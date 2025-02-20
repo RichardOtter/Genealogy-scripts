@@ -1,14 +1,14 @@
 # Genealogy-scripts and utilities
 
-updated: 2025-01-16
+updated: 2025-02-20
 
-These are scripts I've written to help my work with RootsMagic genealogy software. They directly access the SQLite database used by RootsMagic (RM) to store its data.
+These are scripts I've written to help my work with RootsMagic genealogy software. 
+They directly access the SQLite database used by RootsMagic (RM) to store its data.
 
-Some are simple SQL in txt files, there are several Windows command files, and a number of Python scripts.
+Some are simple SQL in .sql txt files and there are several Python scripts.
 
 The are tested only on Windows 11 x64 OS with Python 3x. Most have been tested only with RM v10 databases.
 I don't have a MacOS computer to test with, but I'd guess that most could easily be ported. Let me know if you have any results.
-
 
 "Released" scripts means that-
 
@@ -23,7 +23,7 @@ The Release zip file is found in the Releases page, here on Github (https://gith
 If any of the other scripts are of interest, I may be persuaded to make them release-ready. Let me know.
 Always interested in feedback.
 
-## RELEASED:
+## RELEASED
 
 ### RM -Run SQL
 
@@ -45,6 +45,11 @@ I find use of this app invaluable as part of my backup routine.
 A utility to quickly update a RM group by running an SQL query.\
 Makes changes only to GroupTable.
 
+This includes-
+RM -SQL for creating useful groups
+
+As the name says, contains SQL that can be used by the GroupFromSQL utility.
+
 ### RM -Color from Group
 
 A utility to quickly update a the color coding of people in specified RM groups.\
@@ -62,12 +67,17 @@ A utility to switch the source template used by one or a set of sources.\
 Preserves all linkages and allows remapping of field data.\
 This is the solution for modifying a SourceTemplate in use.
 
-My process is to always run the script on a copy of the main database. Then after iterating through fixes to the configuration file and I'm satisfied with the results, I backup the main database and then move the copy with the changes done by the script to the main database file location.
+My process is to always run the script on a copy of the main database.
+Then after iterating through fixes to the configuration file and I'm satisfied with
+the results, I backup the main database and then move the copy with the changes done
+by the script to the main database file location.
 
 ### RM -Citation Sort Order
 
-A utility to allow the user to re-order the listing of citations attached to Persons, Names, or Facts.\
-See [SQLiteTools site](https://sqlitetoolsforrootsmagic.com/forum/topic/sorting-the-order-of-rm9-citations/) for a compatible SQL script that will update a  citations ordering in one step based on selected criteria.
+A utility to allow the user to re-order the listing of citations attached to
+Persons, Names, or Facts.\
+See [SQLiteTools site](https://sqlitetoolsforrootsmagic.com/forum/topic/sorting-the-order-of-rm9-citations/)
+for a compatible SQL script that will update a  citations ordering in one step based on selected criteria.
 
 ### RM -Convert Fact
 
@@ -79,22 +89,19 @@ Probably most useful for projects imported from TMG, or when introducing a custo
 
 ### RM -Lump misc sources
 
-I started in TMG as splitting all sources. Now in RM, I am lumping the sources for which it makes sense to me. So far, Find_a_Grave, Census and Social Security SSDI, and all Ancestry collections. These scripts do that. They will need modification for your circumstances. These are not released and require Python development to run.
+I started in TMG as splitting all sources. Now in RM, I am lumping the sources for
+which it makes sense to me. So far, Find_a_Grave, Census and Social Security SSDI,
+and all Ancestry collections. These scripts do that. They will need modification
+for your circumstances. These are not released and require Python development to run.
 
 ## Non Python
 
-### RM -SQL for creating useful groups
-
-As the name says, contains SQL that can be used by the GroupFromSQL utility.
-
-These are just SQL statements, not python scripts, so they won't be released
-as the scripts above. But they have been extensively tested.
-They don't modify the database, so little risk involved.
-
 ### RM -Maintenance SQL
 
-Consists of a SQL command file containing SQL updates that fix reoccurring problems in my database caused by user errors during data entry.
-There are parts of the script that are specific to my data entry practices. Read it before you run it.
+Consists of a SQL command file containing SQL updates that fix reoccurring problems
+in my database caused by user errors during data entry.
+There are parts of the script that are specific to my data entry practices.
+Read it before you run it.
 The Maintenance SQL has been run on my production database many times.
 
 ## NOTE-
@@ -110,7 +117,7 @@ My later releases use the custom "RMpy" python package located in the "RM -RMpy 
 
 Those scripts using the package will find it if the folder structure is preserved. If the main script is moved elsewhere, copy the "RMpy" folder to be in the same directory as the main script.
 
-## Required packages for building frozen executables (exe files)  NO LONGER USED
+## NO LONGER USED  Required packages for building frozen executables (exe files)  NO LONGER USED
 
 NOTE: the following lines substitute "me" for your user name, and NNN for the python ver code.
 
@@ -123,13 +130,11 @@ so can start python with "python"
 if you don't add it, use full path to invoke-
 C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Python
 
-
 Adjust path to include-
 C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Scripts
 
 if you don't add it, use full path to invoke-
 C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Scripts\pip
-
 
 confirm pip is working 
 by attempting to run it-
@@ -145,9 +150,8 @@ can start pip in several ways:
 | python -m pip |  will work only if python is in the path |
 | py -m pip | only available as optional install using installer from python web site |
 
-
 Install these packages:
-
+```text
 python.exe -m pip install --upgrade pip
 
 pip install --upgrade PyYAML
@@ -155,6 +159,7 @@ pip install --upgrade PyYAML
 pip install --upgrade pyinstaller
 
 pip install --upgrade pyinstaller-versionfile
+```
 
 # RM Utilities Release Format Change
 
@@ -167,15 +172,12 @@ The Internet has gotten to be a dangerous place, and it seems there are fewer an
 
 This means that I have removed the "exe" format file from the release zip and the user must now install Python to run the scripts.
 
-## There are advantages to the new format:
+## Advantages to the New Release Format
 
-All apps are now in the same zip file. Perhaps this will encourage users to try an app they didn't know they needed.
+* All apps are now in the same zip file. Perhaps this will encourage users to try an app they didn't know they needed.
 
-All apps are tested with each other using the same RMPy package (common code).
+* All apps are tested with each other using the same RMPy package (common code).
 
-Less effort maintaining one release than the previous nine.
+* Less effort maintaining one release than the previous nine.
 
-All of the software is human-readable. Each user can read the code and confirm that nothing bad is happening.
-
-## TODO
-I am still in the process of creating a release build script and improving the release folder's structure.
+* All of the software is human-readable. Each user can read the code and confirm that nothing bad is happening.

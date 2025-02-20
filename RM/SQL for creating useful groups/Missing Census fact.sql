@@ -1,7 +1,7 @@
 --[FACT-Census:  missing]
 --SQL_QUERY =
   -- Search for missing Census on people with constraints:
-  -- people who might be in census but have no FACT or SHARED FACT
+  -- people who might be in census but have no Census or Census_research FACT or SHARED FACT
   -- Requires Birth place in "United States"
   -- Requires Birth birth date in specified range (between YearBirth and YearCensus)
   -- Death date after YearCensus or no DeathFact
@@ -25,11 +25,11 @@
   WHERE
       et.OwnerType = 0
   AND et.Details LIKE ( (SELECT C_YearCensus FROM constants) || '%') COLLATE NOCASE
-  AND ftt.Name = 'Census' COLLATE NOCASE
+  AND (ftt.Name COLLATE NOCASE = 'Census' OR ftt.Name COLLATE NOCASE = 'Census_research')
   )
   --
   SELECT personID
-  FROM PersonTable as pt
+  FROM PersonTable AS pt
     INNER JOIN PlaceTable AS plt ON et_birth.PlaceID = plt.PlaceID
     INNER JOIN EventTable AS et_birth ON et_birth.OwnerID = pt.PersonID
                                       AND et_birth.EventType = 1

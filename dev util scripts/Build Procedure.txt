@@ -1,31 +1,44 @@
 Update all files in local git - make sure main branch is correct.
-Test script.py, readme.txt, _util_info.yaml
-push code to github main
-This script is to be run from the "RM -<fldr name>" folder, where the py file is.
-It will create a subfolder -  Release "<util_name> v<short_ver_num>  <time>"
-where all building is done.
-That subfolder should be moved to the upper level Releases folder when done.
+
+For now, building from Main branch from local files
+
+
+First test any changes to the util scripts.
+Confirm documentation correct
+
+
+_top_level_build_config.yaml
+readme.txt
+_util_info.yaml
+
+Do a test run of the main build script in dev util scripts:
+BuildRelease.py
+
+If all OK
+
+push all code to github main
 
 
 RELEASE PROCEDURE for GitHub
 see build script output for git tag name, git release title and git commands
 
-commit all files locally
-
-push files to git
 
 tag local with command line
 write tag comment in default text editor, save and close.
+(with notepad, must do an explicit save before quitting notepad.)
+
 Perhaps mini release notes?
 
 push tag with command line
 
-Build again % save output
-in Terminal use - Shift-Control-A,  Shift-Control-C  
-and paste into a new Build_output.txt file, and put it into Release folder/
+Run the main build script in dev util scripts:
+BuildRelease.py
+from its normal location
 
-Tag the local repo with an annotated tag  - no spaces allowed in tag name
-Add release info, refer to previous descriptions for what to write.
+It will create a subfolder -  
+Release RM_Utilities_Suite_v1.0.2 2025-02-01_202626
+
+That subfolder should be moved to the upper level Releases folder when done.
 
 Draft a release at Github
   see build output for release Title
@@ -50,6 +63,8 @@ Python
 	or 
 	Microsoft store
 
+
+THE PACKAGES BELOW ARE NO LONGER USED
 pip
 downloads & installs python modules/packages
 https://pip.pypa.io/en/stable/installation/
@@ -69,10 +84,6 @@ implements command line:: create-version-file
 https://pypi.org/project/pyinstaller-versionfile/
 	pip install pyinstaller-versionfile
 	pip install --upgrade pyinstaller-versionfile
-
-For now,
-all copies of BuildRelease.py are hard links.
-would be nice to run the BuildRelease.py from its home folder, dev util scripts.
 
 
 
