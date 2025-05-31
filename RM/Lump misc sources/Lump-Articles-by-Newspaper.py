@@ -53,15 +53,13 @@ def main():
 # ===================================================DIV60==
 def run_selected_features(config, db_connection, report_file):
 
-    lump_citations(config, db_connection, report_file)
-
-
-## global _G_count
+    lump_sources(config, db_connection, report_file)
 
 # ===================================================DIV60==
-def lump_citations(config, db_connection, report_file):
+def lump_sources(config, db_connection, report_file):
 
-  # Deal with index and the fact that the collation sequence is different here than in RM
+  # Deal with RMNOCASE index and the fact that the collation sequence is different here than in RM
+  # Must Rebild Indexes in RM immediatly upon opening the DB.
   SqlStmt_ReIndex= """
    REINDEX RMNOCASE;
    """
@@ -69,89 +67,16 @@ def lump_citations(config, db_connection, report_file):
   cur = db_connection.cursor()
   cur.execute(SqlStmt_ReIndex)
 
-  old_src_TemplateID= 10070
-  new_src_TemplateID= 10071
+#  old_src_TemplateID= 10070
+#  new_src_TemplateID= 10071
+
+  lumped_source_map = config ["MAPPING"]["LUMP_MAP"]
+  mapping = config["MAPPING"]['FIELD_MAPPING']
+
+  field_mapping = parse_field_mapping(mapping)
 
   lumped_source_list = [
-#    (6813, "-pTBE", "NP US,NY- Brooklyn Eagle")
-#    (6814, "-pHSA", "NP US,HI- Honolulu Star-Advertiser")
     (6815, "%-pHTH=%", "NP US,HI- Hawaii Tribune-Herald")
-#    (6816, "-pNDNE", "NP US,NY- Newsday (Nassau Edition) ")
-#    (6817, "-pHSB", "NP US,HI- Honolulu Star-Bulletin")
-#    (6818, "NP US,IN- Palladium-Item")
-#    (6819, "NP US,NJ- The Daily Register")
-#    (6820, "NP US,NY- Kings County Rural Gazette")
-#    (6821, "NP US,CA- Daily Independent Journal")
-#    (6822, "NP US,IN- The Star Press")
-#    (6823, "NP US,FL- The Naples Daily News")
-#    (6824, "NP US,LA- The Times-Picayune")
-#    (6825, "NP US,IN- The News-Examiner")
-#    (6826, "NP US,FL- South Florida Sun-Sentinel")
-#    (6827, "NP US,NY- The Journal News")
-#    (6828, "NP US,CA- Los Angeles Sentinel")
-#    (6829, "NP US,FL- The Banner")
-#    (6830, "NP US,NY- Long Island Daily Press")
-#    (6831, "NP US,CA- The San Francisco Examiner")
-#    (6832, "NP US,NY- New York Post")
-#    (6833, "NP US,MF- The Baltimore Sun")
-#    (6834, "NP US,OH- The Zanesville Signal")
-#    (6835, "NP US,OH- The Piqua Daily Call")
-#    (6836, "NP US,PA- The Gettysburg Times")
-#    (6837, "NP US,NH- Nashua Telegraph")
-#    (6838, "NP US,OH- Mansfield News Journal")
-#    (6839, "NP US,OH- The Daily Advocate")
-#    (6840, "NP US,OH- Miami Union")
-#    (6841, "NP US,OH- Troy Daily News")
-#    (6842, "NP US,KY- The Kentucky Enquirer")
-#    (6843, "NP US,KY- Lexington Herald-Leader")
-#    (6844, "NP US,OH- The Arcanum Times")
-#    (6845, "NP US,OH- News Journal")
-#    (6847, "NP US,OH- Dayton Daily News")
-#    (6848, "NP US,OH- The Dayton Herald")
-#    (6849, "NP US,TN- Evening Herald Courier")
-#    (6850, "NP US,IN- The Journal-Press")
-#    (6851, "NP US,IN- The Aurora Journal")
-#    (6852, "NP US,OH- The Galion Inquirer")
-#    (6853, "NP US,IN- The Indianapolis News")
-#    (6854, "NP US,OH- The Journal News")
-#    (6855, "NP US,CA- The Sacramento Bee")
-#    (6856, "NP US,NJ- Asbury Park Press")
-#    (6857, "NP US,NJ- The Ocean Star")
-#    (6860, "NP US,WI- The Daily Tribune")
-#    (6861, "NP US,FL- News-Press")
-#    (6862, "NP US,NY- The Post-Standard")
-#    (6863, "NP US,CA- The Los Angeles Times")
-#    (6864, "NP US,IN- The Call-Leader")
-#    (6865, "NP US,CA- The Desert Sun")
-#    (6866, "NP US,OH- Springfield News-Sun")
-#    (6867, "NP US,IN- Tipton County Tribune")
-#    (6868, "NP US,AZ- Arizona Republic")
-#    (6869, "NP US,OR- Statesman Journal")
-#    (6870, "NP US,IN- Muncie Evening Press")
-#    (6871, "NP US,FL- The Orlando Sentinel")
-#    (6872, "NP US,FL- The Bradenton Herald")
-#    (6873, "NP US,PA- The Morning Call")
-#    (6875, "NP US,HI- West Hawaii Today")
-#    (6877, "NP US,GA- The Atlanta Constitution")
-#    (6878, "NP US,IN- The Daily Reporter")
-#    (6879, "NP US,IN- The Commercial-Mail")
-#    (6880, "NP US,IN- The Kokomo Tribune")
-#    (6881, "NP US,NY- The Ithaca Journal")
-#    (6882, "NP US,FL- Pensacola News Journal")
-#    (6883, "NP US,MA- The Boston Globe")
-#    (6884, "NP US,NY- Times Union")
-#    (6885, "NP US,OH- The Circleville Herald")
-#    (6886, "NP US,NY- Daily News")
-#    (6887, "NP US,NJ- The Herald-News")
-#    (6888, "NP US,NY- The Standard Union")
-#    (6889, "NP US,FL- The Miami Herald")
-#    (6890, "NP US,MI- Detroit Free Press")
-#    (6892, "NP US,NV- Reno Gazette-Journal")
-#    (6893, "NP US,TX- Corpus Christi Times")
-#    (6894, "NP US,IN- The Brookville Democrat")
-#    (6895, "NP US,CT- Hartford Courant")
-#    (6896, "NP US,IN- The Terre Haute Tribune")
-#    (6897, "NP US,IL- Pekin Daily Times ")
     ]
     
 
@@ -162,11 +87,15 @@ def lump_citations(config, db_connection, report_file):
     src_name_identifier=  source[1]
    
     # List the sources which will be converted to citations of the 'new' source
-    SQL_stmt = "SELECT SourceID FROM SourceTable WHERE Name LIKE ? AND TemplateID=?"
+    SQL_stmt = "SELECT SourceID FROM SourceTable WHERE Name LIKE ?"
   #  SourcesToLump = GetListOfRows( db_connection, SQL_stmt, (src_name_identifier, old_src_TemplateID))
    
+# get template id from old source- just want to be sure all od sources have same template
+# actually, the mapping takes casre of that, but probably want to alert user
+
+
     cur = db_connection.cursor()
-    subs=(src_name_identifier, old_src_TemplateID)
+    subs=(src_name_identifier,)
     cur.execute(SQL_stmt, subs)
 
     SourcesToLump = []
@@ -174,44 +103,44 @@ def lump_citations(config, db_connection, report_file):
       for x in t:
         SourcesToLump.append(x)
 
-    print ("\n\n\n number of source to process: ", len(SourcesToLump))
+    report_file.write (f"\n\n\nNumber of source to process: {str(len(SourcesToLump))}\n")
    
     #iterate through each of the old sources, converting each one separately
     for oldSrc in SourcesToLump:
-        print ("old SourceID= " + str(oldSrc) )
-        ConvertSource (db_connection, oldSrc, NewSourceID)
-        print ("=====================================================")
+        report_file.write (f"old SourceID= {str(oldSrc)}\n" )
+        ConvertSource (db_connection, oldSrc, NewSourceID, field_mapping, report_file)
+        report_file.write ("=====================================================\n")
 
-  print ("total not found",G_count)
-  input( "\n\nPress Enter to continue...")
+  report_file.write ("total not found",G_count)
+
   return 0
 
 
 # ================================================================
-def ConvertSource ( conn, oldSourceID, newSourceID):
+def ConvertSource ( db_connection, oldSourceID, newSourceID, field_mapping, report_file):
 
   global G_count
 
-  # For the given old source, count its citations 
-  # Code as written only handles sources that have one citation and
-  # no info in that citation is preserved.
-  # Must make code changes to deal with #cits !=1 or preserve info in the citation.
-
-  # print source name for confirmation
+  # display source name for confirmation
   SqlStmt = """
   SELECT Name
     FROM SourceTable
     WHERE SourceID = ?
   """
-  cur = conn.cursor()
+  cur = db_connection.cursor()
   cur.execute(SqlStmt, (newSourceID,))
-  print ("source to get cited......" + cur.fetchone()[0]  )
+  report_file.write ("source to receive citations......" + cur.fetchone()[0]  )
 
-  citationIDsToMove= getCitationsToMove(conn,oldSourceID)
-  if len(citationIDsToMove) != 1:  return
+  citation_IDs_to_move= getCitationsToMove(db_connection,oldSourceID)
+  # For the given old source, count its citations 
+  # Code as written only handles sources that have one citation and
+  # no info in that citation is preserved.
+  # Must make code changes to deal with #cits !=1 or preserve info in the citation.
 
-  for citationIDToMove in citationIDsToMove:
-    if ConvertCitation( conn, oldSourceID, newSourceID, citationIDToMove) == False:
+  if len(citation_IDs_to_move) != 1:  raise (RMc.RM_Py_Exception("more than one citation"))
+
+  for citation_to_move in citation_IDs_to_move:
+    if ConvertCitation( db_connection, oldSourceID, newSourceID, citation_to_move, field_mapping, report_file) == False:
        return
 
   # delete the old src (all of its citations have been moved to new source)
@@ -219,34 +148,34 @@ def ConvertSource ( conn, oldSourceID, newSourceID):
   DELETE from SourceTable
       WHERE SourceID = ?
   """
-  RunSqlNoResult( conn, SqlStmt, tuple([oldSourceID, ]) )
-  conn.commit()
+  RunSqlNoResult( db_connection, SqlStmt, tuple([oldSourceID, ]) )
   return
 
 # ================================================================
-def ConvertCitation( conn, oldSourceID, newSourceID, citationIDToMove ):
+def ConvertCitation( db_connection, oldSourceID, newSourceID, citationIDToMove, field_mapping, report_file ):
+
   global G_count
 
-# Copy fields from old src record to the citationToMove
+# Copy standard fields from old src record to the citationToMove
   SqlStmt = """
   UPDATE CitationTable
     SET (CitationName, ActualText, Comments, UTCModDate)
       = (SELECT Name, ActualText, Comments, UTCModDate FROM SourceTable WHERE SourceID = ?)
     WHERE CitationID = ?
   """
-  RunSqlNoResult( conn, SqlStmt, tuple([oldSourceID, citationIDToMove]) )
+  RunSqlNoResult( db_connection, SqlStmt, (oldSourceID, citationIDToMove) )
 
   # Change owner & type columns for relevant web tags so they follow the citationToMove
   # takes all webtags linked to old source and add them to the citation in process
-  # SO ONLY FIRST CITATION MOVED WILL GET THE OLD SOURCE WEB TAGS.
+  # SO ONLY FIRST CITATION MOVED WILL GET THE OLD SOURCE WEB TAGS.  NOTE only 1 citation in the old source is supported
 
   SqlStmt = """
-  UPDATE URLTable
+      UPDATE URLTable
     SET OwnerType = 4,
         OwnerID = ? 
     WHERE OwnerType = 3 AND OwnerID = ?
   """
-  RunSqlNoResult( conn, SqlStmt, tuple([citationIDToMove, oldSourceID]) )
+  RunSqlNoResult( db_connection, SqlStmt, tuple([citationIDToMove, oldSourceID]) )
 
   # Change owner & type for relevant media so they follow the citationToMove
   # SO ONLY FIRST CITATION MOVED WILL GET THE OLD SOURCE MEDIA LINKS.
@@ -257,7 +186,7 @@ def ConvertCitation( conn, oldSourceID, newSourceID, citationIDToMove ):
         OwnerID = ? 
     WHERE OwnerType = 3 AND OwnerID = ?
   """
-  RunSqlNoResult( conn, SqlStmt, tuple([citationIDToMove, oldSourceID]) )
+  RunSqlNoResult( db_connection, SqlStmt, tuple([citationIDToMove, oldSourceID]) )
 
   #  move the existing citation to the new (existing) source
   SqlStmt = """
@@ -265,7 +194,7 @@ def ConvertCitation( conn, oldSourceID, newSourceID, citationIDToMove ):
     SET SourceID = ?
     WHERE CitationID = ?
   """
-  RunSqlNoResult( conn, SqlStmt, tuple([newSourceID, citationIDToMove]) )
+  RunSqlNoResult( db_connection, SqlStmt, tuple([newSourceID, citationIDToMove]) )
 
 
   # Get the SourceTable.Fields BLOB from the oldSource to extract its data
@@ -276,7 +205,7 @@ def ConvertCitation( conn, oldSourceID, newSourceID, citationIDToMove ):
   """
 
   oldSrcFields = {}
-  srcRoot = getFieldsXmlDataAsDOM ( conn, SqlStmt, oldSourceID )
+  srcRoot = getFieldsXmlDataAsDOM ( db_connection, SqlStmt, oldSourceID )
   srcFields = srcRoot.find("Fields")
 
 
@@ -285,26 +214,17 @@ def ConvertCitation( conn, oldSourceID, newSourceID, citationIDToMove ):
 #  return
 
   for item in srcFields:
-    if   item[0].text == "Household": oldSrcFields["Household"] = item[1].text
-    elif item[0].text == "BirthDateHead": oldSrcFields["BirthDateHead"] = item[1].text
-    elif item[0].text == "Place": oldSrcFields["Place"] = item[1].text
-    elif item[0].text == "Location": oldSrcFields["Location"] = item[1].text
-    elif item[0].text == "County": oldSrcFields["County"] = item[1].text
-    elif item[0].text == "State": oldSrcFields["State"] = item[1].text
-    elif item[0].text == "HouseNumber": oldSrcFields["HouseNumber"] = item[1].text
-    elif item[0].text == "Street": oldSrcFields["Street"] = item[1].text
-    elif item[0].text == "FilmNumber": oldSrcFields["FilmNumber"] = item[1].text
-    elif item[0].text == "DateSheet": oldSrcFields["DateSheet"] = item[1].text
-    elif item[0].text == "Page": oldSrcFields["Page"] = item[1].text
-    elif item[0].text == "EnumerationDistrict": oldSrcFields["EnumerationDistrict"] = item[1].text
-    elif item[0].text == "Dwelling": oldSrcFields["Dwelling"] = item[1].text
-    elif item[0].text == "Family": oldSrcFields["Family"] = item[1].text
-    elif item[0].text == "FS_ark": oldSrcFields["FS_ark"] = item[1].text
-    elif item[0].text == "CD": oldSrcFields["CD"] = item[1].text
-    elif item[0].text == "CitationDateUpdated": oldSrcFields["CitationDateUpdated"] = item[1].text
-    elif item[0].text == "ANC_RID": oldSrcFields["ANC_RID"] = item[1].text
+    if   item[0].text == "Name":               oldSrcFields["Name"] = item[1].text
+    elif item[0].text == "BirthDate":          oldSrcFields["BirthDate"] = item[1].text
+    elif item[0].text == "Name2":              oldSrcFields["Name2"] = item[1].text
+    elif item[0].text == "Title":              oldSrcFields["Title"] = item[1].text
+    elif item[0].text == "PublicationDate":    oldSrcFields["PublicationDate"] = item[1].text
+    elif item[0].text == "PublicationPage":    oldSrcFields["PublicationPage"] = item[1].text
+    elif item[0].text == "PublicationColumn":  oldSrcFields["PublicationColumn"] = item[1].text
+    elif item[0].text == "DateCitation":       oldSrcFields["DateCitation"] = item[1].text
+    elif item[0].text == "CD":                 oldSrcFields["CD"] = item[1].text
 
-  print (oldSrcFields)
+  report_file.write (str(oldSrcFields))
 
 
   # retrieve an empty sample XML chunk that has the citation fields of the source template used by the newSource
@@ -316,31 +236,23 @@ def ConvertCitation( conn, oldSourceID, newSourceID, citationIDToMove ):
     JOIN SourceTable ST ON CT.SourceId = ST.SourceID
     WHERE CT.SourceID = ? AND CT.CitationName = "sample citation"
   """
-  newRoot = getFieldsXmlDataAsDOM ( conn, SqlStmt, newSourceID)
+  newRoot = getFieldsXmlDataAsDOM ( db_connection, SqlStmt, newSourceID)
   if newRoot == None:
-    print( "cannot find the 'sample citation'")
-    return False
+    raise RMc.RM_Py_Exception( "Cannot find the 'sample citation'")
+
   newFields = newRoot.find("Fields")
 
   # now fill the XML with values
   for item in newFields:
-    if   item[0].text == "Household":           item[1].text = oldSrcFields["Household"]
-    elif item[0].text == "DateHeadBirth":       item[1].text = oldSrcFields["BirthDateHead"]
-    elif item[0].text == "DateSheet":           item[1].text = oldSrcFields["DateSheet"]
-    elif item[0].text == "PlaceFull":           item[1].text = oldSrcFields["Place"]
-    elif item[0].text == "PlaceLocality":       item[1].text = oldSrcFields["Location"]
-    elif item[0].text == "PlaceCounty":         item[1].text = oldSrcFields["County"]
-    elif item[0].text == "PlaceStreet":         item[1].text = oldSrcFields["Street"]
-    elif item[0].text == "PlaceHouseNumber":    item[1].text = oldSrcFields["HouseNumber"]
-    elif item[0].text == "EnumerationDistrict": item[1].text = oldSrcFields["EnumerationDistrict"]
-    elif item[0].text == "SheetLineNumber":     item[1].text = oldSrcFields["Page"]
-    # elif item[0].text == "DwellingSN":          item[1].text = oldSrcFields["Dwelling"]
-    elif item[0].text == "DwellingSN":          item[1].text = oldSrcFields["Family"]
-    elif item[0].text == "FilmRollNumber":      item[1].text = oldSrcFields["FilmNumber"]
-    elif item[0].text == "ANC_SRC_ID":          item[1].text = oldSrcFields["ANC_RID"]
-    elif item[0].text == "FS_SRC_ID":           item[1].text = oldSrcFields["FS_ark"]
-    elif item[0].text == "DateCitation":        item[1].text = oldSrcFields["CitationDateUpdated"]
-  #  elif item[0].text == "CD":                  item[1].text = oldSrcFields["CD"]
+    if   item[0].text == "Name":                 item[1].text = oldSrcFields["Name"]
+    elif item[0].text == "DateBirth":            item[1].text = oldSrcFields["BirthDate"]
+    elif item[0].text == "Name2":                item[1].text = oldSrcFields["Name2"]
+    elif item[0].text == "Title":                item[1].text = oldSrcFields["Title"]
+    elif item[0].text == "PublicationDate":      item[1].text = oldSrcFields["PublicationDate"]
+    elif item[0].text == "PublicationPage":      item[1].text = oldSrcFields["PublicationPage"]
+    elif item[0].text == "PublicationColumn":    item[1].text = oldSrcFields["PublicationColumn"]
+    elif item[0].text == "DateCitation":         item[1].text = oldSrcFields["DateCitation"]
+    elif item[0].text == "CD":                   item[1].text = oldSrcFields["CD"]
 
 
 #  NOTE field name DwellingSN should be changed to HouseholdSN. 
@@ -354,24 +266,28 @@ def ConvertCitation( conn, oldSourceID, newSourceID, citationIDToMove ):
     SET Fields = ?
     WHERE CitationID = ?
   """
-  RunSqlNoResult( conn, SqlStmt, tuple([ET.tostring(newRoot), citationIDToMove]) )
-  conn.commit()
-  return True
+  RunSqlNoResult( db_connection, SqlStmt, tuple([ET.tostring(newRoot), citationIDToMove]) )
+
+  return
 
 
 # ================================================================
-def RunSqlNoResult ( conn, SqlStmt, myTuple):
-    cur = conn.cursor()
+def RunSqlNoResult ( db_connection, SqlStmt, myTuple):
+    cur = db_connection.cursor()
     cur.execute(SqlStmt, myTuple)
 
 
 # ================================================================
-def getFieldsXmlDataAsDOM ( conn, SqlStmt, rowID ):
-  cur = conn.cursor()
+def getFieldsXmlDataAsDOM ( db_connection, SqlStmt, rowID ):
+  cur = db_connection.cursor()
   cur.execute(SqlStmt, (rowID,))
   XmlTxt_raw = cur.fetchone()
   if XmlTxt_raw == None: return None
-  XmlTxt=XmlTxt_raw[0].decode()
+
+  XmlTxt=(XmlTxt_raw[0])
+  print(type(XmlTxt) )
+  if not isinstance(XmlTxt, str):
+    XmlTxt=XmlTxt.decode('utf-8')
 
   # test for and fix old style "XML" no longer used in RM8
   xmlStart = "<Root"
@@ -387,14 +303,14 @@ def getFieldsXmlDataAsDOM ( conn, SqlStmt, rowID ):
 
 
 # ================================================================
-def getCitationsToMove ( conn, oldSourceID):
+def getCitationsToMove ( db_connection, oldSourceID):
   # get citations for oldSourceID
   SqlStmt = """
   SELECT CitationID
     FROM CitationTable
     WHERE SourceID = ?
   """
-  cur = conn.cursor()
+  cur = db_connection.cursor()
   cur.execute(SqlStmt, (oldSourceID,))
   citationsIDs = cur.fetchall()
 
@@ -408,9 +324,9 @@ def getCitationsToMove ( conn, oldSourceID):
 
 
 # ================================================================
-def GetListOfRows ( conn, SqlStmt):
+def GetListOfRows ( db_connection, SqlStmt):
     # SqlStmt should return a set of single values
-    cur = conn.cursor()
+    cur = db_connection.cursor()
     cur.execute(SqlStmt)
 
     result = []
@@ -418,6 +334,85 @@ def GetListOfRows ( conn, SqlStmt):
       for x in t:
         result.append(x)
     return result
+
+
+# ===================================================DIV60==
+def adjust_xml_fields(field_mapping, root_element):
+
+    fields_element = root_element.find(".//Fields")
+    # change fields in XML as per mapping:
+    for transform in field_mapping:
+        # transform[0] is the From, transform[1] is the To.
+        if transform[0] == transform[1]:
+            continue
+        if transform[0] == "NULL":
+            # check whether transform[1] already exists as a Name
+            if root_element.find("Fields/Field[Name='" + transform[1] + "']") == None:
+                # if it does not exist, create it
+                create_empty_field(transform[1], fields_element)
+            else:
+                raise RMc.RM_Py_Exception(
+                    "Tried to create duplicate Name in XML. NULL on left")
+            continue
+
+        # for each existing field in the XML...
+        fields_in_xml = fields_element.findall('.//Field')
+        for eachField in fields_in_xml:
+            current_xml_field_name = eachField.find('Name').text
+            if current_xml_field_name != transform[0]:
+                # not the relevant XML field, continue with the next
+                continue
+            # found the xml field for the From field of the transform  under consideration
+            # now check if transform 1 (To field) is null (already checked for transform 0 is null)
+            if transform[1] == "NULL":
+                # delete the field
+                root_element.find(".//Fields").remove(eachField)
+                break
+            # Do the rename, but first check for existing field with that name
+            # xpath search Fields/Field[Name='name of transform1']
+            field_names_transform1 = root_element.find("Fields/Field[Name='" + transform[1] + "']")
+            if field_names_transform1 == None:
+                # target doesn't exist, so rename source to the target name
+                eachField.find('Name').text = transform[1]
+                break
+            else:
+                raise RMc.RM_Py_Exception(
+                    "Tried to create duplicate Name in XML.")
+        # end of for eachField loop
+    # end of for each transform loop
+
+    # After all transforms done, *now* deal with XML that is missing a name/value element
+    # For now, make it a requirement that all fields in new template be 
+    # included as destinations in field mapping if they are to be fixed
+    for transform in field_mapping:
+        # check whether transform[1] already exists as a Name
+        if root_element.find("Fields/Field[Name='" + transform[1] + "']") == None:
+            # if it does not exist, create it
+            create_empty_field(transform[1], fields_element)
+
+
+# ===================================================DIV60==
+def create_empty_field(name_to_use, fields):
+
+    # create a new field with name_to_use and empty value, in the fields element.
+    newPair = ET.SubElement(fields, "Field")
+    ET.SubElement(newPair, "Name").text = name_to_use
+    ET.SubElement(newPair, "Value")
+
+
+# ===================================================DIV60==
+def parse_field_mapping(in_str):
+
+    # convert string to list of lists (of 3 strings)
+    in_str = in_str.strip()
+    list_of_lines = in_str.splitlines()
+    list_of_lists = []
+    for each_line in list_of_lines:
+        item_set = list(each_line.split(sep='>'))
+        item_set = [x.strip() for x in item_set]
+        item_set = [x.strip('"') for x in item_set]
+        list_of_lists.append(item_set)
+    return list_of_lists
 
 
 # ===================================================DIV60==
