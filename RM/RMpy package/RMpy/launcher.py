@@ -11,7 +11,6 @@ import RMpy.common as RMc  # type: ignore
 
 # ===================================================DIV60==
 def launcher(utility_info):
-    
 
     db_connection = None
     report_display_app = None
@@ -20,17 +19,27 @@ def launcher(utility_info):
     # Errors go to console window
     # ===========================================DIV50==
     try:
-        # config file must be in "current directory" and encoded as UTF-8 (no BOM).
+        # Configuration file location- 
+        # either specified by quoted command line argument or default
+        # encoded as UTF-8 (no BOM).
         # see   https://docs.python.org/3/library/configparser.html
-        config_file_name = utility_info["config_file_name"]
-        config_file_path = (
-            RMc.get_current_directory(utility_info["script_path"]) 
-            / config_file_name )
-        # Check that config file is at expected path and that it is readable & valid.
+        if len(sys.argv) >2: 
+            raise RMc.RM_Py_Exception(
+                "\n\nERROR: Only one parameter allowed.\n"
+                "       Enclose the configuration file path parameter with \n"
+                "       double quotes if it contains spaces or special characters.")
+        if len(sys.argv) == 2:
+            config_file_path = Path(sys.argv[1])
+        else:
+            config_file_name = utility_info["config_file_name"]
+            config_file_path = (
+                RMc.get_current_directory(utility_info["script_path"]) 
+                    / config_file_name )
+        # Check that config file exists and that it is readable & valid.
         if not config_file_path.exists():
             raise RMc.RM_Py_Exception(
-                f"\n\nERROR: The configuration file, {config_file_name}"
-                f" must be in the same directory as the .py file.\n\n")
+                f'\n\nERROR: The configuration file: "{config_file_path}"'
+                f" was not found.\n\n")
 
         config = configparser.ConfigParser(empty_lines_in_values=False,
                                            interpolation=None)
