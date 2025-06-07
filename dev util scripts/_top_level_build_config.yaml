@@ -1,6 +1,7 @@
 # Top level configuration
 
-SuiteVersion: 1.0.2
+# Last Release 1.0.2   2025-02-01_202626
+SuiteVersion: 1.0.3
 
 SuiteName: RM_Utilities_Suite
 
@@ -16,6 +17,7 @@ ProjectList:
  - List citations for PersonID
  - Run SQL
  - Test external files
+ - Lump sources
 
  
 

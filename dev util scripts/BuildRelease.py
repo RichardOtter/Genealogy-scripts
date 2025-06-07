@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-import yaml
+import yaml    # type: ignore
 from datetime import datetime
 from pathlib import Path
 import zipfile
@@ -8,9 +8,9 @@ import shutil
 import re
 
 # As a first step, this build script builds from local source
-# it does not get "fresh file" from GitHub
+# it does not get "fresh files" from GitHub
 
-# this file lives in the repo root/dev util scripts dir
+# this file lives in the dir:  repo root/dev util scripts
 # the top level yaml config file is also here.
 
 def main():
@@ -47,8 +47,7 @@ def main():
     Path.mkdir(distribution_dir_path)
 
     # Copy the top level documentation file
-    top_level_readme_path
-    shutil.copy(top_level_readme_path, distribution_dir_path)
+    shutil.copy(top_level_readme_path, distribution_dir_path / "Read Me First.txt")
 
     # Process each project
     for project in project_list:

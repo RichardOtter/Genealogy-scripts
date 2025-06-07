@@ -4,7 +4,7 @@ SQLite needs the ability to sort data. It does so by comparing two items and det
 
 This is from the official [SQLite documention](https://www.sqlite.org/quirks.html). It describes a peculiarity of SQLite:
 
-``` TEXT
+```text
 7. Does Not Do Full Unicode Case Folding By Default
 SQLite does not know about the upper-case/lower-case distinction for all unicode characters.
 SQL functions like upper() and lower() only work on ASCII characters.
@@ -17,6 +17,7 @@ corrupting indexes in the process.
 Full unicode case folding is supported in SQLite if it is compiled with the -DSQLITE_ENABLE_ICU option
 and linked against the International Components for Unicode library.
 ```
+
 It appears that RM uses a standard SQLite build, not one that does Unicode case folding. It is also not clear whether the above referenced "International Components for Unicode library" calls an OS native function.
 
 RMNOCASE is the name of a custom collation used by the RM schema to do Unicode case folding. It is not clear how many characters are actuallly supported by RMNOCASE. RM uses RMNOCASE for columns that represent names. Looking at the listings at the end of this doc, you'll see that the name columns in the NameTable and SourceTable are ordered by RMNOCASE. Many other names, such as SourceTable.Name and CitationTable.CitationName also use RMNOCASE. 
