@@ -41,7 +41,7 @@ def main():
     utility_info["script_path"] = Path(__file__).parent
     utility_info["run_features_function"] = run_selected_features
     utility_info["allow_db_changes"] = True
-    utility_info["RMNOCASE_required"] = True
+    utility_info["RMNOCASE_required"] = False
     utility_info["RegExp_required"] = False
 
     RMpy.launcher.launcher(utility_info)
@@ -78,7 +78,7 @@ def lump_sources(config, db_connection, report_file):
     field_mapping = parse_field_mapping(mapping_raw)
     lump_list = parse_field_mapping(lump_list_raw)
 
-    # Check whethe all sources use the same template
+    # Check whether all sources use the same template
     # If they use more than one Template, it is not necessarily an error, as
     # long as the lump_map is appropriate
     sources_to_check = []
@@ -90,7 +90,7 @@ def lump_sources(config, db_connection, report_file):
         SQL_stmt = (
             """SELECT SourceID, TemplateID, Name
       FROM SourceTable
-      WHERE Name LIKE ?
+      WHERE Name COLLATE NOCASE LIKE ?
     """)
         cur = db_connection.cursor()
         cur.execute(SQL_stmt, (split_src_name_identifier,))
@@ -107,7 +107,7 @@ def lump_sources(config, db_connection, report_file):
                 break
 
     if not templates_all_same:
-        report_file.write("\n\nWARNING: Sorce templates are not all the same.\n"
+        report_file.write("\n\nWARNING: Source templates are not all the same.\n"
                           " Ensure that the mapping can handle all templates in use.\n\n"
                           "The sources selected for lumping: (identifier, SourceID, TemplateID, Name)\n\n")
         for src in sources_to_check:
@@ -124,8 +124,8 @@ def lump_sources(config, db_connection, report_file):
         F"\n\nNumber of source identifiers in LUMP_MAP= {len(lump_list)}")
 
     # Deal with RMNOCASE index and the fact that the collation sequence is different here than in RM
-    # Must Rebild Indexes in RM immediatly upon opening the DB.
-    RMc.reindex_RMNOCASE(db_connection)
+    # Must Rebuild Indexes in RM immediately upon opening the DB.
+    # RMc.reindex_RMNOCASE(db_connection)
 
     # Iterate through list of the new (lumped) sources and add the citations to each
     for lumped_source in lump_list:
@@ -138,7 +138,7 @@ def lump_sources(config, db_connection, report_file):
         SQL_stmt = (
             """SELECT SourceID, Name, TemplateID
       FROM SourceTable
-      WHERE Name LIKE ?
+      WHERE Name COLLATE NOCASE LIKE ?
     """)
         cur = db_connection.cursor()
         cur.execute(SQL_stmt, (split_src_name_identifier,))
@@ -185,7 +185,7 @@ def ConvertSource(db_connection, split_SourceID, lumped_SourceID, field_mapping,
     # For the given old source, count its citations
     # Code as written only handles sources that have one citation and
     # no info in that citation is preserved.
-    # Must make code changes to deal with #cits !=1 or preserve info in the citation.
+    # Must make code changes to deal with #citations >1 or preserve info in the citation.
 
     if len(citation_IDs_to_move) != 1:
         raise (RMc.RM_Py_Exception(
