@@ -34,6 +34,19 @@ copy until you are confident of the results and affect on the database.
 
 
 =========================================================================DIV80==
+The ReadMe files for the individual utilities do not include details from the latest release.
+
+The RM-Python-config.ini file will be recognized when placed in the same directory as the Python script (.py file) for the utility. A new feature now allows the utility to be run with a command-line argument specifying the name and path of a configuration file. This argument overrides the default configuration file located in the current directory.
+For example, if TestExternalFiles.py is executed from the folder "C:\Users\me\Joe", it will use the configuration file "C:\Users\me\Joe\RM-Python-config.ini" if it exists.
+However, if the utility is run with an explicit argument, such as:
+"C:\Users\me\Joe\documents\RM-Python-config.ini",
+then that configuration file will be used instead.
+Users are not restricted to the default file name. For instance, running the utility with:
+"C:\Users\me\Joe\documents\RM.ini"
+will instruct the utility to read RM.ini for its runtime parameters.
+
+
+=========================================================================DIV80==
 Python install-
 Install Python from the Microsoft Store
 or download and install from Python.org web site

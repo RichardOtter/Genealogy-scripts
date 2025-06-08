@@ -20,6 +20,9 @@ def main():
     TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
     RM_PATH = REPO_ROOT_PATH / "RM"
 
+    file1="_DB get fresh copy.cmd"
+    file2="_DB reset test db.cmd"
+
     try:
         dev_util_fldr_path= REPO_ROOT_PATH / "dev util scripts"
         top_level_config_path = dev_util_fldr_path / TOP_LEVEL_CONFIG_NAME
@@ -37,20 +40,46 @@ def main():
         print("Problem getting the values from the top level yaml file.\n")
         exit()
     
-    doc_fldr = REPO_ROOT_PATH / "RM" / "doc"
+    doc_folder = REPO_ROOT_PATH / "RM" / "doc"
 
     # Process each project
     for project in project_list:
         project_dir_path = RM_PATH / project
 
         # create a hard link in the docs folder for each ReaMe
-        os.link(project_dir_path / 'ReadMe.txt', doc_fldr / F"doc-{project}")
+        try:
+            os.link(project_dir_path / 'ReadMe.txt', doc_folder / F"doc-{project}")
+        except FileExistsError:
+            print(f"Error: The file '{doc_folder / F"doc-{project}"}' already exists.")
 
         #create a DB folder in each project folder
-        os.mkdir(project_dir_path / "DB")
-        # make a hardlink to the db utility cmd files in each DB
-        os.link( dev_util_fldr_path / "_DB get fresh copy.cmd", project_dir_path / "DB" )
-        os.link( dev_util_fldr_path / "_DB reset test db.cmd", project_dir_path / "DB" )
+        project_DB_path = project_dir_path / "DB"
+        try:
+            os.mkdir(project_DB_path)
+        except FileExistsError:
+            print(F"Directory '{project_DB_path}' already exists.")
+        # make a hardlink to the db utility cmd files in each DB folder
+
+        keep_orig = True
+        try:
+            if not keep_orig:
+                try:
+                    os.remove(project_DB_path / file1 )
+                except FileNotFoundError:
+                    continue
+            os.link( dev_util_fldr_path / file1, project_DB_path / file1 )
+        except FileExistsError:
+            print(f"Error: The file '{project_DB_path / file1}' already exists.")
+
+        try:
+            if not keep_orig:
+                try:
+                    os.remove(project_DB_path / file2 )
+                except FileNotFoundError:
+                    continue
+            os.link( dev_util_fldr_path / file2, project_DB_path / file2 )
+        except FileExistsError:
+            print(f"Error: The file '{project_DB_path / file2}' already exists.")
 
     return
 
