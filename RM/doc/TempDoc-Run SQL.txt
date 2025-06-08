@@ -1,0 +1,314 @@
+=========================================================================DIV80==
+Run SQL commands on a RootsMagic database
+RunSQL
+
+Utility application for use with RootsMagic databases
+
+RootsMagic (RM) software uses a SQLite relational database as its data storage
+file. Having access to that file via third part tools is a major advantage
+to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
+
+
+=========================================================================DIV80==
+Purpose
+
+This utility will run SQL statements and script files on a database 
+and display the results in a text file.
+
+This utility is meant to help the novice SQL user get the task done.
+It attempts to eliminate most of the complications found using more
+sophisticated off the shelf SQLite manager software.
+
+The ability to run SQL script files can be used by even advanced users to
+run database maintenance scripts which give predictable results and
+don't need to show output.
+
+
+=========================================================================DIV80==
+INCLUDE: Backups large changes
+=========================================================================DIV80==
+INCLUDE: Compatibility
+=========================================================================DIV80==
+INCLUDE: Overview
+=========================================================================DIV80==
+Running the utility in detail
+
+One step ommited from the Overview 
+
+*  Download the SQLite extension file: unifuzz64.dll   -see below
+   (This dll provides a RMNOCASE collation used by RM.)
+   Move the unifuzz64.dll file to the working folder.
+
+
+=========================================================================DIV80==
+Notes
+
+For example-
+
+[FILE_PATHS]
+DB_PATH         = TEST.rmtree
+[SQL]
+SQL_STATEMENT_1 = SELECT PersonID FROM PersonTable
+
+Shown are two sections: "FILE_PATHS" and "SQL".
+
+Section "OPTIONS" has one key :"DB_PATH" which has the value "TEST.rmtree".
+
+Section "SQL" has one key: "SQL_STATEMENT_1" which has the
+value "SELECT PersonID FROM PersonTable".
+
+This example, if run with the utility, will run the very simple SQL statement
+and print out all of the RINs in the database.
+The example SQL text is very simple and fits on the same line as the key name.
+Real SQL will be more complex and require multiple lines.
+Each line of a multi line Value must be indented at least one space.
+
+for example:
+
+[SQL]
+SQL_STATEMENT_1 =
+    -- simple example sql
+    SELECT Given
+    FROM NameTable
+    WHERE Surname LIKE 'smith';
+
+The SQL_STATEMENT_1  key specifies the SQL statement that will be run.
+The statement may begin on the next line, as above, as long as the SQL lines are all
+indented with white space. Blank lines are not allowed.
+Use indented SQL comments (--) to add spacing for readability.
+# style comments are not allowed within multi line values.
+
+Note that the SQL_STATEMENT_1 key is required, while additional SQL_STATEMENTs are optional.
+
+The the app will accept up to 99 SQL statements.-
+   SQL_STATEMENT_1
+   SQL_STATEMENT_2
+   ...
+   SQL_STATEMENT_99
+
+This app will also run SQL script files. In this case, the file path is
+specified, not the contents.
+For example:
+
+[SQL]
+SQL_SCRIPT_1 = Maintenance-auto.sql
+
+For this key, always place the file path on the same line as the key name,
+as shown in the example.
+To specify a second script file to run, add in another key name as:
+
+SQL_SCRIPT_2 =  C:\my script folder\SecondScriptFile.sql
+
+Up to 99 scripts can be run.
+
+If you want none of the SQL Statements to run, just change the name of 
+SQL_STATEMENT_1  to anything else, such as:
+INACTIVE_SQL_STATEMENT_1 
+Since the SQL_STATEMENT_1  won't be found, noen of the other SQL_STATEMENTs 
+will run.
+
+Same for SQL script file keys. Renaming SQL_SCRIPT_1 will stop any scripts 
+from running.
+
+
+
+===========-
+*  IMPORTANT
+   If your SQL makes any **changes** to an RMONCASE collated column, you must
+   run the SQL:
+   REINDEX RMNOCASE;
+   as SQL_STATEMENT_1 or at the start of your script file. 
+   Put your updating SQL in following statements. After running the SQL,
+   IMPORTANT- run the RM "Rebuild Indexes" tool immediately after opening
+   the modified database in RM.
+
+   For fully reliable results, any queries using RMONCASE collated columns
+   should be coded to use the SQLite built-in NOCASE collation, as above,
+   Start with REINDEX RMNOCASE; do the query and then run the RM "Rebuild 
+   Indexes" tool immediately after opening the modified database in RM.
+
+
+*  Database modification statements should usually be followed by a
+   SELECT changes(); statement to display how many rows were changed.
+
+
+*    This utility will not help you write the SQL statement and is not a good
+working environment in which to create your SQL statement.
+Confirm you query works before running it in this utility. (Or get the SQL from
+a source that has confirmed its results.)
+
+
+
+Less important notes included for completeness..
+
+===========-
+REPORT_FILE_DISPLAY_APP
+
+Option to automatically open the report file in a display application.
+The included ini sample file has this option activated and set to use Windows
+NotePad as the display app. It can be deactivated by inserting a # character
+at the start of the line. Your favorite editor may be substituted.
+
+===========-
+
+
+=========================================================================DIV80==
+Precautions before using the modified database
+
+Once you are satisfied with the results of the modifications made by this
+software, don't hurry to start use the resulting file for research.
+Continue your work for a week or so using the original database to allow
+further consideration. Then run the utility again with your perfected config
+file on a new copy of your now-current database and then use the modified
+database as your normal work file.
+The week delay will give you time to think about it. If you start
+using the newly modified database immediately, you'll lose work if you miss
+a problem and have to revert to a backup.
+
+=========================================================================DIV80==
+INCLUDE: APPENDIX  Config file: location, contents and editing
+=========================================================================DIV80==
+INCLUDE: APPENDIX  Python install
+=========================================================================DIV80==
+INCLUDE: APPENDIX  unifuzz64.dll download
+=========================================================================DIV80==
+=========================================================================DIV80==
+=========================================================================DIV80==
+Troubleshooting
+
+=========-
+No Report File displayed
+
+If the report is created, but not displayed, check the config
+file line- REPORT_FILE_DISPLAY_APP
+
+If no report file is generated, look at the black command
+console window for error messages that will help you fix the problem.
+There may be something wrong with the config file line- REPORT_FILE_PATH
+
+If the black console windows displays the message-
+RM-Python-config.ini file contains a format error
+See the section below.
+
+If no report file is generated and the black command console window closes
+before you can read it, try first opening a command line console and then
+running the py file from the command line. The window will not close
+and you'll be able to read any error messages.
+
+=========-
+Error message:
+RM-Python-config.ini file contains a format error
+
+Start over with the supplied config file and make sure that works, Then make your
+edits one by one to identify the problem.
+You may want to look at- https://en.wikipedia.org/wiki/INI_file
+
+=========-
+Multiline Values
+Probably the trickiest part of the config file is the SQL section.
+The SQL_STATEMENT_1 and SQL_STATEMENT_2 keys are multi-line values.
+Each line of the value should be on a separate line indented with at least
+one blank. An empty line generates an error.
+Multi-line values may not contain comment lines (lines starting with a #).
+
+examples-
+
+correct format-
+
+[SQL]
+SQL_STATEMENT_1 =
+   SELECT pt.personid
+   FROM persontable AS pt
+   INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+   WHERE nt.nametype = 5    -- married name
+   AND nt.surname LIKE 'sm%'
+
+
+
+incorrect format- (empty line not allowed)
+
+[SQL]
+SQL_STATEMENT_1 =
+   SELECT pt.personid
+   FROM persontable AS pt
+
+   INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+   WHERE nt.nametype = 5    -- married name
+   AND nt.surname LIKE 'sm%'
+
+
+incorrect format (not indented)
+
+[SQL]
+SQL_STATEMENT_1 =
+SELECT pt.personid
+FROM persontable AS pt
+INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+WHERE nt.nametype = 5    -- married name
+AND nt.surname LIKE 'sm%'
+
+
+incorrect format- (no comments allowed)
+
+[SQL]
+SQL_STATEMENT_1 =
+   SELECT pt.personid
+   # this is an non-allowed comment line
+   FROM persontable AS pt
+   INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+   WHERE nt.nametype = 5    -- married name
+   AND nt.surname LIKE 'sm%'
+
+
+incorrect format- (empty line not allowed)
+
+[SQL]
+SQL_STATEMENT_1 =
+
+   SELECT pt.personid
+   FROM persontable AS pt
+   INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+   WHERE nt.nametype = 5    -- married name
+   AND nt.surname LIKE 'sm%'
+
+
+*    On some occasions, the utility console window will display a "Database
+Locked" message. In that case: Close the console window, Close RM and re-run the
+ utility, then re-open RM. "Database locked" is a normal message encountered with SQLite.)
+
+
+=========================================================================DIV80==
+TODO
+
+*  Consider adding execution of SQL scripts.
+*  Consider fancier formatting of output.
+*  Add ability to add additional database extensions besides RMNOCASE.
+*  ?? what would you find useful?
+
+
+=========================================================================DIV80==
+Feedback
+The author appreciates comments and suggestions regarding this software.
+RichardJOtter@gmail.com
+
+Public comments may be made at-
+https://github.com/ricko2001/Genealogy-scripts/discussions
+
+
+Also see:
+My website containing other RootsMagic relevant information:
+https://RichardOtter.github.io
+
+My Linked-In profile at-
+https://www.linkedin.com/in/richardotter/
+
+
+=========================================================================DIV80==
+Distribution
+Everyone is free to use this utility. However, instead of
+distributing it yourself, please instead distribute the URL
+of my website where I describe it- https://RichardOtter.github.io
+
+=========================================================================DIV80==

@@ -1,0 +1,276 @@
+=========================================================================DIV80==
+Convert an existing fact from one fact type to another
+ConvertFact
+
+Utility application for use with RootsMagic databases
+
+RootsMagic (RM) software uses a SQLite relational database as its data storage
+file. Having access to that file via third part tools is a major advantage
+to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
+
+
+=========================================================================DIV80==
+Purpose
+
+This utility can convert existing facts of one fact type to facts of a different fact type.
+e.g. "Residence (fam)" to "Residence", or "Census" to "Census 1950".
+
+Simply changing the fact type for an existing fact is trivial using SQL.
+Complications arise when a family fact is converted to a Individual fact or when
+the fact to be changed has witnesses (was shared).
+ConvertFact will test all of these cases and guide you.
+
+ConvertFact will not create new fact types or roles. That can't be helpfully
+automated and remains a task to be done by the user within RM.
+
+ConvertFact can be configured to convert only a subset of the facts of a certain
+fact type based on the date of the fact and/or the description of the fact.
+
+
+=========================================================================DIV80==
+INCLUDE: Backups small changes
+=========================================================================DIV80==
+INCLUDE: Compatibility
+=========================================================================DIV80==
+INCLUDE: Overview
+=========================================================================DIV80==
+Running the utility in detail
+
+==========-
+
+
+=========================================================================DIV80==
+Notes
+
+===========-
+The config file must be edited to indicate the conversion that should be done.
+
+The task is specified by the key value pairs. or example-
+
+[MAPPING]
+FACTTYPE_CURRENT  = Census (family)
+FACTTYPE_NEW      = Census
+ROLE              = Spouse
+
+Note that the value can have embedded spaces.
+Space characters between the = and the value are ignored.
+
+
+===========-
+Fact Type name lists
+
+Fact Type full names are listed in RM by the "Fact types" window found in
+several places in the RM user interface-
+  In the Edit Person window upon clicking the + button (Add fact button or Alt+A)
+  In the three dot menu in the Person tab.
+  In the command pallet. (type in "fact")
+
+This window also displays, in the right side panel -
+* Whether the fact type is Individual or Family.
+* The full fact type name and its assigned abbreviation.
+The specification of fact types in the config file uses the full fact type name,
+not the abbreviation.
+
+
+===========-
+Fact Type fields used
+
+It is best to check the fields used in both fact types before making the change.
+If the fields used by the current and new fact types differ (date, place,
+description), no data is lost in the conversion.
+
+
+===========-
+Fact types in RM come in two categories: Individual and Family.
+
+Facts of the Individual type are linked to a single person while facts of the
+family type are linked to a database family.
+An RM database family consists either 2 or 1 persons, labeled internally as
+Father and Mother. Either the father or mother may be "unknown"
+(and thus set to 0 in the database). Database families, by design, do not
+include any offspring.
+
+
+===========-
+Supported fact type conversions:
+
+Individual => Individual
+Family => Individual
+Family => Family
+
+Not allowed:
+Individual => Family
+
+
+Configuration items in config file required for each type conversion:
+
+* Individual => Individual
+FACTTYPE_CURRENT (full name of the fact type of the facts that that should be converted)
+FACTTYPE_NEW (full name of the fact type that existing facts should be converted to)
+(ROLE is ignored)
+
+* Family => Individual
+FACTTYPE_CURRENT
+FACTTYPE_NEW
+ROLE (name of an existing role associated with the FACTTYPE_NEW)
+
+* Family => Family
+FACTTYPE_CURRENT
+FACTTYPE_NEW
+(ROLE is ignored)
+
+
+===========-
+Limiting which Facts are changed
+
+There maybe situations in which only a subset of Facts should be changed to a new fact type.
+One can limit the facts by fields that describe them- the Date and the Description.
+
+Some examples-
+
+[SOURCE_FILTER]
+DESC              = %New York%
+DATE              = 1930
+
+if you want to convert only facts whose descriptions start with the
+words "New York", then enter-
+
+[SOURCE_FILTER]
+DESC              = New York%
+DATE              =
+
+notice the trailing percent sign.
+If the fact descriptions should only contain "New York" somewhere in the text,
+enter-
+
+[SOURCE_FILTER]
+DESC              = %New York%
+DATE              =
+
+The percent sign % wildcard matches any sequence of zero or more characters.
+The underscore _ wildcard matches any single character.
+
+To limit the facts converted by their Date, use the DATE value.
+The DATE value is always a four digit year.
+For example-
+
+[SOURCE_FILTER]
+DESC              = 
+DATE              = 1930
+
+The values for DESC and DATE are optional. If all facts of a certain type are to be converted,
+leave these fields blank-
+
+[SOURCE_FILTER]
+DESC              = 
+DATE              = 
+
+
+===========-
+Complications handled by this utility
+
+The first complication comes with converting a Family fact to a Individual fact.
+
+A family fact is linked to a father-mother couple. If the father is know, then
+the new Individual fact will be linked to the father. If the mother is also known,
+the mother will be added as a witness to the new Individual fact. Her role is
+specified in the config file as "ROLE =".
+
+If the father is not known then the new Individual fact will be linked to the
+mother. There is no new witness added, so the ROLE config file item is ignored.
+
+
+The second complication arises when the facts of FACTTYPE_CURRENT have witnesses.
+
+Background: Every witness is assigned a role in RM when the fact is shared.
+Each fact type has its own set of roles. Many of the roles have the same name,
+for instance "Witness" however they are still separate and the sentence assigned
+to each of the roles are probably different.
+
+If the original fact type, say Census (fam) had a role named "Spouse", and that
+fact type is to be converted to "Census", then the fact of type census will
+have the former witness transferred to it maintaining the former role, in this
+case "Spouse". If "Census" does not have already have a role named Spouse,
+the utility will complain and request that you create such a role for "Census"
+before the conversion can be completed.
+You don't have to recreate all of the roles that exist for the FACTTYPE_CURRENT,
+only the ones that are in use. ConvertFact will tell you which ones.
+
+
+===========-
+REPORT_FILE_DISPLAY_APP
+
+Option to automatically open the report file in a display application.
+The included ini sample file has this option activated and set to use Windows
+NotePad as the display app. It can be deactivated by inserting a # character
+at the start of the line. Your favorite editor may be substituted.
+
+=========================================================================DIV80==
+INCLUDE: APPENDIX  Config file: location, contents and editing
+=========================================================================DIV80==
+INCLUDE: APPENDIX  Python install
+=========================================================================DIV80==
+=========================================================================DIV80==
+=========================================================================DIV80==
+Troubleshooting
+
+=========-
+No Report File displayed
+
+If the report is created, but not displayed, check the config
+file line- REPORT_FILE_DISPLAY_APP
+
+If no report file is generated, look at the black command
+console window for error messages that will help you fix the problem.
+There may be something wrong with the config file line- REPORT_FILE_PATH
+
+If the black console windows displays the message-
+RM-Python-config.ini file contains a format error
+See the section below.
+
+If no report file is generated and the black command console window closes
+before you can read it, try first opening a command line console and then
+running the py file from the command line. The window will not close
+and you'll be able to read any error messages.
+
+=========-
+Error message:
+RM-Python-config.ini file contains a format error
+
+Start over with the supplied config file and make sure that works, Then make your
+edits one by one to identify the problem.
+You may want to look at- https://en.wikipedia.org/wiki/INI_file
+
+
+=========================================================================DIV80==
+TODO
+
+*  ?? what would you find useful?
+
+
+=========================================================================DIV80==
+Feedback
+The author appreciates comments and suggestions regarding this software.
+RichardJOtter@gmail.com
+
+Public comments may be made at-
+https://github.com/ricko2001/Genealogy-scripts/discussions
+
+
+Also see:
+My website containing other RootsMagic relevant information:
+https://RichardOtter.github.io
+
+My Linked-In profile at-
+https://www.linkedin.com/in/richardotter/
+
+
+=========================================================================DIV80==
+Distribution
+Everyone is free to use this utility. However, instead of
+distributing it yourself, please instead distribute the URL
+of my website where I describe it- https://RichardOtter.github.io
+
+=========================================================================DIV80==
