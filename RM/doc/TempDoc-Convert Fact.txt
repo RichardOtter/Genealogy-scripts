@@ -1,16 +1,7 @@
 =========================================================================DIV80==
 Convert an existing fact from one fact type to another
-ConvertFact
-
-Utility application for use with RootsMagic databases
-
-RootsMagic (RM) software uses a SQLite relational database as its data storage
-file. Having access to that file via third part tools is a major advantage
-to using RM.
-This software accesses that database directly to provide functionality not found
-in the RootsMagic program.
-
-
+ConvertFact.py
+INCLUDE: LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
@@ -30,11 +21,11 @@ fact type based on the date of the fact and/or the description of the fact.
 
 
 =========================================================================DIV80==
-INCLUDE: Backups small changes
+INCLUDE: LIB_Backups small changes
 =========================================================================DIV80==
-INCLUDE: Compatibility
+INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
-INCLUDE: Overview
+INCLUDE: LIB_Overview
 =========================================================================DIV80==
 Running the utility in detail
 
@@ -208,42 +199,11 @@ NotePad as the display app. It can be deactivated by inserting a # character
 at the start of the line. Your favorite editor may be substituted.
 
 =========================================================================DIV80==
-INCLUDE: APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
 =========================================================================DIV80==
-INCLUDE: APPENDIX  Python install
+INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==
-=========================================================================DIV80==
-=========================================================================DIV80==
-Troubleshooting
-
-=========-
-No Report File displayed
-
-If the report is created, but not displayed, check the config
-file line- REPORT_FILE_DISPLAY_APP
-
-If no report file is generated, look at the black command
-console window for error messages that will help you fix the problem.
-There may be something wrong with the config file line- REPORT_FILE_PATH
-
-If the black console windows displays the message-
-RM-Python-config.ini file contains a format error
-See the section below.
-
-If no report file is generated and the black command console window closes
-before you can read it, try first opening a command line console and then
-running the py file from the command line. The window will not close
-and you'll be able to read any error messages.
-
-=========-
-Error message:
-RM-Python-config.ini file contains a format error
-
-Start over with the supplied config file and make sure that works, Then make your
-edits one by one to identify the problem.
-You may want to look at- https://en.wikipedia.org/wiki/INI_file
-
-
+INCLUDE: LIB_APPENDIX  Troubleshooting
 =========================================================================DIV80==
 TODO
 
@@ -251,26 +211,7 @@ TODO
 
 
 =========================================================================DIV80==
-Feedback
-The author appreciates comments and suggestions regarding this software.
-RichardJOtter@gmail.com
-
-Public comments may be made at-
-https://github.com/ricko2001/Genealogy-scripts/discussions
-
-
-Also see:
-My website containing other RootsMagic relevant information:
-https://RichardOtter.github.io
-
-My Linked-In profile at-
-https://www.linkedin.com/in/richardotter/
-
-
+INCLUDE: LIB_Feedback
 =========================================================================DIV80==
-Distribution
-Everyone is free to use this utility. However, instead of
-distributing it yourself, please instead distribute the URL
-of my website where I describe it- https://RichardOtter.github.io
-
+INCLUDE: LIB_Distribution
 =========================================================================DIV80==

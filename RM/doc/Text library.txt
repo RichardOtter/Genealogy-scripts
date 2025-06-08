@@ -1,6 +1,17 @@
+=========================================================================DIV80==
+LIB_INTRO
+
+Utility application for use with RootsMagic databases
+
+RootsMagic (RM) software uses a SQLite relational database as its data storage
+file. Having access to that file via third part tools is a major advantage
+to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
+
 
 =========================================================================DIV80==
-Compatibility
+LIB_Compatibility
 Compatibility
 
 Tested with RootsMagic v 10
@@ -10,7 +21,7 @@ The py file has not been tested on MacOS but could probably be easily
 modified to work on MacOS with Python version 3 installed.
 
 =========================================================================DIV80==
-Backups large changes
+LIB_Backups large changes
 Backups
 
 VERY IMPORTANT
@@ -25,7 +36,7 @@ multiple known-good backups.
 Read about additional considerations in the Precautions section below.
 
 =========================================================================DIV80==
-Backups small changes
+LIB_Backups small changes
 Backups
 
 IMPORTANT
@@ -35,7 +46,7 @@ have multiple known-good backups until you are confident that the changes made
 are the ones desired.
 
 =========================================================================DIV80==
-Backups read only
+LIB_Backups read only
 Backups
 
 IMPORTANT
@@ -46,7 +57,7 @@ remains intact after use. At that point, run this utility of your
 "production" database.
 
 =========================================================================DIV80==
-Overview
+LIB_Overview
 Overview
 
 This program is what is called a "command line utility". 
@@ -88,7 +99,7 @@ To install and use the script for the first time:
 
 
 =========================================================================DIV80==
-APPENDIX  Python install
+LIB_APPENDIX  Python install
 APPENDIX  Python install
 
 Either
@@ -124,7 +135,7 @@ Run the Python installer selecting all default options.
 
 
 =========================================================================DIV80==
-APPENDIX  unifuzz64.dll download
+LIB_APPENDIX  unifuzz64.dll download
 APPENDIX  unifuzz64.dll download
 
 direct download:
@@ -144,7 +155,7 @@ of unifuzz64.dll from the SQLiteToolsforRootsMagic website.
 
 
 =========================================================================DIV80==
-APPENDIX  Config file: location, contents and editing
+LIB_APPENDIX  Config file: location, contents and editing
 APPENDIX  Config file: location, contents and editing
 
 Name and location
@@ -220,7 +231,7 @@ File format is an option in the "Save file" dialog box in NotePad.
 
 
 =========================================================================DIV80==
-APPENDIX  Troubleshooting
+LIB_APPENDIX  Troubleshooting
 APPENDIX  Troubleshooting
 
 =========-
@@ -254,7 +265,7 @@ You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
 
 =========================================================================DIV80==
-Precautions before using the modified database
+LIB_Precautions before using the modified database
 Precautions before using the modified database
 
 Once you are satisfied with the results of the modifications made by this
@@ -269,3 +280,32 @@ a problem and have to revert to a backup.
 
 
 =========================================================================DIV80==
+LIB_Feedback
+Feedback
+
+The author appreciates comments and suggestions regarding this software.
+RichardJOtter@gmail.com
+
+Public comments may be made at-
+https://github.com/ricko2001/Genealogy-scripts/discussions
+
+
+Also see:
+My website containing other RootsMagic relevant information:
+https://RichardOtter.github.io
+
+My Linked-In profile at-
+https://www.linkedin.com/in/richardotter/
+
+
+=========================================================================DIV80==
+LIB_Distribution
+Distribution
+
+Everyone is free to use this utility. However, instead of
+distributing it yourself, please instead distribute the URL
+of my website where I describe it- https://RichardOtter.github.io
+
+
+=========================================================================DIV80==
+
