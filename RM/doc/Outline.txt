@@ -18,13 +18,9 @@ Compatibility
 Overview
 Follows pattern with word changes for app names
 =========================================================================DIV80==
-Python installation
-CONSTANT
-DONE ---------------
-=========================================================================DIV80==
-unifuzz64.dll download-
-CONSTANT    only in RunSQL
-DONE ---------------
+Running the utility in detail
+Different
+==========-
 =========================================================================DIV80==
 Config file: location, contents and editing
 
@@ -38,7 +34,16 @@ Precautions before using the modified database
 CONSTANT  only in the 2  big change
 DONE ---------------
 =========================================================================DIV80==
-Troubleshooting:
+Python installation
+CONSTANT
+DONE ---------------
+=========================================================================DIV80==
+unifuzz64.dll download-
+CONSTANT    only in RunSQL
+DONE ---------------
+
+=========================================================================DIV80==
+Troubleshooting
 numbers of sub sections differ
 DONE ---------------
 =========================================================================DIV80==
@@ -121,7 +126,17 @@ ONLY TEST EXTERNAL FILES
 Overview
 
 This program is what is called a "command line utility". 
-To install and use the script:
+It is in the form of a single file with a "py" extension, referred to 
+below, as "MainScriptFile.py".
+Most input to the utility is through the configuration file and sometimes
+the command line console window.
+The the default name of the configuration file ("config file") is "RM-Python-config.ini"
+and it should also be located in the same folder as the MainScriptFile py script.
+At a minimum, the config gives the name and location of the database on
+which to operate. One config file can be shared among my other RM utilities.
+Each utility will extract the information it needs from the config file.
+
+To install and use the script for the first time:
 
 *  Install Python for Windows x64  -see immediately below
 
@@ -132,26 +147,24 @@ To install and use the script:
    Rename the copy to TEST.rmtree
 
 *  Copy these files and the folder from the downloaded zip file to the working folder-
-      ChangeSrcForCitation.py
-      RM-Python-config.ini
-      RMpy
+      file:    MainScriptFile.py
+      folder:  RMpy
+      file:    RM-Python-config.ini
 
-*  Edit the file, RM-Python-config.ini (hereinafter referred to as the 
-   "config file") in the working folder.
+*  Edit the config file, RM-Python-config.ini, that was copied into the working folder.
 
    The utility needs to know where the RM database file is located, the output
    report file name and its location.
 
-*  Double click the ChangeSrcForCitation.py ile to run the utility. 
-   Enter the requested information in the displayed black command
-   console window.
+*  Double click the MainScriptFile.py ile to run the utility. 
 
-*  When you are finished, a summary report will be displayed in NotePad.
-   Confirm that the desired change was made in RM.
+*  A summary report will be displayed in NotePad.
+
+*****  Details follow below. *****
 
 
 =========================================================================DIV80==
-Python install-
+Python install
 
 Either install Python from the Microsoft Store
 or download and install from Python.org web site
@@ -252,7 +265,7 @@ Running the utility in detail
 
 ==========-
 
-below moved to notes
+below moved to Notes
 
 Before starting, you will want to confirm that a group exists in your database
 that will be the basis of the color operation. Make sure that you know the
@@ -302,7 +315,7 @@ at the start of the line. Your favorite editor may be substituted.
 =========================================================================DIV80==
 =========================================================================DIV80==
 =========================================================================DIV80==
-Troubleshooting:
+Troubleshooting
 
 =========-
 No Report File displayed
