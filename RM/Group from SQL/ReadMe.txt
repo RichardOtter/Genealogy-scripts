@@ -1,5 +1,5 @@
 =========================================================================DIV80==
-Group from SQL
+Group persons by using SQL
 GroupFromSQL
 
 Utility application for use with RootsMagic databases
@@ -7,6 +7,8 @@ Utility application for use with RootsMagic databases
 RootsMagic (RM) software uses a SQLite relational database as its data storage
 file. Having access to that file via third part tools is a major advantage
 to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
 
 
 =========================================================================DIV80==
@@ -14,28 +16,20 @@ Purpose
 
 This utility uses SQL to query the database file and create a RM group in the
 RM database independently of RM. Groups may be created with RootsMagic software,
-of course, but the types of queries are more limited.
+of course, but the types of queries are much more limited.
 
 This utility will update one or more RM groups from any SQL query that returns
-a list of PersonIDs (RINs).
-
-Also remember, that groups in RM, are always groups of Persons. So if you want
-to find all RM facts with a certain characteristic, you need to create a group of
-the people that have that fact attached. Once the group is created, you will
-need to search each person's edit window for the fact you are interested in.
+a list of RINs/PersonIDs.
 
 
 =========================================================================DIV80==
 Backups
 
-IMPORTANT: You should run this script on a copy of your database file until you
-have confidence using it and confidence in its results. Or at least have a
-current known-good backup.
-Assume software developers are fallible and make mistakes, but are not
-malevolent.
-
-Similarly, always use a database copy when you are developing your SQL. It's
-easy to make unintended database changes in GUI based database manager apps.
+IMPORTANT
+This utility modifies the RM database file.
+You should run this script on a copy of your database file or at least
+have multiple known-good backups until you are confident that the changes made
+are the ones desired.
 
 
 =========================================================================DIV80==
@@ -198,7 +192,13 @@ RMNOCASE collation used by RM for most name type columns. Use "COLLATE NOCASE"
 to avoid errors.
 
 =========-
-Due to technical issue regarding RMNOCASE, this utility will not create a
+Also remember, that groups in RM, are always groups of Persons. So if you want
+to find all RM facts with a certain characteristic, you need to create a group of
+the people that have that fact attached. Once the group is created, you will
+need to search each person's edit window for the fact you are interested in.
+
+=========-
+Due to technical issue regarding RMNOCASE, this utility will not actually create a
 new group. Instead use RM to create the group name before using this utility.
 The process is simple-
 Open the database in RM,
@@ -281,7 +281,7 @@ See the section below.
 
 If no report file is generated and the black command console window closes
 before you can read it, try first opening a command line console and then
-running the exe or py file from the command line. The window will not close
+running the py file from the command line. The window will not close
 and you'll be able to read any error messages.
 
 =========-
@@ -292,6 +292,8 @@ Start over with the supplied config file and make sure that works, Then make you
 edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
+=========-
+Multiline Values
 Probably the trickiest part of the config file is the GROUP_NAME key.
 It may be assigned either a single or multi line value.
 Each line of the value should be on a separate line indented with at least 
@@ -343,7 +345,9 @@ GROUP_NAME =
 
 =========================================================================DIV80==
 TODO
-COLOR:  Consider adding color coding functions.
+
+* COLOR:  Consider adding color coding functions.
+*  ?? what would you find useful?
 
 
 =========================================================================DIV80==

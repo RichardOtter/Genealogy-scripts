@@ -1,57 +1,48 @@
 =========================================================================DIV80==
-Convert Fact
+Convert an existing fact from one fact type to another
 ConvertFact
 
 Utility application for use with RootsMagic databases
 
 RootsMagic (RM) software uses a SQLite relational database as its data storage
-file. Having access to that file via third party tools is a major advantage
+file. Having access to that file via third part tools is a major advantage
 to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
 
 
 =========================================================================DIV80==
 Purpose
 
-This utility can convert facts of one fact type to facts of a different fact type.
+This utility can convert existing facts of one fact type to facts of a different fact type.
 e.g. "Residence (fam)" to "Residence", or "Census" to "Census 1950".
 
 Simply changing the fact type for an existing fact is trivial using SQL.
 Complications arise when a family fact is converted to a Individual fact or when
-the fact to be changed has witnesses.
+the fact to be changed has witnesses (was shared).
 ConvertFact will test all of these cases and guide you.
 
 ConvertFact will not create new fact types or roles. That can't be helpfully
-automated and remains a task to be done by the user with RM.
+automated and remains a task to be done by the user within RM.
 
 ConvertFact can be configured to convert only a subset of the facts of a certain
 fact type based on the date of the fact and/or the description of the fact.
-
-See Notes section for further details.
 
 
 =========================================================================DIV80==
 Backups
 
-VERY IMPORTANT
-This utility makes changes to the RM database file. It can change a large number
-of data items in a single run.
-You will likely not be satisfied with your first run of the utility and you will
-want to try again, perhaps several times, each time making changes to your
-configuration file. You must run this script on a copy of your database file
-and have at least several known-good backups.
-
-Once you are satisfied, don't hurry to use the resulting file. Wait a week or so
-to allow further consideration. Then run the utility with your perfected
-config file on a copy of your now-current database and then use the modified
-database as your normal work file. The week delay will give you time to think
-about it. If you start using the newly modified database immediately, you'll
-lose work if you miss a problem and have to revert to a backup.
+IMPORTANT
+This utility modifies the RM database file.
+You should run this script on a copy of your database file or at least
+have multiple known-good backups until you are confident that the changes made
+are the ones desired.
 
 
 =========================================================================DIV80==
 Compatibility
 
-Tested with RootsMagic v10
+Tested with RootsMagic v 10
 Tested with Python for Windows v3.13   64bit
 
 The py file has not been tested on MacOS but could probably be easily
@@ -124,6 +115,17 @@ It is easily and cleanly removed using the standard method found in
 Windows=>Settings
 
 Run the Python installer selecting all default options.
+
+
+=========================================================================DIV80==
+Config file contents and editing
+
+First, some nomenclature. The config file is made up of Sections, Keys, Values and
+Comments. The names in square brackets are Section Names that identify the start
+of a section. A Section contains Key = Value pairs. Names on the left of
+the = sign are Keys. Text on the right side of the = is the Value of the Key.
+Comment lines start with # and are only included to help the user read and
+understand the file.
 
 
 =========================================================================DIV80==
@@ -323,7 +325,7 @@ See the section below.
 
 If no report file is generated and the black command console window closes
 before you can read it, try first opening a command line console and then
-running the exe or py file from the command line. The window will not close
+running the py file from the command line. The window will not close
 and you'll be able to read any error messages.
 
 =========-
@@ -337,6 +339,7 @@ You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
 =========================================================================DIV80==
 TODO
+
 *  ?? what would you find useful?
 
 

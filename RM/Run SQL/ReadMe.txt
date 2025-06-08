@@ -1,12 +1,14 @@
 =========================================================================DIV80==
-Run SQL
+Run SQL commands on a RootsMagic database
 RunSQL
 
 Utility application for use with RootsMagic databases
 
 RootsMagic (RM) software uses a SQLite relational database as its data storage
-file. Having access to that file via third party tools is a major advantage
+file. Having access to that file via third part tools is a major advantage
 to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
 
 
 =========================================================================DIV80==
@@ -29,18 +31,14 @@ Backups
 
 VERY IMPORTANT
 This utility makes changes to the RM database file. It can change a large number
-of data items in a single run.
+of data items in a single run depending on the settings specified.
 You will likely not be satisfied with your first run of the utility and you will
 want to try again, perhaps several times, each time making changes to your
-configuration file. You must run this script on a copy of your database file
-and have at least several known-good backups.
+configuration file. 
+You must run this script on a copy of your database file and have at least
+multiple known-good backups.
 
-Once you are satisfied, don't hurry to use the resulting file. Wait a week or so
-to allow further consideration. Then run the utility with your perfected
-config file on a copy of your now-current database and then use the modified
-database as your normal work file. The week delay will give you time to think
-about it. If you start using the newly modified database immediately, you'll
-lose work if you miss a problem and have to revert to a backup.
+Read about additional considerations in the Precautions section below.
 
 
 =========================================================================DIV80==
@@ -214,6 +212,19 @@ will run.
 Same for SQL script file keys. Renaming SQL_SCRIPT_1 will stop any scripts 
 from running.
 
+=========================================================================DIV80==
+Precautions before using the modified database
+
+Once you are satisfied with the results of the modifications made by this
+software, don't hurry to start use the resulting file for research.
+Continue your work for a week or so using the original database to allow
+further consideration. Then run the utility again with your perfected config
+file on a new copy of your now-current database and then use the modified
+database as your normal work file.
+The week delay will give you time to think about it. If you start
+using the newly modified database immediately, you'll lose work if you miss
+a problem and have to revert to a backup.
+
 
 =========================================================================DIV80==
 NOTES
@@ -293,7 +304,7 @@ See the section below.
 
 If no report file is generated and the black command console window closes
 before you can read it, try first opening a command line console and then
-running the exe or py file from the command line. The window will not close
+running the py file from the command line. The window will not close
 and you'll be able to read any error messages.
 
 =========-
@@ -304,6 +315,8 @@ Start over with the supplied config file and make sure that works, Then make you
 edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
+=========-
+Multiline Values
 Probably the trickiest part of the config file is the SQL section.
 The SQL_STATEMENT_1 and SQL_STATEMENT_2 keys are multi-line values.
 Each line of the value should be on a separate line indented with at least
@@ -378,9 +391,11 @@ Locked" message. In that case: Close the console window, Close RM and re-run the
 
 =========================================================================DIV80==
 TODO
-Consider adding execution of SQL scripts.
-Consider fancier formatting of output.
-Add ability to add additional database extensions besides RMNOCASE.
+
+*  Consider adding execution of SQL scripts.
+*  Consider fancier formatting of output.
+*  Add ability to add additional database extensions besides RMNOCASE.
+*  ?? what would you find useful?
 
 
 =========================================================================DIV80==

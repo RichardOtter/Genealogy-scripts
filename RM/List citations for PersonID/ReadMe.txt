@@ -1,5 +1,5 @@
 =========================================================================DIV80==
-List all Citations for a Person given the PersonID/RIN
+List all citations for a person given the RIN/PersonID
 ListCitationsForPersonID
 
 Utility application for use with RootsMagic databases
@@ -7,15 +7,16 @@ Utility application for use with RootsMagic databases
 RootsMagic (RM) software uses a SQLite relational database as its data storage
 file. Having access to that file via third part tools is a major advantage
 to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
+
 
 =========================================================================DIV80==
 Purpose
 
-Input is a single RIN number (also called a PersonID).
-The RIN can be entered at the console window as the script runs, or it can be 
-specified in the RM-Python-config.ini file.
+Generates  an alphabetically sorted list of source names and citation names
+associated with a person. The list includes citations attached-
 
-Output is an alphabetically sorted list of source names and citation names attached -
     to the specified person
     to facts attached to the person
     to facts shared to the person
@@ -32,18 +33,18 @@ The results are saved to a report file which is automatically displayed.
 =========================================================================DIV80==
 Backups
 
-IMPORTANT: You should run this script on a copy of your database file until you
-have confidence using it and confidence in its results. Or at least have a
-current known-good backup.
-
+IMPORTANT
 This script only reads the database file and makes no changes.
+However, you should run this script on a copy of your database file or at least
+have multiple known-good backups until you are confident that the the database
+remains intact after use. At that point, run this utility of your
+"production" database.
 
 
 =========================================================================DIV80==
 Compatibility
 
 Tested with RootsMagic v 10
-Not compatible with RM v7
 Tested with Python for Windows v3.13   64bit
 
 The py file has not been tested on MacOS but could probably be easily
@@ -83,7 +84,9 @@ To install and use the script:
 
 *  Examine the generated report text file that is now opened in Notepad.
 
-
+Input is a single RIN number (also called a PersonID).
+The RIN can be entered at the console window as the script runs, or it can be 
+specified in the RM-Python-config.ini file.
 
 ======================================================================
 Backups
@@ -156,10 +159,16 @@ Run the Python installer selecting all default options.
 
 
 =========================================================================DIV80==
-NOTES
+Config file contents and editing
 
-=========-
-RM-Python-config.ini  (the config file)
+First, some nomenclature. The config file is made up of Sections, Keys, Values and
+Comments. The names in square brackets are Section Names that identify the start
+of a section. A Section contains Key = Value pairs. Names on the left of
+the = sign are Keys. Text on the right side of the = is the Value of the Key.
+Comment lines start with # and are only included to help the user read and
+understand the file.
+
+
 If there are any non-ASCII characters in the config file then the file must be
 saved in UTF-8 format, with no byte order mark (BOM).
 The included sample ini file has an accented ä in the first line comment to
@@ -188,7 +197,7 @@ See the section below.
 
 If no report file is generated and the black command console window closes
 before you can read it, try first opening a command line console and then
-running the exe or py file from the command line. The window will not close
+running the py file from the command line. The window will not close
 and you'll be able to read any error messages.
 
 =========-
@@ -200,9 +209,12 @@ edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
 
+
 =========================================================================DIV80==
 TODO
+
 *   consider alternate output formats
+*  ?? what would you find useful?
 
 
 =========================================================================DIV80==

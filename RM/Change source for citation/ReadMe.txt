@@ -1,13 +1,14 @@
 =========================================================================DIV80==
+Change the source for a given citation
 ChangeSrcForCitation
-Change source for citation
-
 
 Utility application for use with RootsMagic databases
 
 RootsMagic (RM) software uses a SQLite relational database as its data storage
-file. Having access to that file via third party tools is a major advantage
+file. Having access to that file via third part tools is a major advantage
 to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
 
 
 =========================================================================DIV80==
@@ -30,15 +31,16 @@ For example, if you lump census source by US state and year, you will have a
 number of sources all based on the same source template.
 When entering a citation, you may accidentally cite a source set up for the
 wrong year or state. Instead of deleting and recreating the citation, use this
-utility to move it to the correct source.
+utility to move the citation to the correct source.
 
 
 =========================================================================DIV80==
 Backups
 
-IMPORTANT: This utility modifies the RM database file.
+IMPORTANT
+This utility modifies the RM database file.
 You should run this script on a copy of your database file or at least
-have a known-good backup until you are confident that the changes made
+have multiple known-good backups until you are confident that the changes made
 are the ones desired.
 
 
@@ -115,6 +117,17 @@ It is easily and cleanly removed using the standard method found in
 Windows=>Settings
 
 Run the Python installer selecting all default options.
+
+
+=========================================================================DIV80==
+Config file contents and editing
+
+First, some nomenclature. The config file is made up of Sections, Keys, Values and
+Comments. The names in square brackets are Section Names that identify the start
+of a section. A Section contains Key = Value pairs. Names on the left of
+the = sign are Keys. Text on the right side of the = is the Value of the Key.
+Comment lines start with # and are only included to help the user read and
+understand the file.
 
 
 =========================================================================DIV80==
@@ -197,7 +210,7 @@ See the section below.
 
 If no report file is generated and the black command console window closes
 before you can read it, try first opening a command line console and then
-running the exe or py file from the command line. The window will not close
+running the py file from the command line. The window will not close
 and you'll be able to read any error messages.
 
 =========-
@@ -208,8 +221,10 @@ Start over with the supplied config file and make sure that works, Then make you
 edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
+
 =========================================================================DIV80==
 TODO
+
 *  ?? what would you find useful?
 
 

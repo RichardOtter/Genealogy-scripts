@@ -1,12 +1,14 @@
 =========================================================================DIV80==
+Color code people by group membership
 ColorFromGroup
-Color from Group
 
 Utility application for use with RootsMagic databases
 
 RootsMagic (RM) software uses a SQLite relational database as its data storage
 file. Having access to that file via third part tools is a major advantage
 to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
 
 
 =========================================================================DIV80==
@@ -15,16 +17,18 @@ Purpose
 This utility will change the color coding/color high-lighting of people in
 the database based on their group membership.
 While this is easily done with RM, this utility allows a series of commands
-to be executed with one run. It is a perfect complement to the 
-utility GroupFromSQL.
+to be executed with one run.
+It is a perfect complement to the utility GroupFromSQL.
 
 
 =========================================================================DIV80==
 Backups
 
-IMPORTANT: You should run this script on a copy of your database file until you
-have confidence using it and confidence in its results. Or at least have a
-current known-good backup.
+IMPORTANT
+This utility modifies the RM database file.
+You should run this script on a copy of your database file or at least
+have multiple known-good backups until you are confident that the changes made
+are the ones desired.
 
 
 =========================================================================DIV80==
@@ -107,6 +111,14 @@ Run the Python installer selecting all default options.
 
 =========================================================================DIV80==
 Config file contents and editing
+
+First, some nomenclature. The config file is made up of Sections, Keys, Values and
+Comments. The names in square brackets are Section Names that identify the start
+of a section. A Section contains Key = Value pairs. Names on the left of
+the = sign are Keys. Text on the right side of the = is the Value of the Key.
+Comment lines start with # and are only included to help the user read and
+understand the file.
+
 
 Before starting, you will want to confirm that a group exists in your database
 that will be the basis of the color operation. Make sure that you know the
@@ -270,7 +282,7 @@ See the section below.
 
 If no report file is generated and the black command console window closes
 before you can read it, try first opening a command line console and then
-running the exe or py file from the command line. The window will not close
+running the py file from the command line. The window will not close
 and you'll be able to read any error messages.
 
 =========-
@@ -281,6 +293,8 @@ Start over with the supplied config file and make sure that works, Then make you
 edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
+=========-
+Multiline Values
 Probably the trickiest part of the config file is the COLORS key in OPTIONS.
 It may be assigned either a single or multi line value.
 Each line of the value should be on a separate line indented with at least 
@@ -332,9 +346,11 @@ COLOR_COMMAND =
 
 =========================================================================DIV80==
 TODO
-Consider adding ability 
-to specify color by name, color set by name.
-to rename a color to the group that it represents
+
+*  Consider adding abilities: 
+*  to specify color by name, color set by name.
+*  to rename a color to the group that it represents
+*  ?? what would you find useful?
 
 
 =========================================================================DIV80==

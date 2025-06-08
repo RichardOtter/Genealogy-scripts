@@ -1,12 +1,14 @@
 =========================================================================DIV80==
-Change Source Template
+Change the source template used by given sources
 ChangeSourceTemplate
 
 Utility application for use with RootsMagic databases
 
 RootsMagic (RM) software uses a SQLite relational database as its data storage
-file. Having access to that file via third party tools is a major advantage
+file. Having access to that file via third part tools is a major advantage
 to using RM.
+This software accesses that database directly to provide functionality not found
+in the RootsMagic program.
 
 
 =========================================================================DIV80==
@@ -30,9 +32,11 @@ already in use. The work flow using this utility, involves :
 * Copy the in-use source template (using the "Copy" button in the RM source
   templates list window)
 * Rename and edit the Source Template copy to have the desired fields
-* Make a copy of your database and place it in a working folder.
+* Make a copy of your database and place it in a working folder and rename it.
 * Uses this utility on the database copy in the working folder to switch the
   sources that used the old template to instead use the newly created template.
+* Verify that desired result was achieved.
+* Move the database copy to your database's normal location and name.
 
 See "All possible Source Template changes" in the Notes section before
 proceeding.
@@ -40,7 +44,7 @@ proceeding.
 This utility does not modify any source template. It modifies sources and
 citations.
 This utility does not move data BETWEEN source and citation fields. Other
-utilities can do that.
+utilities can do that. (see: LumpSources)
 
 
 =========================================================================DIV80==
@@ -48,26 +52,21 @@ Backups
 
 VERY IMPORTANT
 This utility makes changes to the RM database file. It can change a large number
-of data items in a single run.
+of data items in a single run depending on the settings specified.
 You will likely not be satisfied with your first run of the utility and you will
 want to try again, perhaps several times, each time making changes to your
-configuration file. You must run this script on a copy of your database file
-and have at least several known-good backups.
+configuration file. 
+You must run this script on a copy of your database file and have at least
+multiple known-good backups.
 
-Once you are satisfied, don't hurry to use the resulting file. Wait a week or so
-to allow further consideration. Then run the utility with your perfected
-config file on a copy of your now-current database and then use the modified
-database as your normal work file. The week delay will give you time to think
-about it. If you start using the newly modified database immediately, you'll
-lose work if you miss a problem and have to revert to a backup.
+Read about additional considerations in the Precautions section below.
 
 
 =========================================================================DIV80==
 Compatibility
 
-Tested with RootsMagic version 10.
-Not compatible with ver 7.
-Tested with Python for Windows v3.13.1   64bit
+Tested with RootsMagic v 10
+Tested with Python for Windows v3.13   64bit
 
 The py file has not been tested on MacOS but could probably be easily
 modified to work on MacOS with Python version 3 installed.
@@ -138,6 +137,17 @@ It is easily and cleanly removed using the standard method found in
 Windows=>Settings
 
 Run the Python installer selecting all default options.
+
+
+=========================================================================DIV80==
+Config file contents and editing
+
+First, some nomenclature. The config file is made up of Sections, Keys, Values and
+Comments. The names in square brackets are Section Names that identify the start
+of a section. A Section contains Key = Value pairs. Names on the left of
+the = sign are Keys. Text on the right side of the = is the Value of the Key.
+Comment lines start with # and are only included to help the user read and
+understand the file.
 
 
 =========================================================================DIV80==
@@ -516,9 +526,22 @@ Open the database in RootsMagic and confirm that the desired changes have been m
 If there are changes that you did not want, make another copy of your main
 database file and copy it to the working folder and try again.
 
+=========================================================================DIV80==
+Precautions before using the modified database
+
+Once you are satisfied with the results of the modifications made by this
+software, don't hurry to start use the resulting file for research.
+Continue your work for a week or so using the original database to allow
+further consideration. Then run the utility again with your perfected config
+file on a new copy of your now-current database and then use the modified
+database as your normal work file.
+The week delay will give you time to think about it. If you start
+using the newly modified database immediately, you'll lose work if you miss
+a problem and have to revert to a backup.
+
 
 =========================================================================DIV80==
-NOTES
+Notes
 
 ===========-
 All possible Source Template changes for source templates
@@ -885,6 +908,7 @@ literal percent symbol, underscore, or a single escape character, respectively.
 
 =========================================================================DIV80==
 TODO
+
 *  consider allowing text to be used in the left side of a mapping instead of
    existing text in an existing field.
 *  ?? what would you find useful?
