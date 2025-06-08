@@ -1,55 +1,57 @@
 =========================================================================DIV80==
-[Utility name]
+<LONG-NAME>
+<SHORT-NAME>
 CONSTANT
+DONE ---------------
 =========================================================================DIV80==
 Purpose
-
+each different
+DONE ---------------
 =========================================================================DIV80==
 Backups
-Mostly CONSTANT
-=========================================================================DIV80==
-
-
+3 versions
+DONE ---------------
 =========================================================================DIV80==
 Compatibility
-CONSTANT  ???
+2 versions  just 1 extra line re v7 in TestExternalFiles
 =========================================================================DIV80==
 Overview
 Follows pattern with word changes for app names
 =========================================================================DIV80==
 Python installation
 CONSTANT
+DONE ---------------
 =========================================================================DIV80==
 unifuzz64.dll download-
-CONSTANT
+CONSTANT    only in RunSQL
+DONE ---------------
 =========================================================================DIV80==
-Config file contents and editing
-=========================================================================DIV80==
-Precautions before using the modified database
-CONSTANT
+Config file: location, contents and editing
+
 =========================================================================DIV80==
 Notes
 =========-
 =========-
 =========-
-
-
-
-
 =========================================================================DIV80==
-=========================================================================DIV80==
+Precautions before using the modified database
+CONSTANT  only in the 2  big change
+DONE ---------------
 =========================================================================DIV80==
 Troubleshooting:
-
+numbers of sub sections differ
+DONE ---------------
 =========================================================================DIV80==
 TODO
-
+DONE ---------------
 =========================================================================DIV80==
 Feedback
 CONSTANT
+DONE ---------------
 =========================================================================DIV80==
 Distribution
 CONSTANT
+DONE ---------------
 =========================================================================DIV80==
 
 
@@ -72,7 +74,7 @@ in the RootsMagic program.
 =========================================================================DIV80==
 Backups
 
-
+=======================
 large changes
 VERY IMPORTANT
 This utility makes changes to the RM database file. It can change a large number
@@ -85,9 +87,7 @@ multiple known-good backups.
 
 Read about additional considerations in the Precautions section below.
 
-
-
-
+=======================
 small changes
 IMPORTANT
 This utility modifies the RM database file.
@@ -95,6 +95,7 @@ You should run this script on a copy of your database file or at least
 have multiple known-good backups until you are confident that the changes made
 are the ones desired.
 
+=======================
 read only
 IMPORTANT
 This script only reads the database file and makes no changes.
@@ -102,15 +103,6 @@ However, you should run this script on a copy of your database file or at least
 have multiple known-good backups until you are confident that the the database
 remains intact after use. At that point, run this utility of your
 "production" database.
-
-precautions-
-Once you are satisfied, don't hurry to use the resulting file. Wait a week or so
-to allow further consideration. Then run the utility with your perfected
-config file on a copy of your now-current database and then use the modified
-database as your normal work file. The week delay will give you time to think
-about it. If you start using the newly modified database immediately, you'll
-lose work if you miss a problem and have to revert to a backup.
-
 
 =========================================================================DIV80==
 Compatibility
@@ -120,6 +112,7 @@ Tested with Python for Windows v3.13   64bit
 
 The py file has not been tested on MacOS but could probably be easily
 modified to work on MacOS with Python version 3 installed.
+
 
 =========================================================================DIV80==
 Performance
@@ -159,7 +152,8 @@ To install and use the script:
 
 =========================================================================DIV80==
 Python install-
-Install Python from the Microsoft Store
+
+Either install Python from the Microsoft Store
 or download and install from Python.org web site
 
 From Microsoft Store
@@ -205,11 +199,60 @@ of unifuzz64.dll from the SQLiteToolsforRootsMagic website.
 Capabilities
 ONLY TEST EXTERNAL FILES
 =========================================================================DIV80==
-Config file contents and editing
+Config file: location, contents and editing
+
+Name and location
+The RM-Python-config.ini file will be recognized as the configuration file when
+placed in the same directory as the Python script (.py file) for the utility.
+The file uses the standard ini file format.
+
+The configuration file name and location can also be specified on the command-line
+as an argument to the script. This argument overrides the default configuration
+file located in the current directory if it exists.
+
+For example, if the script "RMutility.py" is executed from the folder
+"C:\Users\me\Joe", it will use the configuration file 
+ C:\Users\me\Joe\RM-Python-config.ini" if it exists.
+However, if the utility is run with an explicit argument, such as:
+  RMutility.py "C:\Users\me\Joe\documents\RM-Python-config.ini"
+then the specified configuration file will be used instead of the default
+Note that the file name is also not restricted to the default. 
+For instance, running the utility with:
+  RMutility.py "C:\Users\me\Joe\documents\Rmine.ini"
+will instruct the utility to read Rmine.ini for its configuration parameters.
+
+The configuration file might be named so as to convey its purpose.
+A Windows shortcut can also be constructed with the above described argument
+to allow execution from the desktop with a double mouse click.
+
+Editing
+Use any text editor to edit the configuration file. The builtin-to-Windows
+app "Notepad" works well. 
+To edit the configuration file, first open the Notepad app and then use the
+mouse to drag the configuration file onto the open Notepad window
+
+Contents
+The config file is made up of the elements: Sections, Keys, Values and
+Comments. The names in square brackets are Section Names that identify the start
+of a section. A Section contains Key = Value pairs. Names on the left of
+the = sign are Keys. Text on the right side of the = is the Value of the Key.
+Comment lines start with # and are only included to help the user read and
+understand the file.
+
+Encoding
+If there are any non-ASCII characters in the config file then the file must be
+saved in UTF-8 format, with no byte order mark (BOM).
+The included sample config file has an accented ä in the first line comment to
+force it to be in the correct format.
+File format is an option in the "Save file" dialog box in NotePad.
 
 
-* using notepad
-* UTF-8 file
+=========================================================================DIV80==
+Running the utility in detail
+
+==========-
+
+below moved to notes
 
 Before starting, you will want to confirm that a group exists in your database
 that will be the basis of the color operation. Make sure that you know the
@@ -227,20 +270,6 @@ Next, determine whether there will be more than one action to perform. Usually,
 if you want to make a group correspond to a color, you will want to reset/clear 
 that color before assigning group members. This will take care of cases in which
 people have been removed from groups.
-
-To edit the config file, open NotePad and drag the config file onto the NotePad 
-window.
-
-The config file is made up of Sections, Keys, Values and Comments. The names
-in square brackets are Section Names that identify the start of a section. A
-Section contains Key = Value pairs. Names on the left of the = sign are Keys.
-Text on the right side of the = is the Value of the Key. Comment lines start
-with # and are only included to help the user read and understand the file.
-
-
-
-
-some of the notes items can be moved here
 
 
 =========================================================================DIV80==
@@ -269,18 +298,6 @@ The included ini sample file has this option activated and set to use Windows
 NotePad as the display app. It can be deactivated by inserting a # character
 at the start of the line. Your favorite editor may be substituted.
 
-=========-
-RM-Python-config.ini  (the config file)
-
-If there are any non-ASCII characters in the config file then the file must be
-saved in UTF-8 format, with no byte order mark (BOM).
-The included sample config file has an accented ä in the first line comment to
-force it to be in the correct format.
-File format is an option in the "Save file" dialog box in NotePad.
-
-
-
-
 
 =========================================================================DIV80==
 =========================================================================DIV80==
@@ -303,7 +320,7 @@ See the section below.
 
 If no report file is generated and the black command console window closes
 before you can read it, try first opening a command line console and then
-running the exe or py file from the command line. The window will not close
+running the py file from the command line. The window will not close
 and you'll be able to read any error messages.
 
 =========-
@@ -314,6 +331,35 @@ Start over with the supplied config file and make sure that works, Then make you
 edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
+===========-
+Error Message:
+Tried to create duplicate Name in XML.
+
+This will be generated when the first source is processed. It is generated
+before any database change is made.
+
+This problem can usually be avoided by reordering the lines in the mapping.
+
+Example:
+CITATION_MAPPING =
+  Field_1     >     Field_2
+  Field_2     >     Field_1
+
+In this case, existing field 1 is attempted to be renamed to field 2. However,
+there is already an existing field 2. That is not allowed and will stop
+processing and generate the error message.
+
+This can be avoided by using a temporary field, say "temp"
+
+CITATION_MAPPING =
+  Field_1     >     temp
+  Field_2     >     Field_1
+  temp        >     Field_2
+  temp        >     NULL
+
+
+=========-
+Multiline Values
 Probably the trickiest part of the config file is the COLORS key in OPTIONS.
 It may be assigned either a single or multi line value.
 Each line of the value should be on a separate line indented with at least 
@@ -361,7 +407,6 @@ COLOR_COMMAND =
   GroupName1
  #  GroupName2
   GroupName3
-
 
 
 

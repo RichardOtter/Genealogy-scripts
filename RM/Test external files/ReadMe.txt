@@ -103,7 +103,8 @@ To install and use the script:
 
 =========================================================================DIV80==
 Python install-
-Install Python from the Microsoft Store
+
+Either install Python from the Microsoft Store
 or download and install from Python.org web site
 
 From Microsoft Store
@@ -134,7 +135,7 @@ Run the Python installer selecting all default options.
 
 
 =========================================================================DIV80==
-Config file contents and editing
+Config file: location, contents and editing
 
 First, some nomenclature. The config file is made up of Sections, Keys, Values and
 Comments. The names in square brackets are Section Names that identify the start
@@ -143,6 +144,17 @@ the = sign are Keys. Text on the right side of the = is the Value of the Key.
 Comment lines start with # and are only included to help the user read and
 understand the file.
 
+If there are any non-ASCII characters in the config file then the file must be
+saved in UTF-8 format, with no byte order mark (BOM).
+The included sample config file has an accented ä in the first line comment to
+force it to be in the correct format.
+File format is an option in the "Save file" dialog box in NotePad.
+
+
+=========================================================================DIV80==
+Running the utility in detail
+
+==========-
 
 =========================================================================DIV80==
 Capabilities
@@ -308,16 +320,6 @@ Option to automatically open the report file in a display application.
 The included config file sample has this option activated and set to use Windows
 NotePad as the display app. It can be deactivated by inserting a # character
 at the start of the line. Your favorite editor may be substituted.
-
-
-=========-
-RM-Python-config.ini  (the config file)
-If there are any non-ASCII characters in the config file then the file must be
-saved in UTF-8 format, with no byte order mark (BOM).
-The included sample config file has an accented ä in the first line comment to
-force it to be in the correct format.
-File format is an option in the "Save file" dialog box in NotePad.
-The [END] section is entirely optional.
 
 
 =========-

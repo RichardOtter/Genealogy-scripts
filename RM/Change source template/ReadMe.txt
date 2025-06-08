@@ -109,7 +109,8 @@ To install and use the script:
 
 =========================================================================DIV80==
 Python install-
-Install Python from the Microsoft Store
+
+Either install Python from the Microsoft Store
 or download and install from Python.org web site
 
 From Microsoft Store
@@ -140,14 +141,46 @@ Run the Python installer selecting all default options.
 
 
 =========================================================================DIV80==
-Config file contents and editing
+Config file: location, contents and editing
 
-First, some nomenclature. The config file is made up of Sections, Keys, Values and
+Name and location
+The RM-Python-config.ini file will be recognized as the configuration file when
+placed in the same directory as the Python script (.py file) for the utility.
+The file uses the standard ini file format.
+
+The configuration file name and location can also be specified on the command-line
+as an argument to the script. This argument overrides the default configuration
+file located in the current directory if it exists.
+
+For example, if the script "RMutility.py" is executed from the folder
+"C:\Users\me\Joe", it will use the configuration file 
+ C:\Users\me\Joe\RM-Python-config.ini" if it exists.
+However, if the utility is run with an explicit argument, such as:
+  RMutility.py "C:\Users\me\Joe\documents\RM-Python-config.ini"
+then the specified configuration file will be used instead of the default
+Note that the file name is also not restricted to the default. 
+For instance, running the utility with:
+  RMutility.py "C:\Users\me\Joe\documents\Rmine.ini"
+will instruct the utility to read Rmine.ini for its configuration parameters.
+
+The configuration file might be named so as to convey its purpose.
+A Windows shortcut can also be constructed with the above described argument
+to allow execution from the desktop with a double mouse click.
+
+Contents
+The config file is made up of the elements: Sections, Keys, Values and
 Comments. The names in square brackets are Section Names that identify the start
 of a section. A Section contains Key = Value pairs. Names on the left of
 the = sign are Keys. Text on the right side of the = is the Value of the Key.
 Comment lines start with # and are only included to help the user read and
 understand the file.
+
+Encoding
+If there are any non-ASCII characters in the config file then the file must be
+saved in UTF-8 format, with no byte order mark (BOM).
+The included sample config file has an accented ä in the first line comment to
+force it to be in the correct format.
+File format is an option in the "Save file" dialog box in NotePad.
 
 
 =========================================================================DIV80==
@@ -526,19 +559,6 @@ Open the database in RootsMagic and confirm that the desired changes have been m
 If there are changes that you did not want, make another copy of your main
 database file and copy it to the working folder and try again.
 
-=========================================================================DIV80==
-Precautions before using the modified database
-
-Once you are satisfied with the results of the modifications made by this
-software, don't hurry to start use the resulting file for research.
-Continue your work for a week or so using the original database to allow
-further consideration. Then run the utility again with your perfected config
-file on a new copy of your now-current database and then use the modified
-database as your normal work file.
-The week delay will give you time to think about it. If you start
-using the newly modified database immediately, you'll lose work if you miss
-a problem and have to revert to a backup.
-
 
 =========================================================================DIV80==
 Notes
@@ -742,17 +762,8 @@ Rename a Key
 Delete a Key-Value pair
 Add a new, Key-Value pair with a particular Key and an empty value.-
 
-===========-
-RM-Python-config.ini  (the config file)
-If there are any non-ASCII characters in the config file then the file must be
-saved in UTF-8 format, with no byte order mark (BOM).
-The included sample config file has an accented ä in the first line comment to
-force it to be in the correct format.
-
-File format is an option in the "Save file" dialog box in NotePad.
 
 
-config file path names may be absolute or relative to the current directory.
 
 The MAPPING key takes a multi-line value.
 Each line must be indented with at least one space character.
@@ -770,6 +781,20 @@ The included config sample file has this option activated and set to use Windows
 NotePad as the display app. Your favorite editor may be substituted.
 Automatic display can be deactivated by inserting a # character
 at the start of the line.
+
+
+=========================================================================DIV80==
+Precautions before using the modified database
+
+Once you are satisfied with the results of the modifications made by this
+software, don't hurry to start use the resulting file for research.
+Continue your work for a week or so using the original database to allow
+further consideration. Then run the utility again with your perfected config
+file on a new copy of your now-current database and then use the modified
+database as your normal work file.
+The week delay will give you time to think about it. If you start
+using the newly modified database immediately, you'll lose work if you miss
+a problem and have to revert to a backup.
 
 
 =========================================================================DIV80==
