@@ -12,17 +12,18 @@ Sources are created using a Source Template. If 2 sources are created
 from the same source template, they will have the same fundamental structure.
 
 A Citation is created as a child of a Source. Citations of different sources
-created using the same source template will also have the same fundamental
-structure.
+created using the same source template will have the same fundamental
+structure as each other.
 
 This simple utility will move a citation from one source to another source,
 but only if the 2 sources were created using the same source template.
 
-For example, if you lump census source by US state and year, you will have a
-number of sources all based on the same source template.
+For example, if you lump obituary sourced by newspaper, you will have a
+number of sources (newspapers) all based on the same source template.
 When entering a citation, you may accidentally cite a source set up for the
-wrong year or state. Instead of deleting and recreating the citation, use this
+wrong newspaper. Instead of deleting and recreating the citation, use this
 utility to move the citation to the correct source.
+The utility will carry along all of the uses of the citation.
 
 
 =========================================================================DIV80==
@@ -35,8 +36,8 @@ INCLUDE: LIB_Overview
 Running the utility in detail
 
 While the database name and location is specified in the config file, the actual
-instructions for which citations and sources to modify are entered at prompts in
-the black command shell window.
+instructions for which citations and sources to modify are entered at a series
+of prompts in the black command shell window.
 
 =========-
 Make sure that the "ChangeSrcForCitation.py" file is in the same folder as
@@ -49,16 +50,31 @@ Check that the config file is pointing to the desired database.
 Double click the "ChangeSrcForCitation.py" file to start the utility.
 
 =========-
-The utility asks for the name of the citation to change and the source
-that it should use. In both cases, only enough of the name needs to be
-entered to make it unique among all citations for all sources. 
+The command shell window will open and prompt you to enter the name of
+the citation to move and the source that it should be moved to.
+In both cases, only enough of the name needs to be
+entered to make it unique among all citations for all sources.
+
 It is suggested that you copy and paste from the RM source edit window.
 There is no need to manually type input.
-One may start the name entry with a % char and it will be used as the
-standard  'SQL Like' wild card.
+
+The standard 'SQL Like' wild card characters % and _ may be used.
+% matches 0 or more characters, _ matches one character.
+This utility always adds a % to the end of the citation name and
+source names entered.
+
 If the full citation name is not unique, then as a workaround, you
 could add some text to the citation name of the citation you want
 to modify to make the name unique.
+
+=========-
+After the source name is entered, either a confirmation or error message
+is displayed. In either case, a prompt to change another citation is
+shown.
+
+=========-
+If n is entered in response to the "another" prompt,  the command
+line window is closed and a report file is displayed summarizing the changes made.
 
 =========================================================================DIV80==
 Notes
