@@ -74,7 +74,7 @@ remains intact after use. At that point, run this utility of your
 LIB_Overview
 Overview
 
-This program is what is called a "command line utility". 
+This program is what is called a "command line utility".
 It is in the form of a single text file with a "py" file name extension,
 referred to, below, as "MainScriptFile.py". The utility also needs the
 Python package RMpy, which is a folder included in the distribution zip file.
@@ -85,7 +85,7 @@ The the default name of the configuration file (called, hereinafter the
 "config file") is "RM-Python-config.ini". It should be located in the
 same folder as the MainScriptFile py script file and the RMpy folder.
 At a minimum, the config file gives the name and location of the database on
-which to operate. 
+which to operate.
 
 One config file can be shared among other RM utilities in the suite. Each
 utility will extract the information it needs from the config file.
@@ -100,18 +100,16 @@ To install and use the script for the first time:
 *  Make a copy of your database, move the copy into the working folder.
    Rename the copy to TEST.rmtree
 
-*  Copy these files and the folder from the downloaded zip file to the working folder-
+*  Copy the program files/folder from the downloaded zip file to
+   the working folder.
 
-      file:    MainScriptFile.py     (MainScriptFile is the name of this utility)
-      folder:  RMpy
-      file:    RM-Python-config.ini
+*  Copy the sample config file  from the downloaded zip file to
+   the working folder.
 
-*  Edit the config file, RM-Python-config.ini, that was copied into the working folder.
+*  Edit the config file in the working folder to tell the utility what to
+   do and where to do it.
 
-   The utility needs to know where the RM database file is located, the output
-   report file name and its location.
-
-*  Double click the MainScriptFile.py file to run the utility. 
+*  Double click the main program .py file to run the utility.
 
 *  A summary report will be displayed in NotePad.
 
@@ -180,7 +178,9 @@ APPENDIX  Config file: location, contents and editing
 Name and location
 The RM-Python-config.ini file will be recognized as the configuration file when
 placed in the same directory as the Python script (.py file) for the utility.
-The file uses the standard ini file format.
+The file uses the standard ini file format. For more details, see:
+https://docs.python.org/3/library/configparser.html     see the section "Supported INI File Structure"
+https://en.wikipedia.org/wiki/INI_file
 
 The configuration file name and location can also be specified on the command-line
 as an argument to the script. This argument overrides the default configuration
@@ -194,8 +194,8 @@ However, if the utility is run with an explicit argument, such as:
 then the specified configuration file will be used instead of the default
 Note that the file name is not restricted to the default.
 For instance, running the utility with:
-  RMutility.py Rmine.ini
-will instruct the utility to read Rmine.ini in the current directory 
+  RMutility.py config_mine.ini
+will instruct the utility to read config_mine.ini in the current directory
 for its configuration parameters.
 
 The configuration file might be named so as to convey its purpose.
@@ -204,9 +204,16 @@ to allow execution from the desktop with a double mouse click.
 
 Editing
 Use any text editor to edit the configuration file. The builtin-to-Windows
-app "Notepad" works well.
+app "Notepad" is suitable.
 To edit the configuration file, first open the Notepad app and then use the
 mouse to drag the configuration file onto the open Notepad window.
+
+Encoding
+If there are any non-ASCII characters in the config file then the file must be
+saved in UTF-8 format, with no byte order mark (BOM).
+The included sample config file has an accented ä in the first line comment to
+force it to be in the correct format.
+File format is an option in the "Save file" dialog box in NotePad.
 
 Contents
 The config file is made up of the elements: Sections, Keys, Values and
@@ -221,13 +228,13 @@ KEYs used by all of the RM utilities:
 
 [FILE_PATHS]
 DB_PATH         = TEST.rmtree
-REPORT_FILE_PATH  = Report_ColorFromGroup.txt
+REPORT_FILE_PATH  = ..\Report_utilName.txt
 REPORT_FILE_DISPLAY_APP  = C:\Windows\system32\Notepad.exe
 
 These KEYS are all in the [FILE_PATHS] section and all require file paths as values.
 
 The file path may be absolute, as in REPORT_FILE_DISPLAY_APP
-above, or it may be relative to the current directory, as in DB_PATH and 
+above, or it may be relative to the current directory, as in DB_PATH and
 REPORT_FILE_PATH above.
 
 The DB_PATH points to the database that is to be analyzed/modified.
@@ -242,12 +249,25 @@ If REPORT_FILE_DISPLAY_APP is specified, then the report file will be
 automatically displayed by the named application.
 
 
-Encoding
-If there are any non-ASCII characters in the config file then the file must be
-saved in UTF-8 format, with no byte order mark (BOM).
-The included sample config file has an accented ä in the first line comment to
-force it to be in the correct format.
-File format is an option in the "Save file" dialog box in NotePad.
+=========================================================================DIV80==
+LIB_multi-line value
+
+The MAPPING keys takes a multi-line value.
+
+Each line must be indented with at least one space character.
+
+All the rows in a value should have the same indentation (for human readability).
+
+Each line must have 2 entries- old field, new field, separated by a ">" character.
+
+Entries may be enclosed in double quotes.
+
+The space between the columns is flexible.
+
+There is one or more blank lines at the end of a value separating it
+from the next item.
+
+A comment line is not allowed within a multi-line value.
 
 
 =========================================================================DIV80==
