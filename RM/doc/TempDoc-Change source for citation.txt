@@ -39,12 +39,30 @@ While the database name and location is specified in the config file, the actual
 instructions for which citations and sources to modify are entered at a series
 of prompts in the black command shell window.
 
-=========-
-Make sure that the "ChangeSrcForCitation.py" file is in the same folder as
-the folder "RMpy" and "RM-Python-config.ini"
 
-=========-
-Check that the config file is pointing to the desired database.
+==========-
+Create a folder on your computer that you will not confuse with other
+folders. It will be referred to as the "working folder".
+
+==========-
+Copy these files and the folder from the downloaded zip file to the working folder-
+      ChangeSrcForCitation.py
+      RM-Python-config.ini
+      RMpy
+
+==========-
+Make a copy of your database, move the copy into the working folder.
+Rename the copy to TEST.rmtree
+
+==========-
+Edit the RM-Python-config.ini file in the working folder.
+
+Check that the DB_PATH key in the config file is pointing to the 
+desired database.
+If the above steps were followed, the path in the sample config file
+is already correct: TEST.rmtree
+
+Save the config file.
 
 =========-
 Double click the "ChangeSrcForCitation.py" file to start the utility.

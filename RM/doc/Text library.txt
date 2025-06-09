@@ -3,22 +3,36 @@ LIB_INTRO
 
 Utility application for use with RootsMagic databases
 
-RootsMagic (RM) software uses a SQLite relational database as its data storage
-file. Having access to that file via third part tools is a major advantage
-to using RM.
-This software accesses that database directly to provide functionality not found
-in the RootsMagic program.
+RootsMagic (RM) software (https://RootsMagic.com) uses a SQLite relational
+database (https://Sqlite.org) as its data storage file. Having access to
+the RM data file via third party tools is a major advantage over other
+genealogy project management applications.
+
+This software accesses the database directly to provide functionality not
+found in the RootsMagic program.
+
+This utility is part of a suite of utilities that has been written to
+perform analysis or data modification not available within the RM application.
+See https://RichardOtter.github.io
+
+This software is written using the Python language (https://Python.org) and
+is distributed as a text ".py" file along with a folder, RMpy, of common Python
+code, called a python package. The user can simply open the file or package
+files in a text editor to read all implementation details and access safety.
+
+A Python py script file is executed using the Python language interpreter.
+The interpreter is a separate piece of software easily installed on your computer.
 
 
 =========================================================================DIV80==
 LIB_Compatibility
 Compatibility
 
-Tested with RootsMagic v 10
-Tested with Python for Windows v3.13   64bit
+Tested with a RootsMagic v 10.0.5 database
+using Python for Windows v3.13.4   64bit
 
-The py file has not been tested on MacOS but could probably be easily
-modified to work on MacOS with Python version 3 installed.
+The py file has not been tested on MacOS but could probably be
+modified to work on a Macintosh with Python version 3 installed.
 
 =========================================================================DIV80==
 LIB_Backups large changes
@@ -29,8 +43,8 @@ This utility makes changes to the RM database file. It can change a large number
 of data items in a single run depending on the settings specified.
 You will likely not be satisfied with your first run of the utility and you will
 want to try again, perhaps several times, each time making changes to your
-configuration file. 
-You must run this script on a copy of your database file and have at least
+configuration file.
+You must run this script on a copy of your database file or have at least
 multiple known-good backups.
 
 Read about additional considerations in the Precautions section below.
@@ -41,8 +55,8 @@ Backups
 
 IMPORTANT
 This utility modifies the RM database file.
-You should run this script on a copy of your database file or at least
-have multiple known-good backups until you are confident that the changes made
+You should run this script on a copy of your database file (or at least
+have multiple known-good backups) until you are confident that the changes made
 are the ones desired.
 
 =========================================================================DIV80==
@@ -61,15 +75,20 @@ LIB_Overview
 Overview
 
 This program is what is called a "command line utility". 
-It is in the form of a single file with a "py" extension, referred to 
-below, as "MainScriptFile.py".
-Most input to the utility is through the configuration file and sometimes
-the command line console window.
-The the default name of the configuration file ("config file") is "RM-Python-config.ini"
-and it should also be located in the same folder as the MainScriptFile py script.
-At a minimum, the config gives the name and location of the database on
-which to operate. One config file can be shared among my other RM utilities.
-Each utility will extract the information it needs from the config file.
+It is in the form of a single text file with a "py" file name extension,
+referred to, below, as "MainScriptFile.py". The utility also needs the
+Python package RMpy, which is a folder included in the distribution zip file.
+
+Most input to the utility is through the configuration file. (Some utilities
+in this suite also take user input from the command line console window.)
+The the default name of the configuration file (called, hereinafter the
+"config file") is "RM-Python-config.ini". It should be located in the
+same folder as the MainScriptFile py script file and the RMpy folder.
+At a minimum, the config file gives the name and location of the database on
+which to operate. 
+
+One config file can be shared among other RM utilities in the suite. Each
+utility will extract the information it needs from the config file.
 
 To install and use the script for the first time:
 
@@ -82,7 +101,8 @@ To install and use the script for the first time:
    Rename the copy to TEST.rmtree
 
 *  Copy these files and the folder from the downloaded zip file to the working folder-
-      file:    MainScriptFile.py
+
+      file:    MainScriptFile.py     (MainScriptFile is the name of this utility)
       folder:  RMpy
       file:    RM-Python-config.ini
 
@@ -91,7 +111,7 @@ To install and use the script for the first time:
    The utility needs to know where the RM database file is located, the output
    report file name and its location.
 
-*  Double click the MainScriptFile.py ile to run the utility. 
+*  Double click the MainScriptFile.py file to run the utility. 
 
 *  A summary report will be displayed in NotePad.
 
@@ -102,8 +122,7 @@ To install and use the script for the first time:
 LIB_APPENDIX  Python install
 APPENDIX  Python install
 
-Either
-install Python from the Microsoft Store
+Either install Python from the Microsoft Store
 or
 download and install from Python.org web site
 
@@ -115,7 +134,7 @@ the various versions of Python.
 Click the Get button for the latest version.
 
 Web site download and install
-Download the current version of Python 3, ( or see direct link below
+Download the current version of Python 3, (or see direct link below
 for the current as of this date)
 https://www.python.org/downloads/windows/
 
@@ -124,8 +143,8 @@ Find the link near bottom left side of the page, in the "Stable Releases"
 section, labeled "Download Windows installer (64-bit)"
 Click it and save the installer.
 
-Direct link to recent (as of 2024-12) version installer-
-https://www.python.org/ftp/python/3.13.1/python-3.13.1-amd64.exe
+Direct link to recent (as of 2025-06) version installer-
+https://www.python.org/ftp/python/3.13.4/python-3.13.4-amd64.exe
 
 The Python installation requires about 100 Mbytes.
 It is easily and cleanly removed using the standard method found in
@@ -168,15 +187,16 @@ as an argument to the script. This argument overrides the default configuration
 file located in the current directory if it exists.
 
 For example, if the script "RMutility.py" is executed from the folder
-"C:\Users\me\Joe", it will use the configuration file 
+"C:\Users\me\Joe", it will use the configuration file
  C:\Users\me\Joe\RM-Python-config.ini" if it exists.
 However, if the utility is run with an explicit argument, such as:
   RMutility.py "C:\Users\me\Joe\documents\RM-Python-config.ini"
 then the specified configuration file will be used instead of the default
-Note that the file name is also not restricted to the default. 
+Note that the file name is not restricted to the default.
 For instance, running the utility with:
-  RMutility.py "C:\Users\me\Joe\documents\Rmine.ini"
-will instruct the utility to read Rmine.ini for its configuration parameters.
+  RMutility.py Rmine.ini
+will instruct the utility to read Rmine.ini in the current directory 
+for its configuration parameters.
 
 The configuration file might be named so as to convey its purpose.
 A Windows shortcut can also be constructed with the above described argument
@@ -184,14 +204,14 @@ to allow execution from the desktop with a double mouse click.
 
 Editing
 Use any text editor to edit the configuration file. The builtin-to-Windows
-app "Notepad" works well. 
+app "Notepad" works well.
 To edit the configuration file, first open the Notepad app and then use the
-mouse to drag the configuration file onto the open Notepad window
+mouse to drag the configuration file onto the open Notepad window.
 
 Contents
 The config file is made up of the elements: Sections, Keys, Values and
 Comments. The names in square brackets are Section Names that identify the start
-of a section. A Section contains Key = Value pairs. Names on the left of
+of a section. A Section contains one or more Key = Value pairs. Names on the left of
 the = sign are Keys. Text on the right side of the = is the Value of the Key.
 Comment lines start with # and are only included to help the user read and
 understand the file.
@@ -245,13 +265,13 @@ console window for error messages that will help you fix the problem.
 There may be something wrong with the config file line- REPORT_FILE_PATH
 
 If the black console windows displays the message-
-RM-Python-config.ini file contains a format error
-See the section below.
+RM-Python-config.ini file contains a format error, see the section below.
 
 If no report file is generated and the black command console window closes
-before you can read it, try first opening a command line console and then
-running the py file from the command line. The window will not close
-and you'll be able to read any error messages.
+before you can read it, try first opening a command line console, cd'ing to
+the folder containing the py file and then running the py file from the
+command line. The window will not close and you will be able to read any
+error messages.
 
 =========-
 Error message:
@@ -261,22 +281,23 @@ Start over with the supplied config file and make sure that works, Then make you
 edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
-
-
-
 =========================================================================DIV80==
 LIB_Precautions before using the modified database
 Precautions before using the modified database
 
 Once you are satisfied with the results of the modifications made by this
-software, don't hurry to start use the resulting file for research.
-Continue your work for a week or so using the original database to allow
-further consideration. Then run the utility again with your perfected config
-file on a new copy of your now-current database and then use the modified
-database as your normal work file.
-The week delay will give you time to think about it. If you start
-using the newly modified database immediately, you'll lose work if you miss
-a problem and have to revert to a backup.
+software, don't hurry to start using the resulting file for research.
+Continue your work for several days using the original database to allow
+further thought. Then run the utility again with your perfected config
+file on a new copy of your now-current database. Inspect the results and then
+use the modified database as your normal research file.
+
+The week delay will give you time to think about what could go wrong. You should
+consider unexpected changes to your data that you did not expect.
+
+If you start using the newly modified database immediately, you'll lose work
+if you missed a problem only to find it later and have to revert to a backup
+from before the database was modified.
 
 
 =========================================================================DIV80==

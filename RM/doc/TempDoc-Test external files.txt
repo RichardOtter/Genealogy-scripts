@@ -32,8 +32,7 @@ A Hash file might be generated annually and archived with the full dataset.
 INCLUDE: LIB_Backups read only
 =========================================================================DIV80==
 INCLUDE: LIB_Compatibility
-
-Probably still works with RootsMagic v7, although it has not been recetly tested.
+Probably still works with RootsMagic v7, although it has not been recently tested.
 
 =========================================================================DIV80==
 Performance

@@ -1,8 +1,8 @@
 
 UtilityName:  ChangeSourceTemplate
 
-# Last Release v1.1.1
-Version: 1.1.2
+# Last Release v1.1.2
+Version: 1.1.3
 
 DistributionFileList:
   - ChangeSourceTemplate.py

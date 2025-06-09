@@ -324,11 +324,11 @@ def convert_source(reportF, dbConnection, srcID, newTemplateID,
 
     # Update the source with new XML and new templateID
     newSrcFields = ET.tostring(root_element, encoding="unicode")
-    SqlStmt_src_w = """
-UPDATE SourceTable
-   SET Fields = ?, TemplateID = ?
- WHERE SourceID = ?
-"""
+    SqlStmt_src_w = (
+"""UPDATE SourceTable
+SET Fields = ?, TemplateID = ?
+WHERE SourceID = ?;
+""")
     dbConnection.execute(SqlStmt_src_w, (newSrcFields, newTemplateID, srcID))
 
     dbConnection.commit()
@@ -356,11 +356,11 @@ def convert_citation(citation_ID, field_mapping_citation, config, dbConnection):
 
     newCitFields = ET.tostring(root_element, encoding="unicode")
     # Update the citation with new XML and new templateID
-    SqlStmt = """
-UPDATE CitationTable
-   SET Fields = ?
- WHERE CitationID = ? 
-"""
+    SqlStmt = (
+"""UPDATE CitationTable
+SET Fields = ?
+WHERE CitationID = ?;
+""")
     dbConnection.execute(SqlStmt, (newCitFields, citation_ID))
     #  requires RMNOCASE. Do this in a different utility. TODO
     #  if config['CITATIONS'].getboolean('EMPTY_CIT_NAME'):
@@ -435,11 +435,11 @@ def create_empty_field(name_to_use, fields):
 
 # ===================================================DIV60==
 def empty_citation_name(CitationID, dbConnection):
-    SqlStmt = """
-UPDATE CitationTable
-  SET CitationName = ''
- WHERE CitationID = ?
-"""
+    SqlStmt = (
+"""UPDATE CitationTable
+SET CitationName = ''
+WHERE CitationID = ?;
+""")
     cur = dbConnection.cursor()
     cur.execute(SqlStmt, (CitationID,))
 
@@ -450,18 +450,18 @@ def get_root_element(dbConnection, SourceID=None, CitationID=None):
     # Get the Table.Fields BLOB from the ID to extract its data
     if SourceID is not None:
         ID = SourceID
-        SqlStmt = """
-SELECT Fields
-  FROM SourceTable
- WHERE SourceID = ?
-"""
+        SqlStmt = (
+"""SELECT Fields
+FROM SourceTable
+WHERE SourceID = ?;
+""")
     elif CitationID is not None:
         ID = CitationID
-        SqlStmt = """
-SELECT Fields
-  FROM CitationTable
- WHERE CitationID = ?
-"""
+        SqlStmt = (
+"""SELECT Fields
+FROM CitationTable
+WHERE CitationID = ?;
+""")
     else:
         raise RMc.RM_Py_Exception("ERROR internal: both inputs None")
 
@@ -492,11 +492,11 @@ SELECT Fields
 def get_citations_of_source(dbConnection, oldSourceID):
 
     # get citations for oldSourceID
-    SqlStmt = """
-SELECT CitationID, CitationName
-  FROM CitationTable
- WHERE SourceID = ?
-"""
+    SqlStmt = (
+"""SELECT CitationID, CitationName
+FROM CitationTable
+WHERE SourceID = ?;
+""")
     cur = dbConnection.cursor()
     cur.execute(SqlStmt, (oldSourceID,))
     return cur.fetchall()
@@ -582,11 +582,11 @@ def check_source_templates(reportF, dbConnection, oldTemplateName, newTemplateNa
 # ===================================================DIV60==
 def get_src_template_IDrows(dbConnection, TemplateName):
 
-    SqlStmt = """
-SELECT TemplateID
-  FROM SourceTemplateTable
- WHERE Name = ? COLLATE NOCASE
-"""
+    SqlStmt = (
+"""SELECT TemplateID
+FROM SourceTemplateTable
+WHERE Name COLLATE NOCASE = ?;
+""")
     cur = dbConnection.execute(SqlStmt, (TemplateName,))
     rows = []
     rows = cur.fetchall()
@@ -614,11 +614,11 @@ def dump_src_template_fields(reportF, dbConnection, TemplateID):
 # ===================================================DIV60==
 def get_list_src_template_fields(TemplateID, dbConnection):
 
-    SqlStmt = """
-SELECT FieldDefs, Name
-  FROM SourceTemplateTable
- WHERE TemplateID = ?
-"""
+    SqlStmt = (
+"""SELECT FieldDefs, Name
+FROM SourceTemplateTable
+WHERE TemplateID = ?;
+""")
     cur = dbConnection.cursor()
     cur.execute(SqlStmt, (TemplateID,))
     textTuple = cur.fetchone()
@@ -642,12 +642,12 @@ SELECT FieldDefs, Name
 # ===================================================DIV60==
 def get_selected_sources(reportF, dbConnection, oldTemplateID, SourceNamesLike):
 
-    SqlStmt = """
-SELECT st.SourceID, st.Name
-  FROM SourceTable st
-  JOIN SourceTemplateTable stt ON st.TemplateID = stt.TemplateID
- WHERE st.TemplateID = ? AND st.Name LIKE ?   COLLATE NOCASE
-"""
+    SqlStmt = (
+"""SELECT st.SourceID, st.Name
+FROM SourceTable st
+JOIN SourceTemplateTable stt ON st.TemplateID = stt.TemplateID
+WHERE st.TemplateID = ? AND st.Name COLLATE NOCASE LIKE ?;
+""")
     cur = dbConnection.cursor()
     cur.execute(SqlStmt, (oldTemplateID, SourceNamesLike))
     srcTuples = cur.fetchall()

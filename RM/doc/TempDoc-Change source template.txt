@@ -62,17 +62,12 @@ Make a copy of your database, move the copy into the working folder.
 Rename the copy to TEST.rmtree
 
 ==========-
-Edit the RM-Python-config.ini file in the working folder by opening NotePad
-and then dragging the RM-Python-config.ini file onto the opened NotePad
-application window.
+Edit the RM-Python-config.ini file in the working folder.
 
-Look for the section at the top-
-[FILE_PATHS]
-DB_PATH                  = TEST.rmtree
-
-Change the name of the RM database file in the line starting with
-DB_PATH to that of the file you placed in the working folder.
-If you named it TEST, no change is needed.
+Check that the DB_PATH key in the config file is pointing to the 
+desired database.
+If the above steps were followed, the path in the sample config file
+is already correct: TEST.rmtree
 
 Look at the section of the config file containing options:
 [OPTIONS]
@@ -90,9 +85,12 @@ Please go through the validation runs. Error checking is not re-done when
 running Make_Changes.
 Either 0 or 1 of the five options may be "on" at one time in a run of the utility.
 Save the config file, and leave the file open in the editor.
+
 NOTE: only the first "on" action will be performed when the utility is run, the
 remaining options are ignored. So, to avoid confusion, always check that only
 one option is set to on.
+
+Save the config file.
 
 ==========-
 STEP 0		Option    All options = off
@@ -646,18 +644,7 @@ at the start of the line.
 
 
 =========================================================================DIV80==
-Precautions before using the modified database
-
-Once you are satisfied with the results of the modifications made by this
-software, don't hurry to start use the resulting file for research.
-Continue your work for a week or so using the original database to allow
-further consideration. Then run the utility again with your perfected config
-file on a new copy of your now-current database and then use the modified
-database as your normal work file.
-The week delay will give you time to think about it. If you start
-using the newly modified database immediately, you'll lose work if you miss
-a problem and have to revert to a backup.
-
+INCLUDE: LIB_Precautions before using the modified database
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
 =========================================================================DIV80==

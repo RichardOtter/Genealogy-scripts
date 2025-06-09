@@ -30,18 +30,7 @@ Notes
 
 
 =========================================================================DIV80==
-Precautions before using the modified database
-
-Once you are satisfied with the results of the modifications made by this
-software, don't hurry to start use the resulting file for research.
-Continue your work for a week or so using the original database to allow
-further consideration. Then run the utility again with your perfected config
-file on a new copy of your now-current database and then use the modified
-database as your normal work file.
-The week delay will give you time to think about it. If you start
-using the newly modified database immediately, you'll lose work if you miss
-a problem and have to revert to a backup.
-
+INCLUDE: LIB_Precautions before using the modified database
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
 =========================================================================DIV80==
