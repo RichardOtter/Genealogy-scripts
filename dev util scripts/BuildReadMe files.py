@@ -78,13 +78,9 @@ def get_snippet(label, lib_file):
                 save = False
             if save and not skip_label:
                 snippet.append(line)
-
+    if len(snippet) == 0:
+        raise Exception("Snippet not found in Text library file.")
     return snippet
-
-
-
-
-        
 
 
 # ===================================================DIV60==
