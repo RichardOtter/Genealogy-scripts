@@ -5,8 +5,8 @@ INCLUDE: LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
-This utility can convert existing facts of one fact type to facts of a different fact type.
-e.g. "Residence (fam)" to "Residence", or "Census" to "Census 1950".
+This utility can convert existing facts of one fact type to facts of a different
+fact type. e.g. "Residence (fam)" to "Residence", or "Census" to "Census 1950".
 
 Simply changing the fact type for an existing fact is trivial using SQL.
 Complications arise when a family fact is converted to a Individual fact or when
@@ -30,6 +30,50 @@ INCLUDE: LIB_Overview
 Running the utility in detail
 
 ==========-
+Create a folder on your computer that you will not confuse with other
+folders. It will be referred to as the "working folder".
+
+==========-
+*  Copy these items from the downloaded zip file to the working folder-
+      ConvertFact.py                   (file)
+      RM-Python-config.ini             (file)
+      RMpy                             (folder)
+
+==========-
+Make a copy of your database, move the copy into the working folder.
+
+Rename the database copy to "TEST.rmtree" in order to prevent any
+confusion about the purpose of the copy.
+
+==========-
+Edit the RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing" if
+you need help)
+
+Check that the DB_PATH key in the config file is pointing to the
+desired database.
+If the above steps were followed, the path in the sample config file
+is already correct, i.e. TEST.rmtree
+
+Look at the [CV_PARAMS] section of the config file containing parameters for
+the desired changes:
+
+FACTTYPE_CURRENT
+FACTTYPE_NEW
+ROLE
+
+Now look at the [SOURCE_FILTER] section which specify which sources are changed.
+
+DESC
+DATE
+
+
+==========-
+
+see Notes blow for details on how to fill in the parameters
+
+==========-
+==========-
 
 
 =========================================================================DIV80==
@@ -40,7 +84,7 @@ The config file must be edited to indicate the conversion that should be done.
 
 The task is specified by the key value pairs. or example-
 
-[MAPPING]
+[CV_PARAMS]
 FACTTYPE_CURRENT  = Census (family)
 FACTTYPE_NEW      = Census
 ROLE              = Spouse
@@ -190,16 +234,9 @@ You don't have to recreate all of the roles that exist for the FACTTYPE_CURRENT,
 only the ones that are in use. ConvertFact will tell you which ones.
 
 
-===========-
-REPORT_FILE_DISPLAY_APP
-
-Option to automatically open the report file in a display application.
-The included ini sample file has this option activated and set to use Windows
-NotePad as the display app. It can be deactivated by inserting a # character
-at the start of the line. Your favorite editor may be substituted.
-
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==

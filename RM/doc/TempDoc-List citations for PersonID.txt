@@ -40,6 +40,7 @@ Notes
 
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==

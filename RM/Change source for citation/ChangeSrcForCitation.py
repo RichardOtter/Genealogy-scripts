@@ -1,24 +1,19 @@
 import sys
 from pathlib import Path
-sys.path.append( str(Path.resolve(Path.cwd() / r'..\RMpy package')))
-import RMpy.launcher  # type: ignore
-import RMpy.common as RMc  # type: ignore
-from RMpy.common import q_str # type: ignore
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
-
-
-# Requirements:
-#   RootsMagic database file v8 or 9
-#   RM-Python-config.ini
+from RMpy.common import q_str   # noqa #type: ignore
+import RMpy.common as RMc       # noqa #type: ignore
+import RMpy.launcher            # noqa #type: ignore
 
 # Tested with:
 #   RootsMagic database file v10
 #   Python for Windows v3.13
 
 # Config files fields used
+#    FILE_PATHS  DB_PATH
 #    FILE_PATHS  REPORT_FILE_PATH
 #    FILE_PATHS  REPORT_FILE_DISPLAY_APP
-#    FILE_PATHS  DB_PATH
 
 
 #   TODO add new feature to allow multiple moves at once by entering
@@ -30,14 +25,14 @@ def main():
 
     # Configuration
     utility_info = {}
-    utility_info["utility_name"]      = "ChangeSrcForCitation" 
+    utility_info["utility_name"] = "ChangeSrcForCitation"
     utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
-    utility_info["config_file_name"]  = "RM-Python-config.ini"
-    utility_info["script_path"]  = Path(__file__).parent
-    utility_info["run_features_function"]  = run_selected_features
-    utility_info["allow_db_changes"]  = True
+    utility_info["config_file_name"] = "RM-Python-config.ini"
+    utility_info["script_path"] = Path(__file__).parent
+    utility_info["run_features_function"] = run_selected_features
+    utility_info["allow_db_changes"] = True
     utility_info["RMNOCASE_required"] = False
-    utility_info["RegExp_required"]   = False
+    utility_info["RegExp_required"] = False
 
     RMpy.launcher.launcher(utility_info)
 
@@ -68,7 +63,7 @@ def change_source_feature(config, db_connection, report_file):
 
         # % wildcard always added to search string
         SqlStmt = (
-"""SELECT COUNT(), st.TemplateID, ct.CitationID, ct.SourceID, st.Name, ct.CitationName
+            """SELECT COUNT(), st.TemplateID, ct.CitationID, ct.SourceID, st.Name, ct.CitationName
 FROM SourceTable AS st
 JOIN CitationTable AS ct ON ct.SourceID = st.SourceID
 WHERE ct.CitationName COLLATE NOCASE LIKE ( ? || '%' );
@@ -108,7 +103,7 @@ WHERE ct.CitationName COLLATE NOCASE LIKE ( ? || '%' );
 
         # % wildcard always added to search string
         SqlStmt = (
-"""SELECT COUNT(), SourceID, TemplateID
+            """SELECT COUNT(), SourceID, TemplateID
 FROM SourceTable
 WHERE Name COLLATE NOCASE LIKE ( ? || '%' );
 """)
@@ -151,7 +146,7 @@ WHERE Name COLLATE NOCASE LIKE ( ? || '%' );
 
         # update the citation to use the new source
         SqlStmt = (
-"""UPDATE CitationTable
+            """UPDATE CitationTable
 SET  SourceID = ?
 WHERE CitationID = ?;
 """)
@@ -162,7 +157,7 @@ WHERE CitationID = ?;
         # Confirm update was successful
 
         SqlStmt = (
-"""SELECT ct.CitationName, st.Name
+            """SELECT ct.CitationName, st.Name
 FROM SourceTable AS st
 JOIN CitationTable AS ct ON ct.SourceID = st.SourceID
 WHERE ct.CitationID = ?;

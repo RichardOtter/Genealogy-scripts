@@ -159,62 +159,12 @@ until transaction in SQLite Expert is either committed or RolledBack.
 
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: multi-line value
+INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Troubleshooting
-
-=========-
-Multiline Values
-Probably the trickiest part of the config file is the GROUP_NAME key.
-It may be assigned either a single or multi line value.
-Each line of the value should be on a separate line indented with at least 
-one blank. An empty line generates an error.
-Multi-line values may not contain comment lines (lines starting with a #).
-
-examples-
-
-correct formats-
-
-GROUP_NAME = GroupName1
-
-GROUP_NAME =
-  GroupName1
-
-GROUP_NAME = GroupName1
-  GroupName2
-  GroupName3
-
-GROUP_NAME =
-  GroupName1
-  GroupName2
-  GroupName3
-
-
-incorrect format- (empty line not allowed)
-
-GROUP_NAME =
-  GroupName1
-
-  GroupName2
-  GroupName3
-
-
-incorrect format (not indented)
-
-GROUP_NAME =
-GroupName1
-GroupName2
-GroupName3
-
-incorrect format (no commented lines in the multi line value)
-
-GROUP_NAME =
-  GroupName1
- #  GroupName2
-  GroupName3
-
-
 =========================================================================DIV80==
 TODO
 

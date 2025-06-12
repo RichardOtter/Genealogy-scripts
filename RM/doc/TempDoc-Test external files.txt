@@ -32,7 +32,8 @@ A Hash file might be generated annually and archived with the full dataset.
 INCLUDE: LIB_Backups read only
 =========================================================================DIV80==
 INCLUDE: LIB_Compatibility
-Probably still works with RootsMagic v7, although it has not been recently tested.
+Probably still works with RootsMagic v7, although it has not been
+recently tested.
 
 =========================================================================DIV80==
 Performance
@@ -123,7 +124,8 @@ it will show up om this list.
 
  To shorten the list of unreferenced items, a specified set of files and folders
  within the SEARCH_ROOT_FLDR_PATH folder can be ignored and not displayed in the
- Unreferenced Files report. There are two methods of specifying the objects to ignore:
+ Unreferenced Files report. There are two methods of specifying the objects
+ to ignore:
  1: the IGNORED_OBJECTS section can be used to tell the utility to not include 
  certain files in the list of unreferenced files. See below.
  2: The option IGNORED_ITEMS_FILE can be set to on or off. When the option is
@@ -141,7 +143,8 @@ option IGNORED_ITEMS_FILE, create a text file named TestExternalFiles_ignore.txt
 in the root of the SEARCH_ROOT_FLDR_PATH folder, and then edit that file to
 contain the patterns for the files to ignore.
 
-The TestExternalFiles_ignore.txt must be stored in utf-8 format if it contains non-ASCII 
+The TestExternalFiles_ignore.txt must be stored in utf-8 format if it 
+contains non-ASCII 
 characters. (Same as for the config file)
 
 
@@ -204,9 +207,9 @@ NO_TAG_FILES or DUP_FILES
 The option is turned on with the option SHOW_ORIG_PATH in the config file.
 With this option on, the path for each file is shown twice,
 - the path on disk, that is, after any RM8-9 token in the path has been expanded.
-- the path as saved in the database with the relative path anchor token not expanded.
+- the path as saved in the database with the relative path anchor token 
+not expanded.
 See the note below "Background information" regarding relative paths in RM.
-
 
 
 
@@ -264,6 +267,8 @@ appear in the RM Media tab.
 
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: multi-line value
+INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==

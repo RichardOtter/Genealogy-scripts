@@ -42,7 +42,7 @@ def main():
     utility_info["script_path"] = Path(__file__).parent
     utility_info["run_features_function"] = run_selected_features
     utility_info["allow_db_changes"] = True
-    utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_required"] = True
     utility_info["RegExp_required"] = False
 
     RMpy.launcher.launcher(utility_info)
@@ -92,7 +92,7 @@ def lump_sources(config, db_connection, report_file):
         SQL_stmt = (
             """SELECT SourceID, TemplateID, Name
       FROM SourceTable
-      WHERE Name COLLATE NOCASE LIKE ?
+      WHERE Name LIKE ?
     """)
         cur = db_connection.cursor()
         cur.execute(SQL_stmt, (split_src_name_identifier,))
@@ -127,7 +127,8 @@ def lump_sources(config, db_connection, report_file):
 
     # Deal with RMNOCASE index and the fact that the collation sequence is different here than in RM
     # Must Rebuild Indexes in RM immediately upon opening the DB.
-    # RMc.reindex_RMNOCASE(db_connection)
+    # There is one SQL in convert_citation that updates CitationName
+    RMc.reindex_RMNOCASE(db_connection)
 
     # Iterate through list of the new (lumped) sources and add the citations to each
     for lumped_source in lump_list:
@@ -140,7 +141,7 @@ def lump_sources(config, db_connection, report_file):
         SQL_stmt = (
             """SELECT SourceID, Name, TemplateID
       FROM SourceTable
-      WHERE Name COLLATE NOCASE LIKE ?
+      WHERE Name LIKE ?
     """)
         cur = db_connection.cursor()
         cur.execute(SQL_stmt, (split_src_name_identifier,))

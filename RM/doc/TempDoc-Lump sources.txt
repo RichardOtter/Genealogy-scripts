@@ -10,6 +10,10 @@ of "lumped" sources.
 The split sources must each have just one citation. The utility moves that
 citation to another pre-existing "lumped" source.
 
+
+Currenlt- user must know the source ID  of receiving sources
+
+
 =========================================================================DIV80==
 INCLUDE: LIB_Backups large changes
 =========================================================================DIV80==
@@ -33,8 +37,13 @@ Notes
 INCLUDE: LIB_Precautions before using the modified database
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: multi-line value
+INCLUDE: LIB_APPENDIX  Config File: Mapping value
+INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Python install
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  unifuzz64.dll download
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Troubleshooting
 =========================================================================DIV80==

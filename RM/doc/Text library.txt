@@ -1,15 +1,14 @@
 =========================================================================DIV80==
 LIB_INTRO
 
+
 Utility application for use with RootsMagic databases
 
 RootsMagic (RM) software (https://RootsMagic.com) uses a SQLite relational
-database (https://Sqlite.org) as its data storage file. Having access to
-the RM data file via third party tools is a major advantage over other
-genealogy project management applications.
+database (https://Sqlite.org) as its data storage file.
 
-This software accesses the database directly to provide functionality not
-found in the RootsMagic program.
+Access to the RM data file via third party tools is a major advantage RM
+has over other genealogy project management applications.
 
 This utility is part of a suite of utilities that has been written to
 perform analysis or data modification not available within the RM application.
@@ -21,7 +20,8 @@ code, called a python package. The user can simply open the file or package
 files in a text editor to read all implementation details and access safety.
 
 A Python py script file is executed using the Python language interpreter.
-The interpreter is a separate piece of software easily installed on your computer.
+The interpreter is a separate piece of software easily installed on your 
+computer.
 
 
 =========================================================================DIV80==
@@ -40,7 +40,7 @@ Backups
 
 VERY IMPORTANT
 This utility makes changes to the RM database file. It can change a large number
-of data items in a single run depending on the settings specified.
+of data items in a single run depending on the parameters specified.
 You will likely not be satisfied with your first run of the utility and you will
 want to try again, perhaps several times, each time making changes to your
 configuration file.
@@ -80,12 +80,12 @@ referred to, below, as "MainScriptFile.py". The utility also needs the
 Python package RMpy, which is a folder included in the distribution zip file.
 
 Most input to the utility is through the configuration file. (Some utilities
-in this suite also take user input from the command line console window.)
-The the default name of the configuration file (called, hereinafter the
+in this suite also take user input from the terminal window.)
+The the default name of the configuration file (called, hereinafter, the
 "config file") is "RM-Python-config.ini". It should be located in the
 same folder as the MainScriptFile py script file and the RMpy folder.
 At a minimum, the config file gives the name and location of the database on
-which to operate.
+which the utility operates.
 
 One config file can be shared among other RM utilities in the suite. Each
 utility will extract the information it needs from the config file.
@@ -113,6 +113,17 @@ To install and use the script for the first time:
 
 *  A summary report will be displayed in NotePad.
 
+The above procedure of making a copy of your database and operating on it in 
+the working folder is most prudent when a user is just getting familiar with 
+a new or updated utility. 
+Some utilities are read only and do not change the database at all, while others
+affect only small amount of data. Once the user has confidence in the operation
+of such a low-impact utility, one can start operating directly on the research
+(production) database, always assuming that at least several known-good backups
+exist.
+Other utilities that involve more configuration and make larger chnages should
+always be copied and operated on in a working folder.
+
 *****  Details follow below. *****
 
 
@@ -131,7 +142,7 @@ Windows store will open in your browser and you will be be shown
 the various versions of Python.
 Click the Get button for the latest version.
 
-Web site download and install
+Python.org web site download and install
 Download the current version of Python 3, (or see direct link below
 for the current as of this date)
 https://www.python.org/downloads/windows/
@@ -145,10 +156,12 @@ Direct link to recent (as of 2025-06) version installer-
 https://www.python.org/ftp/python/3.13.4/python-3.13.4-amd64.exe
 
 The Python installation requires about 100 Mbytes.
-It is easily and cleanly removed using the standard method found in
-Windows=>Settings
+It is easily and is cleanly removed using the standard Windows method found in
+Windows=>Settings=>Installed apps
 
 Run the Python installer selecting all default options.
+Note: by default, the Python installer places the software in the user's
+home folder in the standard location.
 
 
 =========================================================================DIV80==
@@ -163,12 +176,22 @@ https://sqlitetoolsforrootsmagic.com/rmnocase-faking-it-in-sqlite-expert-command
 
 The SQLiteToolsforRootsMagic website has been around for many years and is run
 by a trusted RM user. Many posts to public RootsMagic user forums mention use
-of unifuzz64.dll from the SQLiteToolsforRootsMagic website.
+of unifuzz64.dll from the SQLiteToolsforRootsMagic website. This author has
+also used it for years.
 
     MD5 hash values are used to confirm the identity and integrity of files.
 
     MD5 hash                            File size         File name
     06a1f485b0fae62caa80850a8c7fd7c2    256,406 bytes    unifuzz64.dll
+
+In Windows, to generate the MD5 hash of a file named [file name]:
+Open a terminal window and enter:
+certutil -hashfile [file name]  MD5
+
+where [file name] is the fie you wish to compute the MD5 has for.
+
+So, to verify the unifuzz file-
+certutil -hashfile unifuzz64.dll  MD5
 
 
 =========================================================================DIV80==
@@ -179,7 +202,7 @@ Name and location
 A file named "RM-Python-config.ini" will be recognized as the utility's 
 configuration file when placed in the same directory as the Python 
 script (.py file) for the utility. Each utility is distributed with a sample 
-config file to get you started.
+config file to get started.
 
 Alternatively, the configuration file name and location can be specified
 on the command-line as an argument to the script. This argument overrides
@@ -189,52 +212,50 @@ For example, if the script "RMutility.py" is executed from the folder
 "C:\Users\me\Joe", it will use the configuration file
  C:\Users\me\Joe\RM-Python-config.ini" if it exists.
 However, if the utility is run with an explicit argument, such as:
-
 RMutility.py "C:\Users\me\Joe\documents\RM-Python-config.ini"
+then the specified configuration file will be used instead of the default.
 
-then the specified configuration file will be used instead of the default
-Note that the file name is not restricted to the default.
+Note also that the file name is not restricted to the default.
 For instance, running the utility as:
-
 RMutility.py config_mine.ini
-
 will instruct the utility to use config_mine.ini in the current directory
 as its configuration file.
 
-A configuration file specified on the command line might be renamed so as
-to convey its purpose. A Windows shortcut can also be constructed with the
-above described argument to allow execution from the desktop with a
+A configuration file that is used from the command line can be renamed so as
+to convey its purpose. 
+A Windows shortcut can also be constructed with the above described srciptname
+with config file name argument to allow execution from the desktop with a
 double mouse click.
+
 
 Editing
 Use any text editor to edit the configuration file. The Windows built-in
 app "Notepad" is suitable.
 To edit the configuration file, first open the Notepad app and then use the
 mouse to drag the configuration file onto the open Notepad window.
-
+(Becasue by default, files with the .ini extension are not associated with an
+editor program.)
 
 
 Format and conventions
-The file uses the standard ini file format.
-
-The config file is made up of the elements: Sections, Keys, Values 
-and Comments.
+The file uses the standard ini file format. The config file is made up of the
+elements: Sections, Keys, Values and Comments.
 
 A name in square brackets is a section name that identifies the start
-of a section. A section continues until a new section starts. Every key
-should be in a named section.
-The order of sections is a config file is not important, but all of the
-sample config files start with the [FILE_PATHS] section.
+of a section. A section continues until a new section starts. The order of 
+sections is a config file is not important, but all of the sample config files
+ start with the [FILE_PATHS] section.
 
-A section contains one or more key-value pairs and comment lines.
+A section contains one or more key-value pairs and comment lines. Every key 
+should be in a named section.
 
 A name on the left side of a "=" sign is a key.
 Text on the right side of a "=" is the value assigned to the key on the left.
 Comment lines start with a "#" character and are only included to help 
 the user read and understand the file. They are ignored by the utility software.
 
-
-For example, a section and 3 key-values used by all of the RM utilities:
+For an example, here is a section containing 3 key-values used by all of the 
+RM utilities:
 
 [FILE_PATHS]
 # this is the test database
@@ -243,12 +264,12 @@ REPORT_FILE_PATH  = ..\Report_utilName.txt
 REPORT_FILE_DISPLAY_APP  = C:\Windows\system32\Notepad.exe
 
 The 3 keys, DB_PATH, REPORT_FILE_PATH, and REPORT_FILE_DISPLAY_APP are all
-in the [FILE_PATHS] section and all require file paths as values.
+in the [FILE_PATHS] section. The utility requires that their values be file 
+paths, as shown.
 The second line is a comment.
 
-The file path may be absolute, as in REPORT_FILE_DISPLAY_APP
-above, or it may be relative to the current directory, as in DB_PATH and
-REPORT_FILE_PATH above.
+The file path may be absolute, as in REPORT_FILE_DISPLAY_APP above, or it may
+be relative to the current directory, as in DB_PATH and REPORT_FILE_PATH above.
 
 The DB_PATH points to the database that is to be analyzed/modified.
 See the sections "Backups" and "Running the utility in detail", above, for help
@@ -271,7 +292,7 @@ These are used when the key is to be assigned more than a single name or datum.
 The multi line value is still just one value, but the values is split up into
 multiple lines.
 
-Each line of a value after the first,  must be indented with at least one 
+Each line of a value after the first, must be indented with at least one 
 space character.
 
 All the lines in a value should have the same indentation. Not required but
@@ -337,11 +358,10 @@ Each line must have 2 names- old field name and new field name, separated by
 a ">" character. 
 The word "NULL" may substitute for either old or new field name.
 
-Names may be enclosed in double quotes.  Required when a name contains a blank 
-or ">" character at the beginning, end, or anywhere within it.
+Names may be enclosed in double quotes.  Quotes are required when a name
+contains a blank or ">" character at the beginning, end, or anywhere within it.
 
 The white space between the names and ">" character is ignored.
-
 
 
 =========================================================================DIV80==
@@ -364,12 +384,12 @@ No Report File displayed
 If the report is created, but not displayed, check the config
 file line- REPORT_FILE_DISPLAY_APP
 
-If no report file is generated, look at the black command
-console window for error messages that will help you fix the problem.
-There may be something wrong with the config file line- REPORT_FILE_PATH
+If no report file is generated, look at the terminal window for error messages
+that will help you fix the problem. There may be something wrong with the config
+file line- REPORT_FILE_PATH.
 
-If the black console windows displays the message-
-RM-Python-config.ini file contains a format error, see the section below.
+If the terminal windows displays the message: RM-Python-config.ini file contains
+a format error, see the section below.
 
 If no report file is generated and the black command console window closes
 before you can read it, try first opening a command line console, cd'ing to
@@ -380,9 +400,9 @@ error messages.
 =========-
 Error message:
 RM-Python-config.ini file contains a format error
-
-Start over with the supplied config file and make sure that works, Then make your
-edits one by one to identify the problem.
+Examine th efile visually and chek to see that it follows the rules mentioned
+above. If all else fails, start over with the supplied config file and make
+sure that it works, Then make your edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
 =========================================================================DIV80==

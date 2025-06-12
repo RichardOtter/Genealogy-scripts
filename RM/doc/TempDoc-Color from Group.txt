@@ -114,6 +114,7 @@ the person's color code is cleared (set to 0).
 ClearOnlyIf has an extra criterion, for the people under consideration (either
 a group or all), only those people who are currently color coded by the color
 indicated by the COLOR parameter, have their color code cleared (set to 0).
+Note that the COLOR value is ignored for the clearAny operation.
 
 
 As mentioned above, each set of color operation parameters is in its own 
@@ -240,6 +241,7 @@ the person's color code is cleared (set to 0).
 ClearOnlyIf has an extra criterion, for the people under consideration (either
 a group or all), only those people who are currently color coded by the color
 indicated by the COLOR parameter, have their color code cleared (set to 0).
+Note that the COLOR value is ignored for the clearAny operation.
 
 The choice between each pair will depend on the exact circumstances: what other
 color operations have been performed and the order in which they were done.

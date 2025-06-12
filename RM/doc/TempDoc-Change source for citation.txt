@@ -37,18 +37,17 @@ Running the utility in detail
 
 While the database name and location is specified in the config file, the actual
 instructions for which citations and sources to modify are entered at a series
-of prompts in the black command shell window.
-
-
-==========-
-Create a folder on your computer that you will not confuse with other
-folders. It will be referred to as the "working folder".
+of prompts in the black terminal window.
 
 ==========-
-Copy these files and the folder from the downloaded zip file to the working folder-
-      ChangeSrcForCitation.py
-      RM-Python-config.ini
-      RMpy
+Create a folder on your computer that you will not confuse with other folders,
+the "working folder".
+
+==========-
+Copy these items from the downloaded zip file to the working folder:
+         ChangeSrcForCitation.py           (file)
+         RM-Python-config.ini              (file)
+         RMpy                              (folder)
 
 ==========-
 Make a copy of your database, move the copy into the working folder.
@@ -59,17 +58,19 @@ Edit the RM-Python-config.ini file in the working folder.
 
 Check that the DB_PATH key in the config file is pointing to the 
 desired database.
-If the above steps were followed, the path in the sample config file
+If the above steps were exactly followed, the path in the sample config file
 is already correct: TEST.rmtree
 
 Save the config file.
 
 =========-
-Double click the "ChangeSrcForCitation.py" file to start the utility.
+Double click the "ChangeSrcForCitation.py" file in the working folder
+to start the utility.
 
 =========-
-The command shell window will open and prompt you to enter the name of
+A black terminal window will open and prompt you to enter the name of
 the citation to move and the source that it should be moved to.
+
 In both cases, only enough of the name needs to be
 entered to make it unique among all citations for all sources.
 
@@ -87,12 +88,14 @@ to modify to make the name unique.
 
 =========-
 After the source name is entered, either a confirmation or error message
-is displayed. In either case, a prompt to change another citation is
-shown.
+is displayed. 
+In either case, a prompt to change another citation is shown. Respond with
+either a y or n.
 
 =========-
-If n is entered in response to the "another" prompt,  the command
-line window is closed and a report file is displayed summarizing the changes made.
+If "n" is entered in response to the "Change another citation" prompt, 
+the terminal window is closed and a report file is displayed summarizing
+the changes made.
 
 =========================================================================DIV80==
 Notes
@@ -116,6 +119,7 @@ Checks made by the utility:
 
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==

@@ -149,6 +149,7 @@ at the start of the line. Your favorite editor may be substituted.
 INCLUDE: LIB_Precautions before using the modified database
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==
@@ -225,9 +226,10 @@ SQL_STATEMENT_1 =
    AND nt.surname LIKE 'sm%'
 
 
-*    On some occasions, the utility console window will display a "Database
-Locked" message. In that case: Close the console window, Close RM and re-run the
- utility, then re-open RM. "Database locked" is a normal message encountered with SQLite.)
+*    On some occasions, the utility terminal window will display a "Database
+Locked" message. In that case: Close the terminal window, Close RM and re-run the
+ utility, then re-open RM. "Database locked" is a normal message encountered 
+ with SQLite.)
 
 
 =========================================================================DIV80==
