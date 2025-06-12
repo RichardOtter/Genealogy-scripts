@@ -1,10 +1,12 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
-import RMpy.common as RMc     # type: ignore
-import RMpy.launcher          # type: ignore
-
 import xml.etree.ElementTree as ET
+
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
+
+import RMpy.common as RMc  # type:ignore  # noqa
+import RMpy.launcher  # type:ignore  # noqa
+
 
 # Requirements:
 #   RootsMagic database file
@@ -20,17 +22,16 @@ import xml.etree.ElementTree as ET
 #    FILE_PATHS  REPORT_FILE_PATH
 #    FILE_PATHS  REPORT_FILE_DISPLAY_APP
 #
-#    LUMP_MAP   SRC_CIT_MAP
-#    LUMP_MAP   LUMP_MAP
+#    LUMP_MAPPINGS   MAPPING_SRC_CIT
+#    LUMP_MAPPINGS   MAPPING_IDENT_SRC
 #    LUMP_OPTIONS   TEMPLATE_CHECK_OVERRIDE (optional)
 
 # ===================================================DIV60==
 #  Global Variables
 G_DEBUG = False
 
+
 # ================================================================
-
-
 def main():
 
     # Configuration
@@ -52,20 +53,21 @@ def run_selected_features(config, db_connection, report_file):
 
     lump_sources(config, db_connection, report_file)
 
+
 # ===================================================DIV60==
-
-
 def lump_sources(config, db_connection, report_file):
 
     try:
-        lump_list_raw = config["LUMP_MAPPINGS"]["LUMP_MAP"]
+        lump_list_raw = config["LUMP_MAPPINGS"]["MAPPING_IDENT_SRC"]
     except:
-        raise RMc.RM_Py_Exception('ERROR: LUMP_MAP must be specified.')
+        raise RMc.RM_Py_Exception(
+            'ERROR: MAPPING_IDENT_SRC must be specified.')
 
     try:
-        mapping_raw = config["LUMP_MAPPINGS"]['SRC_CIT_MAP']
+        mapping_raw = config["LUMP_MAPPINGS"]['MAPPING_SRC_CIT']
     except:
-        raise RMc.RM_Py_Exception('ERROR: SRC_CIT_MAPPING must be specified.')
+        raise RMc.RM_Py_Exception(
+            'ERROR: MAPPING_SRC_CITPING must be specified.')
 
     try:
         # if missing, treated as false/off
@@ -80,7 +82,7 @@ def lump_sources(config, db_connection, report_file):
 
     # Check whether all sources use the same template
     # If they use more than one Template, it is not necessarily an error, as
-    # long as the lump_map is appropriate
+    # long as the MAPPING_IDENT_SRC is appropriate
     sources_to_check = []
     for source_type_to_check in lump_list:
         lumped_SourceID = source_type_to_check[1]
@@ -121,7 +123,7 @@ def lump_sources(config, db_connection, report_file):
                 "\n\n\nERROR: Source templates are not all the same for the selected sources.")
 
     report_file.write(
-        F"\n\nNumber of source identifiers in LUMP_MAP= {len(lump_list)}")
+        F"\n\nNumber of source identifiers in MAPPING_IDENT_SRC= {len(lump_list)}")
 
     # Deal with RMNOCASE index and the fact that the collation sequence is different here than in RM
     # Must Rebuild Indexes in RM immediately upon opening the DB.
@@ -203,9 +205,8 @@ def ConvertSource(db_connection, split_SourceID, lumped_SourceID, field_mapping,
     RunSqlNoResult(db_connection, SqlStmt, (split_SourceID, ))
     return
 
+
 # ================================================================
-
-
 def ConvertCitation(db_connection, split_SourceID, newSourceID, citationIDToMove, field_mapping, report_file):
 
     # Copy standard fields from old src record to the citationToMove
@@ -291,16 +292,14 @@ def RunSqlNoResult(db_connection, SqlStmt):
     cur = db_connection.cursor()
     cur.execute(SqlStmt)
 
+
 # ================================================================
-
-
 def RunSqlNoResult(db_connection, SqlStmt, myTuple):
     cur = db_connection.cursor()
     cur.execute(SqlStmt, myTuple)
 
+
 # ================================================================
-
-
 def getFieldsXmlDataAsDOM(db_connection, SqlStmt, rowID):
     cur = db_connection.cursor()
     cur.execute(SqlStmt, (rowID,))
