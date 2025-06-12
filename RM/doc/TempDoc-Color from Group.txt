@@ -22,48 +22,128 @@ INCLUDE: LIB_Overview
 Running the utility in detail
 
 ==========-
+Create a folder on your computer that you will not confuse with other
+folders. It will be referred to as the "working folder".
 
+==========-
+*  Copy these items from the downloaded zip file to the working folder-
+      ColorFromGroup.py                (file)
+      RM-Python-config.ini             (file)
+      RMpy                             (folder)
 
-=========================================================================DIV80==
-Notes
+==========-
+Make a copy of your database, move the copy into the working folder.
 
-Before starting, you will want to confirm that a group exists in your database
-that will be the basis of the color operation. Make sure that you know the
-exact spelling of the name and that there is only one group with that name.
+Rename the database copy to "TEST.rmtree" in order to prevent any
+confusion about the purpose of the copy.
 
-Next, determine the color group that you wish to modify and the specific color 
-number. To get the numbers, open the color coding window in RM. 
+==========-
+Before running the utility, you will want to confirm that a group exists
+in your database that will be the basis of the color operation.
+Make sure that you know the exact spelling of the name and that there
+is only one group with that name.
+
+==========-
+Next, determine the color group that you wish to modify and the specific
+color number. To get the numbers, open the color coding window in RM.
 Looking at the "Current color code set" drop down menu at the top of the window,
 the top-most item is set 1, the bottom is set 10. By default they are named
-"Color code set 1"  etc.. If they have been renamed, you'll have to count.
-Looking at the left hand column of colors, counting from the top color, Pink 
-is 1, Slate is 27.
+"Color code set 1"  etc.. If they have been renamed, count down the groups
+to get the set's number. Looking at the left hand column of colors,
+counting from the top color, Pink is 1, Slate is 27.
 
-Next, determine whether there will be more than one action to perform. Usually,
-if you want to make a group correspond to a color, you will want to reset/clear 
-that color before assigning group members. This will take care of cases in which
-people have been removed from groups.
+Next, determine what actions you wish to perform.
+Usually, if you want to make a group correspond to a color, you will want to
+reset/clear that color before assigning group members. This will take care of 
+cases in which people have been removed from groups.
+So for every group that you want to color, you will want to do a clear and then
+a color operation on that group.
 
-To edit the config file, open NotePad and drag the config file onto the NotePad 
-window.
+==========-
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
 
-The config file is made up of Sections, Keys, Values and Comments. The names
-in square brackets are Section Names that identify the start of a section. A
-Section contains Key = Value pairs. Names on the left of the = sign are Keys.
-Text on the right side of the = is the Value of the Key. Comment lines start
-with # and are only included to help the user read and understand the file.
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
 
-[FILE_PATHS]
-DB_PATH  = TEST.rmtree
-REPORT_FILE_DISPLAY_APP  = C:\Windows\system32\Notepad.exe
-REPORT_FILE_PATH  = Report_ColorFromGroup.txt
+so, for example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 3 key =  value pairs, one of which is 
+DB_PATH = TEST.rmtree
+DB_PATH is the key, TEST.rmtree is the value.
+key-value pairs are separated with a = character.
 
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
+Next, tell the utility what color operations to perform.
+This requires a bit of explanation.
+Each operation is contained in a separate section of the config file.
+In a color operation section, reside 4 key=value pairs. These 4 items
+define a color code operation.
+
+ACTION can be one of: set, clearAny, ClearOnlyIf, or setOnlyIf.
+COLOR_CODE_SET takes a value of 1 to 10
+COLOR takes a value of 1 to 27
+GROUP takes a name of a group or "_ALL" which indicates all people in
+      the database. The "_ALL" option is only usable
+      with the clearAny and ClearOnlyIf actions.
+
+Taken together, these 4 parameters give all of the necessary information 
+for a color operation.
+
+The distinctions between set vs setOnlyIf  and clearAny vs. ClearOnlyIf is
+a bit subtle.
+
+set vs setOnlyIf
+The set action will alawys color code the people under consideration (either 
+a group or all) no matter what color they are currently coded as.
+The setOnlyIf action has an extra criterion, for the people under consideration
+(either a group or all), only those people who currently have no color code
+will be color coded with the specified COLOR.
+
+clearAny vs. ClearOnlyIf
+ClearAny is simplest. For the people under consideration (either a group or all)
+the person's color code is cleared (set to 0).
+ClearOnlyIf has an extra criterion, for the people under consideration (either
+a group or all), only those people who are currently color coded by the color
+indicated by the COLOR parameter, have their color code cleared (set to 0).
+
+
+As mentioned above, each set of color operation parameters is in its own 
+section. The section name is completely arbitrary, but you may want to use 
+a name that is similar to the group and add a character at the end to 
+indicate Set or Clear. See the sample config file.
+
+You can create as many of these sections as you wish. Each of these sections
+will have all four color operation parameters (key-value pairs).
+
+The last item to cover is the OPTIONS section.
+It contains one key named: COLOR_COMMAND. It's value can be a single name, 
+or it can be a multi-line value containing multiple names.
+
+The key's value correspond to the section names you created earlier to
+contain the 4 color parameters.
+The section names listed in the COLOR_COMMAND are the color operations that 
+will actually be performed by a run of the utility.
+
+The color operations in a utility run are performed in the order that
+they are listed in the COLOR_COMMAND's value.
+
+Example:
+
+#-----------------------------------------------
 [OPTIONS]
-COLOR_COMMAND = 
+COLOR_COMMAND =
   Color_my_family_C
   Color_my_family_S
 
-#-----------------------------------------------
 [Color_my_family_C]
 ACTION = clear
 COLOR_CODE_SET = 5
@@ -75,21 +155,21 @@ ACTION = set
 COLOR_CODE_SET = 5
 COLOR = 1
 GROUP = FamGroup
-
 #-----------------------------------------------
 
-Shown are four sections: FILE_PATHS, OPTIONS and Color_my_family_C and 
-Color_my_family_S
+In this example, there are 3 sections: OPTIONS, Color_my_family_C, 
+and Color_my_family_S.
 
-These sections have varying numbers of keys-
-section                  number of keys
-FILE_PATHS                  3
-OPTIONS                     1
-Color_my_family_C           4
-Color_my_family_S           4
+The COLOR_COMMAND key in OPTIONS lists the sections that contain actions 
+to execute.
+
+When COLOR_COMMAND needs to specify more than one section name, it is entered
+as a multi-line value. There are 3 rules for multi-line values:
+1 each section name is on a separate line
+2 each line, after the first, must be indented with at least one space.
+3 the value can not contain an empty line.
 
 
-The COLOR_COMMAND key in OPTIONS list the sections that contain actions to execute.
 The key can contain one section name, like
 COLOR_COMMAND =   Color_my_family_C
 
@@ -97,28 +177,22 @@ or multiple section names, like-
 COLOR_COMMAND = Color_my_family_C
   Color_my_family_S
 
-  or, like
-COLOR_COMMAND = 
+or
+
+COLOR_COMMAND =
   Color_my_family_C
   Color_my_family_S
 
-Note that the second and following section names must be indented.
 
-The last two sections are color commands. Each color command section must 
-have the four shown keys.
-The name of the color command section is set by the user. (You may want to use
-the same name as the group.)
-
-Your config file can contain multiple color command sections, but only those 
+Your config file can contain multiple color command sections, but only those
 listed in COLOR_COMMAND will be executed. The others are ignored. You may want
-to keep unused sections in the config file for future use. (Just like 
-the GroupFromSQL utility.)
+to keep unused sections in the config file for future use. 
 
 The keys in the color command section are ACTION, COLOR_CODE_SET, COLOR, and GROUP.
 ACTION is either set or clear
 COLOR_CODE_SET is a number from 1 to 10.
 COLOR is the color to use 1-27
-GROUP is the RM group name that specifies which people are to have their code 
+GROUP is the RM group name that specifies which people are to have their code
 code set.
 If the ACTION is clear, then the GROUP should be set to "_ALL".
 If ACTION is set, then GROUP must be the name of an existing RM group.
@@ -126,21 +200,69 @@ If ACTION is set, then GROUP must be the name of an existing RM group.
 ACTION clear only clears a particular color in a particular color code set.
 It does this for all people (thus the group name placeholder "_ALL")
 
-The utility does not allow clearing all colors in a color code set or 
+The utility does not allow clearing all colors in a color code set or
 clearing colors in multiple color code sets.
 
 
+=========================================================================DIV80==
+Notes
 =========-
-Updating the colorization of a group while the database is open in RM 
-works OK. However, RM will not refresh the screen based on an external update. 
+The GROUP key specifies which people in the database the color operation 
+is to be performed on. It can be either the name of a gorup or "_ALL".
+
+_ALL will operate on all people in the database. It is required to be used 
+for all clear color operations.
+
+=========-
+ACTION can be one of: set, clearAny, ClearOnlyIf, or setOnlyIf.
+COLOR_CODE_SET takes a value of 1 to 10
+COLOR takes a value of 1 to 27
+GROUP takes a name of a group or "_ALL" which indicates all people in
+      the database. The "_ALL" option is only usable
+      with the clearAny and ClearOnlyIf actions.
+
+Taken together, these 4 parameters give all of the necessary information 
+for a color operation.
+
+The distinctions between set vs setOnlyIf  and clearAny vs. ClearOnlyIf is
+a bit subtle.
+
+set vs setOnlyIf
+The set action will alawys color code the people under consideration (either 
+a group or all) no matter what color they are currently coded as.
+The setOnlyIf action has an extra criterion, for the people under consideration
+(either a group or all), only those people who currently have no color code
+will be color coded with the specified COLOR.
+
+clearAny vs. ClearOnlyIf
+ClearAny is simplest. For the people under consideration (either a group or all)
+the person's color code is cleared (set to 0).
+ClearOnlyIf has an extra criterion, for the people under consideration (either
+a group or all), only those people who are currently color coded by the color
+indicated by the COLOR parameter, have their color code cleared (set to 0).
+
+The choice between each pair will depend on the exact circumstances: what other
+color operations have been performed and the order in which they were done.
+The same considerations apply when using the RM user interface to do color
+coding.
+
+RM's command "Clear Color for people selected above" does the 
+equivalent of the clearAny option in this utility. No matter what color happens
+to be selected, the color of the selected people is cleared.
+
+The previous release of this software used the clearOnlyIf option.
+
+=========-
+Updating the colorization of a group while the database is open in RM
+works OK. However, RM will not refresh the screen based on an external update.
 So, switch screens and then return to see the updated color coding.
 
 =========-
 On some occasions, the utility report file will display a "Database
-Locked" message. In that case, close RM and re-run the utility, then re-open 
+Locked" message. In that case, close RM and re-run the utility, then re-open
 RM. It's not clear why this sometimes happens, but it is rare.
 No database damage has ever been seem after many hundreds of uses.
-"Database locked" is a normal operating message encountered from SQLite. 
+"Database locked" is a normal operating message encountered from SQLite.
 
 
 Less important notes.
@@ -150,72 +272,24 @@ This utility only changes the database's PersonTable.
 If I add the feature of renaming colors, that will affect the Config table.
 
 =========-
-This utility will, if so configured, modify a pre-existing color coding 
+This utility will, if so configured, modify a pre-existing color coding
 that may be important to you. Take care when assigning the actions in the
 config file.
 
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: multi-line value
+INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Troubleshooting
 
-=========-
-Multiline Values
-Probably the trickiest part of the config file is the COLORS key in OPTIONS.
-It may be assigned either a single or multi line value.
-Each line of the value should be on a separate line indented with at least 
-one blank. An empty line generates an error.
-Multi-line values may not contain comment lines (lines starting with a #).
-
-examples-
-
-correct formats-
-
-COLOR_COMMAND = GroupName1
-
-COLOR_COMMAND =
-  GroupName1
-
-COLOR_COMMAND = GroupName1
-  GroupName2
-  GroupName3
-
-COLOR_COMMAND =
-  GroupName1
-  GroupName2
-  GroupName3
-
-
-incorrect format- (empty line not allowed)
-
-COLOR_COMMAND =
-  GroupName1
-
-  GroupName2
-  GroupName3
-
-
-incorrect format (not indented)
-
-COLOR_COMMAND =
-GroupName1
-GroupName2
-GroupName3
-
-incorrect format (no commented lines in the multi line value)
-
-COLOR_COMMAND =
-  GroupName1
- #  GroupName2
-  GroupName3
-
 
 =========================================================================DIV80==
 TODO
 
-*  Consider adding abilities: 
+*  Consider adding abilities:
 *  to specify color by name, color set by name.
 *  to rename a color to the group that it represents
 *  ?? what would you find useful?

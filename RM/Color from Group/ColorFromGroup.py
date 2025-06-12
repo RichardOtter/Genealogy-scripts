@@ -62,65 +62,68 @@ def color_from_group_feature(config, db_connection, report_file):
 # iterate thru the color commands
 
     try:
-        color_command_list = config['OPTIONS'].get(
+        color_cmd_name_list = config['OPTIONS'].get(
             'COLOR_COMMAND').split('\n')
     except:
         raise RMc.RM_Py_Exception(
             'section: [OPTIONS],  key: COLOR_COMMAND   not found.')
 
     # confirm that the corresponding sections exist
-    for color_cmd in color_command_list:
-        if color_cmd == '':
+    for color_cmd_name in color_cmd_name_list:
+        if color_cmd_name == '':
             continue
         try:
-            config[color_cmd]
+            config[color_cmd_name]
         except:
             raise RMc.RM_Py_Exception(
-                f'section: [{q_str(color_cmd)}]   not found.')
+                f'section: [{q_str(color_cmd_name)}]   not found.')
 
     Divider = "="*50 + "===DIV60=="
 
-    for color_cmd in color_command_list:
-        if color_cmd == '':
+    for color_cmd_name in color_cmd_name_list:
+        if color_cmd_name == '':
             continue
         report_file.write(f"\n{Divider}\n")
-        report_file.write(f"Run {color_cmd}\n")
-        exec_color_cmd(db_connection, config, report_file, color_cmd)
+        report_file.write(f"Run {color_cmd_name}\n")
+        exec_color_cmd(db_connection, config, report_file, color_cmd_name)
 
     report_file.write(f"\n{Divider}\n")
-    report_file.write( "Last command set done.")
+    report_file.write( "Last color command operation finished.")
     return
 
 
 # ===================================================DIV60==
-def exec_color_cmd(db_connection, config, report_file, color_cmd):
+def exec_color_cmd(db_connection, config, report_file, color_cmd_section):
 # execute a color command set (named section)
 
+    # get the raw values from config
     try:
-        action = config[color_cmd].get('ACTION')
+        action = config[color_cmd_section].get('ACTION')
     except:
         raise RMc.RM_Py_Exception(
-            f'section: [{color_cmd}],  key: ACTION    not found.')
+            f'section: [{color_cmd_section}],  key: ACTION    not found.')
     
     try:
-        code_set = config[color_cmd].get('COLOR_CODE_SET')
+        code_set = config[color_cmd_section].get('COLOR_CODE_SET')
     except:
         raise RMc.RM_Py_Exception(
-            f'section: [{color_cmd}],  key: COLOR_CODE_SET    not found.')
+            f'section: [{color_cmd_section}],  key: COLOR_CODE_SET    not found.')
 
     try:
-        color_txt = config[color_cmd].get('COLOR')
+        color_txt = config[color_cmd_section].get('COLOR')
     except:
         raise RMc.RM_Py_Exception(
-            f'section: [{color_cmd}],  key: COLOR    not found.')
+            f'section: [{color_cmd_section}],  key: COLOR    not found.')
 
     try:
-        group_name = config[color_cmd].get('GROUP')
+        group_name = config[color_cmd_section].get('GROUP')
     except:
         raise RMc.RM_Py_Exception(
-            f'section: [{color_cmd}],  key: GROUP    not found.')
+            f'section: [{color_cmd_section}],  key: GROUP    not found.')
 
-    # Validate the input
+
+
+    # Validate the raw values
 
     # group_name
     if group_name == "_ALL":
@@ -131,14 +134,14 @@ def exec_color_cmd(db_connection, config, report_file, color_cmd):
     # action
     if (action != "set"
         and action != "clear"
+        and action != "clearOnlyIf"
+        and action != "clearAny"
+        and action != "setOnlyIf"
         ):
         raise RMc.RM_Py_Exception(
-            f'section: [{color_cmd}],  key: ACTION {action}   is not supported.')
+            F'section: [{color_cmd_section}],  key: ACTION {action}   is not supported.\n'
+            "Allowed actions:n\set\nclearAny\nclearOnlyIf\nsetOnlyIf")
     
-    if action == "clear" and group_name != "_ALL":
-        raise RMc.RM_Py_Exception(
-            f'section: [{color_cmd}],  clear action requires group to be "_ALL""')
-
     # color_txt
     # for now, the color must be a number
     db_color_num = translate_ui_color_to_db( ui_number = int(color_txt))
@@ -147,10 +150,12 @@ def exec_color_cmd(db_connection, config, report_file, color_cmd):
     try:
         if (int(code_set) <1 or int(code_set) >10):
             raise RMc.RM_Py_Exception(
-                f'section: [{color_cmd}],  key: COLOR_CODE_SET {code_set}   is out of range.')
+                F'section: [{color_cmd_section}],  key: COLOR_CODE_SET'
+                F'{code_set}  is out of range.\nMust be in the range 1-10.')
     except TypeError:
             raise RMc.RM_Py_Exception(
-                f'section: [{color_cmd}],  key: COLOR_CODE_SET    is not an integer.')
+                F'section: [{color_cmd_section}],  key: COLOR_CODE_SET'
+                F'   must be an integer.')
 
     report_file.write(
         f"Parameters:\nACTION = {action}\nCOLOR_CODE_SET = {code_set}\n"
@@ -162,10 +167,12 @@ def exec_color_cmd(db_connection, config, report_file, color_cmd):
 
 
 # ===================================================DIV60==
-def update_people_colors(db_connection, group_id, color_group, db_color_num, action):
+def OLD_update_people_colors(db_connection, group_id, color_group, db_color_num, action):
 
 # Construct the SQL statement so correct color group column is updated
-# can't use a SQL variable, must use python string manipulation.
+# can't use a SQL variable, must use python string manipulation
+# because the column name to update is a variable. Would need to
+# use one of 10 SQL statements each with a different column name.
 
     if color_group <1 or color_group>10:
             raise RMc.RM_Py_Exception('color_group is out of range.')
@@ -201,6 +208,127 @@ WHERE Color{num} = :color;
         cur = db_connection.cursor()
         cur.execute(SqlStmt, { "color":str(db_color_num)})
 
+
+# ===================================================DIV60==
+def update_people_colors(db_connection, group_id, color_group, db_color_num, action):
+
+# Construct the SQL statement so correct color group column is updated
+# can't use a SQL variable, must use python string manipulation
+# because the column name to update is a variable. Would need to
+# use one of 10 SQL statements each with a different column name.
+
+# validate input which has not yet been checked
+    if color_group <1 or color_group>10:
+            raise RMc.RM_Py_Exception('color_group is out of range.')
+    
+    # prepare the string that will be concatenated with the word "Color"
+    # to be used as column name
+    # Columns in PersonTable are named: Color, Color1, Color2 ... Color9
+    if color_group== 0:
+        column_num_str=''
+    else:
+        column_num_str = str(color_group -1)
+
+    # keep this in reserve
+    test_color_str = str(db_color_num)
+
+    # For clear operations, the number to be set to is always 0
+    if action == "set" or action == "setOnlyIf":
+        color_str = str(db_color_num)
+    else:
+        color_str = str(0)
+
+
+    # These are prototypes for the SQL to be used
+    # they need the {num} string replaced before they can be used
+    # If sql text name includes:
+    #  sub selection        then is is using a real group, id not = 0
+    #  AND Color{num} = :color;  then it is an OnlyIf
+    #  AND Color{num} = 0      then it is an OnlyIfZero
+
+    proto_GRP_Any_SqlStmt = (
+"""UPDATE  PersonTable AS pt
+SET Color{num}  = :set_color
+FROM (
+    SELECT pt2.PersonID
+    FROM PersonTable AS pt2
+    JOIN GroupTable AS gt ON pt2.PersonID BETWEEN gt.StartID AND gt.EndID
+    WHERE gt.GroupID = :group_id ) AS id
+WHERE pt.PersonID = id.PersonID;
+""")
+
+    proto_ALL_Any_SqlStmt = (
+"""UPDATE  PersonTable
+SET Color{num}  = :set_color;
+""")
+
+    proto_GRP_OnlyIf_SqlStmt = (
+"""UPDATE  PersonTable AS pt
+SET Color{num}  = :set_color
+FROM (
+    SELECT pt2.PersonID
+    FROM PersonTable AS pt2
+    JOIN GroupTable AS gt ON pt2.PersonID BETWEEN gt.StartID AND gt.EndID
+    WHERE gt.GroupID = :group_id ) AS id
+WHERE pt.PersonID = id.PersonID
+    AND Color{num} = :test_color;
+""")
+
+    proto_ALL_OnlyIf_SqlStmt = (
+"""UPDATE  PersonTable
+SET Color{num}  = :set_color
+WHERE Color{num} = :test_color;
+""")
+
+    proto_GRP_OnlyIfZero_SqlStmt = (
+"""UPDATE  PersonTable AS pt
+SET Color{num}  = :set_color
+FROM (
+    SELECT pt2.PersonID
+    FROM PersonTable AS pt2
+    JOIN GroupTable AS gt ON pt2.PersonID BETWEEN gt.StartID AND gt.EndID
+    WHERE gt.GroupID = :group_id ) AS id
+WHERE pt.PersonID = id.PersonID
+    AND Color{num} = :test_color;
+""")
+
+    #  group_id, color_group, db_color_num, action
+    #    not group_id ==-0  means it operates on a real group
+
+    if not group_id ==-0 and action == "set":    # could be named setAny
+        SqlStmt = proto_GRP_Any_SqlStmt.format(num=column_num_str)
+        cur = db_connection.cursor()
+        cur.execute(SqlStmt, {"group_id":str(group_id), "set_color":color_str})
+
+    elif not group_id ==-0 and action == "setOnlyIf":  # could be named setOnlyIf
+        SqlStmt = proto_GRP_OnlyIfZero_SqlStmt.format(num=column_num_str)
+        cur = db_connection.cursor()
+        cur.execute(SqlStmt, {"group_id":str(group_id), "set_color":color_str, "test_color":str(0)})
+
+    elif not group_id ==-0 and action == "clearAny":
+        SqlStmt = proto_GRP_Any_SqlStmt.format(num=column_num_str)
+        cur = db_connection.cursor()
+        cur.execute(SqlStmt, {"group_id":str(group_id), "set_color":color_str})
+
+    elif not group_id ==-0 and action == "clearOnlyIf":
+        SqlStmt = proto_GRP_OnlyIf_SqlStmt.format(num=column_num_str)
+        cur = db_connection.cursor()
+        cur.execute(SqlStmt, {"group_id":str(group_id), "set_color":color_str, "test_color":test_color_str})
+
+    elif group_id ==-0 and action == "clearAny":
+        SqlStmt = proto_ALL_Any_SqlStmt.format(num=column_num_str)
+        cur = db_connection.cursor()
+        cur.execute(SqlStmt, {"group_id":str(group_id), "set_color":color_str})
+
+    elif  group_id ==-0 and action == "clearOnlyIf":
+        SqlStmt = proto_ALL_OnlyIf_SqlStmt.format(num=column_num_str)
+        cur = db_connection.cursor()
+        cur.execute(SqlStmt, {"group_id":str(group_id), "set_color":color_str,"test_color":color_str})
+
+    else:
+        raise RMc.RM_Py_Exception('something went wrong.')
+
+    return
 
 # ===================================================DIV60==
 def translate_ui_color_to_db( ui_number=None, ui_color_name=None, ui_custom_name=None):

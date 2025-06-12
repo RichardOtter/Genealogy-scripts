@@ -176,62 +176,75 @@ LIB_APPENDIX  Config file: location, contents and editing
 APPENDIX  Config file: location, contents and editing
 
 Name and location
-The RM-Python-config.ini file will be recognized as the configuration file when
-placed in the same directory as the Python script (.py file) for the utility.
-The file uses the standard ini file format. For more details, see:
-https://docs.python.org/3/library/configparser.html     see the section "Supported INI File Structure"
-https://en.wikipedia.org/wiki/INI_file
+A file named "RM-Python-config.ini" will be recognized as the utility's 
+configuration file when placed in the same directory as the Python 
+script (.py file) for the utility. Each utility is distributed with a sample 
+config file to get you started.
 
-The configuration file name and location can also be specified on the command-line
-as an argument to the script. This argument overrides the default configuration
-file located in the current directory if it exists.
+Alternatively, the configuration file name and location can be specified
+on the command-line as an argument to the script. This argument overrides
+the default configuration file name and location.
 
 For example, if the script "RMutility.py" is executed from the folder
 "C:\Users\me\Joe", it will use the configuration file
  C:\Users\me\Joe\RM-Python-config.ini" if it exists.
 However, if the utility is run with an explicit argument, such as:
-  RMutility.py "C:\Users\me\Joe\documents\RM-Python-config.ini"
+
+RMutility.py "C:\Users\me\Joe\documents\RM-Python-config.ini"
+
 then the specified configuration file will be used instead of the default
 Note that the file name is not restricted to the default.
-For instance, running the utility with:
-  RMutility.py config_mine.ini
-will instruct the utility to read config_mine.ini in the current directory
-for its configuration parameters.
+For instance, running the utility as:
 
-The configuration file might be named so as to convey its purpose.
-A Windows shortcut can also be constructed with the above described argument
-to allow execution from the desktop with a double mouse click.
+RMutility.py config_mine.ini
+
+will instruct the utility to use config_mine.ini in the current directory
+as its configuration file.
+
+A configuration file specified on the command line might be renamed so as
+to convey its purpose. A Windows shortcut can also be constructed with the
+above described argument to allow execution from the desktop with a
+double mouse click.
 
 Editing
-Use any text editor to edit the configuration file. The builtin-to-Windows
+Use any text editor to edit the configuration file. The Windows built-in
 app "Notepad" is suitable.
 To edit the configuration file, first open the Notepad app and then use the
 mouse to drag the configuration file onto the open Notepad window.
 
-Encoding
-If there are any non-ASCII characters in the config file then the file must be
-saved in UTF-8 format, with no byte order mark (BOM).
-The included sample config file has an accented ä in the first line comment to
-force it to be in the correct format.
-File format is an option in the "Save file" dialog box in NotePad.
-
-Contents
-The config file is made up of the elements: Sections, Keys, Values and
-Comments. The names in square brackets are Section Names that identify the start
-of a section. A Section contains one or more Key = Value pairs. Names on the left of
-the = sign are Keys. Text on the right side of the = is the Value of the Key.
-Comment lines start with # and are only included to help the user read and
-understand the file.
 
 
-KEYs used by all of the RM utilities:
+Format and conventions
+The file uses the standard ini file format.
+
+The config file is made up of the elements: Sections, Keys, Values 
+and Comments.
+
+A name in square brackets is a section name that identifies the start
+of a section. A section continues until a new section starts. Every key
+should be in a named section.
+The order of sections is a config file is not important, but all of the
+sample config files start with the [FILE_PATHS] section.
+
+A section contains one or more key-value pairs and comment lines.
+
+A name on the left side of a "=" sign is a key.
+Text on the right side of a "=" is the value assigned to the key on the left.
+Comment lines start with a "#" character and are only included to help 
+the user read and understand the file. They are ignored by the utility software.
+
+
+For example, a section and 3 key-values used by all of the RM utilities:
 
 [FILE_PATHS]
+# this is the test database
 DB_PATH         = TEST.rmtree
 REPORT_FILE_PATH  = ..\Report_utilName.txt
 REPORT_FILE_DISPLAY_APP  = C:\Windows\system32\Notepad.exe
 
-These KEYS are all in the [FILE_PATHS] section and all require file paths as values.
+The 3 keys, DB_PATH, REPORT_FILE_PATH, and REPORT_FILE_DISPLAY_APP are all
+in the [FILE_PATHS] section and all require file paths as values.
+The second line is a comment.
 
 The file path may be absolute, as in REPORT_FILE_DISPLAY_APP
 above, or it may be relative to the current directory, as in DB_PATH and
@@ -243,31 +256,102 @@ in deciding which database to use. New users will always want to point to a
 copy of the main database.
 
 The utilities all generate a textual report file. The file's name
-and location can be specified by REPORT_FILE_PATH
+and location can be specified by REPORT_FILE_PATH key.
 
-If REPORT_FILE_DISPLAY_APP is specified, then the report file will be
+If REPORT_FILE_DISPLAY_APP key has a valid value, then the report file will be
 automatically displayed by the named application.
 
 
 =========================================================================DIV80==
-LIB_multi-line value
+LIB_APPENDIX  Config File: multi-line value
+multi-line value
 
-The MAPPING keys takes a multi-line value.
+The ini file format used by the config file allows entry of multi-line values.
+These are used when the key is to be assigned more than a single name or datum.
+The multi line value is still just one value, but the values is split up into
+multiple lines.
 
-Each line must be indented with at least one space character.
+Each line of a value after the first,  must be indented with at least one 
+space character.
 
-All the rows in a value should have the same indentation (for human readability).
+All the lines in a value should have the same indentation. Not required but
+looks much more tidy and is easier to read.
 
-Each line must have 2 entries- old field, new field, separated by a ">" character.
+There must be one or more blank lines at the end of a value separating it
+from the next key or section marker or comment.
 
-Entries may be enclosed in double quotes.
+Comment lines are not allowed within a multi-line value.
 
-The space between the columns is flexible.
+Examples-
+correct formats-
 
-There is one or more blank lines at the end of a value separating it
-from the next item.
+KEY_NAME = Name1
 
-A comment line is not allowed within a multi-line value.
+KEY_NAME =
+  Name1
+
+KEY_NAME = Name1
+  Name2
+  Name3
+
+KEY_NAME =
+  Name1
+  Name2
+  Name3
+
+incorrect format- (empty line not allowed)
+
+KEY_NAME =
+  Name1
+
+  Name2
+  Name3
+
+incorrect format (not indented)
+
+KEY_NAME =
+Name1
+Name2
+Name3
+
+incorrect format (not indented)
+
+KEY_NAME = Name1
+Name2
+Name3
+
+incorrect format (comment lines not allowed within a multi line value)
+
+KEY_NAME =
+  Name1
+ #  Name2
+  Name3
+
+=========================================================================DIV80==
+LIB_APPENDIX  Config File: Mapping value
+MAPPING_ value format
+
+Values that this utility names "MAPPING_" have additional format requirements.
+
+Each line must have 2 names- old field name and new field name, separated by
+a ">" character. 
+The word "NULL" may substitute for either old or new field name.
+
+Names may be enclosed in double quotes.  Required when a name contains a blank 
+or ">" character at the beginning, end, or anywhere within it.
+
+The white space between the names and ">" character is ignored.
+
+
+
+=========================================================================DIV80==
+LIB_APPENDIX  Config File: Encoding
+Encoding
+If there are any non-ASCII characters in the config file then the file must be
+saved in UTF-8 format, with no byte order mark (BOM).
+The included sample config file has an accented ä in the first line comment to
+force it to be in the correct format.
+File format is an option in the "Save file" dialog box in NotePad.
 
 
 =========================================================================DIV80==
