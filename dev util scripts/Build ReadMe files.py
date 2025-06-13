@@ -80,7 +80,7 @@ def get_snippet(label, lib_file):
             if save and not skip_label:
                 snippet.append(line)
     if len(snippet) == 0:
-        raise Exception("Snippet not found in Text library file.")
+        raise Exception(F'Snippet "{label}" not found in Text library file.')
     return snippet
 
 
