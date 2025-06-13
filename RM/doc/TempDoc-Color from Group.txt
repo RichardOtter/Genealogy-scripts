@@ -38,6 +38,17 @@ Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
 ==========-
+Edit the RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
+
+Check that the DB_PATH key in the config file is pointing to the
+desired database.
+If the above steps were followed, the path in the sample config file
+is already correct, i.e. TEST.rmtree
+
+Save the config file but leave it open in Notepad.
+
+==========-
 Before running the utility, you will want to confirm that a group exists
 in your database that will be the basis of the color operation.
 Make sure that you know the exact spelling of the name and that there

@@ -26,11 +26,44 @@ INCLUDE: LIB_Overview
 =========================================================================DIV80==
 Running the utility in detail
 
-One step omitted from the Overview 
+==========-
+Create a folder on your computer that you will not confuse with other
+folders- the "working folder".
 
+==========-
+*  Copy these items from the downloaded zip file to the working folder-
+      RunSQL.py                        (file)
+      RM-Python-config.ini             (file)
+      RMpy                             (folder)
+
+==========-
 *  Download the SQLite extension file: unifuzz64.dll   -see below
    (This dll provides a RMNOCASE collation used by RM.)
    Move the unifuzz64.dll file to the working folder.
+
+==========-
+Make a copy of your database, move the copy into the working folder.
+
+Rename the database copy to "TEST.rmtree" in order to prevent any
+confusion about the purpose of the copy.
+
+==========-
+Edit the RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
+
+Check that the DB_PATH key in the config file is pointing to the
+desired database.
+Confirm also that the RMNOCASE_PATH is correctly pointing to the unifuzz64.dll
+file.
+
+If the above steps were followed, the DB_PATH and RMNOCASE_PATH in the sample
+config file are already correct.
+
+Save the config file but leave it open in Notepad.
+
+=========-
+
+
 
 
 =========================================================================DIV80==

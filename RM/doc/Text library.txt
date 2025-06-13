@@ -75,17 +75,16 @@ LIB_Overview
 Overview
 
 This program is what is called a "command line utility".
-It is in the form of a single text file with a "py" file name extension,
-referred to, below, as "MainScriptFile.py". The utility also needs the
-Python package RMpy, which is a folder included in the distribution zip file.
+It is in the form of a single text file with a "py" file name extension
+(referred to, in this section, as "MainScriptFile.py"). The utility also
+needs the Python package RMpy, which is a folder included in the distribution
+zip file.
 
-Most input to the utility is through the configuration file. (Some utilities
-in this suite also take user input from the terminal window.)
-The the default name of the configuration file (called, hereinafter, the
-"config file") is "RM-Python-config.ini". It should be located in the
-same folder as the MainScriptFile py script file and the RMpy folder.
-At a minimum, the config file gives the name and location of the database on
-which the utility operates.
+Most input to the utility is through the configuration file. The the default
+name of the configuration file (called, hereinafter, the "config file") is
+ "RM-Python-config.ini". It should be located in the same folder as the
+ MainScriptFile py script file and the RMpy folder. At a minimum, the config
+file gives the name and location of the database on which the utility operates.
 
 One config file can be shared among other RM utilities in the suite. Each
 utility will extract the information it needs from the config file.
@@ -111,7 +110,13 @@ To install and use the script for the first time:
 
 *  Double click the main program .py file to run the utility.
 
-*  A summary report will be displayed in NotePad.
+*  A window titled "Command Prompt" with a black background and white text will
+appear. Some utilities will keep this window open and request commands and 
+information, other utilities will only show the window for a moment, others 
+will have the window displayed for the length of the utilit's proeceeing time.
+
+*  The terminal wiindow will close and a summary report will be displayed
+in NotePad.
 
 The above procedure of making a copy of your database and operating on it in 
 the working folder is most prudent when a user is just getting familiar with 

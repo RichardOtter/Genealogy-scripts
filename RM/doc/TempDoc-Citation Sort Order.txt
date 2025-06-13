@@ -22,7 +22,7 @@ Running the utility in detail
 
 ==========-
 Create a folder on your computer that you will not confuse with other
-folders. It will be referred to as the "working folder".
+folders- the "working folder".
 
 ==========-
 *  Copy these items from the downloaded zip file to the working folder-
@@ -40,10 +40,14 @@ confusion about the purpose of the copy.
 Edit the RM-Python-config.ini file in the working folder.
 (See the section "APPENDIX  Config file: location, contents and editing" if you need help)
 
-   The utility needs to know where the RM database file is located, the output
-   report file name and its location.
+Check that the DB_PATH key in the config file is pointing to the
+desired database.
+If the above steps were followed, the path in the sample config file
+is already correct, i.e. TEST.rmtree
 
-   If you followed the above instructions, no edits are needed.
+Save the config file.
+
+=========-
 
 *  Double click the CitationSortOrder.py file. This displays the black
    terminal window.

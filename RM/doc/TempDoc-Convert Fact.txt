@@ -55,6 +55,9 @@ desired database.
 If the above steps were followed, the path in the sample config file
 is already correct, i.e. TEST.rmtree
 
+Save the config file but leave it open in Notepad.
+
+==========-
 Look at the [CV_PARAMS] section of the config file containing parameters for
 the desired changes:
 

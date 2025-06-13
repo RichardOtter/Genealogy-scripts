@@ -65,7 +65,7 @@ Running the utility in detail
 
 ==========-
 Create a folder on your computer that you will not confuse with other
-folders. It will be referred to as the "working folder".
+folders- the "working folder".
 
 ==========-
 *  Copy these items from the downloaded zip file to the working folder-
@@ -87,6 +87,10 @@ Check that the DB_PATH key in the config file is pointing to the
 desired database.
 If the above steps were followed, the path in the sample config file
 is already correct, i.e. TEST.rmtree
+
+Save the config file but leave it open in Notepad.
+
+=========-
 
 Look at the section of the config file containing options:
 [OPTIONS]
@@ -359,7 +363,7 @@ citation    Text  "Name"             "PersonName"
 citation    Text  "Form"             "Form"
 citation    Text  "CertificateNo"    "CertificateNo"
 citation    Date  "Date"             "Date"
-citation           NULL             "ID-number"
+citation           NULL              "ID-number"
 ======
 
 Check to be sure that the data types match for the source & destination.
@@ -377,7 +381,7 @@ Next, remove the first 2 columns. They are not used in the mapping.
   "Form"             "Form"
   "CertificateNo"    "CertificateNo"
   "Date"             "Date"
-   NULL             "ID-number"
+   NULL              "ID-number"
 ======
 
 Add the KEY names above each category of field names and
@@ -386,9 +390,9 @@ Insert a ">" character between the columns.
 
 ======
 MAPPING_SOURCE =
-  "Repository"     > "RepositoryName"
-  "RepositoryLoc"  > "RepositoryLoc"
-  "Jurisdiction"   >  NULL
+  "Repository"     >   "RepositoryName"
+  "RepositoryLoc"  >   "RepositoryLoc"
+  "Jurisdiction"   >    NULL
 
 
 MAPPING_CITATION =
@@ -551,7 +555,6 @@ confirmed as accurate.
 
 Or, you may consider renaming your sources (temporarily ?) so they fit an
 easy to search-for pattern.
-
 
 ===========-
 Mapping rules processing
@@ -779,6 +782,7 @@ TODO
 
 *  consider allowing text to be used in the left side of a mapping instead of
    existing text in an existing field.
+*  allow the text mentioned above to come from a parsing of the note fields
 *  ?? what would you find useful?
 
 
