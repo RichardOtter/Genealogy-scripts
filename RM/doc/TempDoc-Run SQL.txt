@@ -48,23 +48,63 @@ Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
 ==========-
-Edit the RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
 
-Check that the DB_PATH key in the config file is pointing to the
-desired database.
-Confirm also that the RMNOCASE_PATH is correctly pointing to the unifuzz64.dll
-file.
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
 
-If the above steps were followed, the DB_PATH and RMNOCASE_PATH in the sample
-config file are already correct.
+So, for example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 3 key =  value pairs, one of which is 
+DB_PATH = TEST.rmtree
+DB_PATH is the key, TEST.rmtree is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
 
 Save the config file but leave it open in Notepad.
 
+
 =========-
+CONTINUE TO FILL IN TH CONFIG FILE
+
+=========-
+Double click the "RunSQL.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+If "n" is entered in response to the "Change another citation" prompt,
+the terminal window is closed and the utility is exited.
+
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
 
 
+=========-
+IMPORTANT:
+Open the TEST.rmtree database in RM and before anything else,
+perform the "Rebuild Indexes" database tool command
+From Left hand icon panel, select the Tools icon to open the Tools listing,
+then select Database Tools=>Rebuild indexes=>Run selected tool.
 
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.
 
 =========================================================================DIV80==
 Notes
@@ -139,43 +179,29 @@ from running.
 
 
 ===========-
-*  IMPORTANT
-   If your SQL makes any **changes** to an RMONCASE collated column, you must
-   run the SQL:
-   REINDEX RMNOCASE;
-   as SQL_STATEMENT_1 or at the start of your script file. 
-   Put your updating SQL in following statements. After running the SQL,
-   IMPORTANT- run the RM "Rebuild Indexes" tool immediately after opening
-   the modified database in RM.
+IMPORTANT
+If your SQL makes any **changes** to an RMONCASE collated column, you must
+run the SQL:
+REINDEX RMNOCASE;
+as SQL_STATEMENT_1 or at the start of your script file. 
+Put your updating SQL in following statements. After running the SQL,
+IMPORTANT- run the RM "Rebuild Indexes" tool immediately after opening
+the modified database in RM.
 
-   For fully reliable results, any queries using RMONCASE collated columns
-   should be coded to use the SQLite built-in NOCASE collation, as above,
-   Start with REINDEX RMNOCASE; do the query and then run the RM "Rebuild 
-   Indexes" tool immediately after opening the modified database in RM.
-
-
-*  Database modification statements should usually be followed by a
-   SELECT changes(); statement to display how many rows were changed.
+For fully reliable results, any queries using RMONCASE collated columns
+should be coded to use the SQLite built-in NOCASE collation, as above,
+Start with REINDEX RMNOCASE; do the query and then run the RM "Rebuild 
+Indexes" tool immediately after opening the modified database in RM.
 
 
-*    This utility will not help you write the SQL statement and is not a good
+Database modification statements should usually be followed by a
+SELECT changes(); statement to display how many rows were changed.
+
+
+This utility will not help you write the SQL statement and is not a good
 working environment in which to create your SQL statement.
 Confirm you query works before running it in this utility. (Or get the SQL from
 a source that has confirmed its results.)
-
-
-
-Less important notes included for completeness..
-
-===========-
-REPORT_FILE_DISPLAY_APP
-
-Option to automatically open the report file in a display application.
-The included ini sample file has this option activated and set to use Windows
-NotePad as the display app. It can be deactivated by inserting a # character
-at the start of the line. Your favorite editor may be substituted.
-
-===========-
 
 
 =========================================================================DIV80==

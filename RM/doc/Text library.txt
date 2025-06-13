@@ -113,9 +113,9 @@ To install and use the script for the first time:
 *  A window titled "Command Prompt" with a black background and white text will
 appear. Some utilities will keep this window open and request commands and 
 information, other utilities will only show the window for a moment, others 
-will have the window displayed for the length of the utilit's proeceeing time.
+will have the window displayed for the length of the utility's processing time.
 
-*  The terminal wiindow will close and a summary report will be displayed
+*  The terminal window will close and a summary report will be displayed
 in NotePad.
 
 The above procedure of making a copy of your database and operating on it in 
@@ -370,7 +370,7 @@ The white space between the names and ">" character is ignored.
 
 
 =========================================================================DIV80==
-LIB_APPENDIX  Config File: Encoding
+LIB_APPENDIX  Config File: encoding
 Encoding
 If there are any non-ASCII characters in the config file then the file must be
 saved in UTF-8 format, with no byte order mark (BOM).

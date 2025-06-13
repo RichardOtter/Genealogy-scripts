@@ -39,26 +39,40 @@ Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
 ==========-
-Edit the RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
 
-Check that the DB_PATH key in the config file is pointing to the
-desired database.
-If the above steps were followed, the path in the sample config file
-is already correct, i.e. TEST.rmtree
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
 
-Save the config file but leave it open in Notepad.
+So, for example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 3 key =  value pairs, one of which is 
+DB_PATH = TEST.rmtree
+DB_PATH is the key, TEST.rmtree is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
 
 ==========-
-*  Create or find a SQL statement that returns the RINs of the people you want
-   to put into a group.
-   for eaxmple, the SQL that returns all of the people in a database is-
-   SELECT PersonID FROM PersonTable
+Create or find a SQL statement that returns the RINs of the people you want
+to put into a group.
+for example, the SQL that returns all of the people in a database is-
+
+SELECT PersonID FROM PersonTable
 
 Enter the SQL statement into the config file so the utility can use it.
 
 [OPTIONS]
-GROUP_NANE = GroupEveryone
+GROUP_NAME = GroupEveryone
 
 #-----------------------------------------------
 [GroupEveryone]
@@ -92,22 +106,40 @@ SQL_QUERY =
 
 The SQL_QUERY key specifies the SQL statement that will be run.
 It must return a set of PersonID's. The statement may begin on the next line,
-as above, as long as the SQL lines are all
-indented with white space. Blank lines are not allowed.
+as above, as long as the SQL lines are all indented with white space.
+Blank lines are not allowed.
 Use indented SQL comments (--) to add spacing for readability.
+
 # style comments are not allowed in multi line values.
 
 
-The Group_name value in OPTIONS may also have multiple lines, that is
+The GROUP_NAME value in OPTIONS may also have multiple lines, that is
 multiple group names. Each of those group will be updated in the same run
-of the utility.
+of the utility and listed separately in the report.
 
-Your config file can contain multiple Sections each with SQL statements.
-Only the Sections specified by [OPTIONS] GROUP_NANE will be used. The others
+Your config file can contain multiple sections each with SQL statements.
+Only the sections specified by [OPTIONS] GROUP_NAME will be used. The others
 are ignored.
 
+=========-
+Double click the "GroupFromSQL.py" file in the working folder
+to start the utility.
 
-=========================================================================DIV80==
+=========-
+A terminal window is displayed while the utility processes
+the commands.
+
+=========-
+The report file is displayed in Notepad for you inspection.
+
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.
+
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
+
+
 =========================================================================DIV80==
 Notes
 
@@ -164,7 +196,7 @@ No database damage has ever been seem after many hundreds of uses.
 Less important notes.
 
 =========-
-I have not tested all SQL statements :)
+All SQL statements have not tested :)
 The utility takes the input SQL and creates a temporary view based on it. If that
 fails, an appropriate error is returned. That should protect against SQL that
 modifies/deletes data. (This is not tested beyond simple cases.)

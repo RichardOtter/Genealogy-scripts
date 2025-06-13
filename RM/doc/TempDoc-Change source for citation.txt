@@ -5,8 +5,8 @@ INCLUDE: LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
-RootsMagic has Sources and Citations. Sources are also called "Master Sources".
-Citations are also called "Source Details".
+A RootsMagic database contains records for Sources and Citations. Sources are
+also called "Master Sources". Citations are also called "Source Details".
 
 Sources are created using a Source Template. If 2 sources are created
 from the same source template, they will have the same fundamental structure.
@@ -23,7 +23,9 @@ number of sources (newspapers) all based on the same source template.
 When entering a citation, you may accidentally cite a source set up for the
 wrong newspaper. Instead of deleting and recreating the citation, use this
 utility to move the citation to the correct source.
-The utility will carry along all of the uses of the citation.
+
+The utility will carry along all of the uses of the citation, along with web
+links and media.
 
 
 =========================================================================DIV80==
@@ -44,7 +46,7 @@ Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 
 ==========-
-*  Copy these items from the downloaded zip file to the working folder-
+Copy these items from the downloaded zip file to the working folder-
       ChangeSrcForCitation.py          (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
@@ -56,22 +58,37 @@ Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
 ==========-
-Edit the RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
 
-Check that the DB_PATH key in the config file is pointing to the
-desired database.
-If the above steps were followed, the path in the sample config file
-is already correct, i.e. TEST.rmtree
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
 
-Save the config file.
+So, for example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 3 key =  value pairs, one of which is 
+DB_PATH = TEST.rmtree
+DB_PATH is the key, TEST.rmtree is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
+Save the config file but leave it open in Notepad.
+
 
 =========-
 Double click the "ChangeSrcForCitation.py" file in the working folder
 to start the utility.
 
 =========-
-A black terminal window will open and prompt you to enter the name of
+A terminal window will open and prompt you to enter the name of
 the citation to move and the source that it should be moved to.
 
 In both cases, only enough of the name needs to be
@@ -82,27 +99,38 @@ There is no need to manually type input.
 
 The standard 'SQL Like' wild card characters % and _ may be used.
 % matches 0 or more characters, _ matches one character.
-This utility always adds a % to the end of the citation name and
-source names entered.
+This utility silently adds a % to the end of the citation name  and
+source name text entered.
 
+=========-
+After the source name is entered, either a confirmation or error message
+is displayed.
+In either case, a prompt to change another citation is shown. Respond with
+either y or n.
+
+=========-
+If "n" is entered in response to the "Change another citation" prompt,
+the terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
+
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.
+
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
+
+=========================================================================DIV80==
+Notes
+
+=========-
 If the full citation name is not unique, then as a workaround, you
 could add some text to the citation name of the citation you want
 to modify to make the name unique.
 
 =========-
-After the source name is entered, either a confirmation or error message
-is displayed. 
-In either case, a prompt to change another citation is shown. Respond with
-either a y or n.
-
-=========-
-If "n" is entered in response to the "Change another citation" prompt, 
-the terminal window is closed and a report file is displayed summarizing
-the changes made.
-
-=========================================================================DIV80==
-Notes
-
 All entered information is verified before it is used. It is unlikely that
 random data would be accepted by the utility.
 

@@ -50,6 +50,9 @@ Troubleshooting
 CONSTANT
 added sections
 =========================================================================DIV80==
+Developer Notes
+ONLY TEST EXTERNAL FILES (not in lib)
+=========================================================================DIV80==
 TODO
 variable
 =========================================================================DIV80==
@@ -89,3 +92,26 @@ ListCitationsForPersonID
 all other chnage DB
 
 
+import sys
+from pathlib import Path
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
+
+import RMpy.common as RMc       # noqa #type: ignore
+import RMpy.launcher            # noqa #type: ignore
+from RMpy.common import q_str   # noqa #type: ignore
+
+
+=========-
+Double click the "GroupFromSQL.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is displayed while the utility process the SQL.
+
+=========-
+The terminal terminal window closes and the report file is displayed
+in Notepad for you inspection.
+
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.

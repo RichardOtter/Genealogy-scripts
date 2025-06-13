@@ -26,7 +26,7 @@ Create a folder on your computer that you will not confuse with other
 folders. It will be referred to as the "working folder".
 
 ==========-
-*  Copy these items from the downloaded zip file to the working folder-
+Copy these items from the downloaded zip file to the working folder-
       ColorFromGroup.py                (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
@@ -93,6 +93,9 @@ report file name and its location.
 If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
 
+Save the config file but leave it open in Notepad.
+
+==========-
 Next, tell the utility what color operations to perform.
 This requires a bit of explanation.
 Each operation is contained in a separate section of the config file.
@@ -196,9 +199,10 @@ COLOR_COMMAND =
   Color_my_family_S
 
 
-Your config file can contain multiple color command sections, but only those
-listed in COLOR_COMMAND will be executed. The others are ignored. You may want
-to keep unused sections in the config file for future use. 
+Your config file can contain multiple color action sections, but only those
+listed in COLOR_COMMAND will be executed. The others are ignored. 
+
+You may want to keep unused sections in the config file for future use. 
 
 The keys in the color command section are ACTION, COLOR_CODE_SET, COLOR, and GROUP.
 ACTION is either set or clear
@@ -215,20 +219,45 @@ It does this for all people (thus the group name placeholder "_ALL")
 The utility does not allow clearing all colors in a color code set or
 clearing colors in multiple color code sets.
 
+==========-
+After confirming that your edits to the config file are saved,
+
+Double click the "ColorFromGroup.py" file in the working folder to run
+the utility.
+
+=========-
+A terminal window is displayed while the utility processes
+the commands.
+
+=========-
+The terminal terminal window closes and the report file is displayed
+in Notepad for you inspection.
+
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.
+
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
+
 
 =========================================================================DIV80==
 Notes
+
 =========-
 The GROUP key specifies which people in the database the color operation 
-is to be performed on. It can be either the name of a gorup or "_ALL".
+is to be performed on. It can be either the name of a RM person group or "_ALL".
 
-_ALL will operate on all people in the database. It is required to be used 
-for all clear color operations.
+_ALL will operate on all people in the database. It may only be used 
+for clear color operations.
 
 =========-
 ACTION can be one of: set, clearAny, ClearOnlyIf, or setOnlyIf.
+
 COLOR_CODE_SET takes a value of 1 to 10
+
 COLOR takes a value of 1 to 27
+
 GROUP takes a name of a group or "_ALL" which indicates all people in
       the database. The "_ALL" option is only usable
       with the clearAny and ClearOnlyIf actions.

@@ -8,7 +8,8 @@ Purpose
 This utility works with structured sources and citations defined by source
 templates. "Structured" meaning having defined data fields used to create
 footnotes using the sentence language, as opposed to "free form" sources.
-(See below "Template specified data fields" for more explanation)
+(See below "Template specified data fields" in the Notes section, below,
+for further explanation)
 
 RM users can create their own source templates. Those users often find that an
 initial source template design needs updating after using it for a time and
@@ -32,27 +33,8 @@ This utility does not modify any source template. It modifies sources and
 citations.
 
 This utility does not move data BETWEEN source fields and citation fields.
-Other utilities can do that. (see: LumpSources)
+Other utilities can do that. (see: LumpSources another utility in this suite.)
 
-
-
-Template specified data fields
-Both sources and citations are each displayed in RM in 2 separate panels.
-In RM, open the source tab to see the listing of all sources.
-Click on one to select it.
-On the right had side, see the panel labeled Edit Source. There are two sub panels
-below it labeled "Master Source- xxxxxxx" and "Master Source text, media etc."
-The top box, has a table with rows labeled "Source Type", "Source Name" and others.
-The "others" are the data fields defined for this particular source and they are
-specified by the Source Template.
-Open one of the source's citations (click on the ">" button to the right of
-a source name in the left hand listing).
-The right hand side now displays a panel labeled "Edit Citation".
-The 3rd sub-panel header is labeled "Citation Details" and the 4th is "Citation
-Detail text, media etc."
-The rows of the "Citation Details" table are "Citation Name" and others. As
-above, the "others" are the data fields defined for this particular citation
-and they are specified by the Source Template.
 
 =========================================================================DIV80==
 INCLUDE: LIB_Backups large changes
@@ -68,7 +50,7 @@ Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 
 ==========-
-*  Copy these items from the downloaded zip file to the working folder-
+Copy these items from the downloaded zip file to the working folder-
       ChangeSourceTemplate.py          (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
@@ -80,18 +62,33 @@ Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
 ==========-
-Edit the RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
 
-Check that the DB_PATH key in the config file is pointing to the
-desired database.
-If the above steps were followed, the path in the sample config file
-is already correct, i.e. TEST.rmtree
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
 
-Save the config file but leave it open in Notepad.
+So, for example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 3 key =  value pairs, one of which is 
+DB_PATH = TEST.rmtree
+DB_PATH is the key, TEST.rmtree is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
+
+==========-
+STEP 0		Option    All options = off
 
 =========-
-
 Look at the section of the config file containing options:
 [OPTIONS]
 CHECK_TEMPLATE_NAMES   = off
@@ -113,16 +110,22 @@ NOTE: only the first "on" action read from the list will be performed when
 the utility is run, the remaining options are ignored. So, to avoid confusion,
 always check that only one option is set to on.
 
-Save the config file.
+Save the config file but leave it open in Notepad.
 
-==========-
-STEP 0		Option    All options = off
+=========-
+Double click the "ChangeSourceTemplate.py" file in the working folder
+to start the utility.
 
-Double click the SwitchSourceTemplate.py file to run it.
-A black terminal window should momentarily open and then close.
-A new file, Report_ChangeSourceTemplate.txt, should appear in the working
-folder and then automatically open in NotePad.
-Check that there are no error messages listed in the Report file.
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
+
 
 If the database file couldn't be found, fix the config file, save it and re-run
 the utility until you get it right.
@@ -168,11 +171,21 @@ CHECK_TEMPLATE_NAMES   = off
 to
 CHECK_TEMPLATE_NAMES   = on
 
-Save the file, leave it open in Notepad.
+Save the config file but leave it open in Notepad.
 
-Double click the utility py file to run it.
-A black terminal window will momentarily open and then close.
-The Report_ChangeSourceTemplate.txt file will automatically open in NotePad.
+=========-
+Double click the "ChangeSourceTemplate.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
 
 Check that there are no error messages listed in the Report file.
 If a source template name couldn't be found, fix the config file, save it and
@@ -205,9 +218,21 @@ two lines so they are as shown:
 CHECK_TEMPLATE_NAMES   = off
 LIST_SOURCES           = on
 
-Save the file, leave it open in Notepad.
-Double click the utility py file to run it, etc.
-The Report_ChangeSourceTemplate.txt file will automatically open in NotePad.
+Save the config file but leave it open in Notepad.
+
+=========-
+Double click the "ChangeSourceTemplate.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
 
 Check that there are no error messages listed in the Report file. You should
 see a list of all sources that were created using the Old Template.
@@ -244,9 +269,21 @@ two lines so they are as shown:
 LIST_SOURCES           = off
 LIST_TEMPLATE_DETAILS  = on
 
-Save the file, leave it open in Notepad.
-Double click the utility py file to run it, etc.
-The Report_ChangeSourceTemplate.txt file will automatically open in NotePad.
+Save the config file but leave it open in Notepad.
+
+=========-
+Double click the "ChangeSourceTemplate.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
 
 (Leave the report open in Notepad. We'll use it in the next step.)
 
@@ -265,7 +302,8 @@ switching templates.
 We'll create the mapping from the information in the report file just created.
 
 Using the built-in source template "Birth Registration, state level"
-as an example.
+as an example-
+
 The report files lists its fields as-
 
 OLD TEMPLATE
@@ -277,7 +315,7 @@ citation   Text     "Form"
 citation   Text     "CertificateNo"
 citation   Date     "Date"
 
-I have created a new template that has some field changes.
+Assume that the new template already created has some field changes.
 Its field listing is-
 
 NEW TEMPLATE
@@ -291,7 +329,7 @@ citation   Date     "Date"
 citation   Text     "ID-number"
 
 The quotation marks are optional for most names. However names with spaces,
- embedded, leading or trailing, must be enclosed in double quotes as shown.
+embedded, leading or trailing, must be enclosed in double quotes as shown.
 
 First, copy the Old Template listing into a new text file and then move the
 source fields to the top and the citation fields to the bottom and add a couple
@@ -308,7 +346,6 @@ citation   Text     "Form"
 citation   Text     "CertificateNo"
 citation   Date     "Date"
 ======
-
 
 Next copy each of the field names from the New template listing and
 place them on the corresponding line to the right of the old field.
@@ -332,7 +369,8 @@ citation                             "ID-number"
 Notice that 2 fields have been renamed, a new citation field
 "ID-number" has been added, and 1 source field "Jurisdiction" has been deleted.
 
-The renames are simple, just have the old and new names on the same line.
+The mapping format for renames are simple, just have the old and new names
+on the same line.
 
 Deleted fields are described by inserting the word "NULL" as the destination as
 shown here:
@@ -387,7 +425,6 @@ Next, remove the first 2 columns. They are not used in the mapping.
 Add the KEY names above each category of field names and
 Insert a ">" character between the columns.
 
-
 ======
 MAPPING_SOURCE =
   "Repository"     >   "RepositoryName"
@@ -422,9 +459,21 @@ CHECK_MAPPING_DETAILS  = on
 Look at the [FIELD_MAP] section in the config file.
 Replace the sample text in the [FIELD_MAP] section with the text created above.
 
-Save the config file, leaving it open in Notepad.
-Double click the utility py file to run it, etc.
-The Report_ChangeSourceTemplate.txt file should automatically open in NotePad.
+Save the config file but leave it open in Notepad.
+
+=========-
+Double click the "ChangeSourceTemplate.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
 
 Check that there are no error messages listed in the Report file.
 If the mapping checks out as valid, you will see the message:
@@ -435,10 +484,9 @@ If so, make the fix in the Mapping and rerun.
 
 If the report file did not open in NotePad, read the section "APPENDIX
 Troubleshooting" below. It's likely that a formatting error has been
-introduced in to the config file.
+introduced in to the config file after pasting in the new mapping text.
 
 If everything checks out, you're ready to make the changes.
-
 
 ==========-
 STEP 5		Option MAKE_CHANGES = on
@@ -448,24 +496,59 @@ two lines so they are as shown:
 CHECK_MAPPING_DETAILS  = off
 MAKE_CHANGES  = on
 
-Save the file, leave it open in Notepad, double click the utility py file to
-run it, etc. The Report_ChangeSourceTemplate.txt file should automatically
-open in NotePad.
+Save the config file but leave it open in Notepad.
+
+=========-
+Double click the "ChangeSourceTemplate.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
 
 Check that there are no error messages listed in the Report file.
 
-If you see a message- Tried to create duplicate Name in XML., read the
+
+If you see a message- Tried to create duplicate Name in XML, read the
 section "APPENDIX  Troubleshooting" below.
 
-Open the database in RootsMagic and confirm that the desired changes have been made.
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.
 
-If there are changes that you did not want, make another copy of your main
-database file and copy it to the working folder, update the config file
-and try again.
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
 
 
 =========================================================================DIV80==
 Notes
+
+===========-
+Template specified data fields
+Both sources and citations are each displayed in RM in 2 separate panels.
+In RM, open the source tab to see the listing of all sources.
+Click on one to select it.
+On the right had side, see the panel labeled Edit Source. There are two
+sub panels below it labeled "Master Source- xxxxxxx" and
+"Master Source text, media etc." The top box, has a table with rows labeled
+"Source Type", "Source Name" and others.
+The "others" are the data fields defined for this particular source and they
+are specified by the Source Template.
+Open one of the source's citations (click on the ">" button to the right of
+a source name in the left hand listing).
+The right hand side now displays a panel labeled "Edit Citation".
+The 3rd sub-panel header is labeled "Citation Details" and the 4th is 
+"Citation Detail text, media etc."
+The rows of the "Citation Details" table are "Citation Name" and others.
+As above, the "others" are the data fields defined for this particular citation
+and they are specified by the Source Template.
+
 
 ===========-
 All possible Source Template changes
@@ -533,8 +616,8 @@ it's not tidy.
 It is not strictly necessary that all of the fields in the new source template
 be listed as destinations (right hand) in the mappings, however, in order to
 repair sources and citations that are missing fields, that field must appear
-as a destination. So, best practice is to list all the fields as destinations,
-as was done above.
+as a destination. So, best practice is to list all the fields in the 
+new template as destinations even if there is no change, as was done above.
 
 ===========-
 Selecting sources to be changed
@@ -685,6 +768,7 @@ before any database change is made.
 This problem can usually be avoided by reordering the lines in the mapping.
 
 Example:
+BAD
 CITATION_MAPPING =
   Field_1     >     Field_2
   Field_2     >     Field_1
@@ -695,6 +779,7 @@ processing and generate the error message.
 
 This can be avoided by using a temporary field, say "temp"
 
+GOOD
 CITATION_MAPPING =
   Field_1     >     temp
   Field_2     >     Field_1
@@ -703,17 +788,17 @@ CITATION_MAPPING =
 
 
 =========================================================================DIV80==
-=========================================================================DIV80==
-Developer Notes   (not needed to use utility)
-=========================================================================DIV80==
+Developer Notes
+(not needed to use utility)
 
 The XML fields in the source and citation record are just a collection of
 FieldName-Value pairs.
 The order of these pairs in the XML is not significant.
-The Template determines the order of the values in the default citation name.
+The Template determines the order of the values in the display panel and in
+the default citation name.
 There is no point to reordering the data in the source and citation XML.
 
-the three tables having source type XML data-
+the three tables having  XML type data-
 SourceTemplateTable      FieldDefs
 SourceTable              Fields
 CitationTable            Fields

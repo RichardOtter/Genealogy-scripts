@@ -34,7 +34,7 @@ Create a folder on your computer that you will not confuse with other
 folders. It will be referred to as the "working folder".
 
 ==========-
-*  Copy these items from the downloaded zip file to the working folder-
+Copy these items from the downloaded zip file to the working folder-
       ConvertFact.py                   (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
@@ -46,16 +46,28 @@ Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
 ==========-
-Edit the RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing" if
-you need help)
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
 
-Check that the DB_PATH key in the config file is pointing to the
-desired database.
-If the above steps were followed, the path in the sample config file
-is already correct, i.e. TEST.rmtree
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
 
-Save the config file but leave it open in Notepad.
+So, for example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 3 key =  value pairs, one of which is 
+DB_PATH = TEST.rmtree
+DB_PATH is the key, TEST.rmtree is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
 
 ==========-
 Look at the [CV_PARAMS] section of the config file containing parameters for
@@ -73,10 +85,27 @@ DATE
 
 ==========-
 
-see Notes blow for details on how to fill in the parameters
 
-==========-
-==========-
+Save the config file but leave it open in Notepad.
+
+=========-
+Double click the "ConvertFact.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+The terminal window closes and the report file is displayed in Notepad for
+your inspection.
+
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.
+
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
 
 
 =========================================================================DIV80==

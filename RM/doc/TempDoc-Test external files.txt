@@ -32,6 +32,7 @@ A Hash file might be generated annually and archived with the full dataset.
 INCLUDE: LIB_Backups read only
 =========================================================================DIV80==
 INCLUDE: LIB_Compatibility
+
 Probably still works with RootsMagic v7, although it has not been
 recently tested.
 
@@ -103,7 +104,7 @@ Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 
 ==========-
-*  Copy these items from the downloaded zip file to the working folder-
+Copy these items from the downloaded zip file to the working folder-
       TestExternalFiles.py             (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
@@ -115,17 +116,53 @@ Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
 ==========-
-Edit the RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
 
-Check that the DB_PATH key in the config file is pointing to the
-desired database.
-If the above steps were followed, the path in the sample config file
-is already correct, i.e. TEST.rmtree
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
+
+So, for example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 3 key =  value pairs, one of which is 
+DB_PATH = TEST.rmtree
+DB_PATH is the key, TEST.rmtree is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
 
 Save the config file but leave it open in Notepad.
 
 =========-
+TODO
+CONTINUE TO FILL IN TH CONFIG FILE
+
+=========-
+Double click the "TestExternalFiles.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is displayed while the utility processes
+the commands.
+
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
+
+=========-
+Examine the report and note any discrepancies from what was expected
+
+This utility does not change the database.
+
 
 =========================================================================DIV80==
 Notes

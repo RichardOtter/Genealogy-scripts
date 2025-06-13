@@ -25,7 +25,7 @@ Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 
 ==========-
-*  Copy these items from the downloaded zip file to the working folder-
+Copy these items from the downloaded zip file to the working folder-
       CitationSortOrder.py             (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
@@ -37,29 +37,57 @@ Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
 ==========-
-Edit the RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
 
-Check that the DB_PATH key in the config file is pointing to the
-desired database.
-If the above steps were followed, the path in the sample config file
-is already correct, i.e. TEST.rmtree
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
 
-Save the config file.
+So, for example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 3 key =  value pairs, one of which is 
+DB_PATH = TEST.rmtree
+DB_PATH is the key, TEST.rmtree is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
+Save the config file but leave it open in Notepad.
 
 =========-
+Open the TEST.rmtree in RootsMagic and find the citation list that is to be
+reordered. Having the database open in RM for reference will aid the next steps.
 
-*  Double click the CitationSortOrder.py file. This displays the black
-   terminal window.
+=========-
+Double click the CitationSortOrder.py file in the working folder to start
+the utility.
 
-*  The terminal window displays a prompt asking for the RIN
-(PersonID) of the person that has the attached citation list.
+=========-
+A terminal window will open and prompt you asking for the RIN (PersonID) of the
+person that has the attached citation list.
 The utility will continue with prompts until the desired list of citations is
 displayed. The user then responds to prompts until the list is ordered in the
-desired way. The utility will then close.
+desired way. 
 
-*  Return to the RootsMagic application window. Navigate away from the changed
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad.
+
+=========-
+Return to the RootsMagic application window. Navigate away from the changed
 citation listing and the return to it. Examine the modified sort order.
+
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
 
 
 =========================================================================DIV80==
