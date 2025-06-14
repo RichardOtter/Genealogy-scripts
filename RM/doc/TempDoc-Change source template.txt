@@ -70,11 +70,12 @@ A summary of the config file structure:
 The names in square brackets are section names.
 The items in a section are key-value pairs.
 
-So, for example, in the sample config file, there is a section named 
+For example, in the sample config file, there is a section named 
 [FILE_PATHS].
-In that section, reside 3 key =  value pairs, one of which is 
+In that section, reside 3 key-value pairs, one of which is 
 DB_PATH = TEST.rmtree
-DB_PATH is the key, TEST.rmtree is the value.
+
+"DB_PATH" is the key, "TEST.rmtree" is the value.
 key-value pairs are separated with a = character.
 
 
@@ -118,10 +119,8 @@ to start the utility.
 
 =========-
 A terminal window is momentarily displayed while the utility processes
-the commands.
-
-=========-
-The terminal window is closed and the utility is exited.
+the commands and then the terminal window is closed and the
+utility is exited.
 
 =========-
 The report file is displayed in Notepad for you inspection.
@@ -179,10 +178,8 @@ to start the utility.
 
 =========-
 A terminal window is momentarily displayed while the utility processes
-the commands.
-
-=========-
-The terminal window is closed and the utility is exited.
+the commands and then the terminal window is closed and the
+utility is exited.
 
 =========-
 The report file is displayed in Notepad for you inspection.
@@ -191,17 +188,18 @@ Check that there are no error messages listed in the Report file.
 If a source template name couldn't be found, fix the config file, save it and
 re-run the utility until you get it right.
 
-A common issue is that template names may an embedded space, a leading or trailing
-space.  See NOTES section for details on how to enclose names in quotes to fix.
+A common issue is that template names may an embedded space, a leading or
+trailing space.
+See NOTES section for details on how to enclose names in quotes to fix.
 
 ==========-
 STEP 2		Option LIST_SOURCES = on
 
-Now comes the question of which sources should have their SourceTemplate switched.
-A common use case will require that all of the sources using the old template should
-be switched over to use the new template. Other situations are also possible in
-which only a subset of all sources using the old template should be switched over
-to the new template.
+Now comes the question of which sources should have their SourceTemplate 
+switched. A common use case will require that all of the sources using the old
+template should be switched over to use the new template. Other situations 
+are also possible in which only a subset of all sources using the old template 
+should be switched over to the new template.
 
 In the config file, look for the line:
 [SOURCES]
@@ -226,10 +224,8 @@ to start the utility.
 
 =========-
 A terminal window is momentarily displayed while the utility processes
-the commands.
-
-=========-
-The terminal window is closed and the utility is exited.
+the commands and then the terminal window is closed and the
+utility is exited.
 
 =========-
 The report file is displayed in Notepad for you inspection.
@@ -277,15 +273,13 @@ to start the utility.
 
 =========-
 A terminal window is momentarily displayed while the utility processes
-the commands.
-
-=========-
-The terminal window is closed and the utility is exited.
+the commands and then the terminal window is closed and the
+utility is exited.
 
 =========-
 The report file is displayed in Notepad for you inspection.
 
-(Leave the report open in Notepad. We'll use it in the next step.)
+(Leave the report open in Notepad. It will be used in the next step.)
 
 Check that there are no error messages listed in the Report file.
 You will see a list of all the fields in the old and new templates.
@@ -467,10 +461,8 @@ to start the utility.
 
 =========-
 A terminal window is momentarily displayed while the utility processes
-the commands.
-
-=========-
-The terminal window is closed and the utility is exited.
+the commands and then the terminal window is closed and the
+utility is exited.
 
 =========-
 The report file is displayed in Notepad for you inspection.
@@ -504,10 +496,8 @@ to start the utility.
 
 =========-
 A terminal window is momentarily displayed while the utility processes
-the commands.
-
-=========-
-The terminal window is closed and the utility is exited.
+the commands and then the terminal window is closed and the
+utility is exited.
 
 =========-
 The report file is displayed in Notepad for you inspection.

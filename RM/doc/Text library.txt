@@ -354,6 +354,74 @@ KEY_NAME =
   Name3
 
 =========================================================================DIV80==
+LIB_APPENDIX  Config File: multi-line value SQL
+=========-
+Multiline Values
+
+Probably the trickiest part of the config file is the SQL section.
+The SQL_STATEMENT_1, SQL_STATEMENT_2 etc keys are multi-line values.
+Each line of the value should be on a separate line indented with at least
+one blank. An empty line terminates the value/statement.
+generates an error.
+Multi-line values may not contain # style comment lines, but they may
+contain -- style SQL comments. These are just part of the value/statement.
+
+examples-
+
+correct format-
+[SQL]
+SQL_STATEMENT_1 =
+   SELECT pt.personid
+   FROM persontable AS pt
+   INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+   -- this kind of comment is OK
+   WHERE nt.nametype = 5    -- married name
+   AND nt.surname LIKE 'sm%'
+
+incorrect format- (empty line not allowed)
+[SQL]
+SQL_STATEMENT_1 =
+   SELECT pt.personid
+   FROM persontable AS pt
+
+   INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+   WHERE nt.nametype = 5    -- married name
+   AND nt.surname LIKE 'sm%'
+
+incorrect format (not indented)
+[SQL]
+SQL_STATEMENT_1 =
+SELECT pt.personid
+FROM persontable AS pt
+INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+WHERE nt.nametype = 5    -- married name
+AND nt.surname LIKE 'sm%'
+
+incorrect format- (no # type comments allowed)
+[SQL]
+SQL_STATEMENT_1 =
+   SELECT pt.personid
+   # this is an non-allowed comment line
+   FROM persontable AS pt
+   INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+   WHERE nt.nametype = 5    -- married name
+   AND nt.surname LIKE 'sm%'
+
+incorrect format- (empty line not allowed)
+[SQL]
+SQL_STATEMENT_1 =
+
+   SELECT pt.personid
+   FROM persontable AS pt
+   INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
+   WHERE nt.nametype = 5    -- married name
+   AND nt.surname LIKE 'sm%'
+
+
+
+
+
+=========================================================================DIV80==
 LIB_APPENDIX  Config File: Mapping value
 MAPPING_ value format
 

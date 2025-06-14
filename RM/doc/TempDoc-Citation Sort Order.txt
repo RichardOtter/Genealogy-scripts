@@ -45,11 +45,12 @@ A summary of the config file structure:
 The names in square brackets are section names.
 The items in a section are key-value pairs.
 
-So, for example, in the sample config file, there is a section named 
+For example, in the sample config file, there is a section named 
 [FILE_PATHS].
-In that section, reside 3 key =  value pairs, one of which is 
+In that section, reside 3 key-value pairs, one of which is 
 DB_PATH = TEST.rmtree
-DB_PATH is the key, TEST.rmtree is the value.
+
+"DB_PATH" is the key, "TEST.rmtree" is the value.
 key-value pairs are separated with a = character.
 
 

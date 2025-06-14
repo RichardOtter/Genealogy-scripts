@@ -53,16 +53,20 @@ A summary of the config file structure:
 The names in square brackets are section names.
 The items in a section are key-value pairs.
 
-So, for example, in the sample config file, there is a section named 
+For example, in the sample config file, there is a section named 
 [FILE_PATHS].
-In that section, reside 3 key =  value pairs, one of which is 
+In that section, reside 4 key-value pairs, one of which is 
 DB_PATH = TEST.rmtree
-DB_PATH is the key, TEST.rmtree is the value.
+
+"DB_PATH" is the key, "TEST.rmtree" is the value.
 key-value pairs are separated with a = character.
 
 
 The utility needs to know where the RM database file is located, the output
 report file name and its location.
+
+The utility also needs to know where the unifuzz64.dll file is.  Its path
+is give an the value of the key RMNOCASE.
 
 If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
@@ -79,10 +83,8 @@ to start the utility.
 
 =========-
 A terminal window is momentarily displayed while the utility processes
-the commands.
-
-=========-
-The terminal window is closed and the utility is exited.
+the commands and then the terminal window is closed and the
+utility is exited.
 
 =========-
 The report file is displayed in Notepad for you inspection.
