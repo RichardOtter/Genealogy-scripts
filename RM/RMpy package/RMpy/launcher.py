@@ -1,12 +1,13 @@
 import sys
-import sqlite3
 from pathlib import Path
+sys.path.append( r'.' )
+
 from datetime import datetime
+import sqlite3
 import configparser
 import subprocess
 import traceback
 
-sys.path.append( r'.' )
 import RMpy.common as RMc  # type: ignore
 
 # ===================================================DIV60==

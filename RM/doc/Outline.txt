@@ -89,17 +89,19 @@ affects Backup section
 TestExternalFile		ignored items
 ListCitationsForPersonID
 
-all other chnage DB
+all others change DB
 
 
 import sys
 from pathlib import Path
 sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
-import RMpy.common as RMc       # noqa #type: ignore
 import RMpy.launcher            # noqa #type: ignore
+import RMpy.common as RMc       # noqa #type: ignore
 from RMpy.common import q_str   # noqa #type: ignore
 
+q_str may not be used
+launcher already uses common
 
 =========-
 Double click the "GroupFromSQL.py" file in the working folder
