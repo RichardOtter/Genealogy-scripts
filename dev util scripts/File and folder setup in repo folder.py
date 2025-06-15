@@ -13,6 +13,8 @@ from pathlib import Path
 
 def main():
 
+    keep_orig = True
+
     # CONSTANTS
     REPO_ROOT_PATH = Path(
         r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts")
@@ -20,8 +22,9 @@ def main():
     TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
     RM_PATH = REPO_ROOT_PATH / "RM"
 
-    file1="_DB get fresh copy.cmd"
+    file1="_DB get fresh copy of Production.cmd"
     file2="_DB reset test db.cmd"
+    file3="_DB get fresh copy of TestData.cmd"
 
     try:
         dev_util_fldr_path= REPO_ROOT_PATH / "dev util scripts"
@@ -60,7 +63,7 @@ def main():
             print(F"Directory '{project_DB_path}' already exists.")
         # make a hardlink to the db utility cmd files in each DB folder
 
-        keep_orig = True
+
         try:
             if not keep_orig:
                 try:
@@ -80,6 +83,16 @@ def main():
             os.link( dev_util_fldr_path / file2, project_DB_path / file2 )
         except FileExistsError:
             print(f"Error: The file '{project_DB_path / file2}' already exists.")
+
+        try:
+            if not keep_orig:
+                try:
+                    os.remove(project_DB_path / file3 )
+                except FileNotFoundError:
+                    continue
+            os.link( dev_util_fldr_path / file3, project_DB_path / file3 )
+        except FileExistsError:
+            print(f"Error: The file '{project_DB_path / file3}' already exists.")
 
     return
 
