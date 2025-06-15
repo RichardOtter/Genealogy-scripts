@@ -2,9 +2,12 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
-from RMpy.common import q_str   # noqa #type: ignore
-import RMpy.common as RMc       # noqa #type: ignore
 import RMpy.launcher            # noqa #type: ignore
+
+
+# Requirements:
+#   RootsMagic database file
+#   RM-Python-config.ini
 
 # Tested with:
 #   RootsMagic database file v10
@@ -40,7 +43,8 @@ def main():
 # ===================================================DIV60==
 def run_selected_features(config, db_connection, report_file):
 
-    change_source_feature(config, db_connection, report_file)
+    change_source_feature(config, 
+                          db_connection, report_file)
 
 
 # ===========================================DIV50==
@@ -62,12 +66,12 @@ def change_source_feature(config, db_connection, report_file):
         report_file.write(F'Citation name as entered ="{citation_name}"\n')
 
         # % wildcard always added to search string
-        SqlStmt = (
-            """SELECT COUNT(), st.TemplateID, ct.CitationID, ct.SourceID, st.Name, ct.CitationName
+        SqlStmt = """
+SELECT COUNT(), st.TemplateID, ct.CitationID, ct.SourceID, st.Name, ct.CitationName
 FROM SourceTable AS st
 JOIN CitationTable AS ct ON ct.SourceID = st.SourceID
 WHERE ct.CitationName COLLATE NOCASE LIKE ( ? || '%' );
-""")
+"""
 
         cur = db_connection.cursor()
         cur.execute(SqlStmt, (citation_name, ))
@@ -102,11 +106,11 @@ WHERE ct.CitationName COLLATE NOCASE LIKE ( ? || '%' );
         report_file.write(F'Source name as entered ={new_source_name}\n')
 
         # % wildcard always added to search string
-        SqlStmt = (
-            """SELECT COUNT(), SourceID, TemplateID
+        SqlStmt = """
+SELECT COUNT(), SourceID, TemplateID
 FROM SourceTable
 WHERE Name COLLATE NOCASE LIKE ( ? || '%' );
-""")
+"""
         cur = db_connection.cursor()
         cur.execute(SqlStmt, (new_source_name, ))
         row = cur.fetchone()
@@ -145,23 +149,23 @@ WHERE Name COLLATE NOCASE LIKE ( ? || '%' );
             continue
 
         # update the citation to use the new source
-        SqlStmt = (
-            """UPDATE CitationTable
-SET  SourceID = ?
+        SqlStmt = """
+UPDATE CitationTable
+    SET  SourceID = ?
 WHERE CitationID = ?;
-""")
+"""
         cur = db_connection.cursor()
         cur.execute(SqlStmt, (NewSourceID, CitationID))
         db_connection.commit()
 
         # Confirm update was successful
 
-        SqlStmt = (
-            """SELECT ct.CitationName, st.Name
+        SqlStmt = """
+SELECT ct.CitationName, st.Name
 FROM SourceTable AS st
 JOIN CitationTable AS ct ON ct.SourceID = st.SourceID
 WHERE ct.CitationID = ?;
-""")
+"""
 
         cur = db_connection.cursor()
         cur.execute(SqlStmt, (CitationID, ))
