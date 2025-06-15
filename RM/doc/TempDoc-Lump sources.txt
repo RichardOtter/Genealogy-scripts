@@ -74,7 +74,22 @@ the [FILE_PATHS] section are needed.
 Save the config file but leave it open in Notepad.
 
 =========-
+TODO
 CONTINUE TO FILL IN TH CONFIG FILE
+
+
+[LUMP_OPTIONS]
+TEMPLATE_CHECK_OVERRIDE= off
+
+[LUMP_MAPPINGS]
+MAPPING_SRC_CIT = 
+    "PublicationName"    >  NULL
+    "PublicationPlace"   >  NULL
+
+MAPPING_IDENT_SRC = 
+     "%-pHTH=%"  >  6815
+
+
 
 
 =========-
@@ -97,9 +112,10 @@ From Left hand icon panel, select the Tools icon to open the Tools listing,
 then select Database Tools=>Rebuild indexes=>Run selected tool.
 
 =========-
+Confirm that the desired changes have been accomplished.
+
+=========-
 Consider whether to rename TEST.rmtree and use it as your research database.
-
-
 
 
 =========================================================================DIV80==

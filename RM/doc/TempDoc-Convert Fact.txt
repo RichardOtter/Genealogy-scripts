@@ -42,8 +42,8 @@ Copy these items from the downloaded zip file to the working folder-
 ==========-
 Make a copy of your database, move the copy into the working folder.
 
-Rename the database copy to "TEST.rmtree" in order to prevent any
-confusion about the purpose of the copy.
+Rename the database copy to "TEST.rmtree" in order to prevent any confusion 
+about the purpose of the copy.
 
 ==========-
 Edit the sample RM-Python-config.ini file in the working folder.
@@ -69,24 +69,23 @@ report file name and its location.
 If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
 
-
 ==========-
-Look at the [CV_PARAMS] section of the config file containing parameters for
-the desired changes:
+Look at the [CV_PARAMS] section of the config file containing keys for the 
+parameters needed to describe the desired changes:
 
 FACTTYPE_CURRENT
 FACTTYPE_NEW
 ROLE
 
-Now look at the [SOURCE_FILTER] section which specify which sources are changed.
+Now look at the [SOURCE_FILTER] section which contains the keys that specify
+which sources are changed.
 
 DESC
 DATE
 
+Full details of how to specify the parameters are in the Notes section below.
 
 ==========-
-
-
 Save the config file but leave it open in Notepad.
 
 =========-
@@ -125,7 +124,6 @@ ROLE              = Spouse
 Note that the value can have embedded spaces.
 Space characters between the = and the value are ignored.
 
-
 ===========-
 Fact Type name lists
 
@@ -141,14 +139,12 @@ This window also displays, in the right side panel -
 The specification of fact types in the config file uses the full fact type name,
 not the abbreviation.
 
-
 ===========-
 Fact Type fields used
 
 It is best to check the fields used in both fact types before making the change.
 If the fields used by the current and new fact types differ (date, place,
 description), no data is lost in the conversion.
-
 
 ===========-
 Fact types in RM come in two categories: Individual and Family.
@@ -159,7 +155,6 @@ An RM database family consists either 2 or 1 persons, labeled internally as
 Father and Mother. Either the father or mother may be "unknown"
 (and thus set to 0 in the database). Database families, by design, do not
 include any offspring.
-
 
 ===========-
 Supported fact type conversions:
@@ -175,8 +170,10 @@ Individual => Family
 Configuration items in config file required for each type conversion:
 
 * Individual => Individual
-FACTTYPE_CURRENT (full name of the fact type of the facts that that should be converted)
-FACTTYPE_NEW (full name of the fact type that existing facts should be converted to)
+FACTTYPE_CURRENT (full name of the fact type of the facts that that 
+                  should be converted)
+FACTTYPE_NEW (full name of the fact type that existing facts should 
+                 be converted to)
 (ROLE is ignored)
 
 * Family => Individual
@@ -189,12 +186,12 @@ FACTTYPE_CURRENT
 FACTTYPE_NEW
 (ROLE is ignored)
 
-
 ===========-
 Limiting which Facts are changed
 
-There maybe situations in which only a subset of Facts should be changed to a new fact type.
-One can limit the facts by fields that describe them- the Date and the Description.
+There maybe situations in which only a subset of Facts should be changed to a
+new fact type. One can limit the facts by fields that describe them- 
+the Description and the Date-
 
 Some examples-
 
@@ -235,16 +232,15 @@ leave these fields blank-
 DESC              = 
 DATE              = 
 
-
 ===========-
 Complications handled by this utility
 
 The first complication comes with converting a Family fact to a Individual fact.
 
 A family fact is linked to a father-mother couple. If the father is know, then
-the new Individual fact will be linked to the father. If the mother is also known,
-the mother will be added as a witness to the new Individual fact. Her role is
-specified in the config file as "ROLE =".
+the new Individual fact will be linked to the father. If the mother is also
+known, the mother will be added as a witness to the new Individual fact.
+Her role is specified in the config file as "ROLE =".
 
 If the father is not known then the new Individual fact will be linked to the
 mother. There is no new witness added, so the ROLE config file item is ignored.
@@ -263,6 +259,7 @@ have the former witness transferred to it maintaining the former role, in this
 case "Spouse". If "Census" does not have already have a role named Spouse,
 the utility will complain and request that you create such a role for "Census"
 before the conversion can be completed.
+
 You don't have to recreate all of the roles that exist for the FACTTYPE_CURRENT,
 only the ones that are in use. ConvertFact will tell you which ones.
 
