@@ -1,10 +1,10 @@
+import xml.etree.ElementTree as ET
 import sys
 from pathlib import Path
-sys.path.append( str(Path.resolve(Path.cwd() / r'..\RMpy package')))
-import RMpy.launcher  # type: ignore
-import RMpy.common as RMc  # type: ignore
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
-import xml.etree.ElementTree as ET
+import RMpy.launcher            # noqa #type: ignore
+import RMpy.common as RMc       # noqa #type: ignore
 
 # Requirements:
 #   RootsMagic database file
@@ -39,6 +39,8 @@ import xml.etree.ElementTree as ET
 G_DEBUG = False
 
 # ===================================================DIV60==
+
+
 def main():
 
     # Configuration
@@ -324,11 +326,11 @@ def convert_source(reportF, dbConnection, srcID, newTemplateID,
 
     # Update the source with new XML and new templateID
     newSrcFields = ET.tostring(root_element, encoding="unicode")
-    SqlStmt_src_w = (
-"""UPDATE SourceTable
-SET Fields = ?, TemplateID = ?
+    SqlStmt_src_w = """
+UPDATE SourceTable
+    SET Fields = ?, TemplateID = ?
 WHERE SourceID = ?;
-""")
+"""
     dbConnection.execute(SqlStmt_src_w, (newSrcFields, newTemplateID, srcID))
 
     dbConnection.commit()
@@ -356,11 +358,11 @@ def convert_citation(citation_ID, field_mapping_citation, config, dbConnection):
 
     newCitFields = ET.tostring(root_element, encoding="unicode")
     # Update the citation with new XML and new templateID
-    SqlStmt = (
-"""UPDATE CitationTable
-SET Fields = ?
+    SqlStmt = """
+UPDATE CitationTable
+    SET Fields = ?
 WHERE CitationID = ?;
-""")
+"""
     dbConnection.execute(SqlStmt, (newCitFields, citation_ID))
     #  requires RMNOCASE. Do this in a different utility. TODO
     #  if config['CITATIONS'].getboolean('EMPTY_CIT_NAME'):
@@ -435,12 +437,12 @@ def create_empty_field(name_to_use, fields):
 
 # ===================================================DIV60==
 def empty_citation_name(CitationID, dbConnection):
-    SqlStmt = (
-"""UPDATE CitationTable
-SET CitationName = ''
+    SqlStmt = """
+UPDATE CitationTable
+    SET CitationName = ''
 WHERE CitationID = ?;
-""")
-    cur = dbConnection.cursor()
+"""
+    cur=dbConnection.cursor()
     cur.execute(SqlStmt, (CitationID,))
 
 
@@ -449,37 +451,37 @@ def get_root_element(dbConnection, SourceID=None, CitationID=None):
 
     # Get the Table.Fields BLOB from the ID to extract its data
     if SourceID is not None:
-        ID = SourceID
-        SqlStmt = (
-"""SELECT Fields
+        ID=SourceID
+        SqlStmt= """
+SELECT Fields
 FROM SourceTable
 WHERE SourceID = ?;
-""")
+"""
     elif CitationID is not None:
-        ID = CitationID
-        SqlStmt = (
-"""SELECT Fields
+        ID=CitationID
+        SqlStmt= """
+SELECT Fields
 FROM CitationTable
 WHERE CitationID = ?;
-""")
+"""
     else:
         raise RMc.RM_Py_Exception("ERROR internal: both inputs None")
 
-    cur = dbConnection.cursor()
+    cur=dbConnection.cursor()
     cur.execute(SqlStmt, (ID,))
-    xml_text = cur.fetchone()[0]
+    xml_text=cur.fetchone()[0]
     if type(xml_text) is not str:
-        xml_text = xml_text.decode('utf-8')
+        xml_text=xml_text.decode('utf-8')
 
     # test for and "fix" old style XML no longer used in RMv>=8
-    xml_real_start_string = "<Root"
-    root_location = xml_text.find(xml_real_start_string)
-    xml_text = xml_text[root_location::]
+    xml_real_start_string="<Root"
+    root_location=xml_text.find(xml_real_start_string)
+    xml_text=xml_text[root_location::]
 
     # Extraneous characters are not read into DOM or written back
     # Read into DOM and parse for needed values
-    root_element = ET.fromstring(xml_text)
-    fields_element = root_element.find(".//Fields")
+    root_element=ET.fromstring(xml_text)
+    fields_element=root_element.find(".//Fields")
 
     # Fix XML that is missing the Fields element
     if fields_element == None:
@@ -492,12 +494,12 @@ WHERE CitationID = ?;
 def get_citations_of_source(dbConnection, oldSourceID):
 
     # get citations for oldSourceID
-    SqlStmt = (
-"""SELECT CitationID, CitationName
+    SqlStmt= """
+SELECT CitationID, CitationName
 FROM CitationTable
 WHERE SourceID = ?;
-""")
-    cur = dbConnection.cursor()
+"""
+    cur=dbConnection.cursor()
     cur.execute(SqlStmt, (oldSourceID,))
     return cur.fetchall()
 
@@ -506,13 +508,13 @@ WHERE SourceID = ?;
 def parse_field_mapping(in_str):
 
     # convert string to list of lists (of 3 strings)
-    in_str = in_str.strip()
-    list_of_lines = in_str.splitlines()
-    list_of_lists = []
+    in_str=in_str.strip()
+    list_of_lines=in_str.splitlines()
+    list_of_lists=[]
     for each_line in list_of_lines:
-        item_set = list(each_line.split(sep='>'))
-        item_set = [x.strip() for x in item_set]
-        item_set = [x.strip('"') for x in item_set]
+        item_set=list(each_line.split(sep='>'))
+        item_set=[x.strip() for x in item_set]
+        item_set=[x.strip('"') for x in item_set]
         list_of_lists.append(item_set)
     return list_of_lists
 
@@ -536,10 +538,10 @@ def unquote_config_string(instr):
 def get_list_of_rows(dbConnection, SqlStmt):
 
     # SqlStmt should return a set of single values
-    cur = dbConnection.cursor()
+    cur=dbConnection.cursor()
     cur.execute(SqlStmt)
 
-    result = []
+    result=[]
     for t in cur:
         for x in t:
             result.append(x)
@@ -553,8 +555,8 @@ def check_source_templates(reportF, dbConnection, oldTemplateName, newTemplateNa
         reportF.write("The old and new template names must be different.")
         return
 
-    IDs = []
-    IDs = get_src_template_IDrows(dbConnection, oldTemplateName)
+    IDs=[]
+    IDs=get_src_template_IDrows(dbConnection, oldTemplateName)
     if len(IDs) == 0:
         reportF.write(
             F'Could not find a SourceTemplate named: "{oldTemplateName}"')
@@ -565,7 +567,7 @@ def check_source_templates(reportF, dbConnection, oldTemplateName, newTemplateNa
         return
     reportF.write(F'"{oldTemplateName}" checks out OK\n')
 
-    IDs = get_src_template_IDrows(dbConnection, newTemplateName)
+    IDs=get_src_template_IDrows(dbConnection, newTemplateName)
     if len(IDs) == 0:
         reportF.write(
             F'Could not find a SourceTemplate named: "{newTemplateName}"')
@@ -582,21 +584,21 @@ def check_source_templates(reportF, dbConnection, oldTemplateName, newTemplateNa
 # ===================================================DIV60==
 def get_src_template_IDrows(dbConnection, TemplateName):
 
-    SqlStmt = (
-"""SELECT TemplateID
+    SqlStmt= """
+SELECT TemplateID
 FROM SourceTemplateTable
 WHERE Name COLLATE NOCASE = ?;
-""")
-    cur = dbConnection.execute(SqlStmt, (TemplateName,))
-    rows = []
-    rows = cur.fetchall()
+"""
+    cur=dbConnection.execute(SqlStmt, (TemplateName,))
+    rows=[]
+    rows=cur.fetchall()
     return rows
 
 
 # ===================================================DIV60==
 def dump_src_template_fields(reportF, dbConnection, TemplateID):
 
-    field_list = get_list_src_template_fields(TemplateID, dbConnection)
+    field_list=get_list_src_template_fields(TemplateID, dbConnection)
     reportF.write(field_list[0][0] + '\n')
     for item in field_list:
         reportF.write(F'{item[1]}   {item[2]}     "{item[3]}"\n')
@@ -614,24 +616,24 @@ def dump_src_template_fields(reportF, dbConnection, TemplateID):
 # ===================================================DIV60==
 def get_list_src_template_fields(TemplateID, dbConnection):
 
-    SqlStmt = (
-"""SELECT FieldDefs, Name
+    SqlStmt= """
+SELECT FieldDefs, Name
 FROM SourceTemplateTable
 WHERE TemplateID = ?;
-""")
-    cur = dbConnection.cursor()
+"""
+    cur=dbConnection.cursor()
     cur.execute(SqlStmt, (TemplateID,))
-    textTuple = cur.fetchone()
-    newRoot = ET.fromstring(textTuple[0].decode())
-    st_name = textTuple[1]
-    field_list = []
+    textTuple=cur.fetchone()
+    newRoot=ET.fromstring(textTuple[0].decode())
+    st_name=textTuple[1]
+    field_list=[]
 
-    fieldItr = newRoot.findall(".Fields/Field")
+    fieldItr=newRoot.findall(".Fields/Field")
     for item in fieldItr:
         if "True" == item.find("CitationField").text:
-            fieldLoc = "citation"
+            fieldLoc="citation"
         else:
-            fieldLoc = "source"
+            fieldLoc="source"
         field_list.append(
             (st_name, fieldLoc, item.find("Type").text, item.find("FieldName").text)
         )
@@ -642,15 +644,15 @@ WHERE TemplateID = ?;
 # ===================================================DIV60==
 def get_selected_sources(reportF, dbConnection, oldTemplateID, SourceNamesLike):
 
-    SqlStmt = (
-"""SELECT st.SourceID, st.Name
+    SqlStmt= """
+SELECT st.SourceID, st.Name
 FROM SourceTable st
 JOIN SourceTemplateTable stt ON st.TemplateID = stt.TemplateID
 WHERE st.TemplateID = ? AND st.Name COLLATE NOCASE LIKE ?;
-""")
-    cur = dbConnection.cursor()
+"""
+    cur=dbConnection.cursor()
     cur.execute(SqlStmt, (oldTemplateID, SourceNamesLike))
-    srcTuples = cur.fetchall()
+    srcTuples=cur.fetchall()
     if len(srcTuples) == 0:
         raise RMc.RM_Py_Exception(
             "No sources found with specified search criteria.\n")
