@@ -2,7 +2,7 @@
 UtilityName:  CitationSortOrder
 
 # Last Release v1.0.2
-Version: 1.0.3
+Version: 1.1.0
 
 DistributionFileList:
   - CitationSortOrder.py
