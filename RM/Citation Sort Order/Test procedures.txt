@@ -1,0 +1,183 @@
+
+Using "TestData-Sample.rmtree" database 2025-06-16
+
+Procedure
+Use dev script to get a frsh copy of TestData
+
+*	Start app
+
+test case
+Entering RIN and q command
+
+*	4 enter			This person does not hae any facts with more than one citation.
+
+
+
+
+
+
+
+Starting DATA
+
+Persons:
+1, 2, 3, 4
+
+
+Person: RMID-1
+Has Birth fact
+Birth fact has 1 citation: 
+Citation-1 in Source-1 based on _test-template-1
+	in: Source-1 based on _test-template-1
+
+Person: RMID-1
+Has Death fact
+	NO source
+Death fact has 8 citations
+	Source-2 based on template ATLAS
+		Citation-1 in Source-2 based on ATLAS
+		Citation-2 in Source-2 based on ATLAS
+		Citation-3 in Source-2 based on ATLAS
+		Citation-4 in Source-2 based on ATLAS
+	Source-3 based on template ATLAS
+		Citation-1 in Source-3 based on ATLAS
+		Citation-2 in Source-3 based on ATLAS
+		Citation-3 in Source-3 based on ATLAS
+		Citation-4 in Source-3 based on ATLAS
+
+
+Person 1 has only 1 fact that has multiple sources
+
+Person 2 has no sources attached
+
+Person 3 has 4 facts
+Birth
+	Citation-1 in Source-3 based on ATLAS
+Residence
+	Citation-1 in Source-1 based on _test-template-1
+	Citation-2 in Source-1 based on _test-template-1
+Death
+	Citation-1 in Source-3 based on ATLAS
+	Citation-2 in Source-3 based on ATLAS
+	Citation-3 in Source-3 based on ATLAS
+	Citation-4 in Source-2 based on ATLAS
+Burial
+	Citation-1 in Source-2 based on ATLAS
+	Citation-2 in Source-2 based on ATLAS
+	Citation-3 in Source-2 based on ATLAS
+	Citation-4 in Source-2 based on ATLAS
+
+
+
+
+
+
+
+
+Test Procedure
+
+normal
+always enter RIN and then type of attachment
+f
+p
+n
+
+Currently, app asks for either a FactTypeID or
+blank line entry that gives a listing.
+Should as for fact type name.
+
+
+1	normal path:
+
+Config
+DB	normal
+report name	normal
+display app		notepad
+
+Start app
+Expect:		Enter the RIN of the person who has the citations to reorder:
+enter:
+2
+Expect:		Are the citations attached to a Fact (f), a name (n) or the Person (p)?:
+enter:
+f
+Expect:		Change made
+Expect:		Change another ? y or n
+CONFIRM
+enter:
+
+
+CONFIRM
+report file-
+has correct header
+
+Has RIN entered points to
+
+Has correct Original order list
+Has correct Current order list
+
+
+
+
+
+
+test cases
+
+For facts
+person has 
+0
+1 
+>1
+
+For names
+person has 
+0
+1 
+>1
+
+For persom
+person has citation list
+or does not
+(only one place to look)
+
+q s a   response
+re-order proc
+number, blank, s, a
+
+
+RIN 4
+f
+no facts meet criteria
+goes back to RIN entry
+
+RIN 2
+f
+1 fact meet criteria
+goes directly to re-order proc
+has 8 citations
+Source 2, Citations 4, 3, 2, 1
+Source 3, Citations 4, 3, 2, 1
+
+
+RIN 3 
+must select f n p q
+fact
+3 facts meet criteria
+death, burial, residence
+must enter a number
+
+death has 4 Citations
+Source 3 Citations 1, 2, 3
+Source 2 Citations 2
+
+burial has 4 Citations
+Source 2 Citations 1, 2, 3, 4
+
+residence has 2 Citations
+Source 1 Citations 1, 2
+
+re-order proc is the same for all types - f, n, p
+
+then in re-order proc
+then can do a abort  quits app
+
+

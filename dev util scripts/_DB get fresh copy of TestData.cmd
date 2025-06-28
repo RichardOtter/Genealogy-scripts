@@ -1,10 +1,10 @@
-REM Copy the production database to the local dev database folder
+REM Copy the test database to the local dev database folder
 
 SET DB_EXTEN=rmtree
 SET DB_BU_EXTEN=rmtreeBU
 
-SET PRODUCTION_DB_PATH=C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\doc
-SET PRODUCTION_DB_NAME=TestData-Sample
+SET TEST_DB_PATH=C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Test Data
+SET TEST_DB_NAME=TestData-RMpython
 
 SET DEV_DB_PATH=.
 
@@ -22,8 +22,8 @@ REM delete existing dev test database and local backup
 del "%DEV_DB_PATH%\%DEV_DB_NAME%.%DB_EXTEN%"
 del "%DEV_DB_PATH%\%DEV_DB_BACKUP%.%DB_BU_EXTEN%"
 
-REM This is the only reference to the production database environment
-copy "%PRODUCTION_DB_PATH%\%PRODUCTION_DB_NAME%.%DB_EXTEN%" "%DEV_DB_PATH%\%DEV_DB_NAME%.%DB_EXTEN%"
+REM This is the only reference to the test database environment
+copy "%TEST_DB_PATH%\%TEST_DB_NAME%.%DB_EXTEN%" "%DEV_DB_PATH%\%DEV_DB_NAME%.%DB_EXTEN%"
 
 REM create a local backup copy of the test DB
 copy "%DEV_DB_PATH%\%DEV_DB_NAME%.%DB_EXTEN%" "%DEV_DB_PATH%\%DEV_DB_BACKUP%.%DB_BU_EXTEN%"

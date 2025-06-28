@@ -1,7 +1,7 @@
 import sys
-import sqlite3
 from pathlib import Path
 from datetime import datetime
+import sqlite3
 
 
 # ===================================================DIV60==
