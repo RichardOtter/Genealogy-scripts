@@ -51,9 +51,9 @@ def main():
 
         # create a hard link in the docs folder for each ReaMe
         try:
-            os.link(project_dir_path / 'ReadMe.txt', doc_folder / F"doc-{project}")
+            os.link(project_dir_path / 'ReadMe.txt', doc_folder / F"DocFull_{project}")
         except FileExistsError:
-            print(f"Error: The file '{doc_folder / F"doc-{project}"}' already exists.")
+            print(f"Error: The file '{doc_folder / F"DocFull_{project}"}' already exists.")
 
         #create a DB folder in each project folder
         project_DB_path = project_dir_path / "DB"

@@ -45,10 +45,10 @@ def main():
     # Process each doc template
     for project in project_list:
         project_dir_path = RM_PATH / project
-        template_file_path = doc_folder / F"TempDoc-{project}.txt"
+        template_file_path = doc_folder / F"DocOutline_{project}.txt"
         # doc_file_path = doc_folder / F"docFinal-{project}.txt"
         doc_file_path = RM_PATH / project / "ReadMe.txt"
-        lib_file_path = doc_folder / "Text library.txt"
+        lib_file_path = doc_folder / "DocLibrary_snippets.txt"
         print (template_file_path)
         with open(template_file_path, 'r') as doc_template, \
              open(doc_file_path, 'w') as doc_final:
