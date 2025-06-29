@@ -14,7 +14,7 @@ import RMpy.RMDate              # noqa #type: ignore
 #   RootsMagic database file v10
 #   Python for Windows v3.13
 
-# Config files fields used
+# Config files fields use
 #    FILE_PATHS  DB_PATH
 #    FILE_PATHS  REPORT_FILE_PATH
 #    FILE_PATHS  REPORT_FILE_DISPLAY_APP
@@ -47,48 +47,52 @@ def run_selected_features(config, db_connection, report_file):
 # ===================================================DIV60==
 def change_citation_order_feature(config, db_connection, report_file):
 
-    try_another_RIN = True
-    while(try_another_RIN):
+    while(True):
+        # keep asking for RINs until break
+
+        # request the PersonID / RIN
+        response_RIN = input('Enter the RIN of the person who has '
+                    'the citations to reorder, or q to quit the app:\n')
+        if response_RIN == '':
+            continue
+        if response_RIN in 'Qq':
+            # exit the app
+            break
+
         try:
-            # input the PersonID / RIN
-            response = input('Enter the RIN of the person who has '
-                        'the citations to reorder, or q to quit:\n')
-            if response in 'Qq':
-                try_another_RIN=False
-                continue
-            PersonID= int(response)
-            validate_PersonID(PersonID, db_connection, report_file)
+            PersonID= int(response_RIN)
+        except ValueError:
+            print('Cannot interpret the response. Enter an integer or "q"')
+            continue
 
-            respose_attached_to = input(
+        if not valid_PersonID(PersonID, db_connection, report_file):
+            print('The number entered is not a valid RIN in this database.\n\n')
+            continue
+
+        # Now ask for the kind of object the citation list is attached to
+        while(True):
+            response_attachment = input(
                 '\nIs the citation list that is to be re-ordered attached to:\n'
-                'a Fact (f), a Name (n) the Person (p) or quit app (q)?:\n')
-                #'a Fact (f), a Name (n) the Person (p), '
-                #'any attachment (blank line) or quit app (q)?:\n')
+                'a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:\n')
 
-            #if respose_attached_to == "":
-            #    rows = attached_to_any(PersonID, db_connection, report_file)
-
-            if respose_attached_to in "Pp":
+            if response_attachment == "":
+                continue
+            if response_attachment in "Pp":
                 rows = attached_to_person(PersonID, db_connection, report_file)
                 continue
-            elif respose_attached_to in "Ff":
+            elif response_attachment in "Ff":
                 rows = attached_to_fact(PersonID, db_connection, report_file)
                 continue
-            elif respose_attached_to in "Nn":
+            elif response_attachment in "Nn":
                 rows = attached_to_name(PersonID, db_connection, report_file)
                 continue
-            elif respose_attached_to in "Qq":
+            elif response_attachment in "Ss":
                 break
             else:
-                print(F'{respose_attached_to} is not'
-                        ' understood. Enter f, p, n or q to exit.')
+                print(F'{response_attachment} is not understood.\n'
+                        'Enter one of:  f, n, p, s     (s will skip this RIN).')
                 continue
-        except ValueError:
-            print('Cannot interpret the response. Enter an integer or a "q"')
-            continue
-#        except RMc.RM_Py_Exception as e:
-#            print(str(e) + '\n\n')
-#            continue
+
     return 0
 
 
@@ -96,7 +100,6 @@ def change_citation_order_feature(config, db_connection, report_file):
 def attached_to_any(PersonID, db_connection, report_file):
 
     # Select nameID's that have more than 1 citation attached1
-
     SqlStmt = """
 SELECT  nt.NameID, nt.Prefix, nt.Given, nt.Surname, nt.Suffix
   FROM NameTable AS nt
@@ -246,7 +249,7 @@ HAVING COUNT() > 1;
         EventID = rows[0][0]
         temp_date = RMpy.RMDate.from_RMDate(rows[0][2], RMpy.RMDate.Format.SHORT)
         print('Found one event with more than one citation.\n' +
-              F'{rows[0][1]}:    {temp_date}  {rows[0][3]}\n\n\n')
+              F'{rows[0][1]}:    {temp_date}  {rows[0][3]}\n\n')
         order_the_list(rows, report_file)
 
     return
@@ -363,7 +366,7 @@ def order_the_list(rows, db_connection, report_file):
     for i in range(0, list_len):
         rowDict[i+1] = ((rows[i][1], (rows[i][2], rows[i][3])))
 
-    print('\n\n\n'
+    print('\n'
     '------------------------------------------------------\n'
     'To re-order citations, at each prompt, enter one of:\n'
     '*  the number of the citation that should go into this slot.\n'
@@ -451,7 +454,7 @@ def order_the_list(rows, db_connection, report_file):
     return rowDict
 
 # ===========================================DIV50==
-def validate_PersonID(PersonID, dbConnection, report_file):
+def valid_PersonID(PersonID, dbConnection, report_file):
 
     SqlStmt = """
 SELECT nt.Prefix, nt.Given, nt.Surname, nt.Suffix
@@ -464,20 +467,18 @@ WHERE nt.OwnerID = ?
     cur.execute(SqlStmt, (PersonID, ))
     rows = cur.fetchall()
 
-    if len(rows) == 0:
-        raise RMc.RM_Py_Exception("That RIN does not exist.")
-    elif len(rows) > 1:
-        # primary key index is unique. This would be weir
-        raise RMc.RM_Py_Exception(
-            'PersonID index not primary key??. Not unique.')
-    elif len(rows) == 1:
 
+    if len(rows) == 0 or len(rows) > 1:
+        is_valid = False
+
+    else:
         message= (F"RIN= {PersonID}  person's primary name is: "
                  F'{rows[0][0]} {rows[0][1]} {rows[0][2]} {rows[0][3]}')
         print(message)
         report_file.write(message + '\n')
+        is_valid = True
 
-    return
+    return is_valid
 
 # ===========================================DIV50==
 def UpdateDatabase(rowDict, db_connection):
