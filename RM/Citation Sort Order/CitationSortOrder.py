@@ -47,12 +47,12 @@ def run_selected_features(config, db_connection, report_file):
 # ===================================================DIV60==
 def change_citation_order_feature(config, db_connection, report_file):
 
-    while(True):
+    while True:
         # keep asking for RINs until break
 
         # request the PersonID / RIN
         response_RIN = input('Enter the RIN of the person who has '
-                    'the citations to reorder, or q to quit the app:\n')
+                             'the citations to reorder, or q to quit the app:\n')
         if response_RIN == '':
             continue
         if response_RIN in 'Qq':
@@ -60,7 +60,7 @@ def change_citation_order_feature(config, db_connection, report_file):
             break
 
         try:
-            PersonID= int(response_RIN)
+            PersonID = int(response_RIN)
         except ValueError:
             print('Cannot interpret the response. Enter an integer or "q"')
             continue
@@ -70,7 +70,7 @@ def change_citation_order_feature(config, db_connection, report_file):
             continue
 
         # Now ask for the kind of object the citation list is attached to
-        while(True):
+        while True:
             response_attachment = input(
                 '\nIs the citation list that is to be re-ordered attached to:\n'
                 'a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:\n')
@@ -90,7 +90,7 @@ def change_citation_order_feature(config, db_connection, report_file):
                 break
             else:
                 print(F'{response_attachment} is not understood.\n'
-                        'Enter one of:  f, n, p, s     (s will skip this RIN).')
+                      'Enter one of:  f, n, p, s     (s will skip this RIN).')
                 continue
 
     return 0
@@ -136,12 +136,13 @@ HAVING COUNT() > 1;
 
     if (number_of_names > 1):
         print(F'{number_of_names} names found having more than'
-                ' 1 attached citation.\n')
+              ' 1 attached citation.\n')
         NameID = select_name_from_list(rows)
 
     elif (number_of_names == 1):
         NameID = rows[0][0]
-        temp_date = RMpy.RMDate.from_RMDate(rows[0][1], RMpy.RMDate.Format.SHORT)
+        temp_date = RMpy.RMDate.from_RMDate(
+            rows[0][1], RMpy.RMDate.Format.SHORT)
         print('Found one name with more than one citation.\n' +
               F'{rows[0][0]:<5}:    {temp_date:15} : '
               F'{rows[0][2]} {rows[0][3]} {rows[0][4]} {rows[0][5]}\n\n\n')
@@ -175,9 +176,10 @@ def select_name_from_list(rows):
     # .SortOrder, .LinkID, st.Name, .CitationName
 
     for i in range(0, len(rows)):
-        #print(i, rows[i-1][1], rows[i-1][2], rows[i-1][3], rows[i-1][4])
-        temp_date = RMpy.RMDate.from_RMDate(rows[0][1], RMpy.RMDate.Format.SHORT)
-        print( F'{i+1:<5}{rows[i][0]:<5}:    {temp_date:15} : '
+        # print(i, rows[i-1][1], rows[i-1][2], rows[i-1][3], rows[i-1][4])
+        temp_date = RMpy.RMDate.from_RMDate(
+            rows[0][1], RMpy.RMDate.Format.SHORT)
+        print(F'{i+1:<5}{rows[i][0]:<5}:    {temp_date:15} : '
               F'{rows[i][2]} {rows[i][3]} {rows[i][4]} {rows[i][5]}')
 
     try:
@@ -195,7 +197,6 @@ def select_name_from_list(rows):
 def NEW_attached_to_fact(PersonID, db_connection, report_file):
 
     EventID = None
-
     FactTypeID = input('Enter the FactTypeID or\n'
                        'blank for full list of attached '
                        'Facts with more than one citation\n')
@@ -238,7 +239,7 @@ HAVING COUNT() > 1;
 
     if number_of_events > 1:
         print(F'{number_of_events} events found having more than'
-                ' 1 attached citation.')
+              ' 1 attached citation.')
         EventID = select_fact_from_list(rows)
         order_the_list(rows, report_file)
 
@@ -247,12 +248,14 @@ HAVING COUNT() > 1;
             'No events with more than one citation found. Try again.')
     elif number_of_events == 1:
         EventID = rows[0][0]
-        temp_date = RMpy.RMDate.from_RMDate(rows[0][2], RMpy.RMDate.Format.SHORT)
+        temp_date = RMpy.RMDate.from_RMDate(
+            rows[0][2], RMpy.RMDate.Format.SHORT)
         print('Found one event with more than one citation.\n' +
               F'{rows[0][1]}:    {temp_date}  {rows[0][3]}\n\n')
         order_the_list(rows, report_file)
 
     return
+
 
 # ===========================================DIV50==
 def attached_to_fact(PersonID, db_connection, report_file):
@@ -277,12 +280,13 @@ HAVING COUNT() > 1;
 
     if number_of_events > 1:
         print(F'{number_of_events} events found having more than'
-                ' 1 attached citation.\n\n')
+              ' 1 attached citation.\n\n')
         EventID = select_fact_from_list(rows)
 
     elif number_of_events == 1:
         EventID = rows[0][0]
-        temp_date = RMpy.RMDate.from_RMDate(rows[0][2], RMpy.RMDate.Format.SHORT)
+        temp_date = RMpy.RMDate.from_RMDate(
+            rows[0][2], RMpy.RMDate.Format.SHORT)
         print('Found one event with more than one citation.\n' +
               F'{rows[0][0]:<5}:{rows[0][1]}    {temp_date}'
               F'  {rows[0][3]}\n\n\n')
@@ -290,7 +294,7 @@ HAVING COUNT() > 1;
     elif number_of_events == 0:
         print('This person does not hae any facts with more than one citation.')
         return
-    
+
     # get the citation list
     SqlStmt = """
     SELECT clt.SortOrder, clt.LinkID, st.Name, ct.CitationName
@@ -302,11 +306,10 @@ HAVING COUNT() > 1;
     ORDER BY clt.SortOrder ASC
     """
     cur = db_connection.cursor()
-    cur.execute( SqlStmt, (EventID, ) )
+    cur.execute(SqlStmt, (EventID, ))
     rows = cur.fetchall()
 
     rowDict = order_the_list(rows, db_connection, report_file)
-
     return
 
 
@@ -316,8 +319,9 @@ def select_fact_from_list(rows):
     # et.EventID, ftt.Name, et.Date, et.Details
 
     for i in range(0, len(rows)):
-        temp_date=RMpy.RMDate.from_RMDate(rows[i-1][2], RMpy.RMDate.Format.SHORT)
-        message=F'{i+1:<5}{rows[i][1]:15}: {temp_date:15}{rows[i][3]}'
+        temp_date = RMpy.RMDate.from_RMDate(
+            rows[i-1][2], RMpy.RMDate.Format.SHORT)
+        message = F'{i+1:<5}{rows[i][1]:15}: {temp_date:15}{rows[i][3]}'
         print(message)
 
     while True:
@@ -359,22 +363,22 @@ ORDER BY clt.SortOrder ASC;
 def order_the_list(rows, db_connection, report_file):
 
     list_len = len(rows)
-
     rowDict = dict()
     # Create the origin 1 based dictionary
     # Use 1 based indexing for human users
     for i in range(0, list_len):
         rowDict[i+1] = ((rows[i][1], (rows[i][2], rows[i][3])))
 
-    print('\n'
-    '------------------------------------------------------\n'
-    'To re-order citations, at each prompt, enter one of:\n'
-    '*  the number of the citation that should go into this slot.\n'
-    '* or\n'
-    '*  nothing    to accept current line as it is.\n'
-    '*  s          to accept current and following slots as they are.\n'
-    '*  a          to abort and make no changes.\n'
-    '------------------------------------------------------\n')
+    print(
+        '\n'
+        '------------------------------------------------------\n'
+        'To re-order citations, at each prompt, enter one of:\n'
+        '*  the number of the citation that should go into this slot.\n'
+        '* or\n'
+        '*  nothing    to accept current line as it is.\n'
+        '*  s          to accept current and following slots as they are.\n'
+        '*  a          to abort and make no changes.\n'
+        '------------------------------------------------------\n')
 
     # Print the list in current order
     report_file.write("\n\n Current order \n")
@@ -419,18 +423,19 @@ def order_the_list(rows, db_connection, report_file):
         for i in range(1, list_len + 1):
             print(i, rowDict[i][1])
 
-        response = input('\n\n'
-                'Save the new citation list order shown above?\n'
-                'Enter one of-\n'
-                '*  Y/y: make the citation order change as shown above\n'
-                '*  N/n :go back and do another round of re-ordering\n'
-                '*  A/a :abort and not save any changes to this list.\n')
-        
+        response = input(
+            '\n\n'
+            'Save the new citation list order shown above?\n'
+            'Enter one of-\n'
+            '*  Y/y: make the citation order change as shown above\n'
+            '*  N/n :go back and do another round of re-ordering\n'
+            '*  A/a :abort and not save any changes to this list.\n')
+
         if response in "Yy":
             # Print order after a round of sorting
             report_file.write("\n\n Current order \n")
             for i in range(1, list_len + 1):
-                message=F'{i}   {rowDict[i][1]}'
+                message = F'{i}   {rowDict[i][1]}'
                 print(message)
                 report_file.write(message + '\n')
             UpdateDatabase(rowDict, db_connection)
@@ -438,7 +443,8 @@ def order_the_list(rows, db_connection, report_file):
 
         elif response in "Aa":
             print('No changes made to this list in the database')
-            report_file.write('No changes made to this list in the database.\n\n\n')
+            report_file.write(
+                'No changes made to this list in the database.\n\n\n')
             done_with_this_list = True
 
         elif response in "Nn":
@@ -467,13 +473,12 @@ WHERE nt.OwnerID = ?
     cur.execute(SqlStmt, (PersonID, ))
     rows = cur.fetchall()
 
-
     if len(rows) == 0 or len(rows) > 1:
         is_valid = False
 
     else:
-        message= (F"RIN= {PersonID}  person's primary name is: "
-                 F'{rows[0][0]} {rows[0][1]} {rows[0][2]} {rows[0][3]}')
+        message = (F"RIN= {PersonID}  person's primary name is: "
+                   F'{rows[0][0]} {rows[0][1]} {rows[0][2]} {rows[0][3]}')
         print(message)
         report_file.write(message + '\n')
         is_valid = True
