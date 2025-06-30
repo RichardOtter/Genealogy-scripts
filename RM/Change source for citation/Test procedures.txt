@@ -1,45 +1,12 @@
-
-Using "TestData-Sample.rmtree" database 2025-06-15
-Starting DATA
-
-has 
-Person: RMID-1
-Has Birth fact
-Birth fact has 1 citation: 
-Citation-1 in Source-1 based on _test-template-1
-	in: Source-1 based on _test-template-1
-
-has sources
-Source-1 based on _test-template-1
-	Citation-1 in Source-1 based on _test-template-1
-	Citation-2 in Source-1 based on _test-template-1
-
-Source-2 based on _test-template-1
-	NULL
-
-Source-1 based on template ATLAS
-	NULL
-
-Source-1 based on _test-template-1
-has media:
-	Source-1 WebTag 1
-has WebTag:
-	T:\Source-1 MEDIA ITEM 1 filename path
+Test Procedure
+Change Source for Citation
 
 
-Citation-1 in Source-1 based on _test-template-1
-uses Source:
-	Source-1 based on _test-template-1
-has media:
-	T:\Source-1 Citation-1 MEDIA ITEM 1 filename path
-webTag:
-	Source-1 Citation-1 WebTag 1
 
+Procedure
+1	normal path
 
-Test Procedure"
-1	normal path:
-
-Config
+Configuration
 DB	normal
 report name	normal
 display app		notepad
@@ -66,6 +33,9 @@ Expect:		Change another ? y or n
 CONFIRM
 enter:
 y
+
+2	Problem- different templates:
+
 Expect:		Enter citation name ...
 Citation-1 in Source-1 based on _test-template-1
 Expect:		Enter source name ...
@@ -75,6 +45,9 @@ Expect:		Problem- different templates
 Expect:		Change another ? y or n
 enter:
 y
+
+2	Problem- more than 1 citation found:
+
 Expect:		Enter citation name ...
 enter:
 Citation-1
@@ -82,6 +55,9 @@ Expect:		Problem- more than 1 citation found
 Expect:		Change another ? y or n
 enter:
 y
+
+3	Problem- more than 1 source found:
+
 Expect:		Enter citation name ...
 Citation-1 in Source-1 based on _test-template-1
 Expect:		Enter source name ...
@@ -119,3 +95,44 @@ has media:
 webTag:
 	Source-1 Citation-1 WebTag 1
 
+
+
+=========================================================================DIV80==
+=========================================================================DIV80==
+Test Data= "TestData-Sample.rmtree" database 2025-06-15
+
+has 
+Person: RMID-1
+Has Birth fact
+Birth fact has 1 citation: 
+Citation-1 in Source-1 based on _test-template-1
+	in: Source-1 based on _test-template-1
+
+has sources
+Source-1 based on _test-template-1
+	Citation-1 in Source-1 based on _test-template-1
+	Citation-2 in Source-1 based on _test-template-1
+
+Source-2 based on _test-template-1
+	NULL
+
+Source-1 based on template ATLAS
+	NULL
+
+Source-1 based on _test-template-1
+has media:
+	Source-1 WebTag 1
+has WebTag:
+	T:\Source-1 MEDIA ITEM 1 filename path
+
+
+Citation-1 in Source-1 based on _test-template-1
+uses Source:
+	Source-1 based on _test-template-1
+has media:
+	T:\Source-1 Citation-1 MEDIA ITEM 1 filename path
+webTag:
+	Source-1 Citation-1 WebTag 1
+
+=========================================================================DIV80==
+=========================================================================DIV80==

@@ -1,10 +1,10 @@
 import sys
 from pathlib import Path
-sys.path.append( str(Path.resolve(Path.cwd() / r'..\RMpy package')))
-import RMpy.launcher          # type: ignore
-import RMpy.common as RMc     # type: ignore
-from RMpy.common import q_str # type: ignore
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
+import RMpy.common as RMc       # noqa #type: ignore
+import RMpy.launcher            # noqa #type: ignore
+from RMpy.common import q_str   # noqa #type: ignore
 
 # Requirements:
 #   RootsMagic database file

@@ -1,16 +1,15 @@
 import sys
 from pathlib import Path
-import xml.etree.ElementTree as ET
-
 sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
-import RMpy.common as RMc  # type:ignore  # noqa
-import RMpy.launcher  # type:ignore  # noqa
-
+import RMpy.common as RMc       # noqa #type: ignore
+import RMpy.launcher            # noqa #type: ignore
+from RMpy.common import q_str   # noqa #type: ignore
 
 # Requirements:
 #   RootsMagic database file
 #   RM-Python-config.ini
+#   unifuzz64.dll (RMNOCASE collation)
 
 # Tested with:
 #   RootsMagic database file v10

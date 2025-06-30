@@ -1,14 +1,10 @@
 import sys
 from pathlib import Path
-sys.path.append( str(Path.resolve(Path.cwd() / r'..\RMpy package')))
-import RMpy.launcher  # type: ignore
-import RMpy.common as RMc  # type: ignore
-from RMpy.common import q_str # type: ignore
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
-import os
-
-
-# Always make a database backup before using this script.
+import RMpy.common as RMc       # noqa #type: ignore
+import RMpy.launcher            # noqa #type: ignore
+from RMpy.common import q_str   # noqa #type: ignore
 
 # Requirements:
 #   RootsMagic database file
@@ -16,7 +12,7 @@ import os
 
 # Tested with:
 #   RootsMagic database file v10
-#   Python for Windows v3.12
+#   Python for Windows v3.13
 
 # Config files fields used
 #    [FILE_PATHS]  REPORT_FILE_PATH
@@ -60,7 +56,7 @@ def RunSQLGroupFeature(config, db_connection, report_file):
             'GROUP_NAME').split('\n')
     except:
         raise RMc.RM_Py_Exception(
-            'section: [OPTIONS],  key: GROUP_NAME   not found.')
+            'Section: [OPTIONS],  key: GROUP_NAME   not found.')
 
     for group_name in group_name_list:
         if group_name == '':
@@ -69,7 +65,7 @@ def RunSQLGroupFeature(config, db_connection, report_file):
             config[group_name]
         except:
             raise RMc.RM_Py_Exception(
-                f'section: [{q_str(group_name)}]   not found.')
+                F'Section: [{q_str(group_name)}]   not found.')
 
     for group_name in group_name_list:
         if group_name == '':
@@ -88,13 +84,13 @@ def update_group(db_connection, config, report_file, group_name):
         SQL_statement = config[group_name]['SQL_QUERY']
     except:
         raise RMc.RM_Py_Exception(
-            f'section: [{q_str(group_name)}],  key: SQL_QUERY not found.')
+            F'Section: [{q_str(group_name)}],  key: SQL_QUERY not found.')
 
     if SQL_statement == '':
         raise RMc.RM_Py_Exception(
-            'section: [GROUP_NAME], key: SQL_QUERY No value entered. Nothing to do.')
+            'Section: [GROUP_NAME], key: SQL_QUERY No value entered. Nothing to do.')
 
-    viewStmt = "DROP VIEW IF EXISTS PersonIdList_RJO_utils"
+    viewStmt = "DROP VIEW IF EXISTS PersonIdList_RJO_utils;"
     try:
         cur = db_connection.cursor()
         cur.execute(viewStmt)
@@ -128,7 +124,7 @@ def update_group(db_connection, config, report_file, group_name):
 
     PopulateGroup(GroupID, db_connection)
 
-    viewStmt = "DROP VIEW IF EXISTS PersonIdList_RJO_utils"
+    viewStmt = "DROP VIEW IF EXISTS PersonIdList_RJO_utils;"
     cur = db_connection.cursor()
     cur.execute(viewStmt)
 
@@ -144,11 +140,11 @@ def confirm_DB_group_name(Name, report_file, db_connection):
     report_file.write(f"{Divider}\n\n")
 
     # check how many groupNames with name and TagTape=0 already exist
-    SqlStmt = """
-SELECT count(*), TagValue 
+    SqlStmt = (
+        """SELECT count(*), TagValue 
 FROM TagTable 
-WHERE TagName=? COLLATE NOCASE AND TagType=0 COLLATE NOCASE
-"""
+WHERE TagName COLLATE NOCASE = ? AND TagType COLLATE NOCASE = 0 ;
+""")
     cur = db_connection.cursor()
     cur.execute(SqlStmt, (Name,))
     result = cur.fetchone()
@@ -174,10 +170,10 @@ def PopulateGroup(GroupID, dbConnection):
     # print ("GroupID=" + str(GroupID))
 
     # Empty out the group if it has any members
-    SqlStmt = """
-  DELETE FROM GroupTable 
-  WHERE GroupID = ?
-  """
+    SqlStmt = (
+        """DELETE FROM GroupTable 
+  WHERE GroupID = ?;
+  """)
     try:
         cur = dbConnection.cursor()
         cur.execute(SqlStmt, (GroupID,))
@@ -185,16 +181,16 @@ def PopulateGroup(GroupID, dbConnection):
         ('Cannot clear the group members. Close RM and try again.\n' + str(e))
 
     # add the members
-    SqlStmt = """
-INSERT INTO GroupTable
+    SqlStmt = (
+        """INSERT INTO GroupTable
 SELECT
     null
    ,?        AS GroupID
    ,PersonID AS StartID
    ,PersonID AS EndID
    ,(julianday('now') - 2415018.5) AS UTCModDate 
-FROM PersonIdList_RJO_utils
-"""
+FROM PersonIdList_RJO_utils;
+""")
     try:
         cur = dbConnection.cursor()
         cur.execute(SqlStmt, (GroupID,))

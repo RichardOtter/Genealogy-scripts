@@ -156,6 +156,9 @@ def launcher(utility_info):
         if utility_info["allow_db_changes"]:
             db_connection.commit()
 
+    except KeyboardInterrupt:
+        # Just quit the app
+        return 1
     except (sqlite3.OperationalError, sqlite3.ProgrammingError) as e:
         if str(e) == "database is locked":
             divider = "="*50 + "===DIV60=="

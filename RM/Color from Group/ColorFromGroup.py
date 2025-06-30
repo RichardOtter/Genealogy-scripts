@@ -2,9 +2,9 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
-from RMpy.common import q_str   # noqa #type: ignore
 import RMpy.common as RMc       # noqa #type: ignore
 import RMpy.launcher            # noqa #type: ignore
+from RMpy.common import q_str   # noqa #type: ignore
 
 # Requirements:
 #   RootsMagic database file
@@ -205,25 +205,25 @@ def update_people_colors(db_connection, group_id, color_group, db_color_num, act
     #  AND Color{num} = :color;  then it is an OnlyIf
     #  AND Color{num} = 0      then it is an OnlyIfZero
 
-    proto_GRP_Any_SqlStmt = (
-        """UPDATE  PersonTable AS pt
-SET Color{num}  = :set_color
+    proto_GRP_Any_SqlStmt = """
+UPDATE  PersonTable AS pt
+    SET Color{num}  = :set_color
 FROM (
     SELECT pt2.PersonID
     FROM PersonTable AS pt2
     JOIN GroupTable AS gt ON pt2.PersonID BETWEEN gt.StartID AND gt.EndID
     WHERE gt.GroupID = :group_id ) AS id
 WHERE pt.PersonID = id.PersonID;
-""")
+"""
 
-    proto_ALL_Any_SqlStmt = (
-        """UPDATE  PersonTable
-SET Color{num}  = :set_color;
-""")
+    proto_ALL_Any_SqlStmt = """
+UPDATE  PersonTable
+    SET Color{num}  = :set_color;
+"""
 
-    proto_GRP_OnlyIf_SqlStmt = (
-        """UPDATE  PersonTable AS pt
-SET Color{num}  = :set_color
+    proto_GRP_OnlyIf_SqlStmt = """
+UPDATE  PersonTable AS pt
+    SET Color{num}  = :set_color
 FROM (
     SELECT pt2.PersonID
     FROM PersonTable AS pt2
@@ -231,17 +231,17 @@ FROM (
     WHERE gt.GroupID = :group_id ) AS id
 WHERE pt.PersonID = id.PersonID
     AND Color{num} = :test_color;
-""")
+"""
 
-    proto_ALL_OnlyIf_SqlStmt = (
-        """UPDATE  PersonTable
-SET Color{num}  = :set_color
+    proto_ALL_OnlyIf_SqlStmt = """
+UPDATE  PersonTable
+    SET Color{num}  = :set_color
 WHERE Color{num} = :test_color;
-""")
+"""
 
-    proto_GRP_OnlyIfZero_SqlStmt = (
-        """UPDATE  PersonTable AS pt
-SET Color{num}  = :set_color
+    proto_GRP_OnlyIfZero_SqlStmt = """
+UPDATE  PersonTable AS pt
+    SET Color{num}  = :set_color
 FROM (
     SELECT pt2.PersonID
     FROM PersonTable AS pt2
@@ -249,7 +249,7 @@ FROM (
     WHERE gt.GroupID = :group_id ) AS id
 WHERE pt.PersonID = id.PersonID
     AND Color{num} = :test_color;
-""")
+"""
 
     # input params:   group_id, color_group, db_color_num, action
     #    not group_id ==-0  means it operates on a real group
@@ -435,12 +435,12 @@ def group_members(group_id, db_connection):
 
     member_list = []
     # check how many groupNames with name and TagType=0 already exist
-    SqlStmt = (
-        """SELECT  StartID,  EndID
+    SqlStmt = """
+SELECT  StartID,  EndID
 FROM GroupTable
 WHERE GroupID = ?
 ORDER BY StartID
-""")
+"""
 
     cur = db_connection.cursor()
     cur.execute(SqlStmt, (group_id,))
@@ -464,11 +464,11 @@ def validate_DB_group_name(group_name, report_file, db_connection):
     #   TagName   duplicates not constrained
 
     # check how many groupNames with name and TagType=0 already exist
-    SqlStmt = (
-        """SELECT count(*), TagValue
+    SqlStmt = """
+SELECT count(*), TagValue
 FROM TagTable
 WHERE TagName=:Name COLLATE NOCASE AND TagType=0 COLLATE NOCASE
-""")
+"""
     cur=db_connection.cursor()
     cur.execute(SqlStmt, {"Name": group_name})
     result=cur.fetchone()
