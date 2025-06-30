@@ -173,24 +173,28 @@ ORDER BY clt.SortOrder ASC;
 # ===========================================DIV50==
 def select_name_from_list(rows):
 
-    # .SortOrder, .LinkID, st.Name, .CitationName
+    # nt.NameID, nt.Date, nt.Prefix, nt.Given, nt.Surname, nt.Suffix
 
     for i in range(0, len(rows)):
         # print(i, rows[i-1][1], rows[i-1][2], rows[i-1][3], rows[i-1][4])
         temp_date = RMpy.RMDate.from_RMDate(
-            rows[0][1], RMpy.RMDate.Format.SHORT)
-        print(F'{i+1:<5}{rows[i][0]:<5}:    {temp_date:15} : '
+            rows[i][1], RMpy.RMDate.Format.SHORT)
+        print(F'{i+1:<5}:{temp_date:15} : '
               F'{rows[i][2]} {rows[i][3]} {rows[i][4]} {rows[i][5]}')
 
-    try:
-        citation_number = int(
-            input("Which name's citations shall be ordered?"))
-    except ValueError as e:
-        raise RMc.RM_Py_Exception('Type a number')
+    while True:
+        try:
+            event_number = int(
+                input("\nWhich name's citations will be re-ordered? "))
+            if event_number < 1 or event_number > len(rows):
+                print(F'Enter a number 1-{len(rows)}')
+                continue
+            break
+        except ValueError as e:
+            print(F'Enter a number 1-{len(rows)}')
 
-    nameID = rows[citation_number - 1][0]
+    return rows[event_number - 1][0]
 
-    return nameID
 
 
 # ===========================================DIV50==
@@ -320,7 +324,7 @@ def select_fact_from_list(rows):
 
     for i in range(0, len(rows)):
         temp_date = RMpy.RMDate.from_RMDate(
-            rows[i-1][2], RMpy.RMDate.Format.SHORT)
+            rows[i][2], RMpy.RMDate.Format.SHORT)
         message = F'{i+1:<5}{rows[i][1]:15}: {temp_date:15}{rows[i][3]}'
         print(message)
 

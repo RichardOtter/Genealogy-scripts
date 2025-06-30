@@ -136,9 +136,9 @@ Setup:		setup-attachment-prompt-RIN-#3
 
 Action:		type: f{ENTER}
 Expect:		3 events found having more than 1 attached citation.
-			1    Death          : 1980           sample death detail
-			2    Burial         : 30 Jan 2000
-			3    Residence      : aft 2000       sample residence detail
+			1    Death          : 30 Jan 2000    sample death detail
+			2    Burial         : aft 2000
+			3    Residence      : 1980           sample residence detail
 			Which fact's citations will be re-ordered?
 
 Action:		type: 4{ENTER}
@@ -176,9 +176,9 @@ Setup:		setup-attachment-prompt-RIN-#3
 
 Action:		type: f{ENTER}
 Expect:		3 events found having more than 1 attached citation.
-			1    Death          : 1980           sample death detail
-			2    Burial         : 30 Jan 2000
-			3    Residence      : aft 2000       sample residence detail
+			1    Death          : 30 Jan 2000    sample death detail
+			2    Burial         : aft 2000
+			3    Residence      : 1980           sample residence detail
 			Which fact's citations will be re-ordered?
 
 Action:		type: -1{ENTER}
@@ -208,9 +208,9 @@ Setup:		setup-attachment-prompt-RIN-#3
 
 Action:		type: f{ENTER}
 Expect:		3 events found having more than 1 attached citation.
-			1    Death          : 1980           sample death detail
-			2    Burial         : 30 Jan 2000
-			3    Residence      : aft 2000       sample residence detail
+			1    Death          : 30 Jan 2000    sample death detail
+			2    Burial         : aft 2000
+			3    Residence      : 1980           sample residence detail
 			Which fact's citations will be re-ordered?
 
 Confirm:	Birth fact is not listed.
@@ -241,9 +241,9 @@ Setup:		setup-attachment-prompt-RIN-#3
 
 Action:		type: f{ENTER}
 Expect:		3 events found having more than 1 attached citation.
-			1    Death          : 1980           sample death detail
-			2    Burial         : 30 Jan 2000
-			3    Residence      : aft 2000       sample residence detail
+			1    Death          : 30 Jan 2000    sample death detail
+			2    Burial         : aft 2000
+			3    Residence      : 1980           sample residence detail
 			Which fact's citations will be re-ordered?
 
 Action:		type: -3{ENTER}
@@ -276,9 +276,9 @@ Setup:		setup-attachment-prompt-RIN-#4
 
 Action:		type: f{ENTER}
 Expect:		3 events found having more than 1 attached citation.
-			1    Death          : 1980           sample death detail
-			2    Burial         : 30 Jan 2000
-			3    Residence      : aft 2000       sample residence detail
+			1    Death          : 30 Jan 2000    sample death detail
+			2    Burial         : aft 2000
+			3    Residence      : 1980           sample residence detail
 			Which fact's citations will be re-ordered?
 
 Action:		type: 2{ENTER}
@@ -323,55 +323,45 @@ Expect:		KeyboardInterrupt
 			Report file:
 			Header
 
-
-
-
-
-
-
-
-
-
-
-
 -------------------------------------------------------------------------DIV80--
 8	Test Case
 citation list attached to a Name - multiple names.
 Stop at the re-order process.
 
 -------------------------------------------DIV50--
-Setup:		setup-attachment-prompt-RIN-#3
+Setup:		setup-attachment-prompt-RIN-#4
 
-Action:		type: f{ENTER}
-Expect:		3 events found having more than 1 attached citation.
-			1    Death          : 1980           sample death detail
-			2    Burial         : 30 Jan 2000
-			3    Residence      : aft 2000       sample residence detail
-			Which fact's citations will be re-ordered?
+Action:		type: n{ENTER}
+Expect:		2 names found having more than 1 attached citation.
+			1    :1 Jan 2000      :  name-g name-s-(tree2)-#4
+			2    :3 Feb 2001      : ALT-name-1 name-g name-s-(tree 2)-#4
+			Which name's citations shall be ordered?
 
-Action:		type: 4{ENTER}
-Expect:		Enter a number 1-3
-			Which fact's citations will be re-ordered?
+Confirm:	not listed: ALT-name-2
+
+Action:		type: 3{ENTER}
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
 
 Action:		type: 0{ENTER}
-Expect:		Enter a number 1-3
-			Which fact's citations will be re-ordered?
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
 
 Action:		type: -2{ENTER}
-Expect:		Enter a number 1-3
-			Which fact's citations will be re-ordered?
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
 
 Action:		type: 1.2{ENTER}
-Expect:		Enter a number 1-3
-			Which fact's citations will be re-ordered?
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
 
 Action:		type: -q{ENTER}
-Expect:		Enter a number 1-3
-			Which fact's citations will be re-ordered?
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
 
 Action:		type: -s{ENTER}
-Expect:		Enter a number 1-3
-			Which fact's citations will be re-ordered?
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
 
 Action:		type: {CONTROL+C}
 Expect:		KeyboardInterrupt
@@ -379,17 +369,18 @@ Expect:		KeyboardInterrupt
 			Report file:
 			Header
 
+
+
 -------------------------------------------DIV50--
-Setup:		setup-attachment-prompt-RIN-#3
+Setup:		setup-attachment-prompt-RIN-#4
 
-Action:		type: f{ENTER}
-Expect:		3 events found having more than 1 attached citation.
-			1    Death          : 1980           sample death detail
-			2    Burial         : 30 Jan 2000
-			3    Residence      : aft 2000       sample residence detail
-			Which fact's citations will be re-ordered?
+Action:		type: n{ENTER}
+Expect:		2 names found having more than 1 attached citation.
+			1    :1 Jan 2000      :  name-g name-s-(tree2)-#4
+			2    :3 Feb 2001      : ALT-name-1 name-g name-s-(tree 2)-#4
+			Which name's citations shall be ordered?
 
-Action:		type: -1{ENTER}
+Action:		type: 1{ENTER}
 Expect:		------------------------------------------------------
 			To re-order citations, at each prompt, enter one of:
 			*  the number of the citation that should go into this slot.
@@ -398,10 +389,8 @@ Expect:		------------------------------------------------------
 			*  s          to accept current and following slots as they are.
 			*  a          to abort and make no changes.
 			------------------------------------------------------
-			1     ('Source-3 based on template ATLAS', 'Citation-1 in Source-3 based on ATLAS')
-			2     ('Source-3 based on template ATLAS', 'Citation-2 in Source-3 based on ATLAS')
-			3     ('Source-3 based on template ATLAS', 'Citation-3 in Source-3 based on ATLAS')
-			4     ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+			1     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
 			Which line should be swapped into position # 1 :
 
 Action:		type: {CONTROL+C}
@@ -412,67 +401,33 @@ Expect:		KeyboardInterrupt
 
 
 -------------------------------------------DIV50--
-Setup:		setup-attachment-prompt-RIN-#3
+Setup:		setup-attachment-prompt-RIN-#4
 
-Action:		type: f{ENTER}
-Expect:		3 events found having more than 1 attached citation.
-			1    Death          : 1980           sample death detail
-			2    Burial         : 30 Jan 2000
-			3    Residence      : aft 2000       sample residence detail
-			Which fact's citations will be re-ordered?
+Action:		type: n{ENTER}
+Expect:		2 names found having more than 1 attached citation.
+			1    :1 Jan 2000      :  name-g name-s-(tree2)-#4
+			2    :3 Feb 2001      : ALT-name-1 name-g name-s-(tree 2)-#4
+			Which name's citations shall be ordered?
 
-Confirm:	Birth fact is not listed.
-
-Action:		type: -2{ENTER}
-------------------------------------------------------
-To re-order citations, at each prompt, enter one of:
-*  the number of the citation that should go into this slot.
-* or
-*  nothing    to accept current line as it is.
-*  s          to accept current and following slots as they are.
-*  a          to abort and make no changes.
-------------------------------------------------------
-1     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
-2     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
-3     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
-4     ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
-Which line should be swapped into position # 1 :
+Action:		type: 2{ENTER}
+Expect:		------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			3     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			Which line should be swapped into position # 1 :
 
 Action:		type: {CONTROL+C}
 Expect:		KeyboardInterrupt
 			App exists and report file displays in NotePad
 			Report file:
 			Header
-
--------------------------------------------DIV50--
-Setup:		setup-attachment-prompt-RIN-#3
-
-Action:		type: f{ENTER}
-Expect:		3 events found having more than 1 attached citation.
-			1    Death          : 1980           sample death detail
-			2    Burial         : 30 Jan 2000
-			3    Residence      : aft 2000       sample residence detail
-			Which fact's citations will be re-ordered?
-
-Action:		type: -3{ENTER}
-------------------------------------------------------
-To re-order citations, at each prompt, enter one of:
-*  the number of the citation that should go into this slot.
-* or
-*  nothing    to accept current line as it is.
-*  s          to accept current and following slots as they are.
-*  a          to abort and make no changes.
-------------------------------------------------------
-1     ('Source-1 based on _test-template-1', 'Citation-1 in Source-1 based on _test-template-1')
-2     ('Source-1 based on _test-template-1', 'Citation-2 in Source-1 based on _test-template-1')
-Which line should be swapped into position # 1 :
-
-Action:		type: {CONTROL+C}
-Expect:		KeyboardInterrupt
-			App exists and report file displays in NotePad
-			Report file:
-			Header
-
 
 
 -------------------------------------------------------------------------DIV80--
@@ -484,26 +439,30 @@ Stop at the re-order process.
 Setup:		setup-attachment-prompt-RIN-#1
 
 Action:		type: n{ENTER}
-Found one name with more than one citation.
-5    :                    :  alt_name-1 name-s 1
-------------------------------------------------------
-To re-order citations, at each prompt, enter one of:
-*  the number of the citation that should go into this slot.
-* or
-*  nothing    to accept current line as it is.
-*  s          to accept current and following slots as they are.
-*  a          to abort and make no changes.
-------------------------------------------------------
-1     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
-2     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
-3     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
-Which line should be swapped into position # 1 :
+Expect:		Found one name with more than one citation.
+			5    :                    :  alt_name-1 name-s 1
+			------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			3     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			Which line should be swapped into position # 1 :
 
 Action:		type: {CONTROL+C}
 Expect:		KeyboardInterrupt
 			App exists and report file displays in NotePad
 			Report file:
 			Header
+
+
+
+
 
 
 ------------------------------------DIV80--
