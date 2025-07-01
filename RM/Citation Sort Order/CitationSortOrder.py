@@ -345,6 +345,9 @@ def select_fact_from_list(rows):
 # ===========================================DIV50==
 def attached_to_person(PersonID, db_connection, report_file):
 
+# Only one citation list is associated with the RIN
+# So retrieve that list immediately
+
     SqlStmt = """
 SELECT clt.SortOrder, clt.LinkID, st.Name, ct.CitationName
   FROM CitationTable AS ct
@@ -357,11 +360,15 @@ ORDER BY clt.SortOrder ASC;
     cur = db_connection.cursor()
     cur.execute(SqlStmt, (PersonID, ))
     rows = cur.fetchall()
-    if len(rows) == 0:
-        raise RMc.RM_Py_Exception("Person has no citations attached")
-    if len(rows) == 1:
-        raise RMc.RM_Py_Exception("Person has only one citation attached")
-    return rows
+
+    if len(rows) >1:
+        rowDict = order_the_list(rows, db_connection, report_file)
+        return
+    else:
+        print("Person does not have more than one citations attached")
+        return
+
+
 
 # ===========================================DIV50==
 def order_the_list(rows, db_connection, report_file):
