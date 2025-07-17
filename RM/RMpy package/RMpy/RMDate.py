@@ -1,4 +1,11 @@
+import sys
+from pathlib import Path
+sys.path.append( r'.' )
+
 from enum import Enum
+from datetime import date
+
+import RMpy.common as RMc  # type: ignore
 
 ## RM Internal Date structure
 
@@ -10,9 +17,9 @@ from enum import Enum
 #   3-10   14-21    8   YYYYMMDD
 #   11     22       1   slash date
 #   12     23       1   confidence
+# eg    D.+20250216..+00000000..
 
-
-# all RN External human readable formats (from RM v9 prefereces)
+# all RM External human readable formats (from RM v9 preferences)
 #  10 Jan 1959
 #  Jan 10, 1959
 #  10 January 1950
@@ -36,16 +43,39 @@ from enum import Enum
 # P1-M&D =1     0x1FF8<<36     0001111111111000000000000000000000000000000000000000
                 
 
+# ===================================================DIV60==
+def now_RMDate():
+    print(date.today())
+    return to_RMDate(str(date.today()))
+
 
 # ===================================================DIV60==
-def to_RMDate(DateStr, form):
+def to_RMDate(DateStr):
     # form is Format.LONG, Format.SHORT
     # may want to first implement with strict canonical format and
     # later implement logic found in RM to interpret strings.
 
-    raise Exception("ToRMDate not yet implemented")
+    # Take the inout string and parse it with assumed format
 
-    return ""
+    if (len(DateStr) != 10
+        or DateStr[4] != '-'
+        or DateStr[7] != '-' ):
+        raise RMc.RM_Py_Exception("ToRMDate: only YYYY-MM-DD format allowed.")
+
+    YYYY = DateStr[0:4]
+    MM = DateStr[5:7]
+    DD = DateStr[8:10]
+
+    if ( int(YYYY) < 1
+        or int(MM) > 12
+        or int(MM) < 1
+        or int(DD) > 31
+        or int (DD) < 1 ):
+        raise RMc.RM_Py_Exception("ToRMDate: integers out of allowed range.")
+
+#            0123   4567   89   A1    23456789B1234
+    return  'D.+' + YYYY + MM + DD + '..+00000000..'
+
 
 # ===================================================DIV60==
 def from_RMDate(RMDate, form):
