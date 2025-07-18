@@ -1,8 +1,8 @@
 # Genealogy-scripts and utilities
 
-updated: 2025-02-20
+updated: 2025-07-18
 
-These are scripts I've written to help my work with RootsMagic genealogy software. 
+These are scripts I've written to help my work with RootsMagic genealogy software.
 They directly access the SQLite database used by RootsMagic (RM) to store its data.
 
 Some are simple SQL in .sql txt files and there are several Python scripts.
@@ -13,34 +13,25 @@ I don't have a MacOS computer to test with, but I'd guess that most could easily
 "Released" scripts means that-
 
 * The ReadMe file has enough guidance for even a novice user.
-* All configuration is done through an ini file so the python code does not need to be changed.
+* All configuration is done through a configuration file so the python code does not need to be changed.
 * All needed files are in a single zip archive for easy download.
 * I've done significant amounts of testing.
 * The release is version numbered.
 
 The Release zip file is found in the Releases page, here on Github (https://github.com/ricko2001/Genealogy-scripts/releases)
 
-If any of the other scripts are of interest, I may be persuaded to make them release-ready. Let me know.
-Always interested in feedback.
+If any of the other scripts are of interest, I may be persuaded to make them release-ready.
+Let me know. I'm always interested in feedback.
 
 ## RELEASED
 
-### RM -Run SQL
-
-This utility is meant to help the novice SQL user get the task done.
-It attempts to eliminate most of the complications found using more
-sophisticated off the shelf software.
-
-This utility will run one or two SQL statements on a database and display the
-results in a report file. It will also run a SQL command script. 
-
-### RM -Test external files
+### Test external files
 
 A utility to check status of external files linked to a RootsMagic file.\
 This only reads the RM file. No changes are made.\
 I find use of this app invaluable as part of my backup routine.
 
-### RM -Group from SQL
+### Group from SQL
 
 A utility to quickly update a RM group by running an SQL query.\
 Makes changes only to GroupTable.
@@ -50,18 +41,18 @@ RM -SQL for creating useful groups
 
 As the name says, contains SQL that can be used by the GroupFromSQL utility.
 
-### RM -Color from Group
+### Color from Group
 
 A utility to quickly update a the color coding of people in specified RM groups.\
 Makes changes only to PersonTable.
 
-### RM -Change Source for a Citation
+### Change source for a Citation
 
 A simple utility to fix a particular kind of data entry mistake. It moves a citation from one master source to another. It does lots of error checking to prevent further errors.
 
 The fix that this utility makes is trivial in SQL, but this app takes information that is available in the RootsMagic user interface and does all of the look ups for you.
 
-### RM -Change source template
+### Change source template
 
 A utility to switch the source template used by one or a set of sources.\
 Preserves all linkages and allows remapping of field data.\
@@ -72,14 +63,23 @@ Then after iterating through fixes to the configuration file and I'm satisfied w
 the results, I backup the main database and then move the copy with the changes done
 by the script to the main database file location.
 
-### RM -Citation Sort Order
+### Run SQL
+
+This utility is meant to help the novice SQL user get the task done.
+It attempts to eliminate most of the complications found using more
+sophisticated off the shelf software.
+
+This utility will run one or two SQL statements on a database and display the
+results in a report file. It will also run a SQL command script. 
+
+### Citation Sort Order
 
 A utility to allow the user to re-order the listing of citations attached to
 Persons, Names, or Facts.\
 See [SQLiteTools site](https://sqlitetoolsforrootsmagic.com/forum/topic/sorting-the-order-of-rm9-citations/)
 for a compatible SQL script that will update a  citations ordering in one step based on selected criteria.
 
-### RM -Convert Fact
+### Convert Fact
 
 Utility to change the fact type for a set of facts. For instance, convert all
 "Census (fam)" facts with date 1940 to "Census" facts. Handles witnesses and Fam->Personal conversions.\
@@ -87,16 +87,17 @@ Probably most useful for projects imported from TMG, or when introducing a custo
 
 ## NOT RELEASED
 
-### RM -Lump misc sources
+### Lump sources
 
 I started in TMG as splitting all sources. Now in RM, I am lumping the sources for
 which it makes sense to me. So far, Find_a_Grave, Census and Social Security SSDI,
-and all Ancestry collections. These scripts do that. They will need modification
-for your circumstances. These are not released and require Python development to run.
+newspaper articles, and all Ancestry collections. These scripts do that.
+They will need modification for your circumstances. These are not released and
+require Python development to run.
 
 ## Non Python
 
-### RM -Maintenance SQL
+### Maintenance SQL
 
 Consists of a SQL command file containing SQL updates that fix reoccurring problems
 in my database caused by user errors during data entry.
@@ -113,34 +114,48 @@ https://RichardOtter.github.io
 
 ## Required packages for running the scripts
 
-My later releases use the custom "RMpy" python package located in the "RM -RMpy package" folder. 
+My later releases use the custom "RMpy" python package located in the "RM -RMpy package" folder.
+It is distributed in the zip file.
 
-Those scripts using the package will find it if the folder structure is preserved. If the main script is moved elsewhere, copy the "RMpy" folder to be in the same directory as the main script.
+Those scripts using the package will find it if the folder structure is preserved. If the main
+script is moved elsewhere, copy the "RMpy" folder to be in the same directory as the main script.
 
-## NO LONGER USED  Required packages for building frozen executables (exe files)  NO LONGER USED
+## Required packages for developing the scripts
 
 NOTE: the following lines substitute "me" for your user name, and NNN for the python ver code.
 
+Python may be installed for all users  or for only the current user.
+
+"All users" install goes into-\
+C:\Program File\Python
+
+"Current user only" install goes into-\
+C:\Users\me\AppData\Local\Programs\Python\
+
 For a new install or each major upgrade of python, do the following:
 
+Adjust path to include-\
+C:\Users\me\AppData\Local\Programs\Python\PythonNNN\
+or\
+C:\Program File\Python\PythonNNN\
+so that one can start python with the command "python".
+
+If you don't add it, use the full path to run it-
+C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Python\
+or\
+C:\Program File\Python\PythonNNN\Python
+
 Adjust path to include-
-C:\Users\me\AppData\Local\Programs\Python\PythonNNN
+C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Scripts\
+or\
+C:\Program File\Python\PythonNNN\Scripts
 
-so can start python with "python"
-if you don't add it, use full path to invoke-
-C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Python
+If you don't add it, use full path to invoke-
+C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Scripts\pip\
+or\
+C:\Program File\Python\PythonNNN\Scripts\pip
 
-Adjust path to include-
-C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Scripts
-
-if you don't add it, use full path to invoke-
-C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Scripts\pip
-
-confirm pip is working 
-by attempting to run it-
-
-or install pip \
-Currently, see:  https://pip.pypa.io/en/stable/installation/
+confirm pip is working by attempting to run it-
 
 can start pip in several ways:
 
@@ -155,7 +170,11 @@ Install these packages:
 python.exe -m pip install --upgrade pip
 
 pip install --upgrade PyYAML
+```
 
+## The following packages are NO LONGER USED  They were used for building frozen executables (exe files)
+
+``` text
 pip install --upgrade pyinstaller
 
 pip install --upgrade pyinstaller-versionfile

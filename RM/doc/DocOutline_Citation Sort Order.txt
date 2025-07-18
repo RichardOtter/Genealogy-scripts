@@ -21,6 +21,9 @@ INCLUDE: LIB_Overview
 Running the utility in detail
 
 ==========-
+Install Python for Windows x64  -see "APPENDIX  Python install" below.
+
+==========-
 Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 

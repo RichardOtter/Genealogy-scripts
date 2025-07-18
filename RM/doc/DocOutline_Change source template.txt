@@ -46,6 +46,9 @@ INCLUDE: LIB_Overview
 Running the utility in detail
 
 ==========-
+Install Python for Windows x64  -see "APPENDIX  Python install" below.
+
+==========-
 Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 
@@ -839,10 +842,10 @@ underscore ("_") in the LIKE pattern matches any single character in the string.
 Any other character matches itself or its lower/upper case equivalent
 (i.e. case-insensitive matching). Important Note: SQLite only understands
 upper/lower case for ASCII characters by default. The LIKE operator is case
-sensitive by default for unicode characters that are beyond the ASCII range.
+sensitive by default for Unicode characters that are beyond the ASCII range.
 For example, the expression 'a' LIKE 'A' is TRUE but 'æ' LIKE 'Æ' is FALSE.
 The ICU extension to SQLite includes an enhanced version of the LIKE operator
-that does case folding across all unicode characters.
+that does case folding across all Unicode characters.
 
 If the optional ESCAPE clause is present, then the expression following the
 ESCAPE keyword must evaluate to a string consisting of a single character.

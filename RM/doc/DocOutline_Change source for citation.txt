@@ -42,6 +42,9 @@ instructions for which citations and sources to modify are entered at a series
 of prompts in the black terminal window.
 
 ==========-
+Install Python for Windows x64  -see "APPENDIX  Python install" below.
+
+==========-
 Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 

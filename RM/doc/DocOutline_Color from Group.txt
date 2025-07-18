@@ -22,6 +22,9 @@ INCLUDE: LIB_Overview
 Running the utility in detail
 
 ==========-
+Install Python for Windows x64  -see "APPENDIX  Python install" below.
+
+==========-
 Create a folder on your computer that you will not confuse with other
 folders. It will be referred to as the "working folder".
 
@@ -117,7 +120,7 @@ The distinctions between set vs setOnlyIf  and clearAny vs. ClearOnlyIf is
 a bit subtle.
 
 set vs setOnlyIf
-The set action will alawys color code the people under consideration (either 
+The set action will always color code the people under consideration (either 
 a group or all) no matter what color they are currently coded as.
 The setOnlyIf action has an extra criterion, for the people under consideration
 (either a group or all), only those people who currently have no color code
@@ -270,7 +273,7 @@ The distinctions between set vs setOnlyIf  and clearAny vs. ClearOnlyIf is
 a bit subtle.
 
 set vs setOnlyIf
-The set action will alawys color code the people under consideration (either 
+The set action will always color code the people under consideration (either 
 a group or all) no matter what color they are currently coded as.
 The setOnlyIf action has an extra criterion, for the people under consideration
 (either a group or all), only those people who currently have no color code

@@ -23,6 +23,9 @@ INCLUDE: LIB_Overview
 Running the utility in detail
 
 ==========-
+Install Python for Windows x64  -see "APPENDIX  Python install" below.
+
+==========-
 Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 
@@ -99,10 +102,10 @@ for example:
 SQL_QUERY =
    --
    -- selects person whose married name starts with 'sm'
-   SELECT pt.personid
-   FROM persontable AS pt
-   INNER JOIN nametable AS nt ON pt.personid = nt.ownerid
-   WHERE nt.nametype = 5    -- married name
+   SELECT pt.PersonId
+   FROM PersonTable AS pt
+   INNER JOIN NameTable AS nt ON pt.PersonId = nt.OwnerId
+   WHERE nt.NameType = 5    -- married name
    AND nt.surname LIKE 'sm%'
 
 The SQL_QUERY key specifies the SQL statement that will be run.
