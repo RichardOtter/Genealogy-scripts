@@ -110,7 +110,7 @@ def update_group(db_connection, config, report_file, group_name):
 
     # errors in SQL show up here, not in view creation
     try:
-        SqlStmt = "select count() from PersonIdList_RJO_utils"
+        SqlStmt = "SELECT COUNT() FROM PersonIdList_RJO_utils;"
         cur = db_connection.cursor()
         cur.execute(SqlStmt)
         numInView = cur.fetchone()[0]
@@ -140,11 +140,11 @@ def confirm_DB_group_name(Name, report_file, db_connection):
     report_file.write(f"{Divider}\n\n")
 
     # check how many groupNames with name and TagTape=0 already exist
-    SqlStmt = (
-        """SELECT count(*), TagValue 
+    SqlStmt = """
+SELECT count(*), TagValue 
 FROM TagTable 
-WHERE TagName COLLATE NOCASE = ? AND TagType COLLATE NOCASE = 0 ;
-""")
+WHERE TagName COLLATE NOCASE = ? AND TagType COLLATE NOCASE = 0;
+"""
     cur = db_connection.cursor()
     cur.execute(SqlStmt, (Name,))
     result = cur.fetchone()
@@ -170,10 +170,10 @@ def PopulateGroup(GroupID, dbConnection):
     # print ("GroupID=" + str(GroupID))
 
     # Empty out the group if it has any members
-    SqlStmt = (
-        """DELETE FROM GroupTable 
-  WHERE GroupID = ?;
-  """)
+    SqlStmt = """
+DELETE FROM GroupTable
+WHERE GroupID = ?;
+"""
     try:
         cur = dbConnection.cursor()
         cur.execute(SqlStmt, (GroupID,))
@@ -181,16 +181,16 @@ def PopulateGroup(GroupID, dbConnection):
         ('Cannot clear the group members. Close RM and try again.\n' + str(e))
 
     # add the members
-    SqlStmt = (
-        """INSERT INTO GroupTable
+    SqlStmt =  """
+INSERT INTO GroupTable
 SELECT
     null
    ,?        AS GroupID
    ,PersonID AS StartID
    ,PersonID AS EndID
-   ,(julianday('now') - 2415018.5) AS UTCModDate 
+   ,(julianday('now') - 2415018.5) AS UTCModDate
 FROM PersonIdList_RJO_utils;
-""")
+"""
     try:
         cur = dbConnection.cursor()
         cur.execute(SqlStmt, (GroupID,))
