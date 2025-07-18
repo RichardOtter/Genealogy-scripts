@@ -1,0 +1,154 @@
+=========================================================================DIV80==
+Lump sources that were entered as split sources
+LumpSources.py
+INCLUDE: LIB_INTRO
+=========================================================================DIV80==
+Purpose
+
+This utility will assist users in converting a set of "split" source to a set
+of "lumped" sources.
+The split sources must each have just one citation. The utility moves that
+citation to another pre-existing "lumped" source.
+
+
+Currenlt- user must know the source ID  of receiving sources
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_Backups large changes
+=========================================================================DIV80==
+INCLUDE: LIB_Compatibility
+=========================================================================DIV80==
+INCLUDE: LIB_Overview
+=========================================================================DIV80==
+Running the utility in detail
+
+==========-
+Install Python for Windows x64  -see "APPENDIX  Python install" below.
+
+==========-
+Create a folder on your computer that you will not confuse with other
+folders- the "working folder".
+
+==========-
+Copy these items from the downloaded zip file to the working folder-
+      LumpSources.py                   (file)
+      RM-Python-config.ini             (file)
+      RMpy                             (folder)
+
+==========-
+Download the SQLite extension file: unifuzz64.dll   -see below
+   (This dll provides a RMNOCASE collation used by RM.)
+   Move the unifuzz64.dll file to the working folder.
+
+==========-
+Make a copy of your database, move the copy into the working folder.
+
+Rename the database copy to "TEST.rmtree" in order to prevent any
+confusion about the purpose of the copy.
+
+==========-
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
+
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
+
+For example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 4 key-value pairs, one of which is 
+DB_PATH = TEST.rmtree
+
+"DB_PATH" is the key, "TEST.rmtree" is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+The utility also needs to know where the unifuzz64.dll file is.  Its path
+is give an the value of the key RMNOCASE.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
+Save the config file but leave it open in Notepad.
+
+=========-
+TODO
+CONTINUE TO FILL IN TH CONFIG FILE
+
+
+[LUMP_OPTIONS]
+TEMPLATE_CHECK_OVERRIDE= off
+
+[LUMP_MAPPINGS]
+MAPPING_SRC_CIT = 
+    "PublicationName"    >  NULL
+    "PublicationPlace"   >  NULL
+
+MAPPING_IDENT_SRC = 
+     "%-pHTH=%"  >  6815
+
+
+
+
+=========-
+Double click the "LumpSources.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands and then the terminal window is closed and the
+utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
+
+=========-
+IMPORTANT:
+Open the TEST.rmtree database in RM and before anything else,
+perform the "Rebuild Indexes" database tool command
+From Left hand icon panel, select the Tools icon to open the Tools listing,
+then select Database Tools=>Rebuild indexes=>Run selected tool.
+
+=========-
+Confirm that the desired changes have been accomplished.
+
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
+
+
+=========================================================================DIV80==
+Notes
+
+=========-
+=========-
+=========-
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_Precautions before using the modified database
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: multi-line value
+INCLUDE: LIB_APPENDIX  Config File: Mapping value
+INCLUDE: LIB_APPENDIX  Config File: encoding
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Python install
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  unifuzz64.dll download
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Troubleshooting
+=========================================================================DIV80==
+TODO
+
+*  ?? what would you find useful?
+
+=========================================================================DIV80==
+INCLUDE: LIB_Feedback
+=========================================================================DIV80==
+INCLUDE: LIB_Distribution
+=========================================================================DIV80==

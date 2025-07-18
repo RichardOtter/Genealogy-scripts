@@ -7,7 +7,7 @@ Version: 1.8.4
 DistributionFileList:
   - TestExternalFiles.py
   - RM-Python-config.ini
-  - doc\ReadMe.txt
+  - ReadMe.txt
   - doc\Sample report file.txt
   - doc\TestExternalFiles_ignore.txt
 

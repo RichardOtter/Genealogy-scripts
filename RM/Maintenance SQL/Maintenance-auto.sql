@@ -72,39 +72,70 @@ UPDATE CitationTable
 --===========================================DIV50==
 --Ancestry links WebTag names that should have tree name
 
+-- LOCATION IN TREE - WEBLINK ON PERSON
 UPDATE URLTable
-  SET Name='otter-saito'
+  SET Name='ANC_OtterSaito'
   WHERE OwnerType =0
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/14741034/person%'
-    AND Name <> 'otter-saito';
-
+    AND Name <> 'ANC_OtterSaito';
 
 UPDATE URLTable
-  SET Name='lumsden-horn'
+  SET Name='ANC_LumsdenHHorn'
   WHERE OwnerType =0
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111641456/person%'
-    AND Name <> 'lumsden-horn';
-
+    AND Name <> 'ANC_LumsdenHHorn';
 
 UPDATE URLTable
-  SET Name='felton-tsujimoto'
+  SET Name='ANC_FeltonTsujimoto'
   WHERE OwnerType =0
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111652204/person%'
-    AND Name <> 'felton-tsujimoto';
-
+    AND Name <> 'ANC_FeltonTsujimoto';
 
 UPDATE URLTable
-  SET Name='smith-burke'
+  SET Name='ANC_SmithBurke'
   WHERE OwnerType =0
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111800644/person%'
-    AND Name <> 'smith-burke';
+    AND Name <> 'ANC_SmithBurke';
 
+--  DNA MATACHES - WEBLINK ON PERSON
+UPDATE URLTable
+  SET Name='ANC_DNA_RichardOtter'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/3472852c-4089-4840-84a0-682ac8631a96/with%'
+    AND Name <> 'ANC_DNA_RichardOtter';
 
+UPDATE URLTable
+  SET Name='ANC_DNA_GloriaSaito'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/bacef9bf-dd00-4bbb-a9cb-b78caaa194bb/with%'
+    AND Name <> 'ANC_DNA_GloriaSaito';
+
+UPDATE URLTable
+  SET Name='ANC_DNA_RosaMaier'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/2728142c-b35d-4a2e-b2a3-6c3e3b80c358/with%'
+    AND Name <> 'ANC_DNA_RosaMaier';
+
+UPDATE URLTable
+  SET Name='ANC_DNA_EthelImai'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/45a402e6-6944-4e5c-bec3-6b8d1b062ace/with%'
+    AND Name <> 'ANC_DNA_EthelImai';
+
+UPDATE URLTable
+  SET Name='ANC_DNA_RomanOtter'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/855339eb-af29-43ec-bb83-bce76aff38fa/with%'
+    AND Name <> 'ANC_DNA_RomanOtter';
+
+-- WEBLINK ON CITATION
 UPDATE URLTable
   SET Name='Find a Grave'
   WHERE OwnerType =4
     AND URL LIKE 'https://www.findagrave.com/memorial%'
     AND Name <> 'Find a Grave';
+
+
 
 
 --===========================================DIV50==

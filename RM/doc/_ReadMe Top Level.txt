@@ -32,7 +32,6 @@ As mentioned in the individual ReadMe files, always run the utility on a databas
 copy until you are confident of the results and affect on the database.
 
 
-
 =========================================================================DIV80==
 Python install-
 Install Python from the Microsoft Store

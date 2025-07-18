@@ -1,0 +1,718 @@
+Test Procedure : Change Citation Sort Order
+
+Preliminaries
+*	RMPy package needs testing- config file location, name, contents
+
+Procedure
+Initial test procedures will define app states called Setups, that will be used in later test procedures.
+
+Configuration
+DB	normal
+report name	normal
+display app		notepad
+Start app in VSCode using control+ F5, using configuration
+that adds config_testdata.ini as command line argument.
+
+-------------------------------------------DIV50--
+Setup
+
+Action:		Run script "repo Genealogy-scripts\dev util scripts\_DB get fresh copy of TestData.cmd"
+Expect:		Modification date of
+			TEST-Citation Sort Order.rmtree
+			and
+			BACKUP_TEST-Citation Sort Order.rmtreeBU
+			are updated
+
+-------------------------------------------DIV50--
+1	Test Case	Start up to RIN prompt.
+
+Action:		Start app	(either in debugger or standalone)
+Expect:		Enter the RIN of the person who has the citations to reorder, or q to quit:
+
+SETUP DEFINITION: setup-RIN-prompt
+
+
+Action:		type: 4{ENTER}
+Expect:		RIN= 4  person's primary name is:  name-g name-s-(tree2)-#4 
+			Is the citation list that is to be re-ordered attached to:
+			a Fact (f), a Name (n) the Person (p) or quit app (q)?:
+
+Action:		type: q{ENTER}
+Expect:		App exists and report file displays in NotePad
+			Report file:
+			Header
+			RIN= 4  person's primary name is:  name-g name-s-(tree2)-#4 
+
+-------------------------------------------------------------------------DIV80--
+2	Test Case	RIN prompt. Enter q.
+
+-------------------------------------------DIV50--
+Setup:		setup-RIN prompt
+
+Action:		type: q{ENTER}
+Expect:		App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------------------------------------DIV80--
+3	Test Case	RIN prompt. Invalid entries.
+
+-------------------------------------------DIV50--
+Setup:		setup-RIN prompt
+
+Action:		type: 500{ENTER}
+Expect:		The number entered is not a valid RIN in this database.
+			Enter the RIN of the person who has the citations to reorder, or q to quit:
+
+Action:		type: -4{ENTER}
+Expect:		The number entered is not a valid RIN in this database.
+			Enter the RIN of the person who has the citations to reorder, or q to quit:
+
+Action:		type: 2.2{ENTER}
+Expect:		Cannot interpret the response. Enter an integer or "q"
+			Enter the RIN of the person who has the citations to reorder, or q to quit:
+
+Action:		type: t{ENTER}
+Expect:		Cannot interpret the response. Enter an integer or "q"
+			Enter the RIN of the person who has the citations to reorder, or q to quit:
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------------------------------------DIV80--
+4	Test Case	Attachment prompt. Enter s or invalid response.
+
+-------------------------------------------DIV50--
+Setup:		setup-RIN prompt
+
+Action:		type: 4{ENTER}
+Expect:		RIN= 4  person's primary name is:  name-g name-s-(tree2)-#4 
+			Is the citation list that is to be re-ordered attached to:
+			a Fact (f), a Name (n) the Person (p) or quit app (q)?:
+
+SETUP DEFINITION:	setup-attachment-prompt-RIN-#4
+					(the number determines the initial RIN selected).
+
+Action:		type: s{ENTER}
+Expect:		Enter the RIN of the person who has the citations to reorder, or q to quit:
+
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#4		(the RIN number may vary)
+
+Action:		type: q{ENTER}
+Expect:		q is not understood.
+			Enter one of:  f, n, p, s     (s will skip this RIN).
+			Is the citation list that is to be re-ordered attached to:
+			a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:
+
+Action:		type: 1{ENTER}
+Expect:		1 is not understood.
+			Enter one of:  f, n, p, s     (s will skip this RIN).
+			Is the citation list that is to be re-ordered attached to:
+			a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:
+
+-------------------------------------------------------------------------DIV80--
+5	Test Case	Citation list attached to a Fact - multiple facts.
+Stop at the re-order process.
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#3
+
+Action:		type: f{ENTER}
+Expect:		3 events found having more than 1 attached citation.
+			1    Death          : 30 Jan 2000    sample death detail
+			2    Burial         : aft 2000
+			3    Residence      : 1980           sample residence detail
+			Which fact's citations will be re-ordered?
+
+Action:		type: 4{ENTER}
+Expect:		Enter a number 1-3
+			Which fact's citations will be re-ordered?
+
+Action:		type: 0{ENTER}
+Expect:		Enter a number 1-3
+			Which fact's citations will be re-ordered?
+
+Action:		type: -2{ENTER}
+Expect:		Enter a number 1-3
+			Which fact's citations will be re-ordered?
+
+Action:		type: 1.2{ENTER}
+Expect:		Enter a number 1-3
+			Which fact's citations will be re-ordered?
+
+Action:		type: -q{ENTER}
+Expect:		Enter a number 1-3
+			Which fact's citations will be re-ordered?
+
+Action:		type: -s{ENTER}
+Expect:		Enter a number 1-3
+			Which fact's citations will be re-ordered?
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#3
+
+Action:		type: f{ENTER}
+Expect:		3 events found having more than 1 attached citation.
+			1    Death          : 30 Jan 2000    sample death detail
+			2    Burial         : aft 2000
+			3    Residence      : 1980           sample residence detail
+			Which fact's citations will be re-ordered?
+
+Action:		type: -1{ENTER}
+Expect:		------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-3 based on template ATLAS', 'Citation-1 in Source-3 based on ATLAS')
+			2     ('Source-3 based on template ATLAS', 'Citation-2 in Source-3 based on ATLAS')
+			3     ('Source-3 based on template ATLAS', 'Citation-3 in Source-3 based on ATLAS')
+			4     ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+			Which line should be swapped into position # 1 :
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#3
+
+Action:		type: f{ENTER}
+Expect:		3 events found having more than 1 attached citation.
+			1    Death          : 30 Jan 2000    sample death detail
+			2    Burial         : aft 2000
+			3    Residence      : 1980           sample residence detail
+			Which fact's citations will be re-ordered?
+
+Confirm:	Birth fact is not listed.
+
+Action:		type: -2{ENTER}
+Expect:		------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			3     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			4     ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+			Which line should be swapped into position # 1 :
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#3
+
+Action:		type: f{ENTER}
+Expect:		3 events found having more than 1 attached citation.
+			1    Death          : 30 Jan 2000    sample death detail
+			2    Burial         : aft 2000
+			3    Residence      : 1980           sample residence detail
+			Which fact's citations will be re-ordered?
+
+Action:		type: -3{ENTER}
+Expect:		------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-1 based on _test-template-1', 'Citation-1 in Source-1 based on _test-template-1')
+			2     ('Source-1 based on _test-template-1', 'Citation-2 in Source-1 based on _test-template-1')
+			Which line should be swapped into position # 1 :
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------------------------------------DIV80--
+6	Test Case	Citation list attached to a Fact - single fact.
+Stop at the re-order process.
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#1
+
+Action:		type: f{ENTER}
+Expect:		Found one event with more than one citation.
+			2    :Death    1 Jan 2100
+			------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			3     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			4     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			5     ('Source-3 based on template ATLAS', 'Citation-4 in Source-3 based on ATLAS')
+			6     ('Source-3 based on template ATLAS', 'Citation-3 in Source-3 based on ATLAS')
+			7     ('Source-3 based on template ATLAS', 'Citation-2 in Source-3 based on ATLAS')
+			8     ('Source-3 based on template ATLAS', 'Citation-1 in Source-3 based on ATLAS')
+			Which line should be swapped into position # 1 :
+
+SETUP DEFINITION:	setup-re-order-list-prompt-RIN-#1
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------------------------------------DIV80--
+7	Test Case	Citation list attached to a Fact - ZERO facts.
+Stop at the re-order process.
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#2
+
+Action:		type: f{ENTER}
+Expect:		This person does not hae any facts with more than one citation.
+			Is the citation list that is to be re-ordered attached to:
+			a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------------------------------------DIV80--
+8	Test Case	Citation list attached to a Name - multiple names.
+Stop at the re-order process.
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#4
+
+Action:		type: n{ENTER}
+Expect:		2 names found having more than 1 attached citation.
+			1    :1 Jan 2000      :  name-g name-s-(tree2)-#4
+			2    :3 Feb 2001      : ALT-name-1 name-g name-s-(tree 2)-#4
+			Which name's citations shall be ordered?
+
+Confirm:	not listed: ALT-name-2
+
+Action:		type: 3{ENTER}
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
+
+Action:		type: 0{ENTER}
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
+
+Action:		type: -2{ENTER}
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
+
+Action:		type: 1.2{ENTER}
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
+
+Action:		type: -q{ENTER}
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
+
+Action:		type: -s{ENTER}
+Expect:		Enter a number 1-2
+			Which name's citations will be re-ordered?
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#4
+
+Action:		type: n{ENTER}
+Expect:		2 names found having more than 1 attached citation.
+			1    :1 Jan 2000      :  name-g name-s-(tree2)-#4
+			2    :3 Feb 2001      : ALT-name-1 name-g name-s-(tree 2)-#4
+			Which name's citations shall be ordered?
+
+Action:		type: 1{ENTER}
+Expect:		------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			Which line should be swapped into position # 1 :
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#4
+
+Action:		type: n{ENTER}
+Expect:		2 names found having more than 1 attached citation.
+			1    :1 Jan 2000      :  name-g name-s-(tree2)-#4
+			2    :3 Feb 2001      : ALT-name-1 name-g name-s-(tree 2)-#4
+			Which name's citations shall be ordered?
+
+Action:		type: 2{ENTER}
+Expect:		------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			3     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			Which line should be swapped into position # 1 :
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+
+-------------------------------------------------------------------------DIV80--
+9	Test Case	Citation list attached to a Name - single name.
+Stop at the re-order process.
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#1
+
+Action:		type: n{ENTER}
+Expect:		Found one name with more than one citation.
+			5    :                    :  alt_name-1 name-s 1
+			------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			3     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			Which line should be swapped into position # 1 :
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------------------------------------DIV80--
+10	Test Case	Citation list attached to a Name - ZERO names.
+Stop at the re-order process.
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#2
+
+Action:		type: n{ENTER}
+Expect:		This person does not hae any names with more than one citation.
+			Is the citation list that is to be re-ordered attached to:
+			a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+
+-------------------------------------------------------------------------DIV80--
+11	Test Case	Citation list attached to a Person - has more than 1 citations.
+Stop at the re-order process.
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#4
+
+Action:		type: p{ENTER}
+Expect:		------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			3     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			Which line should be swapped into position # 1 :
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+-------------------------------------------------------------------------DIV80--
+12	Test Case	Citation list attached to a Person - has less than 2 citations.
+
+Note:	Stop at the re-order process.
+
+-------------------------------------------DIV50--
+Setup:		setup-attachment-prompt-RIN-#3
+
+Action:		type: p{ENTER}
+Expect:		Person does not have more than one citations attached
+			Is the citation list that is to be re-ordered attached to:
+			a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:
+
+Action:		type: {CONTROL+C}
+Expect:		KeyboardInterrupt
+			App exists and report file displays in NotePad
+			Report file:
+			Header
+
+
+-------------------------------------------------------------------------DIV80--
+101	Test Case	Re-order the citation list. Invalid entries.
+
+-------------------------------------------DIV50--
+Setup:		setup-re-order-list-prompt-RIN-#1
+
+Action:		type: 9{ENTER}
+Expect:		Integer must be in the range 2-8
+			Which line should be swapped into position # 1 :
+
+Action:		type: 0{ENTER}
+Expect:		Integer must be in the range 2-8
+			Which line should be swapped into position # 1 :
+
+Action:		type: 1.2{ENTER}
+Expect:		Enter an integer, blank,  or S or s or A or a
+			Which line should be swapped into position # 1 :
+
+Action:		type: -3{ENTER}
+Expect:		Integer must be in the range 2-8
+			Which line should be swapped into position # 1 :
+
+Action:		type: q{ENTER}
+Expect:		Enter an integer, blank,  or S or s or A or a
+			Which line should be swapped into position # 1 :
+
+Action:		type: m{ENTER}
+Expect:		Enter an integer, blank,  or S or s or A or a
+			Which line should be swapped into position # 1 :
+
+-------------------------------------------------------------------------DIV80--
+101	Test Case	Re-order the citation list. Invalid entries.
+
+-------------------------------------------DIV50--
+Setup:		setup-re-order-list-prompt-RIN-#1
+
+Action:		type: 8{ENTER}
+Expect:		1 ('Source-3 based on template ATLAS', 'Citation-1 in Source-3 based on ATLAS')
+			2 ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			3 ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			4 ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			5 ('Source-3 based on template ATLAS', 'Citation-4 in Source-3 based on ATLAS')
+			6 ('Source-3 based on template ATLAS', 'Citation-3 in Source-3 based on ATLAS')
+			7 ('Source-3 based on template ATLAS', 'Citation-2 in Source-3 based on ATLAS')
+			8 ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+Which line should be swapped into position # 2 :
+
+Confirm:	1 swapped with 8
+
+Action:		type:5{ENTER}
+Expect:		1 ('Source-3 based on template ATLAS', 'Citation-1 in Source-3 based on ATLAS')
+			2 ('Source-3 based on template ATLAS', 'Citation-4 in Source-3 based on ATLAS')
+			3 ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			4 ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			5 ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			6 ('Source-3 based on template ATLAS', 'Citation-3 in Source-3 based on ATLAS')
+			7 ('Source-3 based on template ATLAS', 'Citation-2 in Source-3 based on ATLAS')
+			8 ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+Which line should be swapped into position # 3 :
+
+Confirm:	2 swapped with 5
+
+Action:		type:7{ENTER}
+Expect:		1 ('Source-3 based on template ATLAS', 'Citation-1 in Source-3 based on ATLAS')
+			2 ('Source-3 based on template ATLAS', 'Citation-4 in Source-3 based on ATLAS')
+			3 ('Source-3 based on template ATLAS', 'Citation-2 in Source-3 based on ATLAS')
+			4 ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			5 ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			6 ('Source-3 based on template ATLAS', 'Citation-3 in Source-3 based on ATLAS')
+			7 ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			8 ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+			Which line should be swapped into position # 4 :
+
+Confirm:	3 swapped with 7
+
+Action:		type:1{ENTER}
+Expect:		Integer must be in the range 4-8
+			Which line should be swapped into position # 3 :
+
+Confirm:	Still requesting position 3.
+			Citation list in expected order.
+
+Action:		type: s{ENTER}
+Expect:		1 ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+			2 ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			3 ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			4 ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			5 ('Source-3 based on template ATLAS', 'Citation-4 in Source-3 based on ATLAS')
+			6 ('Source-3 based on template ATLAS', 'Citation-3 in Source-3 based on ATLAS')
+			7 ('Source-3 based on template ATLAS', 'Citation-2 in Source-3 based on ATLAS')
+			8 ('Source-3 based on template ATLAS', 'Citation-1 in Source-3 based on ATLAS')
+			Save the new citation list order shown above?
+			Enter one of-
+			*  Y/y: make the citation order change as shown above
+			*  N/n :go back and do another round of re-ordering
+			*  A/a :abort and not save any changes to this list.
+
+SETUP DEFINITION: setup-save-citation list-prompt-#1
+
+Note:		This is asking for confirmation of the s command
+
+Action:		type: S  {ENTER}
+Expect:		Which line should be swapped into position # 1 : 
+
+
+-------------------------------------------DIV50--
+Setup:		setup-re-order-list-prompt-RIN-#1
+
+
+Action:		type: a{ENTER}
+Action:		type: {ENTER}
+
+
+SETUP DEFINITION: setup-save-citation list-prompt-#1
+
+
+when is end?
+
+-------------------------------------------------------------------------DIV80--
+
+
+PROMPT of reorder list
+Action:		type: f{ENTER}
+Expect:		Found one event with more than one citation.
+			2    :Death    1 Jan 2100
+			------------------------------------------------------
+			To re-order citations, at each prompt, enter one of:
+			*  the number of the citation that should go into this slot.
+			* or
+			*  nothing    to accept current line as it is.
+			*  s          to accept current and following slots as they are.
+			*  a          to abort and make no changes.
+			------------------------------------------------------
+			1     ('Source-2 based on template ATLAS', 'Citation-4 in Source-2 based on ATLAS')
+			2     ('Source-2 based on template ATLAS', 'Citation-3 in Source-2 based on ATLAS')
+			3     ('Source-2 based on template ATLAS', 'Citation-2 in Source-2 based on ATLAS')
+			4     ('Source-2 based on template ATLAS', 'Citation-1 in Source-2 based on ATLAS')
+			5     ('Source-3 based on template ATLAS', 'Citation-4 in Source-3 based on ATLAS')
+			6     ('Source-3 based on template ATLAS', 'Citation-3 in Source-3 based on ATLAS')
+			7     ('Source-3 based on template ATLAS', 'Citation-2 in Source-3 based on ATLAS')
+			8     ('Source-3 based on template ATLAS', 'Citation-1 in Source-3 based on ATLAS')
+			Which line should be swapped into position # 1 :
+
+
+
+
+
+=========================================================================DIV80==
+=========================================================================DIV80==
+Test Data= "TestData-Sample.rmtree" database 2025-06-128
+TestData-RMpython (2025-06-29-2321).rmbackup
+
+
+
+Persons:
+1, 2, 3, 4
+
+
+Person: RMID-1
+Has Birth fact
+Birth fact has 1 citation: 
+Citation-1 in Source-1 based on _test-template-1
+	in: Source-1 based on _test-template-1
+
+Person: RMID-1
+Has Death fact
+	NO source
+Death fact has 8 citations
+	Source-2 based on template ATLAS
+		Citation-1 in Source-2 based on ATLAS
+		Citation-2 in Source-2 based on ATLAS
+		Citation-3 in Source-2 based on ATLAS
+		Citation-4 in Source-2 based on ATLAS
+	Source-3 based on template ATLAS
+		Citation-1 in Source-3 based on ATLAS
+		Citation-2 in Source-3 based on ATLAS
+		Citation-3 in Source-3 based on ATLAS
+		Citation-4 in Source-3 based on ATLAS
+
+
+Person 1 has only 1 fact that has multiple sources
+
+Person 2 has no sources attached
+
+Person 3 has 4 facts
+Birth
+	Citation-1 in Source-3 based on ATLAS
+Residence
+	Citation-1 in Source-1 based on _test-template-1
+	Citation-2 in Source-1 based on _test-template-1
+Death
+	Citation-1 in Source-3 based on ATLAS
+	Citation-2 in Source-3 based on ATLAS
+	Citation-3 in Source-3 based on ATLAS
+	Citation-4 in Source-2 based on ATLAS
+Burial
+	Citation-1 in Source-2 based on ATLAS
+	Citation-2 in Source-2 based on ATLAS
+	Citation-3 in Source-2 based on ATLAS
+	Citation-4 in Source-2 based on ATLAS
+
+Person 4 has 1 fact
+Birth
+	Citation-1 in Source-2 based on ATLAS
+	Citation-2 in Source-2 based on ATLAS
+	Citation-3 in Source-2 based on ATLAS
+
+
+
+=========================================================================DIV80==
+=========================================================================DIV80==
+

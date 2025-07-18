@@ -1,7 +1,7 @@
 import sys
-import sqlite3
 from pathlib import Path
 from datetime import datetime
+import sqlite3
 
 
 # ===================================================DIV60==
@@ -32,13 +32,6 @@ def get_SQLite_library_version(dbConnection):
 
 
 # ===================================================DIV60==
-def reindex_RMNOCASE(dbConnection):
-
-    SqlStmt = "REINDEX RMNOCASE"
-    cur = dbConnection.cursor()
-    cur.execute(SqlStmt)
-
-# ===================================================DIV60==
 def time_stamp_now(type=None):
 
     # return a TimeStamp string
@@ -52,15 +45,15 @@ def time_stamp_now(type=None):
 
 # ===================================================DIV60==
 def reindex_RMNOCASE(dbConnection):
-    SqlStmt = """
-REINDEX RMNOCASE
-"""
+
+    SqlStmt = "REINDEX RMNOCASE;"
     cur = dbConnection.cursor()
     cur.execute(SqlStmt, ())
 
     
 # ===================================================DIV60==
 def q_str(in_str):
+
     return '"' + str(in_str) + '"'
 
 
@@ -87,7 +80,7 @@ def get_current_directory(script_path: Path) ->Path:
 # ===================================================DIV60==
 class RM_Py_Exception(Exception):
 
-    '''Exceptions thrown for configuration/database issues'''
+    '''Exceptions thrown for configuration/database/application logic issues'''
 
 # ===================================================DIV60==
 

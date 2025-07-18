@@ -1,0 +1,255 @@
+=========================================================================DIV80==
+Run SQL commands on a RootsMagic database
+RunSQL.py
+INCLUDE: LIB_INTRO
+=========================================================================DIV80==
+Purpose
+
+This utility will run SQL statements and script files on a database 
+and display the results in a text file.
+
+This utility is meant to help the novice SQL user get the task done.
+It attempts to eliminate most of the complications found using more
+sophisticated off the shelf SQLite manager software.
+
+The ability to run SQL script files can be used by even advanced users to
+run database maintenance scripts which give predictable results and
+don't need to show output.
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_Backups large changes
+=========================================================================DIV80==
+INCLUDE: LIB_Compatibility
+=========================================================================DIV80==
+INCLUDE: LIB_Overview
+=========================================================================DIV80==
+Running the utility in detail
+
+==========-
+Install Python for Windows x64  -see "APPENDIX  Python install" below.
+
+==========-
+Create a folder on your computer that you will not confuse with other
+folders- the "working folder".
+
+==========-
+*  Copy these items from the downloaded zip file to the working folder-
+      RunSQL.py                        (file)
+      RM-Python-config.ini             (file)
+      RMpy                             (folder)
+
+==========-
+*  Download the SQLite extension file: unifuzz64.dll   -see below
+   (This dll provides a RMNOCASE collation used by RM.)
+   Move the unifuzz64.dll file to the working folder.
+
+==========-
+Make a copy of your database, move the copy into the working folder.
+
+Rename the database copy to "TEST.rmtree" in order to prevent any
+confusion about the purpose of the copy.
+
+==========-
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
+
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
+
+For example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 4 key-value pairs, one of which is 
+DB_PATH = TEST.rmtree
+
+"DB_PATH" is the key, "TEST.rmtree" is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+The utility also needs to know where the unifuzz64.dll file is.  Its path
+is give an the value of the key RMNOCASE.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
+Save the config file but leave it open in Notepad.
+
+
+=========-
+Enter your SQL statement into the config file using key-value pairs in the
+[SQL] section of the file.
+
+The utility will run up to 99 SQL statements. They are written in the config
+file as
+
+For example:
+
+[SQL]
+SQL_STATEMENT_1 = SELECT PersonID FROM PersonTable
+
+
+This section "SQL" has one key: "SQL_STATEMENT_1" which has the
+value "SELECT PersonID FROM PersonTable".
+
+This example, if run with the utility, will run the very simple SQL statement
+and print out all of the RINs in the database.
+The example SQL text is very simple and fits on the same line as the key name.
+Real SQL will be more complex and require multiple lines.
+Each line of a multi line Value must be indented at least one space.
+
+for example:
+
+[SQL]
+SQL_STATEMENT_1 =
+    -- simple example sql
+    SELECT Given
+    FROM NameTable
+    WHERE Surname LIKE 'smith';
+
+The SQL_STATEMENT_1  key specifies the SQL statement that will be run.
+The statement may begin on the next line, as above, as long as the SQL lines
+are all indented with white space. Blank lines are not allowed.
+Use indented SQL comments (--) to add spacing for readability.
+# style comments are not allowed within multi line values.
+
+Note that the SQL_STATEMENT_1 key is required, while additional SQL_STATEMENTs 
+are optional.
+
+The the app will accept up to 99 SQL statements.-
+   SQL_STATEMENT_1
+   SQL_STATEMENT_2
+   ...
+   SQL_STATEMENT_99
+
+This app will also run SQL script files. In this case, the file path is
+specified, not the contents.
+For example:
+
+[SQL]
+SQL_SCRIPT_1 = Maintenance-auto.sql
+
+For this key, always place the file path on the same line as the key name,
+as shown in the example.
+To specify a second script file to run, add in another key name as:
+
+SQL_SCRIPT_2 =  C:\my script folder\SecondScriptFile.sql
+
+Up to 99 scripts can be run.
+
+If you want none of the SQL Statements to run, just change the name of 
+SQL_STATEMENT_1  to anything else, such as:
+INACTIVE_SQL_STATEMENT_1 
+Since the SQL_STATEMENT_1  won't be found, none of the other SQL_STATEMENTs 
+will run.
+
+Same for SQL script file keys. Renaming SQL_SCRIPT_1 will stop any scripts 
+from running.
+
+
+===========-
+Database modification statements should usually be followed by a
+SELECT changes(); statement to display how many rows were changed.
+
+
+This utility will not help you write the SQL statement and is not a good
+working environment in which to create your SQL statement.
+Confirm you query works before running it in this utility. (Or get the SQL from
+a source that has confirmed its results.)
+
+=========-
+Confirm the config file has the proper entries and that is has been saved.
+
+=========-
+Double click the "RunSQL.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+The terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
+
+=========-
+IMPORTANT:
+See notes below regarding SQL that refers to or updates column data collated by
+the RMNOCASE collation.
+
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.
+
+=========================================================================DIV80==
+Notes
+
+This utility automatically loads the collation sequence RMNOCASE from the 
+unifuzz64.dll file.  That means that the RMNOCASE collation, used in many RM
+tables is available. However, the collation sequence in unifuzz64 is not
+identical to the one in the RM application.
+Problems arise when accessing indexes created with one collation with SQL
+using the other.
+
+=========-
+If your SQL makes any **changes** to an RMONCASE collated column, you must
+run the SQL:
+REINDEX RMNOCASE;
+as SQL_STATEMENT_1 or at the start of your script file. 
+Put your updating SQL in following statements. 
+After running the SQL, run the RM "Rebuild Indexes" tool immediately after
+opening the modified database in RM.
+From Left hand icon panel, select the Tools icon to open the Tools listing,
+then select Database Tools=>Rebuild indexes=>Run selected tool.
+
+Queries that use but do not modify RMONCASE collated columns have two options-
+1- do as above, first REINDEX RMNOCASE and then Rebuild indexes in RM
+or
+2 code the SQL to use the SQLite built-in NOCASE collation as an override 
+to the RMNOCASE.
+
+On the other hand...
+Many users have not done this for read only queries and have not had a problem. 
+
+=========-
+On some occasions, the utility terminal window will display a "Database
+Locked" message. In that case: Close the terminal window, Close RM and re-run
+the utility, then re-open RM.
+"Database locked" is a normal message encountered with SQLite.
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_Precautions before using the modified database
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: multi-line value SQL
+INCLUDE: LIB_APPENDIX  Config File: encoding
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Python install
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  unifuzz64.dll download
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Troubleshooting
+
+
+
+=========================================================================DIV80==
+TODO
+
+*  Consider adding execution of SQL scripts.
+*  Consider fancier formatting of output.
+*  Add ability to add additional database extensions besides RMNOCASE.
+*  ?? what would you find useful?
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_Feedback
+=========================================================================DIV80==
+INCLUDE: LIB_Distribution
+=========================================================================DIV80==

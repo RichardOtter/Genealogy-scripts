@@ -1,0 +1,119 @@
+=========================================================================DIV80==
+<LONG-NAME>
+<SHORT-NAME>
+
+Intro
+CONSTANT
+=========================================================================DIV80==
+Purpose
+variable
+=========================================================================DIV80==
+Backups
+3 versions
+=========================================================================DIV80==
+Compatibility
+CONSTANT
+just 1 extra line added re v7 in TestExternalFiles
+=========================================================================DIV80==
+Performance
+ONLY TEST EXTERNAL FILES (not in lib)
+=========================================================================DIV80==
+Overview
+CONSTANT
+=========================================================================DIV80==
+Capabilities
+ONLY TEST EXTERNAL FILES (not in lib)
+=========================================================================DIV80==
+Running the utility in detail
+variable
+=========================================================================DIV80==
+Notes
+variable
+=========================================================================DIV80==
+Precautions before using the modified database
+CONSTANT
+only in the 2  big change
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: multi-line value
+INCLUDE: LIB_APPENDIX  Config File: Mapping value
+INCLUDE: LIB_APPENDIX  Config File: encoding
+=========================================================================DIV80==
+APPENDIX  Python installation
+CONSTANT
+=========================================================================DIV80==
+APPENDIX  unifuzz64.dll download
+CONSTANT
+only in RunSQL & LumpSources
+=========================================================================DIV80==
+Troubleshooting
+CONSTANT
+added sections
+=========================================================================DIV80==
+Developer Notes
+ONLY TEST EXTERNAL FILES (not in lib)
+=========================================================================DIV80==
+TODO
+variable
+=========================================================================DIV80==
+Feedback
+CONSTANT
+=========================================================================DIV80==
+Distribution
+CONSTANT
+=========================================================================DIV80==
+
+
+
+
+apps thta use multi line values in config need extra trouble shooting
+TestExternalFile		ignored items
+ColorFromGroup			list of ini sections
+ChangeSourceTemplate	mapping
+GroupFromSQL			multi line SQL
+LumpSources				mapping
+RunSQL					multi line SQL
+
+
+do not use multi line ini
+ChangeSrcForCitation
+CitationSortOrder
+ConvertFact
+ListCitationsForPersonID
+
+
+
+
+Read Only
+affects Backup section
+TestExternalFile		ignored items
+ListCitationsForPersonID
+
+all others change DB
+
+
+import sys
+from pathlib import Path
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
+
+import RMpy.launcher            # noqa #type: ignore
+import RMpy.common as RMc       # noqa #type: ignore
+from RMpy.common import q_str   # noqa #type: ignore
+
+q_str may not be used
+launcher already uses common
+
+=========-
+Double click the "GroupFromSQL.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is displayed while the utility process the SQL.
+
+=========-
+The terminal terminal window closes and the report file is displayed
+in Notepad for you inspection.
+
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.

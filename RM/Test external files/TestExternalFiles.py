@@ -1,12 +1,12 @@
 import sys
 from pathlib import Path
-sys.path.append( str(Path.resolve(Path.cwd() / r'..\RMpy package')))
-import RMpy.launcher  # type: ignore
-import RMpy.common as RMc  # type: ignore
-from RMpy.common import q_str # type: ignore
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
+
+import RMpy.common as RMc       # noqa #type: ignore
+import RMpy.launcher            # noqa #type: ignore
+from RMpy.common import q_str   # noqa #type: ignore
 
 import RMpy.gitignore  # type: ignore
-import os
 import xml.etree.ElementTree as ET
 import hashlib
 
@@ -15,7 +15,7 @@ import hashlib
 # Requirements:
 #   RootsMagic database file with associated external media files
 #   RM-Python-config.ini
-#   RootsMagic v7 through v10 installed (only for unref files option)
+#   RootsMagic one of v7 - v10 installed (only for unref files option)
 
 # Last tested with:
 #   RootsMagic database v7 through v10

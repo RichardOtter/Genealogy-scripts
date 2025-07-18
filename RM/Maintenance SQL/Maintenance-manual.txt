@@ -16,7 +16,7 @@ SELECT pt.PersonID, nt.Surname, nt.Given, ftt.Name, COUNT(*)
 
 
 --===========================================DIV50==
---Check people that have more than 1 BIRT fact
+--Check people that have more than 1 BIRTH fact
 
 SELECT et.OwnerID as PersonID
 FROM EventTable et

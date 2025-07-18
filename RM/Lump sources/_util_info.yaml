@@ -1,0 +1,17 @@
+
+UtilityName:  LumpSources
+
+# Last Release vNONE
+Version: 1.0.0
+
+BuildFileList:
+  - LumpSources.py
+  - _util_info.yaml
+
+DistributionFileList:
+  - LumpSources.py
+  - ReadMe.txt
+  - RM-Python-config.ini
+
+DistributionFolderList:
+  - ..\RMpy package\RMpy

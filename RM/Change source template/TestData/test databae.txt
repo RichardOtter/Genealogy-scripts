@@ -1,0 +1,23 @@
+Test database
+updated to v10
+made a change to template "_Ancestry Database-Single -L"
+by adding field ANC_SRC_IDOLD
+and adding the new field to the footnote sentence
+
+In source  BRdb ANC US                  1910-1949    Consular Reports of Births  
+
+I added a citation that has most fields filed, including the new field
+my name; 25 September 1955; ; ; 27 January 2025; 444:999; citation
+
+then another citation, but with new filed empty
+second  but anc src empty; ; ; ; 27 January 2025; ; 
+
+As expected, both citations had their footnote correctly working.
+
+also as expected from bug, previously created citations have bad footnotes
+
+
+Now fix it
+
+_Ancestry Database-Single -L
+_Ancestry Database-Single -L-NEW

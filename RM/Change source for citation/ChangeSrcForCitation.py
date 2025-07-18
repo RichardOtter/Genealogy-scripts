@@ -1,15 +1,12 @@
 import sys
 from pathlib import Path
-sys.path.append( str(Path.resolve(Path.cwd() / r'..\RMpy package')))
-import RMpy.launcher  # type: ignore
-import RMpy.common as RMc  # type: ignore
-from RMpy.common import q_str # type: ignore
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
-import os
+import RMpy.launcher            # noqa #type: ignore
 
 
 # Requirements:
-#   RootsMagic database file v8 or 9
+#   RootsMagic database file
 #   RM-Python-config.ini
 
 # Tested with:
@@ -17,9 +14,9 @@ import os
 #   Python for Windows v3.13
 
 # Config files fields used
+#    FILE_PATHS  DB_PATH
 #    FILE_PATHS  REPORT_FILE_PATH
 #    FILE_PATHS  REPORT_FILE_DISPLAY_APP
-#    FILE_PATHS  DB_PATH
 
 
 #   TODO add new feature to allow multiple moves at once by entering
@@ -31,23 +28,23 @@ def main():
 
     # Configuration
     utility_info = {}
-    utility_info["utility_name"]      = "ChangeSrcForCitation" 
+    utility_info["utility_name"] = "ChangeSrcForCitation"
     utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
-    utility_info["config_file_name"]  = "RM-Python-config.ini"
-    utility_info["script_path"]  = Path(__file__).parent
-    utility_info["run_features_function"]  = run_selected_features
-    utility_info["allow_db_changes"]  = True
+    utility_info["config_file_name"] = "RM-Python-config.ini"
+    utility_info["script_path"] = Path(__file__).parent
+    utility_info["run_features_function"] = run_selected_features
+    utility_info["allow_db_changes"] = True
     utility_info["RMNOCASE_required"] = False
-    utility_info["RegExp_required"]   = False
+    utility_info["RegExp_required"] = False
 
     RMpy.launcher.launcher(utility_info)
-
 
 
 # ===================================================DIV60==
 def run_selected_features(config, db_connection, report_file):
 
-    change_source_feature(config, db_connection, report_file)
+    change_source_feature(config, 
+                          db_connection, report_file)
 
 
 # ===========================================DIV50==
@@ -56,23 +53,24 @@ def change_source_feature(config, db_connection, report_file):
     first_time = True
     while True:
         report_file.write(
-            "\n" "========================================"  "\n")
+            '\n========================================\n')
 
         if (not first_time):
-            if "y" != input("Go again ? (y/n)"):
+            if "y" != input("Change another citation ? (y/n)").lower():
                 break
         first_time = False
 
         # Deal with the citation as it is
         citation_name = input(
-            "Enter the citation name for citation to change source:\n")
-        report_file.write("Citation name as entered =" + citation_name + "\n")
+            "Enter the citation name for citation to move:\n")
+        report_file.write(F'Citation name as entered ="{citation_name}"\n')
 
+        # % wildcard always added to search string
         SqlStmt = """
 SELECT COUNT(), st.TemplateID, ct.CitationID, ct.SourceID, st.Name, ct.CitationName
-  FROM SourceTable AS st
-  JOIN CitationTable AS ct ON ct.SourceID = st.SourceID
- WHERE ct.CitationName LIKE ( ? || '%' )
+FROM SourceTable AS st
+JOIN CitationTable AS ct ON ct.SourceID = st.SourceID
+WHERE ct.CitationName COLLATE NOCASE LIKE ( ? || '%' );
 """
 
         cur = db_connection.cursor()
@@ -100,18 +98,19 @@ SELECT COUNT(), st.TemplateID, ct.CitationID, ct.SourceID, st.Name, ct.CitationN
 
         report_file.write("\nThe citation:\n" + FullCitationName +
                           "\n" "is currently found in source:\n" + OldSourceName + "\n\n")
-        print("\nThe citation:\n" + FullCitationName +
-              "\n" "is currently found in source:\n" + OldSourceName + "\n\n")
+        print(F'\nThe citation:\n{FullCitationName}'
+              F'\nis currently found under source:\n{OldSourceName}\n\n')
 
         # Deal with the new source
-        new_source_name = input("\n\nEnter the name for the new source:\n")
-        report_file.write("Source name as entered =" + new_source_name + "\n")
+        new_source_name = input(F"\n\nEnter the name for the new source:\n")
+        report_file.write(F'Source name as entered ={new_source_name}\n')
 
+        # % wildcard always added to search string
         SqlStmt = """
 SELECT COUNT(), SourceID, TemplateID
-  FROM SourceTable
- WHERE Name LIKE ( ? || '%' )
-  """
+FROM SourceTable
+WHERE Name COLLATE NOCASE LIKE ( ? || '%' );
+"""
         cur = db_connection.cursor()
         cur.execute(SqlStmt, (new_source_name, ))
         row = cur.fetchone()
@@ -121,39 +120,39 @@ SELECT COUNT(), SourceID, TemplateID
         NewSourceTemplateID = row[2]
 
         if (number_found > 1):
-            print("PROBLEM: More than 1 source found." "\n\n")
-            report_file.write("PROBLEM: More than 1 source found." "\n\n")
-            report_file.write('No change made.' '\n\n')
+            print("PROBLEM: More than 1 source found. \n\n")
+            report_file.write("PROBLEM: More than 1 source found. \n\n")
+            report_file.write('No change made. \n\n')
             continue
         if (number_found == 0):
-            print("PROBLEM: Source not found." "\n\n")
-            report_file.write("PROBLEM: Source not found." "\n\n")
-            report_file.write('No change made.' '\n\n')
+            print("PROBLEM: Source not found. \n\n")
+            report_file.write("PROBLEM: Source not found. \n\n")
+            report_file.write('No change made. \n\n')
             continue
 
         if (NewSourceID == OldSourceID):
             print(
-                "PROBLEM: The citation is already using the specified new source." "\n\n")
+                "PROBLEM: The citation is already using the specified new source. \n\n")
             report_file.write(
-                "PROBLEM: The citation is already using the specified new source." "\n\n")
-            report_file.write('No change made.' '\n\n')
+                "PROBLEM: The citation is already using the specified new source. \n\n")
+            report_file.write('No change made. \n\n')
             continue
 
         if (NewSourceTemplateID != OldSourceTemplateID):
             print(
                 "PROBLEM: The new source must be based on the same"
-                " SourceTemplate as the current source." "\n\n")
+                " SourceTemplate as the current source. \n\n")
             report_file.write(
                 "PROBLEM: The new source must be based on the same"
-                " SourceTemplate as the current source." "\n\n")
-            report_file.write('No change made.' '\n')
+                " SourceTemplate as the current source. \n\n")
+            report_file.write('No change made. \n')
             continue
 
         # update the citation to use the new source
         SqlStmt = """
 UPDATE CitationTable
-  SET  SourceID = ?
-WHERE CitationID = ?
+    SET  SourceID = ?
+WHERE CitationID = ?;
 """
         cur = db_connection.cursor()
         cur.execute(SqlStmt, (NewSourceID, CitationID))
@@ -163,9 +162,9 @@ WHERE CitationID = ?
 
         SqlStmt = """
 SELECT ct.CitationName, st.Name
-  FROM SourceTable AS st
-  JOIN CitationTable AS ct ON ct.SourceID = st.SourceID
- WHERE ct.CitationID = ?
+FROM SourceTable AS st
+JOIN CitationTable AS ct ON ct.SourceID = st.SourceID
+WHERE ct.CitationID = ?;
 """
 
         cur = db_connection.cursor()
@@ -174,8 +173,9 @@ SELECT ct.CitationName, st.Name
 
         CitationName = row[0]
         SourceName = row[1]
-        report_file.write("\n\n" "Confirmation of change\nCitation:\n" + CitationName
-                          + "\n\n" "is now using source:\n" + SourceName + "\n")
+        print('Requested change made.')
+        report_file.write(F'\n\nConfirmation of change\nCitation:\n{CitationName}'
+                          F'\n\nis now using source:\n{SourceName}\n')
 
     return 0
 

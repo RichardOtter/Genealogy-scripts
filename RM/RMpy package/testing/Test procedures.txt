@@ -1,0 +1,63 @@
+Test functions done by the RMpy package components.
+
+=========================================================================DIV80==
+Overview
+
+RM date functions       see the RMDate -Test.py file
+launcher
+common
+gitignore function used by TestExternalFiles
+
+
+=========================================================================DIV80==
+launcher.py
+
+Config file
+find it in current dir
+find it from command line argument
+find it with arbitrary name
+number of command line arguments
+
+config contents
+
+read file if not UTF-8
+read file with cr/lf vs lf endings
+['FILE_PATHS']['REPORT_FILE_PATH']
+
+
+error messages in terminal window vs report file
+
+['FILE_PATHS']['REPORT_FILE_DISPLAY_APP']
+Open the report file
+
+['FILE_PATHS']['DB_PATH']
+
+"RMNOCASE_required"
+['FILE_PATHS']['RMNOCASE_PATH']
+
+"RegExp_required"
+['FILE_PATHS']['REGEXP_PATH']
+
+"allow_db_changes"
+and commit
+
+Report file header content
+
+Locked database
+Bad SQL
+
+
+=========================================================================DIV80==
+common.py
+
+RM_Py_Exception
+get_current_directory
+create_db_connection
+pause_with_message
+get_SQLite_library_version
+
+q_str
+reindex_RMNOCASE
+time_stamp_now
+
+most are tested as part of launcher

@@ -12,7 +12,7 @@ __pycache__
 
 # ignore test database stuff
 DB/
-TestData/
+
 
 # ignore RootsMagic database files
 *.rmgc
@@ -27,4 +27,7 @@ HIDE_*
 
 # ignore Releases storage folder and Release build folder
 RM/Release*/
+
+# ignore files in doc not to be checked in
+DocFull_*
 

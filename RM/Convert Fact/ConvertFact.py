@@ -1,10 +1,10 @@
 import sys
 from pathlib import Path
-sys.path.append( str(Path.resolve(Path.cwd() / r'..\RMpy package')))
-import RMpy.launcher          # type: ignore
-import RMpy.common as RMc     # type: ignore
-from RMpy.common import q_str # type: ignore
+sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
+import RMpy.common as RMc       # noqa #type: ignore
+import RMpy.launcher            # noqa #type: ignore
+from RMpy.common import q_str   # noqa #type: ignore
 
 # Requirements:
 #   RootsMagic database file
@@ -19,9 +19,9 @@ from RMpy.common import q_str # type: ignore
 #    FILE_PATHS  REPORT_FILE_DISPLAY_APP
 #    FILE_PATHS  DB_PATH
 #
-#    MAPPING     FACTTYPE_CURRENT
-#    MAPPING     FACTTYPE_NEW
-#    MAPPING     ROLE
+#    CV_PARAMS     FACTTYPE_CURRENT
+#    CV_PARAMS     FACTTYPE_NEW
+#    CV_PARAMS     ROLE
 #    SOURCE_FILTER     DESC
 #    SOURCE_FILTER     DATE
 
@@ -57,16 +57,16 @@ def convert_fact_feature(config, db_connection, report_file):
     date_sel = None
 
     try:
-        facttype_current_name = config['MAPPING']['FACTTYPE_CURRENT']
+        facttype_current_name = config['CV_PARAMS']['FACTTYPE_CURRENT']
     except:
         raise RMc.RM_Py_Exception('ERROR: FACTTYPE_CURRENT must be specified.')
     try:
-        facttype_new_name = config['MAPPING']['FACTTYPE_NEW']
+        facttype_new_name = config['CV_PARAMS']['FACTTYPE_NEW']
     except:
         raise RMc.RM_Py_Exception('ERROR: FACTTYPE_NEW must be specified.')
 
     try:
-        role_name = config['MAPPING']['ROLE']
+        role_name = config['CV_PARAMS']['ROLE']
     except:
         pass
     try:

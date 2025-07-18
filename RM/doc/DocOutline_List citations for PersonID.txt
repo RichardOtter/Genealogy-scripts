@@ -1,0 +1,117 @@
+=========================================================================DIV80==
+List all citations for a person given the RIN/PersonID
+ListCitationsForPersonID.py
+INCLUDE: LIB_INTRO
+=========================================================================DIV80==
+Purpose
+
+Generates  an alphabetically sorted list of source names and citation names
+associated with a person. The list includes citations attached-
+
+    to the specified person
+    to facts attached to the person
+    to facts shared to the person
+    to names attached to the person
+    to "family" objects that the person is in
+    to facts attached to "family" objects that the person is in
+    to associations that the person is a member of
+
+the output also includes the number of citations found.
+
+The results are saved to a report file which is automatically displayed.
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_Backups read only
+=========================================================================DIV80==
+INCLUDE: LIB_Compatibility
+======================================================================
+INCLUDE: LIB_Backups read only
+======================================================================
+INCLUDE: LIB_Overview
+=========================================================================DIV80==
+Running the utility in detail
+
+==========-
+Install Python for Windows x64  -see "APPENDIX  Python install" below.
+
+==========-
+Create a folder on your computer that you will not confuse with other
+folders- the "working folder".
+
+==========-
+*  Copy these items from the downloaded zip file to the working folder-
+      ListCitationsForPersonID.py      (file)
+      RM-Python-config.ini             (file)
+      RMpy                             (folder)
+
+==========-
+Make a copy of your database, move the copy into the working folder.
+
+Rename the database copy to "TEST.rmtree" in order to prevent any
+confusion about the purpose of the copy.
+
+==========-
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
+
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
+
+For example, in the sample config file, there is a section named 
+[FILE_PATHS].
+In that section, reside 3 key-value pairs, one of which is 
+DB_PATH = TEST.rmtree
+
+"DB_PATH" is the key, "TEST.rmtree" is the value.
+key-value pairs are separated with a = character.
+
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
+Save the config file.
+
+=========-
+Double click the "ListCitationsForPersonID.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands and then the terminal window is closed and the
+utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
+
+=========-
+No changes are mde to the database by this utility.
+
+
+=========================================================================DIV80==
+Notes
+
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX  Config File: encoding
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Python install
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Troubleshooting
+=========================================================================DIV80==
+TODO
+
+*   consider alternate output formats
+*  ?? what would you find useful?
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_Feedback
+=========================================================================DIV80==
+INCLUDE: LIB_Distribution
+=========================================================================DIV80==
