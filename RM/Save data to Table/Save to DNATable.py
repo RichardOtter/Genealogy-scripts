@@ -37,20 +37,52 @@ def parse_insert_data(config, db_connection, report_file):
     # read each section delimited with empty line
     # each section is either 3 or 4 lines
 
-    filename = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Save data to Table\WORKING Page copy and paste GCS 2025-03-23.txt"
-#    with open file
-#
-    insert_data(config, db_connection, report_file)
+    filepath = r"TestData\test input.txt"
+    
+    entries= parse_grouped_file(filepath)
 
+    try:
+        for entry in entries:
+            Note = ""
+            for line in entry:
+                Note= Note + line + '\n'
+            label2 = entry[0]
+            SharedPercent = float( (entry[2])[0 : (entry[2]).find('%')])
+            SharedSegs = int( (entry[2])[(entry[2]).find('shared,') + 7 : (entry[2]).find('segments')    ])
+            insert_data(label2, SharedPercent, SharedSegs, Note, config, db_connection, report_file)
+    except Exception as e:
+        print (e, entry)
 
 # ===================================================DIV60==
-def insert_data(config, db_connection, report_file):
+def parse_grouped_file(filepath):
+    try:
+        with open(filepath,  mode='r', encoding='utf-8') as input_file:
+            content = input_file.read()
+            # Split the content by two or more consecutive newline characters
+            # to handle both single and multiple blank lines as separators.
+            groups_raw = content.split('\n\n')
+
+            parsed_groups = []
+            for group_str in groups_raw:
+                # Remove leading/trailing whitespace and split into individual lines
+                lines = [line.strip() for line in group_str.split('\n') if line.strip()]
+                if lines:  # Only add non-empty groups
+                    parsed_groups.append(lines)
+            return parsed_groups
+    except FileNotFoundError:
+        print(f"Error: The file '{filepath}' was not found.")
+        return []
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return []
+
+# ===================================================DIV60==
+def insert_data(label2, SharedPercent, SharedSegs, Note, config, db_connection, report_file):
 
 # the ddl to create the DNATable
-
 # CREATE TABLE DNATable (RecID INTEGER PRIMARY KEY, ID1 INTEGER, ID2 INTEGER, Label1 TEXT, Label2 TEXT, DNAProvider INTEGER, SharedCM FLOAT, SharedPercent FLOAT, LargeSeg FLOAT, SharedSegs INTEGER, Date TEXT, Relate1 INTEGER, Relate2 INTEGER, CommonAnc INTEGER, CommonAncType INTEGER, Verified INTEGER, Note TEXT, UTCModDate FLOAT )
-
 # not RMNOCASE indexed
+
     SQL_statement= """
 INSERT INTO DNATable
 (
@@ -93,16 +125,8 @@ julianday('now') - 2415018.5
 );
 """
 
-    label2 = 'test label2'
-    SharedPercent = .23
-    SharedSegs = 2
-    Note = """test note line 1
-test note line 2
-test note line 3
-"""
-
-    print(RMpy.RMDate.now_RMDate())
-
+# TODO  different for most runs
+# some items are constant, some are calculated, others are from input file
     match_data= {
         'ID1': 1,
         'ID2': 17132,
@@ -125,10 +149,6 @@ test note line 3
     cur = db_connection.cursor()
 
     cur.execute(SQL_statement, match_data)
-
-
-
-
 
 
 # ===================================================DIV60==

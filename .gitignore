@@ -12,7 +12,7 @@ __pycache__
 
 # ignore test database stuff
 DB/
-TestData/
+
 
 # ignore RootsMagic database files
 *.rmgc

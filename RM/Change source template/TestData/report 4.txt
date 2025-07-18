@@ -1,0 +1,47 @@
+Report generated at      = 2024-03-13 19:57:02
+Database processed       = DB\TEST.rmtree
+Database last changed on = 2024-03-13 12:58:12
+SQLite library version   = 3.42.0
+
+Birth Registration, state level
+source   Text     "Repository"
+source   Place     "RepositoryLoc"
+citation   Text     "Name"
+source   Text     "Jurisdiction"
+citation   Text     "Form"
+citation   Text     "CertificateNo"
+citation   Date     "Date"
+
+
+Birth Registration, state level-NEW
+source   Text     "RepositoryName"
+source   Place     "RepositoryLoc"
+citation   Text     "PersonName"
+source   Text     "Jurisdiction"
+citation   Text     "Form"
+citation   Text     "CertificateNo"
+citation   Date     "Date"
+citation   Text     "ID-number"
+
+
+
+The field mappings, as entered in the configuration file:
+
+Source mapping:
+
+"Repository"     "RepositoryName"
+"RepositoryLoc"  "RepositoryLoc"
+"Jurisdiction"   NULL
+
+Citation mapping:
+
+"Name"           "PersonName"
+"Form"           "Form"
+"CertificateNo"  "CertificateNo"
+"Date"           "Date"
+NULL             "ID-number"
+
+
+
+No problems detected in the specified mapping.
+

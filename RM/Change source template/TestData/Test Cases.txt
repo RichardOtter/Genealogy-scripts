@@ -1,0 +1,186 @@
+NEW
+if NULL on left and right side has an existing field with data
+
+
+<Root><Fields><Field><Name>Informant</Name><Value>Alban Otter -b1927</Value></Field><Field><Name>InterviewDate</Name><Value>22 March 1997</Value></Field><Field><Name>Interviewer</Name><Value>Richard J Otter -b1955</Value></Field></Fields></Root>
+
+
+Do test of field mapping in a test phase of app.
+after the template names are checked
+and then the template details are printed.
+
+
+in check
+that citations go to citations and src to src
+
+check mapping for 2 tuples
+and first is either citation or source
+and fields are correct or NULL and proper category
+and all fields listed
+
+
+For better or for worse SourceTemplate, template field and Fact names in RM can start, end or contain  1 or more blank characters.
+
+If you have this, the map line that contains the odd field name should be entered with each of the three words/names in double quotes, like
+  "source"   "field1 "    "field4"
+
+
+so this also goes for speciying Sourcetemplate Names in the ini file-
+need to use quotes to include spaces.
+
+for names-
+TEMPLATE_OLD
+TEMPLATE_NEW
+SOURCE_NAME_LIKE
+
+can use " for leading and trailing spaces
+
+fields are just renamed
+what if removal- rename is wrong?
+
+should really create a new XML and copy data
+need to test NULL => field
+and
+field => NULL
+
+_Ancestry Database-Double -L
+source   Text     "Title"
+source   Date     "Date"
+source   Text     "SrcInfo"
+source   Text     "dbID"
+citation   Text     "Name"
+citation   Date     "EventDate"
+citation   Text     "CD"
+citation   Date     "DateCitation"
+citation   Text     "SrcCitation "
+
+
+_Ancestry Database-Double -L (Copy)
+source   Text     "Ancestrydatabase"
+source   Date     "DateNew"
+source   Text     "SrcInfo"
+source   Text     "dbID"
+citation   Text     "NameNAME"
+citation   Date     "EventDateDATE"
+citation   Text     "CD"
+citation   Date     "DateCitation"
+citation   Text     "newCit "
+source   Text     "NewField"
+
+
+
+MAPPING = 
+    source         Title                    Ancestrydatabase
+    source         Date                     NULL
+    source         SrcInfo                  SrcInfo
+    source         NULL                     NewField
+    citation       Name                     NameNAME
+    citation       EventDate                EventDateDATE
+    citation       CD                       CD
+    "citation"     "DateCitation"             "newCit "
+    "citation"     "SrcCitation "           "NULL"
+
+
+source XML OLD START ============================
+<Root>
+  <Fields>
+    <Field>
+      <Name>Title</Name>
+      <Value>Illinois, U.S., County Marriage Records, 1800-1940</Value>
+    </Field>
+    <Field>
+      <Name>Date</Name>
+      <Value>13 July 2021</Value>
+    </Field>
+    <Field>
+      <Name>SrcInfo</Name>
+      <Value>Ancestry.com. Illinois, U.S., County Marriage Records, 1800-1940 [database on-line]. Lehi, UT, USA: Ancestry.com Operations, Inc., 2016.</Value>
+    </Field>
+    <Field>
+      <Name>dbID</Name>
+      <Value>61370</Value>
+    </Field>
+  </Fields>
+</Root>
+source XML OLD END ==============================
+source XML NEW START ============================
+<Root>
+  <Fields>
+    <Field>
+      <Name>Ancestrydatabase</Name>
+      <Value>Illinois, U.S., County Marriage Records, 1800-1940</Value>
+    </Field>
+    <Field>
+      <Name>SrcInfo</Name>
+      <Value>Ancestry.com. Illinois, U.S., County Marriage Records, 1800-1940 [database on-line]. Lehi, UT, USA: Ancestry.com Operations, Inc., 2016.</Value>
+    </Field>
+    <Field>
+      <Name>dbID</Name>
+      <Value>61370</Value>
+    </Field>
+    <Field>
+      <Name>NewField</Name>
+      <Value />
+    </Field>
+  </Fields>
+</Root>
+source XML NEW END ==============================
+
+
+
+citation XML OLD START ============================
+<Root>
+  <Fields>
+    <Field>
+      <Name>Name</Name>
+      <Value>Essex &amp; Objartel</Value>
+    </Field>
+    <Field>
+      <Name>EventDate</Name>
+      <Value>1911</Value>
+    </Field>
+    <Field>
+      <Name>CD</Name>
+      <Value />
+    </Field>
+    <Field>
+      <Name>DateCitation</Name>
+      <Value>27 October 2021</Value>
+    </Field>
+    <Field>
+      <Name>SrcCitation </Name>
+      <Value>Various Illinois County Courthouses; Various Illinois County Courthouses; Marriage Records; Collection Title: Marriage Records</Value>
+    </Field>
+  </Fields>
+</Root>
+citation XML OLD END ==============================
+citation XML NEW START ============================
+<Root>
+  <Fields>
+    <Field>
+      <Name>NameNAME</Name>
+      <Value>Essex &amp; Objartel</Value>
+    </Field>
+    <Field>
+      <Name>EventDateDATE</Name>
+      <Value>1911</Value>
+    </Field>
+    <Field>
+      <Name>CD</Name>
+      <Value />
+    </Field>
+    <Field>
+      <Name>newCit </Name>
+      <Value>27 October 2021</Value>
+    </Field>
+  </Fields>
+</Root>
+citation XML NEW END ==============================
+
+
+
+
+
+
+
+

@@ -1,7 +1,9 @@
 
--- Create the RmDataExtra.sqlite  file/database using command line-   sqlite3 RmDataExtra.sqlite
+-- Create the RmDataExtra.sqlite  file/database using command line-
+--     sqlite3 RmDataExtra.sqlite
+
 -- Seems that SQLite Expert cannot run SQL without an open database
--- cannot do the attach as main
+-- cannot do the attach as main, but opening the DB automatically calls it main
 
 ATTACH DATABASE  
 'C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Misc SQL\DB\TEST-Misc SQL.rmtree'
@@ -11,7 +13,6 @@ ATTACH DATABASE
 'C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Misc SQL\DB\RmDataExtra.sqlite'
 AS rde; 
 
-
 CREATE TABLE rde.DNATableExtra (
 SupRecID INTEGER PRIMARY KEY,
 Sort TEXT,
@@ -19,6 +20,7 @@ Info TEXT
 );
 
 -- in SQLite Expert, look in Table list for table "rde.DNATableExtra"
+-- General settings pref determines whether it is in main list or separated by DB name
 
 -- Display DNA Table and Extra data in grid
 SELECT Label1, Label2, Info
@@ -66,27 +68,6 @@ FROM DNATable as dt
 INNER JOIN rde.DNATableExtra AS dte ON dt.RecID = dte.RecID
 WHERE dt.recId = 5;
 
---create records first
-insert table DNATableExtra
-
-update rde.DNATableExtra
-set sort=
-INNER JOIN rde.DNATableExtra AS dte ON dt.RecID = dte.RecID
-
-DELETE FROM rde.DNATableExtra;
-
-
-
-update rde.DNATableExtra
-SET sort = round(SharedCM,2) 
-FROM DNATable
-WHERE rde.DNATableExtra.SupRecID = RecID;
-
-
-
-
-
-
 
 
 DROP TABLE DNATableExtra;
@@ -99,35 +80,9 @@ Sort2 INTEGER,
 Info TEXT
 );
 
+-- remove all rows
 DELETE FROM rde.DNATableExtra;
 
--- this works for first run, won't create duplicates
-
-INSERT OR IGNORE INTO DNATableExtra (SupRecID, Sort1)
-SELECT DNATable.RecID, cast(round(SharedCM, 2) *10 as INT)
-FROM DNATable;
-
-
-
-
-
-ATTACH DATABASE
-'C:\Users\rotter\Genealogy\GeneDB\RmDataExtra.sqlite'
-AS rde; 
-
-
-UPDATE DNATableExtra
-SET SORT2 = ?
-WHERE RecID = ?;
-
--- Display DNA Table and Extra data in grid
-SELECT ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC)AS Num,
-    dt.recID, Label2, dte.Sort1, Sort2, dte.Info
-FROM DNATable as dt
-INNER JOIN rde.DNATableExtra AS dte ON dt.RecID = dte.SupRecID
-WHERE dt.DNAProvider = 5
-AND ID1 = 1
-ORDER BY Sort1 DESC, Sort2 ASC;
 
 
 

@@ -45,7 +45,6 @@ import RMpy.common as RMc  # type: ignore
 
 # ===================================================DIV60==
 def now_RMDate():
-    print(date.today())
     return to_RMDate(str(date.today()))
 
 
