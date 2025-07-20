@@ -106,7 +106,7 @@ Each operation is contained in a separate section of the config file.
 In a color operation section, reside 4 key=value pairs. These 4 items
 define a color code operation.
 
-ACTION can be one of: set, clearAny, ClearOnlyIf, or setOnlyIf.
+ACTION can be one of: set, clearAny, clearOnlyIf, or setOnlyIf.
 COLOR_CODE_SET takes a value of 1 to 10
 COLOR takes a value of 1 to 27
 GROUP takes a name of a group or "_ALL" which indicates all people in

@@ -13,7 +13,7 @@ from pathlib import Path
 
 def main():
 
-    keep_orig = True
+    keep_orig = False
 
     # CONSTANTS
     REPO_ROOT_PATH = Path(

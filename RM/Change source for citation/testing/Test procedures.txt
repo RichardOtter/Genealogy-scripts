@@ -1,0 +1,322 @@
+Test Procedure
+Change Source for Citation
+
+
+
+
+Configuration
+DB				Test data
+"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Test Data\TestData-RMpython.rmtree"
+2025-07-16
+
+Refresh with new copy of the database.
+
+report name		normal
+
+display app		notepad
+
+
+PROCEDURE:
+
+CASE: 1	normal path
+
+Start app
+
+__EXPECT:
+Enter the citation name for citation to move:
+
+__ENTER:
+Citation-1 in Source-1 based on _test-template-1
+
+__EXPECT:
+The citation:
+Citation-1 in Source-1 based on _test-template-1
+is currently found under source:
+Source-1 based on _test-template-1
+Enter the name for the new source:
+
+__ENTER:
+Source-2 based on _test-template-1
+
+__EXPECT:
+Requested change made.
+Change another citation ? (y/n)
+
+__ENTER:
+y
+
+__EXPECT:
+Enter the citation name for citation to move:
+
+__ENTER:
+Citation-2 in Source-1 based on _test-template-1
+
+__EXPECT:
+The citation:
+Citation-2 in Source-1 based on _test-template-1
+is currently found under source:
+Source-1 based on _test-template-1
+Enter the name for the new source:
+
+__ENTER:
+Source-2 based on _test-template-1
+
+__EXPECT:
+Requested change made.
+Change another citation ? (y/n)
+
+__ENTER:
+n
+
+__EXPECT:
+Terminal window closes and Report is displayed in NotePad.
+
+REPORT:
+=========================================================================DIV80==
+=========================================================================DIV80==
+
+Report generated at      = 2025-07-18 20:36:35
+Utility name             = ChangeSrcForCitation
+Utility version          = vUTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE
+Python version           = v3.13.5
+SQLite library version   = v3.49.1
+Database last changed on = 2025-07-16 20:58:40
+Database processed       = C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Change source for citation\DB\TEST-Change source for citation.rmtree
+
+
+
+
+========================================
+Citation name as entered ="Citation-1 in Source-1 based on _test-template-1"
+
+The citation:
+Citation-1 in Source-1 based on _test-template-1
+is currently found in source:
+Source-1 based on _test-template-1
+
+Source name as entered =Source-2 based on _test-template-1
+
+
+Confirmation of change
+Citation:
+Citation-1 in Source-1 based on _test-template-1
+
+is now using source:
+Source-2 based on _test-template-1
+
+========================================
+Citation name as entered ="Citation-2 in Source-1 based on _test-template-1"
+
+The citation:
+Citation-2 in Source-1 based on _test-template-1
+is currently found in source:
+Source-1 based on _test-template-1
+
+Source name as entered =Source-2 based on _test-template-1
+
+
+Confirmation of change
+Citation:
+Citation-2 in Source-1 based on _test-template-1
+
+is now using source:
+Source-2 based on _test-template-1
+
+========================================
+=========================================================================DIV80==
+=========================================================================DIV80==
+
+CASE: 2		Problem- different templates:
+
+__EXPECT:
+Enter the citation name for citation to move:
+
+__ENTER:
+Citation-1 in Source-1 based on _test-template-1
+
+__EXPECT:
+The citation:
+Citation-1 in Source-1 based on _test-template-1
+is currently found under source:
+Source-2 based on _test-template-1
+Enter the name for the new source:
+
+__ENTER:
+Source-1 based on template ATLAS
+
+__EXPECT:
+PROBLEM: The new source must be based on the same SourceTemplate as the current source.
+Change another citation ? (y/n)
+
+__ENTER:
+y
+
+2	Problem- more than 1 citation found:
+
+__EXPECT:
+Enter the citation name for citation to move:
+
+__ENTER:
+Citation-1
+
+__EXPECT:
+PROBLEM: Found more than 1 citation. 
+Change another citation ? (y/n)
+
+__ENTER:
+y
+
+__EXPECT:
+Enter the citation name for citation to move:
+
+CASE: 3		Problem- more than 1 source found:
+
+__EXPECT:
+Enter the citation name for citation to move:
+
+__ENTER:
+Citation-1 in Source-1 based on _test-template-1
+
+__EXPECT:
+The citation:
+Citation-1 in Source-1 based on _test-template-1
+is currently found under source:
+Source-2 based on _test-template-1
+Enter the name for the new source:
+
+__ENTER:
+Source-1
+
+__EXPECT:
+PROBLEM: More than 1 source found. 
+Change another citation ? (y/n)
+
+__EXPECT:		Change another ? y or n
+__ENTER:
+n
+__EXPECT:
+exit- window closed. report displayed
+
+CONFIRM:
+filename of report as configured
+
+REPORT:
+=========================================================================DIV80==
+=========================================================================DIV80==
+Report generated at      = 2025-07-18 20:48:15
+Utility name             = ChangeSrcForCitation
+Utility version          = vUTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE
+Python version           = v3.13.5
+SQLite library version   = v3.49.1
+Database last changed on = 2025-07-18 20:37:18
+Database processed       = C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Change source for citation\DB\TEST-Change source for citation.rmtree
+
+
+
+
+========================================
+Citation name as entered ="Citation-1 in Source-1 based on _test-template-1"
+
+The citation:
+Citation-1 in Source-1 based on _test-template-1
+is currently found in source:
+Source-2 based on _test-template-1
+
+Source name as entered =Source-1 based on template ATLAS
+PROBLEM: The new source must be based on the same SourceTemplate as the current source. 
+
+No change made. 
+
+========================================
+Citation name as entered ="Citation-1"
+PROBLEM: Found more than 1 citation.
+
+No change made.
+
+
+========================================
+Citation name as entered ="Citation-1 in Source-1 based on _test-template-1"
+
+The citation:
+Citation-1 in Source-1 based on _test-template-1
+is currently found in source:
+Source-2 based on _test-template-1
+
+Source name as entered =Source-1
+PROBLEM: More than 1 source found. 
+
+No change made. 
+
+
+========================================
+=========================================================================DIV80==
+=========================================================================DIV80==
+
+
+CONFIRM:
+Open in RootsMagic
+
+1:
+Citation-1 in Source-1 based on _test-template-1
+and
+Citation-2 in Source-1 based on _test-template-1
+moved to
+Source-2 based on _test-template-1
+
+2:
+Source-1 based on _test-template-1
+has 0 citations
+
+3:
+Citation-1 in Source-1 based on _test-template-1
+used in Birth of Person 1
+
+4:
+Citation-1 in Source-1 based on _test-template-1
+still has
+has media:
+	T:\Source-1 Citation-1 MEDIA ITEM 1 filename path
+webTag:
+	Source-1 Citation-1 WebTag 1
+
+
+
+=========================================================================DIV80==
+=========================================================================DIV80==
+Test Data= "TestData-Sample.rmtree" database 2025-06-15
+
+has 
+Person: RMID-1
+Has Birth fact
+Birth fact has 1 citation: 
+Citation-1 in Source-1 based on _test-template-1
+	in: Source-1 based on _test-template-1
+
+has sources
+Source-1 based on _test-template-1
+	Citation-1 in Source-1 based on _test-template-1
+	Citation-2 in Source-1 based on _test-template-1
+
+Source-2 based on _test-template-1
+	NULL
+
+Source-1 based on template ATLAS
+	NULL
+
+Source-1 based on _test-template-1
+has media:
+	Source-1 WebTag 1
+has WebTag:
+	T:\Source-1 MEDIA ITEM 1 filename path
+
+
+Citation-1 in Source-1 based on _test-template-1
+uses Source:
+	Source-1 based on _test-template-1
+has media:
+	T:\Source-1 Citation-1 MEDIA ITEM 1 filename path
+webTag:
+	Source-1 Citation-1 WebTag 1
+
+=========================================================================DIV80==
+=========================================================================DIV80==
