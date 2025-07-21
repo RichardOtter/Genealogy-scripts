@@ -18,11 +18,6 @@ import RMpy.launcher            # noqa #type: ignore
 #    FILE_PATHS  REPORT_FILE_PATH
 #    FILE_PATHS  REPORT_FILE_DISPLAY_APP
 
-
-#   TODO add new feature to allow multiple moves at once by entering
-#     a LIKE search criteria for Citation Name. Will probably want to
-#     limit search to the existing source citations.
-
 # ===================================================DIV60==
 def main():
 
@@ -32,19 +27,12 @@ def main():
     utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
     utility_info["config_file_name"] = "RM-Python-config.ini"
     utility_info["script_path"] = Path(__file__).parent
-    utility_info["run_features_function"] = run_selected_features
+    utility_info["run_features_function"] = change_source_feature
     utility_info["allow_db_changes"] = True
     utility_info["RMNOCASE_required"] = False
     utility_info["RegExp_required"] = False
 
     RMpy.launcher.launcher(utility_info)
-
-
-# ===================================================DIV60==
-def run_selected_features(config, db_connection, report_file):
-
-    change_source_feature(config, 
-                          db_connection, report_file)
 
 
 # ===========================================DIV50==

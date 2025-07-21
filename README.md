@@ -127,33 +127,33 @@ NOTE: the following lines substitute "me" for your user name, and NNN for the py
 Python may be installed for all users  or for only the current user.
 
 "All users" install goes into-\
-C:\Program File\Python
+C:\Program File\PythonNNN
 
 "Current user only" install goes into-\
-C:\Users\me\AppData\Local\Programs\Python\
+C:\Users\me\AppData\Local\Programs\PythonNNN\
 
 For a new install or each major upgrade of python, do the following:
 
 Adjust path to include-\
-C:\Users\me\AppData\Local\Programs\Python\PythonNNN\
+C:\Users\me\AppData\Local\Programs\PythonNNN\
 or\
 C:\Program File\Python\PythonNNN\
 so that one can start python with the command "python".
 
 If you don't add it, use the full path to run it-
-C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Python\
+C:\Users\me\AppData\Local\Programs\PythonNNN\python
 or\
-C:\Program File\Python\PythonNNN\Python
+C:\Program File\PythonNNN\python
 
 Adjust path to include-
-C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Scripts\
+C:\Users\me\AppData\Local\Programs\PythonNNN\Scripts\
 or\
-C:\Program File\Python\PythonNNN\Scripts
+C:\Program File\PythonNNN\Scripts
 
 If you don't add it, use full path to invoke-
-C:\Users\me\AppData\Local\Programs\Python\PythonNNN\Scripts\pip\
+C:\Users\me\AppData\Local\Programs\PythonNNN\Scripts\pip\
 or\
-C:\Program File\Python\PythonNNN\Scripts\pip
+C:\Program File\PythonNNN\Scripts\pip
 
 confirm pip is working by attempting to run it-
 
@@ -166,11 +166,17 @@ can start pip in several ways:
 | py -m pip | only available as optional install using installer from python web site |
 
 Install these packages:
+
 ```text
 python.exe -m pip install --upgrade pip
 
 pip install --upgrade PyYAML
+
+pip install --upgrade wakepy
 ```
+
+wakepy is used in some long-running scripts to keep computer awake\
+PyYAML is used by build scripts
 
 ## The following packages are NO LONGER USED  They were used for building frozen executables (exe files)
 
