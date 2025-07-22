@@ -19,9 +19,7 @@ def main():
     timestamp = datetime.now().strftime("%Y-%m-%d-%H%M%S")
 
     # file locations
-   # database_path = Path(r"C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree")
-   # database_path = Path(r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Test Data\TestData-RMpython.rmtree")
-    database_path = Path(r"E:\Users Overflow\ROtter external\Genealogy\Generated Output\DB Dump files\oldOtter-Saito.rmtree")
+    database_path = Path(r"C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree")
 
     dump_fldr_path = Path(r"E:\Users Overflow\ROtter external\Genealogy\Generated Output\DB Dump files")
     dump_file = F'Otter-Saito-sql-dump-{timestamp}.sql'
