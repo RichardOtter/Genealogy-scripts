@@ -1,0 +1,33 @@
+CitationSortOrder.py
+
+Version: 1.1.0
+to be in suite v1.1.0
+New feature release
+
+User can now reorder more than one citation list without restarting the app.
+
+Uses RMpy package v1.2.0
+    Allows specification of config file on command line
+
+Testing:
+Tested with new environment: procedure and standard test database.
+
+Doc:
+ReadMe now uses template and library for consistency.
+
+Code improvements:
+Better error checking of entered text.
+Improved wording of prompts.
+
+
+=========================================================================DIV80==
+v1.0.3
+in suite v1.0.2
+
+=========================================================================DIV80==
+v1.0.0
+First release.
+Allows user to re-order the listing of citations attached to 
+Persons, Names, or Facts.
+
+

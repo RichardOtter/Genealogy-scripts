@@ -1,0 +1,54 @@
+ChangeSourceTemplate.py
+
+Version: 1.2.0
+to be in suite v1.1.0
+New feature release
+
+uses RMpy package v1.2
+    Allows specification of config file on command line
+
+Testing:
+Tested with new environment: procedure and standard test database.
+
+Doc:
+ReadMe now uses template and library for consistency.
+
+Code improvements:
+Adjust placement of COLLATE NOCASE in SQL statements.
+
+
+
+=========================================================================DIV80==
+v1.1.2
+released in suite v1.0.2
+
+Fixed a loss of function.
+App now, again fixes sources and citations that have missing XML filed elements
+due to them being created with a older template, before that field was added.
+Symptom- 
+Say a template T1, has 2 fields, F1 and F2
+Some sources S1 and S2 are created using template T1.
+
+Now the template T1 is changed by editing it to add a field, F3.
+The T1 template also has its footnote sentence adjusted to use the new field F3.
+The edited template T1 is now called T1'
+
+Now some more sources, S3 and S4, are created using template T1'
+The user entered text for field F3 in S3, but left field F3 blank in S4.
+
+Looking at the footnotes displayed in RM that are generated from T1',
+one sees that source S3 and S4 look as expected. The F3 in S3 shows the text that
+was entered for F3, and in S4, the F3 prints as blank.
+
+However the footnotes from S1 and S2 are unexpected. 
+Those sources do not have data in field F3. In fact, they don't 
+even have a field F3. Any reference to F3 in the footnote sentence, 
+by "[F3]" will, in the footnote, print out as "[F3]" not as "" as expected.
+
+To fix, this utility can add the empty field F3 to the existing source S1 and S2.
+
+This can be accomplished by copying the Template T1' to T1'-copy.
+The T1'-copy can have changes like better names, or no changes at all.
+Just map all of the fields to themselves and run the utility.
+Each source and citation will be checked for missing fields and fixed if necessary.
+

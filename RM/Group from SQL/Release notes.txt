@@ -1,0 +1,28 @@
+GroupFromSQL.py
+
+Version: 1.4.0
+to be in suite v1.1.0
+New feature release
+
+uses RMpy package v1.2
+    Allows specification of config file on command line
+
+Testing:
+Tested with new environment: procedure and standard test database.
+
+Doc:
+ReadMe now uses template and library for consistency.
+
+
+=========================================================================DIV80==
+v1.3.3
+released in suite v1.0.2
+
+=========================================================================DIV80==
+v1.3.0
+Now allows multiple line values for key GROUP_NAME
+
+Each assigned group name, one per line, is updated in the same run.
+
+Improved output format.
+

@@ -1,0 +1,4 @@
+First release
+v1.0
+Lumps sources
+Used for Newspapers so far

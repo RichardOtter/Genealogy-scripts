@@ -1,0 +1,29 @@
+TestExternalFiles.py
+
+Version: 1.9.0
+to be in suite v1.1.0
+New feature release
+
+uses RMpy package v1.2
+    Allows specification of config file on command line
+
+Testing:
+Tested with new environment: procedure and standard test database.
+
+Doc:
+ReadMe now uses template and library for consistency.
+
+Code improvements:
+Adds hidden testing feature to allow setting of media folder while testing
+
+
+=========================================================================DIV80==
+v1.8.2
+Bug fix-
+1.8.1 would fail if a file was saved relative to the user's home dir.
+This was introduced in 1.8.1 in moving from os to pathlib for path handling.
+
+
+=========================================================================DIV80==
+v1.8.4 
+released in suite 1.0.2

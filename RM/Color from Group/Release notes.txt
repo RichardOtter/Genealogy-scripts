@@ -1,0 +1,23 @@
+ColorFromGroup.py
+
+Version: 1.1.0
+to be in suite v1.1.0
+New feature release
+
+Added 2 new color action types
+Fixed bug preventing access to color group 1
+
+Uses RMpy package v1.2.0
+    Allows specification of config file on command line
+
+Testing:
+Tested with new environment: procedure and standard test database.
+
+Doc:
+ReadMe now uses template and library for consistency.
+
+
+=========================================================================DIV80==
+v1.0.2
+released in suite v1.0.2
+

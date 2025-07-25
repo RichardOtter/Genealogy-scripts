@@ -1,0 +1,17 @@
+RMpy package
+
+Version: 1.2.0
+to be in suite v1.1.0
+New feature release
+
+Allows specification of config file on command line
+
+Code improvements:
+minor change in import order
+
+
+=========================================================================DIV80==
+v1.1.0
+released in suite v1.0.2
+
+

@@ -1,0 +1,13 @@
+RunSQL.py
+
+Version: 1.3.0
+to be in suite v1.1.0
+New feature release
+
+uses RMpy package v1.2
+    Allows specification of config file on command line
+
+
+=========================================================================DIV80==
+v1.2.2
+released in suite v1.0.2
