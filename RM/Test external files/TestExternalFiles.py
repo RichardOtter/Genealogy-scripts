@@ -73,6 +73,8 @@ def main():
 def run_selected_features(config, db_connection, report_file):
 
     global G_db_file_folder_path
+    global G_media_directory_path
+
     # used only in function expand_relative_dir_path, but no access to config there.
     parent_dir = Path(config['FILE_PATHS']['DB_PATH']).parent
     # get the absolute path in case the DB_PATH was relative
@@ -92,10 +94,17 @@ def run_selected_features(config, db_connection, report_file):
         config['OPTIONS'].getboolean('NOT_MEDIA_FLDR')
         config['OPTIONS'].getboolean('SHOW_ORIG_PATH')
         config['OPTIONS'].getboolean('CASE_INSENSITIVE')
+        config['OPTIONS'].getboolean('TESTING_USE_LOCAL_RM_XML')
 
     except:
         raise RMc.RM_Py_Exception(
             "One of the OPTIONS values could not be interpreted as either on or off.\n")
+
+    if config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER'):
+        # app is in test mode. Set the path to the RM media folder
+        # overriding what might be in the production RM xml config file
+        G_media_directory_path = parent_dir / 'media'
+
 
     # Run all of the requested options.
     if config['OPTIONS'].getboolean('CHECK_FILES'):
