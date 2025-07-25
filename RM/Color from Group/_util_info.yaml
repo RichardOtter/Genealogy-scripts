@@ -1,8 +1,8 @@
 
 UtilityName:  ColorFromGroup
 
-# Last Release v1.0.1
-Version: 1.1
+# Last Release v1.0.2
+Version: 1.1.0
 
 BuildFileList:
   - ColorFromGroup.py

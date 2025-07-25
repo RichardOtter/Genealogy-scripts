@@ -1,8 +1,8 @@
 
 UtilityName:  GroupFromSQL
 
-# Last Release v1.3.2
-Version: 1.3.3
+# Last Release v1.3.3
+Version: 1.4.0
 
 DistributionFileList:
   - GroupFromSQL.py

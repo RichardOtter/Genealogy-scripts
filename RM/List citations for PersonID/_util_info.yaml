@@ -1,8 +1,8 @@
 
 UtilityName:  ListCitationsForPersonID
 
-# Last Release  1.1.1
-Version: 1.1.2
+# Last Release  1.1.2
+Version: 1.2.0
 
 DistributionFileList:
   - ListCitationsForPersonID.py
