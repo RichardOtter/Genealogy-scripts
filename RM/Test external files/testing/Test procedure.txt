@@ -1,0 +1,413 @@
+Have TestExternalFiles.py and RMpy package ready to test in its normal
+development location.
+Confirm the files in testing and in TestData are ready.
+
+Create a C:\Users\Test folder and give yourself full access right to it.
+
+If Users\Test was previously created, remove all files from it.
+Run the create_and_remove script with the 'create' option.
+
+In \Users\Test, run the shortcut- __Run TestExternalFiles with test.ini
+
+Examine the \Users\Test\Report.txt generated and compare with the report shown below.
+
+
+Ignore file testing
+
+Default gitignore ignores 2 files.Confirm in initial run against initial report.
+Then edit Ignore file and uncomment-
+# **/sub1
+=>
+**/sub1
+# of files in media folder will go from 17 to 4.
+i.e. the **/dub1 ignores the entire sub1 folder and contents and sub folders.
+
+
+Annotated version follows the original.
+
+Test database as of 2025-07-24
+
+media folder
+19 files, 3 folders  confirmed by manual counting
+confirmed by Properties in explorer.
+
+7 files outside of media folder
+	2 in F:
+	1 in G;
+	2 in Home (rotter)
+	2 in \Users\Test
+
+
+=========================================================================DIV80==
+=========================================================================DIV80==
+=========================================================================DIV80==
+=========================================================================DIV80==
+Original
+=========================================================================DIV80==
+
+
+Report generated at      = 2025-07-24 13:44:31
+Utility name             = TestExternalFiles
+Utility version          = vUTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE
+Python version           = v3.13.5
+SQLite library version   = v3.49.1
+Database last changed on = 2025-07-24 13:41:54
+Database processed       = C:\Users\Test\RM_test_root\TestData-RMpython.rmtree
+
+
+
+
+===============================================================DIV70==
+=== Start of "Files Not Found" listing
+
+
+Path does not lead to a file (perhaps a folder):
+"C:\Users\Test\RM_test_root\media\sub1" 
+Path stored in database:   "?\" 
+
+Directory path cannot be found:
+"C:\Users\Test\RM_test_root\media\DBTest file s1 01.jpg"
+for file: " "
+Path stored in database:   "?\DBTest file s1 01.jpg"
+
+File path not found:
+"C:\Users\Test\RM_test_root\media\sub1"
+for file: "DB test -not found.jpg" 
+Path stored in database:   "?\sub1" 
+
+Number of file links in database not found on disk: 3 
+
+=== End of "Files Not Found" listing
+
+===============================================================DIV70==
+=== Start of "Unreferenced Files" listing
+
+".\sub1\ssub1\DBTest file ss1 Unref.jpg"
+".\sub1\ssub1-unref\DBTest file ss1 unref01.jpg"
+".\sub1\ssub1-unref\DBTest file ss1 unref02.jpg"
+
+Files in processed folder not referenced by the database: 3
+
+    Folder processed:  C:\Users\Test\RM_test_root\media
+    Number of files in folder: 17 (exclusive of ignored items)
+    Number of database file links: 28
+    # DB links minus # non-ignored files: 11 
+
+=== End of "Unreferenced Files" listing
+
+===============================================================DIV70==
+=== Start of "Files with no Tags" listing
+
+"C:\Users\Test\RM_test_root\DBTest file -in database dir1.txt" 
+Path in database:  "*"
+"C:\Users\Test\RM_test_root\test dir\DBTest file -in database dir2.txt" 
+Path in database:  "*\test dir"
+"C:\Users\Test\RM_test_root\media\DBTest file 01.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file 02.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file 03.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file 04.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file 05.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\sub1" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file s1 01.jpg\ " 
+Path in database:  "?\DBTest file s1 01.jpg"
+"C:\Users\Test\RM_test_root\media\sub1\DB test -not found.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\DBTest file s1 01.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\DBTest file s1 02.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\DBTest file s1 03.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\DBTest file ss1 dupFileName.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 01.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 02.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 03.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 dup_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 dup_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 dupFileName.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 trp_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 trp_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 trp_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"G:\My Drive\DBTest-file in GoogleDrive.txt" 
+Path in database:  "G:\My Drive"
+"C:\Users\rotter\DBTest file -in home dir1.txt" 
+Path in database:  "~"
+"C:\Users\rotter\test dir to check TEF\DBTest file -in home dir2.txt" 
+Path in database:  "~\test dir to check TEF"
+
+=== End of "Files with no Tags" listing
+
+===============================================================DIV70==
+=== Start of "Duplicated File Names" listing
+
+"DBTest file ss1 dup_In_DB.jpg"
+"DBTest file ss1 dupFileName.jpg"
+"DBTest file ss1 trp_In_DB.jpg"
+
+=== End of "Duplicated File Names" listing
+
+===============================================================DIV70==
+=== Start of "Duplicated File Paths" listing
+
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 dup_In_DB.jpg"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 trp_In_DB.jpg"
+
+=== End of "Duplicated File Paths" listing
+
+===============================================================DIV70==
+=== Start of "Files Not in Media Folder" listing
+
+C:\Users\Test\RM_test_root\DBTest file -in database dir1.txt 
+Path in database:   "*"
+
+C:\Users\Test\RM_test_root\test dir\DBTest file -in database dir2.txt 
+Path in database:   "*\test dir"
+
+F:\DBTest file -in abs dir1.txt 
+Path in database:   "F:\"
+
+F:\test dir to check TEF\DBTest file -in abs dir2.txt 
+Path in database:   "F:\test dir to check TEF"
+
+G:\My Drive\DBTest-file in GoogleDrive.txt 
+Path in database:   "G:\My Drive"
+
+C:\Users\rotter\DBTest file -in home dir1.txt 
+Path in database:   "~"
+
+C:\Users\rotter\test dir to check TEF\DBTest file -in home dir2.txt 
+Path in database:   "~\test dir to check TEF"
+
+
+Number of file links in database not in Media Folder: 7 
+
+=== End of "Files Not in Media Folder" listing
+
+===============================================================DIV70==
+=== End of Report
+
+
+
+=========================================================================DIV80==
+=========================================================================DIV80==
+=========================================================================DIV80==
+=========================================================================DIV80==
+Annotated
+=========================================================================DIV80==
+
+
+Report generated at      = 2025-07-24 13:44:31
+-----should show current date
+
+Utility name             = TestExternalFiles
+Utility version          = vUTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE
+-----Released version must show actual version info
+
+Python version           = v3.13.5
+SQLite library version   = v3.49.1
+Database last changed on = 2025-07-24 13:41:54
+Database processed       = C:\Users\Test\RM_test_root\TestData-RMpython.rmtree
+
+-----Confirm that this is the database under test
+
+
+
+===============================================================DIV70==
+=== Start of "Files Not Found" listing
+
+
+Path does not lead to a file (perhaps a folder):
+"C:\Users\Test\RM_test_root\media\sub1" 
+Path stored in database:   "?\" 
+
+-----Database specifies a folder as the filename.
+
+
+Directory path cannot be found:
+"C:\Users\Test\RM_test_root\media\DBTest file s1 01.jpg"
+for file: " "
+Path stored in database:   "?\DBTest file s1 01.jpg"
+
+-----Database specifies a file for the folder name.
+-----Could this ever work.
+-----Should try a path that is absolute.
+
+File path not found:
+"C:\Users\Test\RM_test_root\media\sub1"
+for file: "DB test -not found.jpg" 
+Path stored in database:   "?\sub1" 
+
+-----Normal missing file, but folder is present.
+
+Number of file links in database not found on disk: 3 
+
+=== End of "Files Not Found" listing
+
+===============================================================DIV70==
+=== Start of "Unreferenced Files" listing
+
+".\sub1\ssub1\DBTest file ss1 Unref.jpg"
+".\sub1\ssub1-unref\DBTest file ss1 unref01.jpg"
+".\sub1\ssub1-unref\DBTest file ss1 unref02.jpg"
+
+-----These three files are unreferenced by the DB.
+-----Tested in 2 different dirs. Can test gitignore patterns
+-----TestExternalFiles_ignore.txt  and  DBTest file 02.jpg
+
+Files in processed folder not referenced by the database: 3
+
+    Folder processed:  C:\Users\Test\RM_test_root\media
+    Number of files in folder: 17 (exclusive of ignored items)
+    Number of database file links: 28
+    # DB links minus # non-ignored files: 11 
+
+-----gitignore is ignoring 2 files in media
+-----other files cannot be ignored but are not counted.
+-----22 files in media, 2 ignored => 20  ???
+
+=== End of "Unreferenced Files" listing
+
+===============================================================DIV70==
+=== Start of "Files with no Tags" listing
+
+"C:\Users\Test\RM_test_root\DBTest file -in database dir1.txt" 
+Path in database:  "*"
+"C:\Users\Test\RM_test_root\test dir\DBTest file -in database dir2.txt" 
+Path in database:  "*\test dir"
+"C:\Users\Test\RM_test_root\media\DBTest file 01.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file 02.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file 03.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file 04.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file 05.jpg" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\sub1" 
+Path in database:  "?\"
+"C:\Users\Test\RM_test_root\media\DBTest file s1 01.jpg\ " 
+Path in database:  "?\DBTest file s1 01.jpg"
+"C:\Users\Test\RM_test_root\media\sub1\DB test -not found.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\DBTest file s1 01.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\DBTest file s1 02.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\DBTest file s1 03.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\DBTest file ss1 dupFileName.jpg" 
+Path in database:  "?\sub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 01.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 02.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 03.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 dup_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 dup_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 dupFileName.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 trp_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 trp_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 trp_In_DB.jpg" 
+Path in database:  "?\sub1\ssub1"
+"G:\My Drive\DBTest-file in GoogleDrive.txt" 
+Path in database:  "G:\My Drive"
+"C:\Users\rotter\DBTest file -in home dir1.txt" 
+Path in database:  "~"
+"C:\Users\rotter\test dir to check TEF\DBTest file -in home dir2.txt" 
+Path in database:  "~\test dir to check TEF"
+
+=== End of "Files with no Tags" listing
+
+===============================================================DIV70==
+=== Start of "Duplicated File Names" listing
+
+"DBTest file ss1 dup_In_DB.jpg"
+"DBTest file ss1 dupFileName.jpg"
+"DBTest file ss1 trp_In_DB.jpg"
+
+=== End of "Duplicated File Names" listing
+
+===============================================================DIV70==
+=== Start of "Duplicated File Paths" listing
+
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 dup_In_DB.jpg"
+"C:\Users\Test\RM_test_root\media\sub1\ssub1\DBTest file ss1 trp_In_DB.jpg"
+
+=== End of "Duplicated File Paths" listing
+
+===============================================================DIV70==
+=== Start of "Files Not in Media Folder" listing
+
+C:\Users\Test\RM_test_root\DBTest file -in database dir1.txt 
+Path in database:   "*"
+
+C:\Users\Test\RM_test_root\test dir\DBTest file -in database dir2.txt 
+Path in database:   "*\test dir"
+
+F:\DBTest file -in abs dir1.txt 
+Path in database:   "F:\"
+
+F:\test dir to check TEF\DBTest file -in abs dir2.txt 
+Path in database:   "F:\test dir to check TEF"
+
+G:\My Drive\DBTest-file in GoogleDrive.txt 
+Path in database:   "G:\My Drive"
+
+C:\Users\rotter\DBTest file -in home dir1.txt 
+Path in database:   "~"
+
+C:\Users\rotter\test dir to check TEF\DBTest file -in home dir2.txt 
+Path in database:   "~\test dir to check TEF"
+
+
+Number of file links in database not in Media Folder: 7 
+
+-----These results conform to test environment setup.
+-----Confirm relative path marker ~ for home folder and ^ for database folder.
+
+
+=== End of "Files Not in Media Folder" listing
+
+===============================================================DIV70==
+=== End of Report
+
+
+=========================================================================DIV80==
+=========================================================================DIV80==
+=========================================================================DIV80==
+=========================================================================DIV80==
+=========================================================================DIV80==
+
+
+
+
+Confirmed 
+filename ignores the file
+filename* ignores filename* everywhere
+dirname  ignores the dir and contents when it is at the top level (directly in media)
+*/dirname  ignores the dir and contents when it is within a top level folder
+**/dirname  ignores the dir and contents every where.
+**/sub1/*jpg ignores jpg files in a sub1 folder where ever it is, but sub folders not ignored.

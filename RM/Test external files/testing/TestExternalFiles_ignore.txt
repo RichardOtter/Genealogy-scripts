@@ -1,6 +1,5 @@
 
-
-
+TestExternalFiles_ignore.txt
 
 DBTest file 02.jpg
-**/sub1/*
+
