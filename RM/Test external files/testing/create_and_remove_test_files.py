@@ -46,20 +46,26 @@ def main():
     test_db_file = 'TestData-RMpython.rmtree'
     test_ignore_file = 'TestExternalFiles_ignore.txt'
     test_ini_file ='test.ini'
+    test_run_TEF_shortcut = '__Run TestExternalFiles with test.ini.lnk'
 
 
                            
     file_fldr_list =[
         #      Base folder            created test folder         Test File
-#        (r'G:\My Drive',              r'',                        'DBTest-file in GoogleDrive.txt '),
-#        (r'F:' + '\\',                r'',                        'DBTest file -in abs dir1.txt'),
-#        (r'F:'+'\\',                  r'test dir to check TEF',   'DBTest file -in abs dir2.txt '),
-#        (r'C:\Users\rotter',         r'',                              'DBTest file -in home dir1.txt '),
-#        (r'C:\Users\rotter',         r'test dir to check TEF',         'DBTest file -in home dir2.txt ')
+        (r'G:\My Drive',              r'',                        'DBTest-file in GoogleDrive.txt'),
 
-        (r'C:\Users\Test',            r'',                            'DBTest file -above database dir1.txt'),
-        (r'C:\Users\Test',            r'test dir',                    ''),
-        (r'C:\Users\Test',            r'test dir',                    'DBTest file -above database dir2.txt'),
+        (r'F:' + '\\',                r'',                        'DBTest file -in abs dir1.txt'),
+        (r'F:'+'\\',                  r'test dir to check TEF',   ''),
+        (r'F:'+'\\',                  r'test dir to check TEF',   'DBTest file -in abs dir2.txt'),
+
+        (r'C:\Users\rotter',         r'',                        'DBTest file -in home dir1.txt'),
+
+        (r'C:\Users\rotter',         r'test dir to check TEF',   ''),
+        (r'C:\Users\rotter',         r'test dir to check TEF',   'DBTest file -in home dir2.txt'),
+
+        (r'C:\Users\Test',            r'',                    'DBTest file -above database dir1.txt'),
+        (r'C:\Users\Test',            r'test dir',            ''),
+        (r'C:\Users\Test',            r'test dir',            'DBTest file -above database dir2.txt'),
 
         (r'C:\Users\Test',            r'RM_test_root',           ''),
         (r'C:\Users\Test',            r'RM_test_root',           'DBTest file -in database dir1.txt'),
@@ -78,20 +84,37 @@ def main():
         (r'C:\Users\Test',            r'RM_test_root\media\sub1',  'DBTest file s1 01.jpg'),
         (r'C:\Users\Test',            r'RM_test_root\media\sub1',  'DBTest file s1 02.jpg'),
         (r'C:\Users\Test',            r'RM_test_root\media\sub1',  'DBTest file s1 03.jpg'),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1',  'DBTest file ss1 dupFileName.jpg'),
+
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1',  ''),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1',  'DBTest file ss1 01.jpg'),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1',  'DBTest file ss1 02.jpg'),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1',  'DBTest file ss1 03.jpg'),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1',  'DBTest file ss1 dupFileName.jpg'),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1',  'DBTest file ss1 dup_In_DB.jpg'),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1',  'DBTest file ss1 trp_In_DB.jpg'),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1',  'DBTest file ss1 Unref.jpg'),
+
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1-unref',  ''),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1-unref',  'DBTest file ss1 unref01.jpg'),
+        (r'C:\Users\Test',            r'RM_test_root\media\sub1\ssub1-unref',  'DBTest file ss1 unref02.jpg')
 
     ]
 
     db_file_in_test_root = RM_test_root / test_db_file
     ignore_file_in_test_media = RM_test_media / test_ignore_file
-    ini_file_RM_test_root = RM_test_root / '..' / test_ini_file
+    ini_file_in_RM_test = RM_test_root / '..' / test_ini_file
+    test_run_TEF_shortcut_in_RM_test = RM_test_root / '..' / test_run_TEF_shortcut
 
     if action == 'remove':
         if db_file_in_test_root.exists():
             db_file_in_test_root.unlink()
         if ignore_file_in_test_media.exists():
             ignore_file_in_test_media.unlink()
-        if ini_file_RM_test_root.exists():
-            ini_file_RM_test_root.unlink()
+        if ini_file_in_RM_test.exists():
+            ini_file_in_RM_test.unlink()
+        if test_run_TEF_shortcut_in_RM_test.exists():
+            test_run_TEF_shortcut_in_RM_test.unlink()
 
 
     iterable = file_fldr_list
@@ -135,8 +158,10 @@ def main():
             shutil.copyfile( test_db_home_fldr / test_db_file, db_file_in_test_root)
         if not ignore_file_in_test_media.exists():
             shutil.copyfile( test_files_home_fldr / test_ignore_file, ignore_file_in_test_media)
-        if not ini_file_RM_test_root.exists():
-            shutil.copyfile( test_files_home_fldr / test_ini_file, ini_file_RM_test_root)
+        if not ini_file_in_RM_test.exists():
+            shutil.copyfile( test_files_home_fldr / test_ini_file, ini_file_in_RM_test)
+        if not test_run_TEF_shortcut_in_RM_test.exists():
+            shutil.copyfile( test_files_home_fldr / test_run_TEF_shortcut, test_run_TEF_shortcut_in_RM_test)
 
 
 # using \Users|test is safer in that can't delete files in rotter
