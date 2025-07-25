@@ -6,8 +6,11 @@ Create a C:\Users\Test folder and give yourself full access right to it.
 
 If Users\Test was previously created, remove all files from it.
 Run the create_and_remove script with the 'create' option.
+Two shortcuts are provided in testing folder for create and remove files.
 
-In \Users\Test, run the shortcut- __Run TestExternalFiles with test.ini
+In \Users\Test, run the TestExternalFiles.py script with the test.ini as argument.
+shortcut- __Run TestExternalFiles with test.ini does this and is copied
+to the \Users\Test folder for convenience.
 
 Examine the \Users\Test\Report.txt generated and compare with the report shown below.
 
