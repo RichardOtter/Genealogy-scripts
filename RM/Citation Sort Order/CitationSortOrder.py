@@ -22,6 +22,12 @@ import RMpy.RMDate              # noqa #type: ignore
 # TODO  support associations, tasks, fam facts
 
 # ===================================================DIV60==
+#  Globals
+
+G_RIN_offset = int(10**12)
+
+
+# ===================================================DIV60==
 def main():
 
     # Configuration
@@ -52,7 +58,7 @@ def change_citation_order_feature(config, db_connection, report_file):
 
         # request the PersonID / RIN
         response_RIN = input('Enter the RIN of the person who has '
-                             'the citations to reorder, or q to quit the app:\n')
+                             'the citations to modify, or q to quit the app:\n')
         if response_RIN == '':
             continue
         if response_RIN in 'Qq':
@@ -72,7 +78,7 @@ def change_citation_order_feature(config, db_connection, report_file):
         # Now ask for the kind of object the citation list is attached to
         while True:
             response_attachment = input(
-                '\nIs the citation list that is to be re-ordered attached to:\n'
+                '\nIs the citation list that is to be modified attached to:\n'
                 'a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:\n')
 
             if response_attachment == "":
@@ -165,7 +171,7 @@ ORDER BY clt.SortOrder ASC;
     cur.execute(SqlStmt, (NameID, ))
     rows = cur.fetchall()
 
-    rowDict = order_the_list(rows, db_connection, report_file)
+    rowDict = modify_local_citation_list(rows, db_connection, report_file)
 
     return
 
@@ -229,14 +235,14 @@ SELECT et.EventID, ftt.Name, et.Date, et.Details
   FROM EventTable AS et
   INNER JOIN FactTypeTable AS ftt ON ftt.FactTypeID = et.EventType
   INNER JOIN CitationLinkTable AS clt ON clt.OwnerID = et.EventID AND clt.OwnerType = 2
-  WHERE et.OwnerID = ?
+  WHERE (et.OwnerID = ? OR et.OwnerID = ?)
     AND et.OwnerType = 0
     AND et.EventType = ?
 GROUP BY et.EventID
 HAVING COUNT() > 1;
 """
         cur = db_connection.cursor()
-        cur.execute(SqlStmt, (PersonID, FactTypeID))
+        cur.execute(SqlStmt, (PersonID, PersonID + G_RIN_offset, FactTypeID))
         rows = cur.fetchall()
 
     number_of_events = len(rows)
@@ -245,7 +251,7 @@ HAVING COUNT() > 1;
         print(F'{number_of_events} events found having more than'
               ' 1 attached citation.')
         EventID = select_fact_from_list(rows)
-        order_the_list(rows, report_file)
+        modify_local_citation_list(rows, report_file)
 
     elif number_of_events == 0:
         raise RMc.RM_Py_Exception(
@@ -256,7 +262,7 @@ HAVING COUNT() > 1;
             rows[0][2], RMpy.RMDate.Format.SHORT)
         print('Found one event with more than one citation.\n' +
               F'{rows[0][1]}:    {temp_date}  {rows[0][3]}\n\n')
-        order_the_list(rows, report_file)
+        modify_local_citation_list(rows, report_file)
 
     return
 
@@ -270,7 +276,7 @@ SELECT et.EventID, ftt.Name, et.Date, et.Details
   FROM EventTable AS et
   INNER JOIN FactTypeTable AS ftt ON ftt.FactTypeID = et.EventType
   INNER JOIN CitationLinkTable AS clt ON clt.OwnerID = et.EventID
-  WHERE et.OwnerID = ?
+  WHERE (et.OwnerID = ? OR et.OwnerID = ?)
     AND et.OwnerType = 0
     AND clt.OwnerType = 2
 GROUP BY et.EventID
@@ -313,7 +319,7 @@ HAVING COUNT() > 1;
     cur.execute(SqlStmt, (EventID, ))
     rows = cur.fetchall()
 
-    rowDict = order_the_list(rows, db_connection, report_file)
+    rowDict = modify_local_citation_list(rows, db_connection, report_file)
     return
 
 
@@ -348,8 +354,16 @@ def attached_to_person(PersonID, db_connection, report_file):
 # Only one citation list is associated with the RIN
 # So retrieve that list immediately
 
+# Third  return value is a flag for "hidden" 0 is visible, 1 (true)is hidden
     SqlStmt = """
-SELECT clt.SortOrder, clt.LinkID, st.Name, ct.CitationName
+SELECT clt.SortOrder, clt.LinkID, 0, st.Name COLLATE NOCASE, ct.CitationName COLLATE NOCASE
+  FROM CitationTable AS ct
+  JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
+  JOIN SourceTable AS st ON ct.SourceID = st.SourceID
+  WHERE clt.OwnerID = ?
+    AND clt.OwnerType = 0
+UNION
+SELECT clt.SortOrder, clt.LinkID, 1, st.Name , ct.CitationName COLLATE NOCASE
   FROM CitationTable AS ct
   JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
   JOIN SourceTable AS st ON ct.SourceID = st.SourceID
@@ -358,81 +372,93 @@ SELECT clt.SortOrder, clt.LinkID, st.Name, ct.CitationName
 ORDER BY clt.SortOrder ASC;
 """
     cur = db_connection.cursor()
-    cur.execute(SqlStmt, (PersonID, ))
+    cur.execute(SqlStmt, (PersonID, PersonID + G_RIN_offset))
+
     rows = cur.fetchall()
 
     if len(rows) >1:
-        rowDict = order_the_list(rows, db_connection, report_file)
+        rowDict = modify_local_citation_list(rows, db_connection, report_file)
         return
     else:
         print("Person does not have more than one citations attached")
         return
 
 
-
 # ===========================================DIV50==
-def order_the_list(rows, db_connection, report_file):
+def modify_local_citation_list(rows, db_connection, report_file):
 
-    list_len = len(rows)
-    rowDict = dict()
     # Create the origin 1 based dictionary
-    # Use 1 based indexing for human users
-    for i in range(0, list_len):
-        rowDict[i+1] = ((rows[i][1], (rows[i][2], rows[i][3])))
+    # Use 1 based indexing for human user
+    rowDict = dict()
+
+#  0 clt.SortOrder
+#  1 clt.LinkID
+#  2 HIDDEN flag
+#  3 st.Name
+#  4 ct.CitationName
+
+    for i in range(0, len(rows)):
+        rowDict[i+1] = [rows[i][1], rows[i][2], (rows[i][3], (rows[i][4])[0:50])]
+
+#         rowDict key = cit order index starting at 1
+#         rowDict value
+#  [0]    clt.LinkID
+#  [1]    HIDDEN flag
+#  [2][0] st.Name
+#  [2][1] ct.CitationName
 
     print(
         '\n'
         '------------------------------------------------------\n'
-        'To re-order citations, at each prompt, enter one of:\n'
+        'To modify the citation list, at each prompt, enter a commands:\n'
         '*  the number of the citation that should go into this slot.\n'
         '* or\n'
-        '*  nothing    to accept current line as it is.\n'
+        '*  h to toggle hidden / visible.\n'
+        '*  nothing    to accept current line as it is and move to the next.\n'
         '*  s          to accept current and following slots as they are.\n'
         '*  a          to abort and make no changes.\n'
         '------------------------------------------------------\n')
-
+    
     # Print the list in current order
     report_file.write("\n\n Current order \n")
-    for i in range(1, list_len + 1):
-        message = F'{i}     {rowDict[i][1]}'
-        print(message)
-        report_file.write(message + '\n')
+    list_output(rowDict, report_file)
 
     done_with_this_list = False
     while not done_with_this_list:
         j = 1  # indexing is 1-based
-        while j < list_len:
-            response = str(input(
-                F'\nWhich line should be '
-                F'swapped into position # {j} : '))
+        while j < len(rowDict):
+            response = str(input(F'\Enter a command for line # {j} : '))
             if response == '':
                 j = j + 1
                 continue
-            elif response in 'S s':
+            elif response in 'Hh':
+                # Toggle the hidden attribute
+                rowDict[j][1] = not rowDict[j][1]
+                list_output(rowDict)
+                continue
+            elif response in 'Ss':
                 break
-            elif response in 'A a':
+            elif response in 'Aa':
                 raise RMc.RM_Py_Exception("No changes made to this list.")
             else:
                 try:
                     swapVal = int(response)
-                    if swapVal < (j + 1) or swapVal > (list_len):
-                        print(F'Integer must be in the range {j+1}-{list_len}')
+                    if swapVal < (j + 1) or swapVal > (len(rowDict)):
+                        print(F'Integer must be in the range {j+1}-{len(rowDict)}')
                         continue
                 except ValueError:
                     print('Enter an integer, blank,  or S or s or A or a')
                     continue
+            #  Python swap mechanism using tuples
             rowDict[swapVal], rowDict[j] = rowDict[j], rowDict[swapVal]
             j = j + 1
             print("\n\n")
-            for i in range(1, list_len + 1):
-                print(i, rowDict[i][1])
+            list_output(rowDict)
         # End while j
 
-        print("\n\n")
-
         # Print order after a round of sorting
-        for i in range(1, list_len + 1):
-            print(i, rowDict[i][1])
+        print("\n\n")
+        list_output(rowDict, report_file)
 
         response = input(
             '\n\n'
@@ -445,10 +471,8 @@ def order_the_list(rows, db_connection, report_file):
         if response in "Yy":
             # Print order after a round of sorting
             report_file.write("\n\n Current order \n")
-            for i in range(1, list_len + 1):
-                message = F'{i}   {rowDict[i][1]}'
-                print(message)
-                report_file.write(message + '\n')
+            list_output(rowDict, report_file)
+
             UpdateDatabase(rowDict, db_connection)
             done_with_this_list = True
 
@@ -460,15 +484,39 @@ def order_the_list(rows, db_connection, report_file):
 
         elif response in "Nn":
             print('Try another round of re-ordering.\n\n')
-            for i in range(1, list_len + 1):
-                message = F'{i}     {rowDict[i][1]}'
-                print(message)
-
+            list_output(rowDict)
             done_with_this_list = False
 
         print("\n\n")
 
     return rowDict
+
+
+# ===========================================DIV50==
+def list_output(rowDict, report_file = None ):
+    for key, value in sorted(rowDict.items()):
+        message = F'{key}   {"HIDDEN " if value[1] else "VISIBLE"}  {value[2][0][0:40]:<43}    {value[2][1][0:50]}'
+        print(message)
+        if report_file is not None:
+            report_file.write(message + '\n')
+
+
+#     for key, value in sorted(rowDict).items():
+
+
+#    for i in range(1, list_len + 1):
+#        message = F'{i}   {"HIDDEN " if rowDict[i][1] else "VISIBLE"}  {rowDict[i][2][0][0:40]:<43}    {rowDict[i][2][1][0:50]}'
+#        print(message)
+#        if report_file is not None:
+#            report_file.write(message + '\n')
+
+#    lens = []
+#    for col in zip(*rows):
+#        lens.append(max([len(v) for v in col]))
+#    format = "  ".join(["{:<" + str(l) + "}" for l in lens])
+#    for row in rows:
+#        print(format.format(*row))
+
 
 # ===========================================DIV50==
 def valid_PersonID(PersonID, dbConnection, report_file):
@@ -499,10 +547,13 @@ WHERE nt.OwnerID = ?
 # ===========================================DIV50==
 def UpdateDatabase(rowDict, db_connection):
 
+    adjust_OwnerID_for_visibility(rowDict)
+
     # Now update the SortOrder column for the given Citation Links
     SqlStmt = """
 UPDATE  CitationLinkTable AS clt
-  SET SortOrder = ?
+  SET SortOrder = ?,
+      OwnerID = ?,
   WHERE LinkID = ?;
 """
     for i in range(1, len(rowDict)+1):
@@ -512,6 +563,11 @@ UPDATE  CitationLinkTable AS clt
 
     return
 
+# ===================================================DIV60==
+def adjust_OwnerID_for_visibility(rowDict):
+    # Hidden citations have OwnerID > 10**12
+    for key, value in rowDict.items():
+        
 
 # ===================================================DIV60==
 # Call the "main" function
