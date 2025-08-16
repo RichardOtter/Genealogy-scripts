@@ -276,7 +276,7 @@ SELECT et.EventID, ftt.Name, et.Date, et.Details
   FROM EventTable AS et
   INNER JOIN FactTypeTable AS ftt ON ftt.FactTypeID = et.EventType
   INNER JOIN CitationLinkTable AS clt ON clt.OwnerID = et.EventID
-  WHERE (et.OwnerID = ? OR et.OwnerID = ?)
+  WHERE et.OwnerID = ?
     AND et.OwnerType = 0
     AND clt.OwnerType = 2
 GROUP BY et.EventID
@@ -292,34 +292,33 @@ HAVING COUNT() > 1;
         print(F'{number_of_events} events found having more than'
               ' 1 attached citation.\n\n')
         EventID = select_fact_from_list(rows)
-
     elif number_of_events == 1:
         EventID = rows[0][0]
         temp_date = RMpy.RMDate.from_RMDate(
-            rows[0][2], RMpy.RMDate.Format.SHORT)
+                                rows[0][2], RMpy.RMDate.Format.SHORT)
         print('Found one event with more than one citation.\n' +
               F'{rows[0][0]:<5}:{rows[0][1]}    {temp_date}'
               F'  {rows[0][3]}\n\n\n')
-
     elif number_of_events == 0:
         print('This person does not hae any facts with more than one citation.')
         return
 
     # get the citation list
     SqlStmt = """
-    SELECT clt.SortOrder, clt.LinkID, st.Name, ct.CitationName
+    SELECT clt.SortOrder, clt.LinkID, clt.OwnerID, st.Name, ct.CitationName
       FROM CitationTable AS ct
       JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
       JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-      WHERE clt.OwnerID = ?
+      WHERE (clt.OwnerID = ? OR clt.OwnerID = ?)
         AND clt.OwnerType = 2
     ORDER BY clt.SortOrder ASC
     """
-    cur = db_connection.cursor()
-    cur.execute(SqlStmt, (EventID, ))
+
+    cur.execute(SqlStmt, (EventID, EventID + G_RIN_offset))
     rows = cur.fetchall()
 
-    modify_local_citation_list(rows, db_connection, report_file)
+    rowDict = modify_local_citation_list(rows, report_file)
+    UpdateDatabase(rowDict, db_connection)
     return
 
 
@@ -327,7 +326,6 @@ HAVING COUNT() > 1;
 def select_fact_from_list(rows):
 
     # et.EventID, ftt.Name, et.Date, et.Details
-
     for i in range(0, len(rows)):
         temp_date = RMpy.RMDate.from_RMDate(
             rows[i][2], RMpy.RMDate.Format.SHORT)
@@ -337,7 +335,7 @@ def select_fact_from_list(rows):
     while True:
         try:
             event_number = int(
-                input("\nWhich fact's citations will be re-ordered? "))
+                input("\nWhich fact's citation list will be modified? "))
             if event_number < 1 or event_number > len(rows):
                 print(F'Enter a number 1-{len(rows)}')
                 continue
@@ -394,6 +392,7 @@ def modify_local_citation_list(rows, report_file):
     for i in range(0, len(rows)):
         rowDict[i+1] = [rows[i][1], rows[i][2], (rows[i][3], (rows[i][4])[0:50])]
 
+# the dictionary
 #         rowDict key = cit order index starting at 1
 #         rowDict value
 #  [0]    clt.LinkID
@@ -406,14 +405,14 @@ def modify_local_citation_list(rows, report_file):
         '------------------------------------------------------\n'
         'To modify the citation list, at each prompt, enter a command:\n'
         '*  the number of the citation that should be swapped into this slot\n'
-        '* or\n'
+        '*  or\n'
         '*  blank    to accept current line as it is and move to the next\n'
         '*  h        to toggle HIDDEN vs. VISIBLE\n'
         '*  s        to accept current and following slots as they are\n'
         '*  a        to abort and make no changes\n'
         '------------------------------------------------------\n')
     
-    # Print the list in current order
+    # Print the list as it is
     report_file.write("\n\n Previous citation list \n")
     list_output(rowDict, report_file)
 
@@ -454,7 +453,7 @@ def modify_local_citation_list(rows, report_file):
                 list_output(rowDict)
         # End while j
 
-        # Print order after a round of sorting
+        # Print list after a round of modifications
         print("\n\n")
         list_output(rowDict)
 
@@ -484,9 +483,7 @@ def modify_local_citation_list(rows, report_file):
             done_with_this_list = False
 
     # end while not_done
-
     print("\n\n")
-
     return rowDict
 
 
@@ -500,6 +497,7 @@ def list_output(rowDict, report_file = None ):
     print('\n\n')
     if report_file is not None:
         report_file.write('\n\n')
+
 
 # ===========================================DIV50==
 def valid_PersonID(PersonID, dbConnection, report_file):
