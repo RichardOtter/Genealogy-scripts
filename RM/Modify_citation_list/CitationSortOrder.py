@@ -275,7 +275,7 @@ SELECT et.EventID, ftt.Name, et.Date, et.Details
     AND et.OwnerType = 0
     AND clt.OwnerType = 2
 GROUP BY et.EventID
-HAVING COUNT() > 1;
+--HAVING COUNT() > 1;
 """
     cur = db_connection.cursor()
     cur.execute(SqlStmt, (PersonID, ))
@@ -372,13 +372,12 @@ ORDER BY clt.SortOrder ASC;
         print("Person does not have more than one citations attached")
         return
 
-
 # ===========================================DIV50==
 def modify_local_citation_list(rows, report_file):
 
     # Create the origin 1 based dictionary
     # Use 1 based indexing for human user
-    rowDict = dict()
+    local_cit_list = dict()
 
 #  0 clt.SortOrder
 #  1 clt.LinkID
@@ -387,7 +386,7 @@ def modify_local_citation_list(rows, report_file):
 #  4 ct.CitationName
 
     for i in range(0, len(rows)):
-        rowDict[i+1] = [rows[i][1], rows[i][2], (rows[i][3], (rows[i][4])[0:50])]
+        local_cit_list[i+1] = [rows[i][1], rows[i][2], (rows[i][3], (rows[i][4])[0:50])]
 
 # the dictionary
 #         rowDict key = cit order index starting at 1
@@ -411,23 +410,20 @@ def modify_local_citation_list(rows, report_file):
     
     # Print the list as it is
     report_file.write("\n\n Previous citation list \n")
-    list_output(rowDict, report_file)
+    list_output(local_cit_list, report_file)
 
     done_with_this_list = False
     while not done_with_this_list:
         j = 1  # indexing is 1-based
-        while j <= len(rowDict):
+        while j <= len(local_cit_list):
             response = str(input(F'Enter a command for line # {j} : '))
             if response == '':
                 j = j + 1
                 continue
             elif response in 'Hh':
                 # Toggle the hidden attribute
-                if rowDict[j][1] < G_RIN_offset:
-                    rowDict[j][1] = rowDict[j][1] + G_RIN_offset
-                else:
-                    rowDict[j][1] = rowDict[j][1] - G_RIN_offset
-                list_output(rowDict)
+                toggle_citation_hide(local_cit_list, j)
+                list_output(local_cit_list)
                 continue
             elif response in 'Ss':
                 break
@@ -437,22 +433,22 @@ def modify_local_citation_list(rows, report_file):
                 try:
                     swapVal = int(response)
 #                    if swapVal < (j + 1) or swapVal > (len(rowDict)):
-                    if swapVal < 1 or swapVal > len(rowDict):
-                        print(F'Integer must be in the range {1}-{len(rowDict)}')
+                    if swapVal < 1 or swapVal > len(local_cit_list):
+                        print(F'Integer must be in the range {1}-{len(local_cit_list)}')
                         continue
                 except ValueError:
                     print('Enter an integer, blank,  or one of: h/H/s/S/a/A')
                     continue
                 #  Python swap mechanism using tuples
-                rowDict[swapVal], rowDict[j] = rowDict[j], rowDict[swapVal]
+                local_cit_list[swapVal], local_cit_list[j] = local_cit_list[j], local_cit_list[swapVal]
                 j = j + 1
                 print("\n\n")
-                list_output(rowDict)
+                list_output(local_cit_list)
         # End while j
 
         # Print list after a round of modifications
         print("\n\n")
-        list_output(rowDict)
+        list_output(local_cit_list)
 
         response = input(
             '\n\n'
@@ -465,7 +461,7 @@ def modify_local_citation_list(rows, report_file):
         if response in "Yy":
             # Print order after a round of sorting
             report_file.write("\n\n Current order \n")
-            list_output(rowDict, report_file)
+            list_output(local_cit_list, report_file)
             done_with_this_list = True
 
         elif response in "Aa":
@@ -476,12 +472,26 @@ def modify_local_citation_list(rows, report_file):
 
         elif response in "Nn":
             print('Try another round of re-ordering.\n\n')
-            list_output(rowDict)
+            list_output(local_cit_list)
             done_with_this_list = False
 
     # end while not_done
     print("\n\n")
-    return rowDict
+    return local_cit_list
+
+
+# ===================================================DIV60==
+def toggle_citation_hide(local_cit_list, key):
+
+    if local_cit_list[key][1] < G_RIN_offset:
+        local_cit_list[key][1] = local_cit_list[key][1] + G_RIN_offset
+    else:
+        local_cit_list[key][1] = local_cit_list[key][1] - G_RIN_offset
+
+
+# ===================================================DIV60==
+def toggle_citation_hide_new(local_cit_list, key):
+    print()
 
 
 # ===========================================DIV50==
@@ -540,9 +550,10 @@ UPDATE  CitationLinkTable AS clt
     for key, value in rowDict.items():
         cur = db_connection.cursor()
         cur.execute(SqlStmt, (key, value[1], value[0]))
-        db_connection.commit()
+        # db_connection.commit()
 
     return
+
 
 
 # ===================================================DIV60==
@@ -551,3 +562,54 @@ if __name__ == '__main__':
     main()
 
 # ===================================================DIV60==
+
+"""
+When searching for facts or names to list, must check hidden as well.
+
+Alternate way of hiding citations instead of the + 10**12 trick
+
+Move the CitationLinkTable to a new table :
+AuxCitationLinkTable
+
+CREATE TABLE AuxCitationLinkTable (AuxLinkID INTEGER PRIMARY KEY, CitationID INTEGER, OwnerType INTEGER, OwnerID INTEGER, SortOrder INTEGER, HiddenSet INTEGER, Quality TEXT, IsPrivate INTEGER, Flags INTEGER, UTCModDate FLOAT );
+
+CREATE INDEX idxAuxCitationLinkOwnerID ON AuxCitationLinkTable (OwnerID);
+
+In config file, add
+CITATION_HIDE_SET=1
+
+to hide a cit, move it to the Aux table
+copy then delete.
+LnkID and AuxLinkID values are irrelevant.
+Don't change UTCModDate
+
+OwnerID won't indicate if it's hidden.
+go back to union of 2 queries
+instead of ownerID, return 0 for cits from main table and the HiddenSet number 
+from those from the aux table
+
+Do all the mods of the list locally as before. for hidden just use the set
+number from the config file, for visible, use 0
+
+
+revert to
+
+SELECT "      ", clt.SortOrder, clt.LinkID, st.Name COLLATE NOCASE, ct.CitationName COLLATE NOCASE
+  FROM CitationTable AS ct
+  JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
+  JOIN SourceTable AS st ON ct.SourceID = st.SourceID
+  WHERE clt.OwnerID = 13651
+    AND clt.OwnerType = 0
+
+UNION
+
+SELECT "HIDDEN", clt.SortOrder, clt.LinkID, st.Name , ct.CitationName COLLATE NOCASE
+  FROM CitationTable AS ct
+  JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
+  JOIN SourceTable AS st ON ct.SourceID = st.SourceID
+  WHERE clt.OwnerID = 1000000013651
+    AND clt.OwnerType = 0
+    
+ORDER BY clt.SortOrder ASC;
+
+"""

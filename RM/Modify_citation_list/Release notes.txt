@@ -21,11 +21,11 @@ Improved wording of prompts.
 
 
 =========================================================================DIV80==
-v1.0.3
+Version: 1.0.3
 in suite v1.0.2
 
 =========================================================================DIV80==
-v1.0.0
+Version: 1.0.0
 First release.
 Allows user to re-order the listing of citations attached to 
 Persons, Names, or Facts.
