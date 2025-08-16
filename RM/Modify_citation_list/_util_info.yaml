@@ -1,11 +1,11 @@
 
-UtilityName:  CitationSortOrder
+UtilityName:  ModifyCitationList
 
 # Last Release v1.0.2
 Version: 1.1.0
 
 DistributionFileList:
-  - CitationSortOrder.py
+  - ModifyCitationList.py
   - ReadMe.txt
   - RM-Python-config.ini
 
