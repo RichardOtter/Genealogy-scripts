@@ -36,7 +36,7 @@ def main():
     utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
     utility_info["config_file_name"] = "RM-Python-config.ini"
     utility_info["script_path"] = Path(__file__).parent
-    utility_info["run_features_function"] = run_selected_features
+    utility_info["run_features_function"] = modify_citation_list_feature
     utility_info["allow_db_changes"] = True
     utility_info["RMNOCASE_required"] = False
     utility_info["RegExp_required"] = False
@@ -45,13 +45,7 @@ def main():
 
 
 # ===================================================DIV60==
-def run_selected_features(config, db_connection, report_file):
-
-    change_citation_order_feature(config, db_connection, report_file)
-
-
-# ===================================================DIV60==
-def change_citation_order_feature(config, db_connection, report_file):
+def modify_citation_list_feature(config, db_connection, report_file):
 
     while True:
         # keep asking for RINs until break
@@ -143,36 +137,35 @@ HAVING COUNT() > 1;
     if (number_of_names > 1):
         print(F'{number_of_names} names found having more than'
               ' 1 attached citation.\n')
-        NameID = select_name_from_list(rows)
-
+        OwnerID = select_name_from_list(rows)
     elif (number_of_names == 1):
-        NameID = rows[0][0]
+        OwnerID = rows[0][0]
         temp_date = RMpy.RMDate.from_RMDate(
             rows[0][1], RMpy.RMDate.Format.SHORT)
         print('Found one name with more than one citation.\n' +
               F'{rows[0][0]:<5}:    {temp_date:15} : '
               F'{rows[0][2]} {rows[0][3]} {rows[0][4]} {rows[0][5]}\n\n\n')
-
     elif (number_of_names == 0):
-        print('This person does not hae any names with more than one citation.')
+        print('This person does not have any names with more than one citation.')
         return
 
     # get the citation list
     SqlStmt = """
-SELECT clt.SortOrder, clt.LinkID, st.Name, ct.CitationName
+SELECT clt.SortOrder, clt.LinkID, clt.OwnerID, st.Name, ct.CitationName
   FROM CitationTable AS ct
   JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
   JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-  WHERE clt.OwnerID = ?
+  WHERE ( clt.OwnerID = ? or clt.OwnerID = ?)
     AND clt.OwnerType = 7
 ORDER BY clt.SortOrder ASC;
 """
     cur = db_connection.cursor()
-    cur.execute(SqlStmt, (NameID, ))
+    cur.execute(SqlStmt, (OwnerID, OwnerID + G_RIN_offset))
+
     rows = cur.fetchall()
 
-    modify_local_citation_list(rows, db_connection, report_file)
-
+    rowDict = modify_local_citation_list(rows, report_file)
+    update_database(rowDict, db_connection)
     return
 
 
@@ -191,7 +184,7 @@ def select_name_from_list(rows):
     while True:
         try:
             event_number = int(
-                input("\nWhich name's citations will be re-ordered? "))
+                input("\nWhich name's citation list will be modified? "))
             if event_number < 1 or event_number > len(rows):
                 print(F'Enter a number 1-{len(rows)}')
                 continue
@@ -262,7 +255,9 @@ HAVING COUNT() > 1;
             rows[0][2], RMpy.RMDate.Format.SHORT)
         print('Found one event with more than one citation.\n' +
               F'{rows[0][1]}:    {temp_date}  {rows[0][3]}\n\n')
-        modify_local_citation_list(rows, report_file)
+        rowDict = modify_local_citation_list(rows, report_file)
+        update_database(rowDict, db_connection)
+    return
 
     return
 
@@ -291,9 +286,9 @@ HAVING COUNT() > 1;
     if number_of_events > 1:
         print(F'{number_of_events} events found having more than'
               ' 1 attached citation.\n\n')
-        EventID = select_fact_from_list(rows)
+        OwnerID = select_fact_from_list(rows)
     elif number_of_events == 1:
-        EventID = rows[0][0]
+        OwnerID = rows[0][0]
         temp_date = RMpy.RMDate.from_RMDate(
                                 rows[0][2], RMpy.RMDate.Format.SHORT)
         print('Found one event with more than one citation.\n' +
@@ -314,11 +309,11 @@ HAVING COUNT() > 1;
     ORDER BY clt.SortOrder ASC
     """
 
-    cur.execute(SqlStmt, (EventID, EventID + G_RIN_offset))
+    cur.execute(SqlStmt, (OwnerID, OwnerID + G_RIN_offset))
     rows = cur.fetchall()
 
     rowDict = modify_local_citation_list(rows, report_file)
-    UpdateDatabase(rowDict, db_connection)
+    update_database(rowDict, db_connection)
     return
 
 
@@ -347,7 +342,7 @@ def select_fact_from_list(rows):
 
 
 # ===========================================DIV50==
-def attached_to_person(PersonID, db_connection, report_file):
+def attached_to_person(OwnerID, db_connection, report_file):
 
 # Only one citation list is associated with the RIN
 # So retrieve that list immediately
@@ -362,14 +357,16 @@ SELECT clt.SortOrder, clt.LinkID, clt.OwnerID, st.Name, ct.CitationName
     AND clt.OwnerType = 0
 ORDER BY clt.SortOrder ASC;
 """
+
     cur = db_connection.cursor()
-    cur.execute(SqlStmt, (PersonID, PersonID + G_RIN_offset))
+    cur.execute(SqlStmt, (OwnerID, OwnerID + G_RIN_offset))
 
     rows = cur.fetchall()
 
+    # test the number of citations attached to the person
     if len(rows) >1:
         rowDict = modify_local_citation_list(rows, report_file)
-        UpdateDatabase(rowDict, db_connection)
+        update_database(rowDict, db_connection)
         return
     else:
         print("Person does not have more than one citations attached")
@@ -526,7 +523,7 @@ WHERE nt.OwnerID = ?
     return is_valid
 
 # ===========================================DIV50==
-def UpdateDatabase(rowDict, db_connection):
+def update_database(rowDict, db_connection):
 
     # do not update the UTCModDate
     SqlStmt = """
