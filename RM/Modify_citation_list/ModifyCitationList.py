@@ -21,11 +21,6 @@ import RMpy.RMDate              # noqa #type: ignore
 
 # TODO  support associations, tasks, fam facts
 
-# ===================================================DIV60==
-#  Globals
-
-G_RIN_offset = int(10**12)
-
 
 # ===================================================DIV60==
 def main():
@@ -39,7 +34,9 @@ def main():
     utility_info["run_features_function"] = modify_citation_list_feature
     utility_info["allow_db_changes"] = True
     utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
     utility_info["RegExp_required"] = False
+    utility_info["RegExp_optional"] = False
 
     RMpy.launcher.launcher(utility_info)
 
@@ -47,12 +44,37 @@ def main():
 # ===================================================DIV60==
 def modify_citation_list_feature(config, db_connection, report_file):
 
+    hide_set_num = 1
+    try:
+        CITATION_HIDE_SET = config['OPTIONS'].get('CITATION_HIDE_SET')
+        hide_set_num = int(CITATION_HIDE_SET)
+    except:
+        pass
+
+    # Create the storage  for hidden citation  table AuxCitationLinkTable 
+    # if it doesn't already exist
+    SqlStmt = """
+CREATE TABLE IF NOT EXISTS AuxCitationLinkTable
+(AuxLinkID INTEGER PRIMARY KEY,
+CitationID INTEGER,
+OwnerType INTEGER,
+OwnerID INTEGER,
+SortOrder INTEGER,
+HiddenSet INTEGER,
+Quality TEXT,
+IsPrivate INTEGER,
+Flags INTEGER,
+UTCModDate FLOAT );
+"""
+    cur = db_connection.cursor()
+    cur.execute(SqlStmt)
+
     while True:
         # keep asking for RINs until break
 
         # request the PersonID / RIN
         response_RIN = input('Enter the RIN of the person who has '
-                             'the citations to modify, or q to quit the app:\n')
+                             'the citation list to modify, or q to quit the app:\n')
         if response_RIN == '':
             continue
         if response_RIN in 'Qq':
@@ -74,17 +96,16 @@ def modify_citation_list_feature(config, db_connection, report_file):
             response_attachment = input(
                 '\nIs the citation list that is to be modified attached to:\n'
                 'a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:\n')
-
             if response_attachment == "":
                 continue
             if response_attachment in "Pp":
-                rows = attached_to_person(PersonID, db_connection, report_file)
+                rows = attached_to_person(PersonID, db_connection, report_file, hide_set_num)
                 continue
             elif response_attachment in "Ff":
-                rows = attached_to_fact(PersonID, db_connection, report_file)
+                rows = attached_to_fact(PersonID, db_connection, report_file, hide_set_num)
                 continue
             elif response_attachment in "Nn":
-                rows = attached_to_name(PersonID, db_connection, report_file)
+                rows = attached_to_name(PersonID, db_connection, report_file, hide_set_num)
                 continue
             elif response_attachment in "Ss":
                 break
@@ -97,7 +118,7 @@ def modify_citation_list_feature(config, db_connection, report_file):
 
 
 # ===========================================DIV50==
-def attached_to_any(PersonID, db_connection, report_file):
+def attached_to_any(PersonID, db_connection, report_file, hide_set_num):
 
     # Select nameID's that have more than 1 citation attached1
     SqlStmt = """
@@ -116,7 +137,7 @@ HAVING COUNT() > 1;
 
 
 # ===========================================DIV50==
-def attached_to_name(PersonID, db_connection, report_file):
+def attached_to_name(PersonID, db_connection, report_file, hide_set_num):
 
     # Select names connected to RIN and that have more than 1 citation attached
     SqlStmt = """
@@ -197,7 +218,7 @@ def select_name_from_list(rows):
 
 
 # ===========================================DIV50==
-def NEW_attached_to_fact(PersonID, db_connection, report_file):
+def NEW_attached_to_fact(PersonID, db_connection, report_file, hide_set_num):
 
     EventID = None
     FactTypeID = input('Enter the FactTypeID or\n'
@@ -263,7 +284,7 @@ HAVING COUNT() > 1;
 
 
 # ===========================================DIV50==
-def attached_to_fact(PersonID, db_connection, report_file):
+def attached_to_fact(PersonID, db_connection, report_file, hide_set_num):
 
     # Select all Events connected to RIN that have more than 1 citation attached
     SqlStmt = """
@@ -300,16 +321,30 @@ GROUP BY et.EventID
 
     # get the citation list
     SqlStmt = """
-    SELECT clt.SortOrder, clt.LinkID, clt.OwnerID, st.Name, ct.CitationName
+    SELECT clt.SortOrder, clt.LinkID, clt.OwnerID,
+        0 as OrigSet, 0 AS HiddenSet,
+        st.Name COLLATE NOCASE, ct.CitationName COLLATE NOCASE
       FROM CitationTable AS ct
       JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
       JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-      WHERE (clt.OwnerID = ? OR clt.OwnerID = ?)
+      WHERE clt.OwnerID = ?
         AND clt.OwnerType = 2
-    ORDER BY clt.SortOrder ASC
+
+    UNION
+
+    SELECT aclt.SortOrder, aclt.AuxLinkID, aclt.OwnerID,
+        1 as OrigSet, 0 AS HiddenSet,
+        st.Name COLLATE NOCASE, ct.CitationName COLLATE NOCASE
+      FROM CitationTable AS ct
+      JOIN AuxCitationLinkTable AS aclt ON aclt.CitationID = ct.CitationID
+      JOIN SourceTable AS st ON ct.SourceID = st.SourceID
+      WHERE aclt.OwnerID = ?
+        AND aclt.OwnerType = 2
+
+    ORDER BY clt.SortOrder ASC;
     """
 
-    cur.execute(SqlStmt, (OwnerID, OwnerID + G_RIN_offset))
+    cur.execute(SqlStmt, (OwnerID, OwnerID))
     rows = cur.fetchall()
 
     rowDict = modify_local_citation_list(rows, report_file)
@@ -319,6 +354,7 @@ GROUP BY et.EventID
 
 # =======================================1====DIV50==
 def select_fact_from_list(rows):
+
 
     # et.EventID, ftt.Name, et.Date, et.Details
     for i in range(0, len(rows)):
@@ -342,59 +378,81 @@ def select_fact_from_list(rows):
 
 
 # ===========================================DIV50==
-def attached_to_person(OwnerID, db_connection, report_file):
+def attached_to_person(OwnerID, db_connection, report_file, hide_set_num):
 
 # Only one citation list is associated with the RIN
 # So retrieve that list immediately
 
 # Third  return value is a flag for "hidden" 0 is visible, 1 (true)is hidden
     SqlStmt = """
-SELECT clt.SortOrder, clt.LinkID, clt.OwnerID, st.Name, ct.CitationName
+SELECT clt.SortOrder,
+       clt.LinkID AS AuxLinkID,
+       0 as OrigSet, 0 AS HiddenSet,
+       st.Name COLLATE NOCASE,
+       ct.CitationName COLLATE NOCASE
   FROM CitationTable AS ct
   JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
   JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-  WHERE (clt.OwnerID = ? OR clt.OwnerID = ?)
+  WHERE clt.OwnerID = ?
     AND clt.OwnerType = 0
-ORDER BY clt.SortOrder ASC;
+
+UNION
+
+SELECT aclt.SortOrder,
+       aclt.AuxLinkID,
+       1 as OrigSet, aclt.HiddenSet,
+       st.Name COLLATE NOCASE,
+       ct.CitationName COLLATE NOCASE
+  FROM CitationTable AS ct
+  JOIN AuxCitationLinkTable AS aclt ON aclt.CitationID = ct.CitationID
+  JOIN SourceTable AS st ON ct.SourceID = st.SourceID
+  WHERE aclt.OwnerID = ?
+    AND aclt.OwnerType = 0
+
+ORDER BY SortOrder ASC;
 """
 
     cur = db_connection.cursor()
-    cur.execute(SqlStmt, (OwnerID, OwnerID + G_RIN_offset))
+    cur.execute(SqlStmt, (OwnerID, OwnerID) )
 
     rows = cur.fetchall()
 
     # test the number of citations attached to the person
     if len(rows) >1:
-        rowDict = modify_local_citation_list(rows, report_file)
-        update_database(rowDict, db_connection)
+        rowDict = modify_local_citation_list(rows, report_file, hide_set_num)
+        if rowDict is not None:
+            update_database(rowDict, db_connection)
         return
     else:
         print("Person does not have more than one citations attached")
         return
 
 # ===========================================DIV50==
-def modify_local_citation_list(rows, report_file):
+def modify_local_citation_list(rows, report_file, hide_set_num):
 
     # Create the origin 1 based dictionary
     # Use 1 based indexing for human user
     local_cit_list = dict()
 
-#  0 clt.SortOrder
-#  1 clt.LinkID
-#  2 clt.OwnerID
-#  3 st.Name
-#  4 ct.CitationName
+#  0 SortOrder
+#  1 LinkID
+#  2 OrigSet
+#  3 HiddenSet
+#  4 Name
+#  5 CitationName
 
     for i in range(0, len(rows)):
-        local_cit_list[i+1] = [rows[i][1], rows[i][2], (rows[i][3], (rows[i][4])[0:50])]
+#        local_cit_list[i+1] = [rows[i][1], rows[i][2], (rows[i][3], (rows[i][4])[0:50])]
+        local_cit_list[i+1] = [rows[i][1], rows[i][2], rows[i][2], (rows[i][4], (rows[i][5])[0:50])]
 
 # the dictionary
-#         rowDict key = cit order index starting at 1
-#         rowDict value
-#  [0]    clt.LinkID
-#  [1]    clt.OwnerID
-#  [2][0] st.Name
-#  [2][1] ct.CitationName
+#  key    local_cit_list = cit order index starting at 1
+#         local_cit_list value
+#  [0]    LinkID
+#  [1]    OrigSet
+#  [2]    HiddenSet
+#  [3][0] Name
+#  [3][1] CitationName
 
     print(
         '\n'
@@ -422,7 +480,7 @@ def modify_local_citation_list(rows, report_file):
                 continue
             elif response in 'Hh':
                 # Toggle the hidden attribute
-                toggle_citation_hide(local_cit_list, j)
+                toggle_citation_hide(local_cit_list[j], hide_set_num)
                 list_output(local_cit_list)
                 continue
             elif response in 'Ss':
@@ -449,7 +507,7 @@ def modify_local_citation_list(rows, report_file):
         # Print list after a round of modifications
         print("\n\n")
         list_output(local_cit_list)
-
+        
         response = input(
             '\n\n'
             'Save the new citation list as shown above?\n'
@@ -469,6 +527,7 @@ def modify_local_citation_list(rows, report_file):
             report_file.write(
                 'No changes made to this list in the database.\n\n\n')
             done_with_this_list = True
+            local_cit_list = None
 
         elif response in "Nn":
             print('Try another round of re-ordering.\n\n')
@@ -481,23 +540,18 @@ def modify_local_citation_list(rows, report_file):
 
 
 # ===================================================DIV60==
-def toggle_citation_hide(local_cit_list, key):
+def toggle_citation_hide(row, hide_set_num):
 
-    if local_cit_list[key][1] < G_RIN_offset:
-        local_cit_list[key][1] = local_cit_list[key][1] + G_RIN_offset
+    if row[2] == 0:
+        row[2] = hide_set_num
     else:
-        local_cit_list[key][1] = local_cit_list[key][1] - G_RIN_offset
-
-
-# ===================================================DIV60==
-def toggle_citation_hide_new(local_cit_list, key):
-    print()
+        row[2] = 0
 
 
 # ===========================================DIV50==
-def list_output(rowDict, report_file = None ):
-    for key, value in sorted(rowDict.items()):
-        message = F'{key}   {"HIDDEN " if value[1] > G_RIN_offset else "VISIBLE"}  {value[2][0][0:40]:<43}    {value[2][1][0:50]}'
+def list_output(local_cit_list, report_file = None ):
+    for key, value in sorted(local_cit_list.items()):
+        message = F'{key}   {"HIDDEN " if value[2] > 0 else "VISIBLE"}  {value[3][0][0:40]:<43}    {value[3][1][0:50]}'
         print(message)
         if report_file is not None:
             report_file.write(message + '\n')
@@ -533,27 +587,113 @@ WHERE nt.OwnerID = ?
     return is_valid
 
 # ===========================================DIV50==
-def update_database(rowDict, db_connection):
+def update_database(local_cit_list, db_connection):
 
     # do not update the UTCModDate
-    SqlStmt = """
-UPDATE  CitationLinkTable AS clt
-  SET SortOrder = ?,
-      OwnerID = ?
+    SqlStmtNorm = """
+UPDATE  CitationLinkTable
+  SET SortOrder = ?
   WHERE LinkID = ?;
 """
-#    for i in range(1, len(rowDict)+1):
-#        cur = db_connection.cursor()
-#        cur.execute(SqlStmt, (i, rowDict[i][1], rowDict[i][0]))
-#        db_connection.commit()
+    SqlStmtAux = """
+UPDATE  AuxCitationLinkTable
+  SET SortOrder = ?
+  WHERE AuxLinkID = ?;
+"""
 
-    for key, value in rowDict.items():
+#   Update the sort order for rows in both tables.
+    for key, value in local_cit_list.items():
         cur = db_connection.cursor()
-        cur.execute(SqlStmt, (key, value[1], value[0]))
-        # db_connection.commit()
+        if value[1] == 0:       # main table
+            cur.execute(SqlStmtNorm, (key, value[0]))
+        else:                   # Aux table
+            cur.execute(SqlStmtAux, (key, value[0]))
 
+    for key, value in local_cit_list.items():
+        if value[1] == 0 and value[2] != 0:
+            # to be moved from main to Aux
+            move_row_to_aux(value, db_connection)
+
+        elif value[1] == 0 and value[2]== 0:
+            # row stays in main
+            pass
+        elif value[1] == 1 and value[2] == 0:
+            # to be moved from Aux to main
+            pass
+        elif value[1] == 1 and value[2] != 0:
+            # row stays in Aux
+            pass
+        else:
+            raise RMc.RM_Py_Exception("unhandled move status")
+            
     return
 
+
+# ===================================================DIV60==
+def move_row_to_aux(value, db_connection):
+
+    cur = db_connection.cursor()
+#    cur.execute("SAVEPOINT nested")
+
+    try:
+        SQL_stmt = """
+INSERT INTO AuxCitationLinkTable
+(CitationID, OwnerType, OwnerID, SortOrder,
+HiddenSet,
+Quality, IsPrivate, Flags, UTCModDate)
+SELECT 
+CitationID, OwnerType, OwnerID, SortOrder,
+?,
+Quality, IsPrivate, Flags, UTCModDate
+FROM CitationLinkTable
+WHERE LinkID = ?;
+"""
+        cur.execute(SQL_stmt, (value[2], value[0]))
+
+        SQL_stmt = """
+DELETE FROM CitationLinkTable
+WHERE LinkID = ?;
+"""
+        cur.execute(SQL_stmt, (value[0],))
+
+#        cur.execute("RELEASE nested")  # Commit nested transaction
+
+    except Exception as e:
+        print("Nested error:", e)
+        cur.execute("ROLLBACK TO nested")  # Undo nested changes
+        cur.execute("RELEASE nested")      # Clean up savepoint
+
+# ===================================================DIV60==
+def move_row_to_main(value):
+
+    cur = db_connection.cursor()
+#    cur.execute("SAVEPOINT nested")
+
+    try:
+        SQL_stmt = """
+INSERT INTO CitationLinkTable
+(CitationID, OwnerType, OwnerID, SortOrder,
+Quality, IsPrivate, Flags, UTCModDate)
+SELECT 
+CitationID, OwnerType, OwnerID, SortOrder,
+Quality, IsPrivate, Flags, UTCModDate
+FROM CitationLinkTable
+WHERE LinkID = ?;
+"""
+        cur.execute(SQL_stmt, (value[0], ))
+
+        SQL_stmt = """
+DELETE FROM AuxCitationLinkTable
+WHERE LinkID = ?;
+"""
+        cur.execute(SQL_stmt, (value[0],))
+
+#        cur.execute("RELEASE nested")  # Commit nested transaction
+
+    except Exception as e:
+        print("Nested error:", e)
+        cur.execute("ROLLBACK TO nested")  # Undo nested changes
+        cur.execute("RELEASE nested")      # Clean up savepoint
 
 
 # ===================================================DIV60==
@@ -571,7 +711,8 @@ Alternate way of hiding citations instead of the + 10**12 trick
 Move the CitationLinkTable to a new table :
 AuxCitationLinkTable
 
-CREATE TABLE AuxCitationLinkTable (AuxLinkID INTEGER PRIMARY KEY, CitationID INTEGER, OwnerType INTEGER, OwnerID INTEGER, SortOrder INTEGER, HiddenSet INTEGER, Quality TEXT, IsPrivate INTEGER, Flags INTEGER, UTCModDate FLOAT );
+CREATE TABLE AuxCitationLinkTable (AuxLinkID INTEGER PRIMARY KEY, CitationID INTEGER, OwnerType INTEGER, OwnerID INTEGER,
+SortOrder INTEGER, HiddenSet INTEGER, Quality TEXT, IsPrivate INTEGER, Flags INTEGER, UTCModDate FLOAT );
 
 CREATE INDEX idxAuxCitationLinkOwnerID ON AuxCitationLinkTable (OwnerID);
 
@@ -594,22 +735,23 @@ number from the config file, for visible, use 0
 
 revert to
 
-SELECT "      ", clt.SortOrder, clt.LinkID, st.Name COLLATE NOCASE, ct.CitationName COLLATE NOCASE
+SELECT clt.SortOrder, clt.LinkID, 0,
+        st.Name COLLATE NOCASE, ct.CitationName COLLATE NOCASE
   FROM CitationTable AS ct
   JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
   JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-  WHERE clt.OwnerID = 13651
+  WHERE clt.OwnerID = ?
     AND clt.OwnerType = 0
-
 UNION
-
-SELECT "HIDDEN", clt.SortOrder, clt.LinkID, st.Name , ct.CitationName COLLATE NOCASE
+SELECT clt.SortOrder, clt.LinkID, aclt.HiddenSet,
+        st.Name COLLATE NOCASE, ct.CitationName COLLATE NOCASE
   FROM CitationTable AS ct
-  JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
+  JOIN AuxCitationLinkTable AS aclt ON aclt.CitationID = ct.CitationID
   JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-  WHERE clt.OwnerID = 1000000013651
+  WHERE clt.OwnerID = ?
     AND clt.OwnerType = 0
-    
 ORDER BY clt.SortOrder ASC;
+
+
 
 """
