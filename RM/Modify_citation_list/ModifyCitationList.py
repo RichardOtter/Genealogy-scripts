@@ -71,7 +71,6 @@ UTCModDate FLOAT );
 
     while True:
         # keep asking for RINs until break
-
         # request the PersonID / RIN
         response_RIN = input('Enter the RIN of the person who has '
                              'the citation list to modify, or q to quit the app:\n')
@@ -141,16 +140,35 @@ def attached_to_name(PersonID, db_connection, report_file, hide_set_num):
 
     # Select names connected to RIN and that have more than 1 citation attached
     SqlStmt = """
-SELECT  nt.NameID, nt.Date, nt.Prefix, nt.Given, nt.Surname, nt.Suffix
+SELECT  nt.NameID,
+        nt.Date,
+        nt.Prefix COLLATE NOCASE,
+        nt.Given COLLATE NOCASE,
+        nt.Surname COLLATE NOCASE,
+        nt.Suffix COLLATE NOCASE
   FROM NameTable AS nt
   INNER JOIN CitationLinkTable AS clt ON clt.OwnerID = nt.NameID
   WHERE  nt.OwnerID = ?
     AND clt.OwnerType = 7
+
+UNION
+
+SELECT  nt.NameID,
+        nt.Date,
+        nt.Prefix COLLATE NOCASE,
+        nt.Given COLLATE NOCASE,
+        nt.Surname COLLATE NOCASE,
+        nt.Suffix COLLATE NOCASE
+  FROM NameTable AS nt
+  INNER JOIN AuxCitationLinkTable AS aclt ON aclt.OwnerID = nt.NameID
+  WHERE  nt.OwnerID = ?
+    AND aclt.OwnerType = 7
+
 GROUP BY nt.NameID
 HAVING COUNT() > 1;
 """
     cur = db_connection.cursor()
-    cur.execute(SqlStmt, (PersonID, ))
+    cur.execute(SqlStmt, (PersonID, PersonID))
     rows = cur.fetchall()
 
     number_of_names = len(rows)
@@ -172,20 +190,36 @@ HAVING COUNT() > 1;
 
     # get the citation list
     SqlStmt = """
-SELECT clt.SortOrder, clt.LinkID, clt.OwnerID, st.Name, ct.CitationName
-  FROM CitationTable AS ct
+SELECT clt.SortOrder,
+       clt.LinkID,
+        0 as OrigSet, 0 AS HiddenSet,
+       st.Name COLLATE NOCASE,
+       ct.CitationName COLLATE NOCASE
+FROM CitationTable AS ct
   JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
   JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-  WHERE ( clt.OwnerID = ? or clt.OwnerID = ?)
+  WHERE clt.OwnerID = ?
     AND clt.OwnerType = 7
-ORDER BY clt.SortOrder ASC;
+
+UNION
+
+SELECT aclt.SortOrder,
+       aclt.AuxLinkID,
+        1 as OrigSet, 0 AS HiddenSet,
+       st.Name COLLATE NOCASE,
+       ct.CitationName COLLATE NOCASE
+FROM CitationTable AS ct
+  JOIN AuxCitationLinkTable AS aclt ON aclt.CitationID = ct.CitationID
+  JOIN SourceTable AS st ON ct.SourceID = st.SourceID
+  WHERE aclt.OwnerID = ?
+    AND aclt.OwnerType = 7
 """
     cur = db_connection.cursor()
-    cur.execute(SqlStmt, (OwnerID, OwnerID + G_RIN_offset))
+    cur.execute(SqlStmt, (OwnerID, OwnerID))
 
     rows = cur.fetchall()
 
-    rowDict = modify_local_citation_list(rows, report_file)
+    rowDict = modify_local_citation_list(rows, report_file, hide_set_num)
     update_database(rowDict, db_connection)
     return
 
