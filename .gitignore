@@ -31,3 +31,4 @@ RM/Release*/
 # ignore files in doc not to be checked in
 DocFull_*
 
+Test Data/TestData-RMpython-FULL.sql

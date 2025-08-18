@@ -1,0 +1,21 @@
+{
+  "title": "vsCode - Remember Open Files (vscrof)",
+  "workspace": {
+    "name": "repo Genealogy-scripts",
+    "rootPath": "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts"
+  },
+  "path": "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/.vscrof/vscrof.json",
+  "files": {
+    "0":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/Change source for citation/Release notes.txt",
+    "1":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/Change source template/Release notes.txt",
+    "2":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/Modify_citation_list/Release notes.txt",
+    "3":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/Color from Group/Release notes.txt",
+    "4":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/Convert Fact/Release notes.txt",
+    "5":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/Group from SQL/Release notes.txt",
+    "6":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/List citations for PersonID/Release notes.txt",
+    "7":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/Lump sources/Release notes.txt",
+    "8":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/RMpy package/Release notes.txt",
+    "9":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/Run SQL/Release notes.txt",
+    "10": "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RM/Test external files/Release notes.txt"
+  }
+}
