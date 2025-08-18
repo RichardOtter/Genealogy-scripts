@@ -332,9 +332,11 @@ HAVING COUNT() > 1;
 
     # get the citation list
     SqlStmt = """
-    SELECT clt.SortOrder, clt.LinkID, clt.OwnerID,
-        0 as OrigSet, 0 AS HiddenSet,
-        st.Name COLLATE NOCASE, ct.CitationName COLLATE NOCASE
+    SELECT clt.SortOrder,
+           clt.LinkID,
+           0 as OrigSet, 0 AS HiddenSet,
+           st.Name COLLATE NOCASE,
+           ct.CitationName COLLATE NOCASE
       FROM CitationTable AS ct
       JOIN CitationLinkTable AS clt ON clt.CitationID = ct.CitationID
       JOIN SourceTable AS st ON ct.SourceID = st.SourceID
@@ -343,9 +345,11 @@ HAVING COUNT() > 1;
 
     UNION
 
-    SELECT aclt.SortOrder, aclt.AuxLinkID, aclt.OwnerID,
-        1 as OrigSet, 0 AS HiddenSet,
-        st.Name COLLATE NOCASE, ct.CitationName COLLATE NOCASE
+    SELECT aclt.SortOrder,
+           aclt.AuxLinkID,
+           1 as OrigSet, 0 AS HiddenSet,
+           st.Name COLLATE NOCASE,
+           ct.CitationName COLLATE NOCASE
       FROM CitationTable AS ct
       JOIN AuxCitationLinkTable AS aclt ON aclt.CitationID = ct.CitationID
       JOIN SourceTable AS st ON ct.SourceID = st.SourceID
@@ -358,14 +362,13 @@ HAVING COUNT() > 1;
     cur.execute(SqlStmt, (OwnerID, OwnerID))
     rows = cur.fetchall()
 
-    rowDict = modify_local_citation_list(rows, report_file)
+    rowDict = modify_local_citation_list(rows, report_file, hide_set_num)
     update_database(rowDict, db_connection)
     return
 
 
 # =======================================1====DIV50==
 def select_fact_from_list(rows):
-
 
     # et.EventID, ftt.Name, et.Date, et.Details
     for i in range(0, len(rows)):
@@ -491,7 +494,7 @@ def modify_local_citation_list(rows, report_file, hide_set_num):
                 continue
             elif response in 'Hh':
                 # Toggle the hidden attribute
-                toggle_citation_hide(local_cit_list[j], hide_set_num)
+                toggle_row_hide(local_cit_list[j], hide_set_num)
                 list_output(local_cit_list)
                 continue
             elif response in 'Ss':
@@ -551,7 +554,7 @@ def modify_local_citation_list(rows, report_file, hide_set_num):
 
 
 # ===================================================DIV60==
-def toggle_citation_hide(row, hide_set_num):
+def toggle_row_hide(row, hide_set_num):
 
     if row[2] == 0:
         row[2] = hide_set_num
