@@ -95,7 +95,7 @@ UTCModDate FLOAT );
         while True:
             response_attachment = input(
                 '\nIs the citation list that is to be modified attached to:\n'
-                'a Fact (f), a Name (n) the Person (p) or skip this RIN (s)?:\n')
+                'a Fact (f), a Name (n) the Person (p) or go to another RIN (q)?:\n')
             if response_attachment == "":
                 continue
             if response_attachment in "Pp":
@@ -107,11 +107,11 @@ UTCModDate FLOAT );
             elif response_attachment in "Nn":
                 rows = attached_to_name(PersonID, db_connection, report_file, hide_set_num)
                 continue
-            elif response_attachment in "Ss":
+            elif response_attachment in "Qq":
                 break
             else:
                 print(F'{response_attachment} is not understood.\n'
-                      'Enter one of:  f, n, p, s     (s will skip this RIN).')
+                      'Enter one of:  f, n, p, q     (q will request another RIN).')
                 continue
 
     return 0
@@ -288,18 +288,29 @@ def attached_to_fact(PersonID, db_connection, report_file, hide_set_num):
 
     # Select all Events connected to RIN that have more than 1 citation attached
     SqlStmt = """
-SELECT et.EventID, ftt.Name, et.Date, et.Details
+SELECT et.EventID, ftt.Name COLLATE NOCASE, et.Date, et.Details
   FROM EventTable AS et
   INNER JOIN FactTypeTable AS ftt ON ftt.FactTypeID = et.EventType
   INNER JOIN CitationLinkTable AS clt ON clt.OwnerID = et.EventID
   WHERE et.OwnerID = ?
     AND et.OwnerType = 0
     AND clt.OwnerType = 2
+
+UNION
+
+SELECT et.EventID, ftt.Name COLLATE NOCASE, et.Date, et.Details
+  FROM EventTable AS et
+  INNER JOIN FactTypeTable AS ftt ON ftt.FactTypeID = et.EventType
+  INNER JOIN AuxCitationLinkTable AS aclt ON aclt.OwnerID = et.EventID
+  WHERE et.OwnerID = ?
+    AND et.OwnerType = 0
+    AND aclt.OwnerType = 2
+
 GROUP BY et.EventID
---HAVING COUNT() > 1;
+HAVING COUNT() > 1;
 """
     cur = db_connection.cursor()
-    cur.execute(SqlStmt, (PersonID, ))
+    cur.execute(SqlStmt, (PersonID,PersonID))
     rows = cur.fetchall()
 
     number_of_events = len(rows)
@@ -613,19 +624,16 @@ UPDATE  AuxCitationLinkTable
         if value[1] == 0 and value[2] != 0:
             # to be moved from main to Aux
             move_row_to_aux(value, db_connection)
-
         elif value[1] == 0 and value[2]== 0:
-            # row stays in main
-            pass
+            pass            # row stays in main
         elif value[1] == 1 and value[2] == 0:
             # to be moved from Aux to main
-            pass
+            move_row_to_main(value, db_connection)
         elif value[1] == 1 and value[2] != 0:
-            # row stays in Aux
-            pass
+            pass            # row stays in Aux
         else:
             raise RMc.RM_Py_Exception("unhandled move status")
-            
+
     return
 
 
@@ -633,18 +641,18 @@ UPDATE  AuxCitationLinkTable
 def move_row_to_aux(value, db_connection):
 
     cur = db_connection.cursor()
-#    cur.execute("SAVEPOINT nested")
+    cur.execute("SAVEPOINT nested")
 
     try:
         SQL_stmt = """
 INSERT INTO AuxCitationLinkTable
-(CitationID, OwnerType, OwnerID, SortOrder,
-HiddenSet,
-Quality, IsPrivate, Flags, UTCModDate)
+    (CitationID, OwnerType, OwnerID, SortOrder,
+    HiddenSet,
+    Quality, IsPrivate, Flags, UTCModDate)
 SELECT 
-CitationID, OwnerType, OwnerID, SortOrder,
-?,
-Quality, IsPrivate, Flags, UTCModDate
+    CitationID, OwnerType, OwnerID, SortOrder,
+    ?,
+    Quality, IsPrivate, Flags, UTCModDate
 FROM CitationLinkTable
 WHERE LinkID = ?;
 """
@@ -655,40 +663,38 @@ DELETE FROM CitationLinkTable
 WHERE LinkID = ?;
 """
         cur.execute(SQL_stmt, (value[0],))
-
-#        cur.execute("RELEASE nested")  # Commit nested transaction
+        cur.execute("RELEASE nested")  # Commit nested transaction
 
     except Exception as e:
-        print("Nested error:", e)
+        print("ERROR  Nested error:", e)
         cur.execute("ROLLBACK TO nested")  # Undo nested changes
         cur.execute("RELEASE nested")      # Clean up savepoint
 
 # ===================================================DIV60==
-def move_row_to_main(value):
+def move_row_to_main(value, db_connection):
 
     cur = db_connection.cursor()
-#    cur.execute("SAVEPOINT nested")
+    cur.execute("SAVEPOINT nested")
 
     try:
         SQL_stmt = """
 INSERT INTO CitationLinkTable
-(CitationID, OwnerType, OwnerID, SortOrder,
-Quality, IsPrivate, Flags, UTCModDate)
+    (CitationID, OwnerType, OwnerID, SortOrder,
+    Quality, IsPrivate, Flags, UTCModDate)
 SELECT 
-CitationID, OwnerType, OwnerID, SortOrder,
-Quality, IsPrivate, Flags, UTCModDate
-FROM CitationLinkTable
-WHERE LinkID = ?;
-"""
-        cur.execute(SQL_stmt, (value[0], ))
-
-        SQL_stmt = """
-DELETE FROM AuxCitationLinkTable
-WHERE LinkID = ?;
+    CitationID, OwnerType, OwnerID, SortOrder,
+    Quality, IsPrivate, Flags, UTCModDate
+FROM AuxCitationLinkTable
+WHERE AuxLinkID = ?;
 """
         cur.execute(SQL_stmt, (value[0],))
 
-#        cur.execute("RELEASE nested")  # Commit nested transaction
+        SQL_stmt = """
+DELETE FROM AuxCitationLinkTable
+WHERE AuxLinkID = ?;
+"""
+        cur.execute(SQL_stmt, (value[0],))
+        cur.execute("RELEASE nested")  # Commit nested transaction
 
     except Exception as e:
         print("Nested error:", e)
