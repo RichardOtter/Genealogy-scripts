@@ -38,8 +38,12 @@ def main():
     utility_info["script_path"]  = Path(__file__).parent
     utility_info["run_features_function"]  = run_selected_features
     utility_info["allow_db_changes"]  = True
-    utility_info["RMNOCASE_required"] = True
+    utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = True
     utility_info["RegExp_required"]   = False
+    utility_info["RegExp_optional"]   = True
+    
+
 
     RMpy.launcher.launcher(utility_info)
 

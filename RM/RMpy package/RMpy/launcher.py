@@ -100,7 +100,7 @@ def launcher(utility_info):
             raise RMc.RM_Py_Exception(
                 F"ERROR: Database path not found: {database_path}\n\n\n")
 
-
+        rmnocase_path = None
         if utility_info["RMNOCASE_required"]:
             try:
                 rmnocase_path = Path(config['FILE_PATHS']['RMNOCASE_PATH'])
@@ -111,7 +111,15 @@ def launcher(utility_info):
                 raise RMc.RM_Py_Exception(
                     f'ERROR: Path for RMNOCASE extension (unifuzz64.dll)\n'
                     f'not found: {rmnocase_path}\n\n')
-            
+
+        if utility_info["RMNOCASE_optional"]:
+            rmnocase_path = Path(config['FILE_PATHS']['RMNOCASE_PATH'])
+            if not rmnocase_path.exists():
+                raise RMc.RM_Py_Exception(
+                    f'ERROR: Path for RMNOCASE extension (unifuzz64.dll)\n'
+                    f'not found: {rmnocase_path}\n\n')
+
+        regexp_path = None
         if utility_info["RegExp_required"]:
             try:
                 regexp_path = config['FILE_PATHS']['REGEXP_PATH']
@@ -123,15 +131,23 @@ def launcher(utility_info):
                     f'ERROR: Path for REGEXP extension not found:'
                     f' {rmnocase_path}\n\n')
 
+        if utility_info["RegExp_optional"]:
+            regexp_path = config['FILE_PATHS']['REGEXP_PATH']
+            if not rmnocase_path.exists():
+                raise RMc.RM_Py_Exception(
+                    f'ERROR: Path for REGEXP extension not found:'
+                    f' {rmnocase_path}\n\n')
+
         # RM database file info
         file_modification_time = datetime.fromtimestamp(
             database_path.stat().st_mtime)
 
-        if utility_info["RMNOCASE_required"] and not utility_info["RegExp_required"]:
+
+        if rmnocase_path is not None  and regexp_path is None:
             db_connection = RMc.create_db_connection(database_path, [rmnocase_path])
-        elif not utility_info["RMNOCASE_required"] and utility_info["RegExp_required"]:
+        elif regexp_path is not None and rmnocase_path is None:
             db_connection = RMc.create_db_connection(database_path, [regexp_path])
-        elif utility_info["RMNOCASE_required"] and utility_info["RegExp_required"]:
+        elif regexp_path is not None and rmnocase_path is not None:
             db_connection = RMc.create_db_connection(database_path, [rmnocase_path, regexp_path])
         else:
             db_connection = RMc.create_db_connection(database_path, None)
