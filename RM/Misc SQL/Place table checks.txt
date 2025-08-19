@@ -1,0 +1,59 @@
+-- Data Quality checks
+
+-- List orphaned place details rows
+SELECT PlaceID, Name
+FROM PlaceTable
+WHERE PlaceType = 2 
+      AND MasterID NOT IN (
+    SELECT PlaceID FROM PlaceTable
+  );
+
+-- List primary places with non zero masterID
+-- unknown significance
+SELECT PlaceID, Name
+FROM PlaceTable
+WHERE PlaceType = 1 
+    AND MasterID <> 0;
+
+-- Place name starting with [~] mean 'probably at this place'
+-- Data entry rule- every probably place must have an exact matching certain place, without the [~].
+-- This SQL finds probably places that do not have a match.
+SELECT PlaceID, Name
+FROM PlaceTable
+WHERE Name COLLATE NOCASE LIKE '[~] %'
+  AND SUBSTR(Name, 5) NOT IN (
+    SELECT Name COLLATE NOCASE FROM PlaceTable
+  );
+
+
+-- List primary places that do not have the ==REV-____-__-__==
+-- at the start of the note field.
+SELECT PlaceID, Name
+FROM PlaceTable
+WHERE Note NOT LIKE '==REV-____-__-__==%' 
+AND placeType = 0;
+
+-- use this while in process of adding REV marker
+SELECT PlaceID, Name
+FROM PlaceTable
+WHERE Note NOT LIKE '==REV-____-__-__==%' 
+AND placeType = 0
+AND Reverse COLLATE NOCASE < "D"
+
+-- List recently edited/added and no REV marker
+WITH mjd_cte AS (
+  SELECT julianday('2025-08-19 15:10:00') - 2415018.5 AS mjd 
+)
+SELECT PlaceID, Name
+FROM PlaceTable
+WHERE Note NOT LIKE '==REV-____-__-__==%' 
+AND placeType = 0
+AND UTCModDate > (select mjd from mjd_cte);
+
+-- To quickly add REV tag in the SQL results window
+-- not editable if Name is displayed due to RMNOCASE
+SELECT PlaceID, Note
+FROM PlaceTable
+WHERE Note NOT LIKE '==REV-____-__-__==%' 
+AND placeType = 0
+AND UTCModDate > julianday('2025-08-19 15:10:00') - 2415018.5
