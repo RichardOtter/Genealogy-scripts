@@ -1,4 +1,5 @@
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
@@ -39,18 +40,14 @@ def main():
     utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
     utility_info["config_file_name"] = "RM-Python-config.ini"
     utility_info["script_path"] = Path(__file__).parent
-    utility_info["run_features_function"] = run_selected_features
+    utility_info["run_features_function"] = lump_sources
     utility_info["allow_db_changes"] = True
     utility_info["RMNOCASE_required"] = True
+    utility_info["RMNOCASE_optional"] = True
     utility_info["RegExp_required"] = False
+    utility_info["RegExp_optional"] = False
 
     RMpy.launcher.launcher(utility_info)
-
-
-# ===================================================DIV60==
-def run_selected_features(config, db_connection, report_file):
-
-    lump_sources(config, db_connection, report_file)
 
 
 # ===================================================DIV60==
@@ -82,17 +79,17 @@ def lump_sources(config, db_connection, report_file):
     # Check whether all sources use the same template
     # If they use more than one Template, it is not necessarily an error, as
     # long as the MAPPING_IDENT_SRC is appropriate
-    sources_to_check = []
     for source_type_to_check in lump_list:
+        sources_to_check = []
         lumped_SourceID = source_type_to_check[1]
         split_src_name_identifier = source_type_to_check[0]
 
         # List the split sources which will be converted to citations of the lumped source
-        SQL_stmt = (
-            """SELECT SourceID, TemplateID, Name
-      FROM SourceTable
-      WHERE Name LIKE ?
-    """)
+        SQL_stmt = """
+SELECT SourceID, TemplateID, Name
+  FROM SourceTable
+  WHERE Name COLLATE NOCASE LIKE ?
+"""
         cur = db_connection.cursor()
         cur.execute(SQL_stmt, (split_src_name_identifier,))
         for cur_row in cur:
@@ -137,11 +134,11 @@ def lump_sources(config, db_connection, report_file):
         split_src_name_identifier = lumped_source[0]
 
         # List the split sources which will be converted to citations of the lumped source
-        SQL_stmt = (
-            """SELECT SourceID, Name, TemplateID
-      FROM SourceTable
-      WHERE Name LIKE ?
-    """)
+        SQL_stmt =  """
+SELECT SourceID, Name, TemplateID
+    FROM SourceTable
+    WHERE Name LIKE ?
+"""
         cur = db_connection.cursor()
         cur.execute(SQL_stmt, (split_src_name_identifier,))
         split_sources_to_lump = []
@@ -174,11 +171,11 @@ def lump_sources(config, db_connection, report_file):
 def ConvertSource(db_connection, split_SourceID, lumped_SourceID, field_mapping, report_file):
 
     # display source name for confirmation
-    SqlStmt = (
-        """SELECT Name
+    SqlStmt = """
+SELECT Name
     FROM SourceTable
     WHERE SourceID = ?
-  """)
+"""
     cur = db_connection.cursor()
     cur.execute(SqlStmt, (lumped_SourceID,))
     report_file.write(F"Source to receive citation= {cur.fetchone()[0]}")
@@ -191,17 +188,17 @@ def ConvertSource(db_connection, split_SourceID, lumped_SourceID, field_mapping,
 
     if len(citation_IDs_to_move) != 1:
         raise (RMc.RM_Py_Exception(
-            "\n\nERROR: A split source to be lumped has more than one citation."))
+            "\n\nERROR: A split source to be lumped has # of citation not equal to 1."))
 
     for citation_to_move in citation_IDs_to_move:
         if ConvertCitation(db_connection, split_SourceID, lumped_SourceID, citation_to_move, field_mapping, report_file) == False:
             return
 
     # delete the old src (all of its citations have been moved to new source)
-    SqlStmt = (
-        """DELETE from SourceTable
-      WHERE SourceID = ?
-  """)
+    SqlStmt = """
+DELETE from SourceTable
+    WHERE SourceID = ?
+"""
     RunSqlNoResult(db_connection, SqlStmt, (split_SourceID, ))
     return
 
@@ -210,54 +207,54 @@ def ConvertSource(db_connection, split_SourceID, lumped_SourceID, field_mapping,
 def ConvertCitation(db_connection, split_SourceID, newSourceID, citationIDToMove, field_mapping, report_file):
 
     # Copy standard fields from old src record to the citationToMove
-    SqlStmt = (
-        """UPDATE CitationTable
-    SET (CitationName, ActualText, Comments, UTCModDate)
+    SqlStmt = """
+UPDATE CitationTable
+SET (CitationName, ActualText, Comments, UTCModDate)
       = (SELECT Name, ActualText, Comments, UTCModDate FROM SourceTable WHERE SourceID = ?)
     WHERE CitationID = ?
-  """)
+"""
     RunSqlNoResult(db_connection, SqlStmt, (split_SourceID, citationIDToMove))
 
     # Change owner & type columns for relevant web tags so they follow the citationToMove
     # takes all webtags linked to old source and add them to the citation in process
     # SO ONLY FIRST CITATION MOVED WILL GET THE OLD SOURCE WEB TAGS.  NOTE only 1 citation in the old source is supported
 
-    SqlStmt = (
-        """UPDATE URLTable
-    SET OwnerType = 4,
-        OwnerID = ? 
-    WHERE OwnerType = 3 AND OwnerID = ?
-  """)
+    SqlStmt = """
+UPDATE URLTable
+SET OwnerType = 4,
+    OwnerID = ? 
+WHERE OwnerType = 3 AND OwnerID = ?
+"""
     RunSqlNoResult(db_connection, SqlStmt, tuple(
         [citationIDToMove, split_SourceID]))
 
     # Change owner & type for relevant media so they follow the citationToMove
     # SO ONLY FIRST CITATION MOVED WILL GET THE OLD SOURCE MEDIA LINKS.
 
-    SqlStmt = (
-        """UPDATE MediaLinkTable
+    SqlStmt = """
+UPDATE MediaLinkTable
     SET OwnerType = 4,
         OwnerID = ? 
     WHERE OwnerType = 3 AND OwnerID = ?
-  """)
+"""
     RunSqlNoResult(db_connection, SqlStmt, tuple(
         [citationIDToMove, split_SourceID]))
 
     #  move the existing citation to the new (existing) source
-    SqlStmt = (
-        """UPDATE CitationTable
+    SqlStmt = """
+UPDATE CitationTable
     SET SourceID = ?
     WHERE CitationID = ?
-  """)
+"""
     RunSqlNoResult(db_connection, SqlStmt, tuple(
         [newSourceID, citationIDToMove]))
 
     # Get the SourceTable.Fields XML BLOB from the oldSource
-    SqlStmt = (
-        """SELECT Fields
+    SqlStmt = """
+        SELECT Fields
     FROM SourceTable
     WHERE SourceID = ?
-  """)
+"""
     oldSrcFields = {}
     srcRoot = getFieldsXmlDataAsDOM(db_connection, SqlStmt, split_SourceID)
 
@@ -276,11 +273,11 @@ def ConvertCitation(db_connection, split_SourceID, newSourceID, citationIDToMove
         print("citation XML NEW END ==============================")
 
     # Update the citation Fields column with the new XML
-    SqlStmt = (
-        """UPDATE CitationTable
+    SqlStmt = """
+UPDATE CitationTable
     SET Fields = ?
     WHERE CitationID = ?
-  """)
+"""
     RunSqlNoResult(db_connection, SqlStmt,
                    (ET.tostring(srcRoot), citationIDToMove))
 
@@ -327,11 +324,11 @@ def getFieldsXmlDataAsDOM(db_connection, SqlStmt, rowID):
 # ================================================================
 def getCitationsToMove(db_connection, oldSourceID):
     # get citations for oldSourceID
-    SqlStmt = (
-        """SELECT CitationID
+    SqlStmt = """
+SELECT CitationID
     FROM CitationTable
     WHERE SourceID = ?
-  """)
+"""
     cur = db_connection.cursor()
     cur.execute(SqlStmt, (oldSourceID,))
     citationsIDs = cur.fetchall()
