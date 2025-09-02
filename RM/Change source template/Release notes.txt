@@ -19,7 +19,7 @@ Adjust placement of COLLATE NOCASE in SQL statements.
 
 
 =========================================================================DIV80==
-v1.1.2
+Version: 1.1.2
 released in suite v1.0.2
 
 Fixed a loss of function.

@@ -1,5 +1,5 @@
-import xml.etree.ElementTree as ET
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
 
@@ -39,8 +39,6 @@ import RMpy.common as RMc       # noqa #type: ignore
 G_DEBUG = False
 
 # ===================================================DIV60==
-
-
 def main():
 
     # Configuration
@@ -52,7 +50,9 @@ def main():
     utility_info["run_features_function"] = run_selected_features
     utility_info["allow_db_changes"] = True
     utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
     utility_info["RegExp_required"] = False
+    utility_info["RegExp_optional"] = False
 
     RMpy.launcher.launcher(utility_info)
 
@@ -319,7 +319,7 @@ def convert_source(reportF, dbConnection, srcID, newTemplateID,
     # deal with this source's citations
     for citationTuple in get_citations_of_source(dbConnection, srcID):
         reportF.write(
-            '   "{citationTuple[0]}"    {citationTuple[1][:70]}\n')
+            F'   "{citationTuple[0]}"    {citationTuple[1][:70]}\n')
         convert_citation(
             citationTuple[0], field_mapping_citation, config, dbConnection)
         # end loop for citations
