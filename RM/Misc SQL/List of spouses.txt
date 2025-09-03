@@ -1,15 +1,14 @@
-  WITH
-  constants(C_StartPerson) AS
+  WITH Constants AS
     (SELECT   1   AS C_StartPerson
     ),
   List(PersonID, FamilyID) AS
     (SELECT ft.FatherID, ft.FamilyID
      FROM FamilyTable AS ft
-     WHERE MotherID = (SELECT C_StartPerson FROM constants)
+     WHERE MotherID = (SELECT C_StartPerson FROM Constants)
      UNION
      SELECT ft.MotherID, ft.FamilyID
      FROM FamilyTable AS ft
-     WHERE FatherID = (SELECT C_StartPerson FROM constants)
+     WHERE FatherID = (SELECT C_StartPerson FROM Vonstants)
     )
 
   SELECT nt.Given, nt.Surname
@@ -24,16 +23,16 @@ OR the same
 
 
   WITH
-  constants(C_StartPerson) AS
+  Constants AS
     (SELECT   6   AS C_StartPerson
     ),
   List(PersonID, FamilyID) AS
     (SELECT ft.FatherID, ft.FamilyID
      FROM FamilyTable AS ft
      WHERE (
-         MotherID = (SELECT C_StartPerson FROM constants)
+         MotherID = (SELECT C_StartPerson FROM Constants)
          OR
-         FatherID = (SELECT C_StartPerson FROM constants)
+         FatherID = (SELECT C_StartPerson FROM Constants)
          )
     )
 

@@ -1,5 +1,5 @@
 
-Records that serve as Top Level places, PlaceType=0, should have MasterID=0
+--Records that serve as Top Level places, PlaceType=0, should have MasterID=0
 
 FIND
 select pt.PlaceID, pt.PlaceType, MasterID, pt.Name

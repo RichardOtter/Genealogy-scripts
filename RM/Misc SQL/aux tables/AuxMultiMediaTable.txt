@@ -1,0 +1,10 @@
+
+
+INSERT INTO AuxMultimediaTable
+VALUES (
+13,
+'e0072553a5c6d3f15529e9505a808c8f',
+julianday('now') - 2415018.5
+);
+
+

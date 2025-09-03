@@ -1,4 +1,4 @@
-﻿-- Change RM7 BLOB columns to text, remove extraneous XML processing stmst and trailing /n.
+﻿-- Change RM7 BLOB columns to text, remove extraneous XML processing stmts and trailing /n.
 
 -- RM Table: CREATE TABLE CitationTable (
 -- CitationID INTEGER PRIMARY KEY, 

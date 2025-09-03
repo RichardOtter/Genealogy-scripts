@@ -1,9 +1,8 @@
 -- Select people who appear in a specified person's DNA match table
 
-WITH
-  constants(C_Person) AS (
-    SELECT   ?   AS C_Person
-    )
+WITH Constants AS ( SELECT
+   ?   AS C_Person)
+
 SELECT DISTINCT ID2
 FROM DNATable
 WHERE ID1 = (SELECT C_Person FROM constants)
@@ -12,5 +11,33 @@ UNION
 
 SELECT DISTINCT ID1
 FROM DNATable
-WHERE ID2 = (SELECT C_Person FROM constants)
+WHERE ID2 = (SELECT C_Person FROM Constants)
 
+
+-- ========================================DIV50==
+--  1 RJO
+--  4 Rose
+-- 17 Roman
+
+-- | 23andme        | 1   |
+-- | Ancestry       | 2   |
+-- | FamilyTree DNA | 3   |
+-- | Living DNA     | 4   |
+-- | MyHeritage     | 5   |
+-- | GEDmatch       | 6   |
+-- | Unknown        | 998 |
+-- | Other          | 999 |
+
+-- Look for duplicate Label 2 entries
+WITH  Constants AS ( SELECT 
+  17   AS C_Matcher,  -- 17 Roman
+   2   AS C_DNAService  -- 2 Ancestry )
+   
+  SELECT 
+  SharedCM, Label2, COUNT(*) c
+  FROM DNATable
+  WHERE ID1=(SELECT C_Matcher FROM constants)
+    AND DNAProvider=(SELECT C_DNAService FROM Constants)
+  GROUP BY Label2
+  HAVING c >1
+  ORDER BY SharedCM DESC;

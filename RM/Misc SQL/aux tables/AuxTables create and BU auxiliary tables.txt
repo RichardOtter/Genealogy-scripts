@@ -1,0 +1,65 @@
+
+
+--AuxDNATable
+CREATE TABLE AuxDNATable (
+AuxDNATableID INTEGER PRIMARY KEY,
+Sort1 INTEGER,
+Sort2 INTEGER,
+UTCModDate FLOAT,
+FOREIGN KEY (AuxDNATableID) REFERENCES DNATable(RecID)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE AuxMultimediaTable (
+AuxMultimediaTableID INTEGER PRIMARY KEY,
+MD5Hash TEXT,
+UTCModDate FLOAT,
+FOREIGN KEY (AuxMultimediaTableID) REFERENCES MultimediaTable(MediaID)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS AuxCitationLinkTable (
+AuxLinkID INTEGER PRIMARY KEY,
+CitationID INTEGER,
+OwnerType INTEGER,
+OwnerID INTEGER,
+SortOrder INTEGER,
+HiddenSet INTEGER,
+Quality TEXT,
+IsPrivate INTEGER,
+Flags INTEGER,
+UTCModDate FLOAT
+);
+
+=========================================================================DIV80==
+explanation
+
+The constraint:
+FOREIGN KEY (AuxDNATableID) REFERENCES DNATable(RecID)
+    ON DELETE CASCADE
+
+ensures that when a row in the main table is deleted, the corresponding row
+in the aux table is also deleted.
+
+tested-  delete a row in dnatable, the corresponding row in aux dna table is deleted.
+if delete row in aux dna table, nothing happens in dnatable.
+
+
+
+=========================================================================DIV80==
+For backup-
+see-
+"C:\Users\rotter\Development\Maintenance\Extract and Backup aux tables.py"
+
+=========================================================================DIV80==
+For restore-
+write utility if it is needed
+
+=========================================================================DIV80==
+Remove Aux tables
+DROP TABLE AuxDNATable;
+DROP TABLE AuxMultimediaTable;
+DROP TABLE AuxCitationLinkTable;
+
+=========================================================================DIV80==
+

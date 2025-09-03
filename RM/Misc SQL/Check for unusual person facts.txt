@@ -1,5 +1,6 @@
 --===========================================DIV50==
---PERSONS WITH a FACt of type 0
+--Persons with a fact of type 0
+
    SELECT personID
    FROM PersonTable
    JOIN EventTable ON PersonID = OwnerID
@@ -7,7 +8,7 @@
 
 
 --===========================================DIV50==
---count  !=1 PERSONS WITH primary name
+--count !=1 Persons with primary name
 
 SELECT PersonTable.PersonID
 FROM PersonTable

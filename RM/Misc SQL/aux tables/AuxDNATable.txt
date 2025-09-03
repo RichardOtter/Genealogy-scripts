@@ -1,0 +1,218 @@
+| DNAProvider    |     |
+| -------------- | --- |
+| 23andme        | 1   |
+| Ancestry       | 2   |
+| FamilyTree DNA | 3   |
+| Living DNA     | 4   |
+| MyHeritage     | 5   |
+| GEDmatch       | 6   |
+| Unknown        | 998 |
+| Other          | 999 |
+
+
+CREATE TABLE main.AuxDNATable (
+AuxDNATableID INTEGER PRIMARY KEY,
+Sort1 INTEGER,
+Sort2 INTEGER,
+UTCModDate FLOAT,
+FOREIGN KEY (AuxDNATableID) REFERENCES DNATable(RecID)
+    ON DELETE CASCADE
+);
+-- tested-  delete a row in dnatable, the corresponding row in aux dna table is dleted.
+-- if dele row in aux dna table, nothing happens in dnatable.
+
+
+don't remember why there are 2 sort cols.
+
+
+=========================================================================DIV80==
+
+PRAGMA foreign_keys = OFF;
+
+INSERT INTO main.AuxDNATable ( AuxDNATableID, Sort1, Sort2, UTCModDate)
+SELECT SupRecID, Sort2, Sort2, julianday('now') - 2415018.5
+FROM adf.DNATableExtra;
+
+PRAGMA foreign_keys = ON;
+
+Had to turn off foreign foreign_key , why
+
+Select RecID, AuxDNATableID
+from AuxDNATable as adt
+inner join DNATable on RecID = AuxDNATableID
+
+couldn't find nulls, or duplicates. turn on constraint and it ok
+
+--===========================================DIV50==
+-- testing
+
+Alternative sorting idea
+Tried adding very small numbers 10e-6 to sharedcm in RM gui
+but it did not chnage the database.
+Probably rounds to 2 decimal places first
+Also made the change directly in SQL, but it didn't chnage sorting in RM
+Probably sorts onm the rounded number.
+
+So this technique will not work
+
+--===========================================DIV50==
+
+
+-- Display DNA Table and Extra data in grid
+SELECT Label1, Label2, Sort1, Sort2
+FROM DNATable as dt
+INNER JOIN AuxDNATable AS adt ON dt.RecID = adt.AuxDNATableID
+WHERE dt.recId = 5;
+
+
+
+-- Add more rows to Extra table after new DNATable entries were made.
+INSERT OR IGNORE INTO DNATableExtra (SupRecID, Sort1)
+SELECT DNATable.RecID, cast(round(SharedCM, 2) *10 as INT)
+FROM DNATable;
+
+-- Fix order   (be sure to specify record ID, not row number)
+UPDATE AuxDNATable
+SET Sort2 = 2
+WHERE SupRecID = 1683;
+
+SELECT ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC)AS Num,
+    dt.recID, Label2, dte.Sort1, Sort2, dte.Info
+FROM DNATable as dt
+INNER JOIN rde.DNATableExtra AS dte ON dt.RecID = dte.SupRecID
+WHERE dt.DNAProvider = 2
+AND ID1 = 1
+ORDER BY Sort1 DESC, Sort2 ASC;
+
+=========================================================================DIV80==
+
+
+SELECT SharedCM, Label2
+ FROM DNATable
+ WHERE RecID IN (SELECT RecID FROM duplicates)
+  OR LABEL2 == (SELECT Label2 FROM duplicates)
+ ORDER BY Label2;
+
+=========================================================================DIV80==
+
+
+
+    SELECT   row_number() 
+         over ( ORDER BY SharedCM desc) || '     '|| round(SharedCM, 2)|| '   ' || label2
+      FROM DNATable
+      WHERE ID1 = 4
+      AND DNAProvider = 5
+    ORDER BY SharedCM desc
+    
+
+=========================================================================DIV80==
+
+-- Add more rows to Extra table after new DNATable entries were made.
+INSERT OR IGNORE INTO DNATableExtra (SupRecID, Sort1)
+SELECT DNATable.RecID, cast(round(SharedCM, 2) *10 as INT)
+FROM DNATable;
+=========================================================================DIV80==
+
+-- Fix order   (be sure to specify record ID, not row number)
+-- instead edit the select results in VS Code below
+UPDATE DNATableExtra
+SET Sort2 = 2
+WHERE SupRecID = 1683;
+
+
+
+===========================================DIV50==
+-- Generate listing mod 10
+-- https://www.sqlitetutorial.net/sqlite-window-functions/sqlite-row_number/
+-- https://www.sqlitetutorial.net/sqlite-window-functions/sqlite-row_number/
+
+WITH
+ constants AS (
+    SELECT   17  AS C_Matcher,  -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
+              2  AS C_DnaServiice,  -- 2 Ancestry
+              0  AS C_Offset ),
+ tab AS (
+  SELECT 
+  (ROW_NUMBER() 
+    OVER( ORDER BY SharedCM DESC)
+    )-(SELECT C_Offset FROM constants) AS SeqNum,
+  SharedCM, Label2 
+  FROM DNATable
+  WHERE ID1=(SELECT C_Matcher FROM constants)
+    AND DNAProvider=(SELECT C_DnaServiice FROM constants)
+  ORDER BY SharedCM DESC
+  )
+SELECT   *
+FROM tab
+WHERE 0 = seqNum%10;
+
+===========================================DIV50==
+-- Look for duplicate Label 2 entries
+WITH Constants AS (SELECT
+    17   AS C_Matcher, 
+     2   AS C_DnaServiice )
+
+  SELECT SharedCM, Label2, COUNT(*) AS c
+  FROM 
+   ID1=(SELECT C_Matcher FROM constants)
+    AND DNAProvider=(SELECT C_DnaServiice FROM constants)
+  GROUP BY Label2
+  HAVING c >1
+  ORDER BY SharedCM DESC;
+  
+===========================================DIV50==
+This is probably older
+
+-- Look for duplicate Label 2 entries
+WITH
+ constants(C_Matcher, C_DnaService) AS (
+    SELECT   17   AS C_Matcher,  -- 4 Rose
+              2   AS C_DnaService  -- 2 Ancestry
+    ),
+ duplicates(RecID, Label2, c) AS (
+  SELECT RecID, Label2, COUNT(*) AS c
+  FROM DNATable
+  WHERE ID1=(SELECT C_Matcher FROM constants)
+    AND DNAProvider=(SELECT C_DnaService FROM constants)
+  GROUP BY Label2
+  HAVING c >1
+  ORDER BY SharedCM DESC)
+
+SELECT SharedCM, Label2
+ FROM DNATable
+ WHERE RecID IN (SELECT RecID FROM duplicates)
+  OR LABEL2 == (SELECT Label2 FROM duplicates)
+ ORDER BY Label2;
+=========================================================================DIV80==
+
+what does this do?
+
+-- perhaps add Constants CTE
+SELECT ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC)AS Num,
+    dt.recID, Label2, dte.Sort1, Sort2, dte.Info, dt.rowid, dte.rowid
+FROM DNATable as dt
+INNER JOIN rde.DNATableExtra AS dte ON dt.RecID = dte.SupRecID
+WHERE dt.DNAProvider = 5
+--ND Sort1 = 190
+AND ID1 = 4
+ORDER BY Sort1 DESC, Sort2 ASC;
+
+=========================================================================DIV80==
+
+WITH
+ Constants AS (
+    SELECT   17     AS C_Matcher,       -- 4 Rose
+              2     AS C_DnaService,    -- 2 Ancestry
+              1170  AS C_cMonly        -- NULL or integer (cM*10)
+    )
+SELECT ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC) AS Num,
+    Label2, dte.Sort1, Sort2, dte.Info, Label1, dt.rowid, dte.rowid
+FROM DNATable as dt
+INNER JOIN rde.DNATableExtra AS dte ON dt.RecID = dte.SupRecID
+WHERE dt.DNAProvider = (SELECT C_DnaService FROM Constants)
+ AND IIF((SELECT C_cMonly FROM Constants) is not NULL, Sort1 = (SELECT C_cMonly FROM Constants), true)
+ORDER BY Sort1 DESC, Sort2 ASC;
+
+=========================================================================DIV80==
+
+
