@@ -12,10 +12,10 @@
   -- (make place '' for no selection of birth place e.g. if places do not include country)
   --
   WITH
-  constants(C_YearCensus, C_YearBirth, C_PlaceBirth) AS (
-    SELECT   1930            AS C_YearCensus,
-             1830            AS C_YearBirth,
-             'United States' AS C_PlaceBirth
+  Constants AS ( SELECT
+     1930            AS C_YearCensus,
+     1830            AS C_YearBirth,
+     'United States' AS C_PlaceBirth
   ),
   existing_events AS  -- All census events whose Description starts with YearCensus
   (
@@ -24,7 +24,7 @@
   INNER JOIN FactTypeTable AS ftt ON et.EventType = ftt.FactTypeID
   WHERE
       et.OwnerType = 0
-  AND et.Details LIKE ( (SELECT C_YearCensus FROM constants) || '%') COLLATE NOCASE
+  AND et.Details LIKE ( (SELECT C_YearCensus FROM Constants) || '%') COLLATE NOCASE
   AND (ftt.Name COLLATE NOCASE = 'Census' OR ftt.Name COLLATE NOCASE = 'Census_research')
   )
   --
@@ -36,10 +36,10 @@
     LEFT JOIN EventTable AS et_death  ON et_death.OwnerID = pt.PersonID
                                       AND et_death.EventType = 2
   WHERE
-    plt.Name LIKE '%' || (SELECT C_PlaceBirth FROM constants) || '%'
-    AND  CAST(SUBSTR(et_birth.DATE, 4,4) as Integer) < CAST((SELECT C_YearCensus FROM constants) as Integer)
-    AND  CAST(SUBSTR(et_birth.DATE, 4,4) as Integer) > CAST((SELECT C_YearBirth FROM constants) as Integer)
-    AND ( CAST(SUBSTR(et_death.DATE, 4,4) as Integer) > CAST((SELECT C_YearCensus FROM constants) as Integer)
+    plt.Name LIKE '%' || (SELECT C_PlaceBirth FROM Constants) || '%'
+    AND  CAST(SUBSTR(et_birth.DATE, 4,4) as Integer) < CAST((SELECT C_YearCensus FROM Constants) as Integer)
+    AND  CAST(SUBSTR(et_birth.DATE, 4,4) as Integer) > CAST((SELECT C_YearBirth FROM Constants) as Integer)
+    AND ( CAST(SUBSTR(et_death.DATE, 4,4) as Integer) > CAST((SELECT C_YearCensus FROM Constants) as Integer)
           OR et_death.OwnerID IS NULL)
   --
   EXCEPT

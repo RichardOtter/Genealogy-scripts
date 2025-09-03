@@ -4,9 +4,9 @@
   -- See line 3         SELECT   2361   AS C_StartPerson
   -- C_BirthParentOnly = 0 or 1.   1=only birth parents included
   WITH RECURSIVE
-  constants(C_StartPerson, C_BirthParentOnly) AS (
-    SELECT   2361   AS C_StartPerson,
-                1   AS C_BirthParentOnly
+  Constants AS ( SELECT
+     2361   AS C_StartPerson,
+        1   AS C_BirthParentOnly
     ),
   cousin_of(CousinID) AS (
     SELECT AncestorID FROM ancestor_of
@@ -16,7 +16,7 @@
     ),
   ancestor_of(AncestorID) AS (
     SELECT ParentID FROM parent_of
-      WHERE ChildID=(SELECT C_StartPerson FROM constants)
+      WHERE ChildID=(SELECT C_StartPerson FROM Constants)
     UNION
       SELECT ParentID FROM parent_of
       INNER JOIN ancestor_of ON ChildID = AncestorID
@@ -26,7 +26,7 @@
       FROM ChildTable AS ct
       LEFT JOIN FamilyTable USING(FamilyID)
       WHERE ParentID <> 0 AND
-        CASE (SELECT C_BirthParentOnly FROM constants)
+        CASE (SELECT C_BirthParentOnly FROM Constants)
         WHEN 1 THEN RelFather=0 ELSE 1
         END
     UNION
@@ -34,7 +34,7 @@
       FROM ChildTable AS ct
       LEFT JOIN FamilyTable USING(FamilyID)
       WHERE ParentID <> 0 AND
-        CASE (SELECT C_BirthParentOnly FROM constants)
+        CASE (SELECT C_BirthParentOnly FROM Constants)
         WHEN 1 THEN RelMother=0 ELSE 1
         END
     ),
@@ -42,14 +42,14 @@
     SELECT FatherID, ct.ChildID FROM FamilyTable
       LEFT JOIN ChildTable AS ct USING(FamilyID)
       WHERE FatherID <> 0 AND
-        CASE (SELECT C_BirthParentOnly FROM constants)
+        CASE (SELECT C_BirthParentOnly FROM Constants)
         WHEN 1 THEN RelFather=0 ELSE 1
         END
     UNION
     SELECT MotherID, ct.ChildID FROM FamilyTable
       LEFT JOIN ChildTable AS ct USING(FamilyID)
       WHERE MotherID <> 0 AND
-        CASE (SELECT C_BirthParentOnly FROM constants)
+        CASE (SELECT C_BirthParentOnly FROM Constants)
         WHEN 1 THEN RelFather=0 ELSE 1
         END
     )

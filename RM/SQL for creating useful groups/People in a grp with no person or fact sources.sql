@@ -4,8 +4,8 @@
   -- people may still have family, family fact, association,or name citations
   -- specify the group name in line 9
   WITH
-    constants(C_GroupName) AS (
-      SELECT    'GROUP_NAME_GOES_HERE'    AS C_GroupName
+    Constants AS (SELECT
+    'GROUP_NAME_GOES_HERE'    AS C_GroupName
       ),
     group_members(PersonID) AS (
       SELECT pt.PersonID
@@ -14,7 +14,7 @@
         INNER JOIN TagTable AS tt ON tt.TagValue = gt.GroupID
         WHERE gt.GroupID = tt.TagValue
           AND tt.TagType = 0
-          AND tt.TagName = (SELECT C_GroupName FROM constants) COLLATE NOCASE
+          AND tt.TagName = (SELECT C_GroupName FROM Constants) COLLATE NOCASE
       )
   -- No person citations
   SELECT gm.PersonID
