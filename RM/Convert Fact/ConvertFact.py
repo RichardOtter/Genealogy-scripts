@@ -35,18 +35,14 @@ def main():
     utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
     utility_info["config_file_name"]  = "RM-Python-config.ini"
     utility_info["script_path"]  = Path(__file__).parent
-    utility_info["run_features_function"]  = run_selected_features
+    utility_info["run_features_function"]  = convert_fact_feature
     utility_info["allow_db_changes"]  = True
     utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
     utility_info["RegExp_required"]   = False
+    utility_info["RegExp_optional"]   = False
 
     RMpy.launcher.launcher(utility_info)
-
-
-# ===================================================DIV60==
-def run_selected_features(config, db_connection, report_file):
-
-    convert_fact_feature(config, db_connection, report_file)
 
 
 # ===================================================DIV60==
