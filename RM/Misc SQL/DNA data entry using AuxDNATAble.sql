@@ -6,36 +6,26 @@
 
 
 
-INSERT OR IGNORE INTO AuxDNATable (SupRecID, Sort1)
-SELECT DNATable.RecID, cast(round(SharedCM, 2) *10 as INT)
-FROM DNATable;
 
 
---  1       Richard
---  4       Rose
---  17      Roman
---  12      Ethel
---  6       Gloria
---  1530    Tamara
 
---  1       23andMe
---  2       Ancestry
---  5       MyHeritage
+
 
 
 WITH
  Constants AS (SELECT
-    17     AS C_Matcher,
+    1     AS C_Matcher,
      2     AS C_DnaService,
-     1170  AS C_cMonly        -- NULL or integer (cM*10)
+     NULL  AS C_cMonly        -- NULL or integer (cM * 10)
     )
 SELECT ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC) AS Num,
-    Label2, dte.Sort1, Sort2, dte.Info, Label1, dt.rowid, dte.rowid
+    Label2, Sort1, Sort2, Label1, dt.rowid, adt.rowid
 FROM DNATable as dt
-INNER JOIN rde.DNATableExtra AS dte ON dt.RecID = dte.SupRecID
-WHERE dt.DNAProvider = (SELECT C_DnaService FROM Constants)
+INNER JOIN AuxDNATable AS adt ON dt.RecID = adt.AuxDNATableID
+WHERE DNAProvider = (SELECT C_DnaService FROM Constants)
+ AND ID1 = (SELECT C_Matcher FROM Constants)
  AND IIF((SELECT C_cMonly FROM Constants) is not NULL, Sort1 = (SELECT C_cMonly FROM Constants), true)
-ORDER BY Sort1 DESC, Sort2 ASC;
+ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC;
 
 
 -- Look for duplicate Label 2 entries for a given person and DNAService
