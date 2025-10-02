@@ -67,7 +67,10 @@ FROM DNATable;
 
 
 --===========================================DIV50==
+-- main test SQL
 -- shows  DNA Table sorted by AuxDNATable steps of 10
+-- or all by commenting out last where clause
+
 -- https://www.sqlitetutorial.net/sqlite-window-functions/sqlite-row_number/
 -- if there are discrepancies, figure out:
 -- are the duplicates in DNA Table, 
@@ -79,23 +82,21 @@ FROM DNATable;
 -- UTCModDate will be auto updated via trigger.
 
 WITH
- constants AS ( SELECT
-       4  AS C_Matcher,  -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
-       5  AS C_DnaService,  -- 2 Anc, 5 MyHer
-       1  AS C_Offset ),
+ constants AS (SELECT
+    4  AS C_Matcher,  -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
+    5  AS C_DnaService,  -- 2 Anc, 5 MyHer
+    1  AS C_Offset ),
  tab AS (
   SELECT 
-  (ROW_NUMBER() 
-    OVER( ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC)
-    )-(SELECT C_Offset FROM constants) AS SeqNum,
-  SharedCM, Label2, Sort1, Sort2
+  (ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC))
+    -(SELECT C_Offset FROM constants) AS SeqNum,
+   Label2, Sort1, Sort2, SharedCM, adt.UTCModDate
   FROM DNATable
   INNER JOIN AuxDNATable AS adt ON AuxDNATableID = RecID
-  WHERE ID1 = (SELECT C_Matcher FROM constants)
-    AND DNAProvider = (SELECT C_DnaService FROM constants)
+  WHERE ID1=(SELECT C_Matcher FROM constants)
+    AND DNAProvider=(SELECT C_DnaService FROM constants)
   ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC)
-  
-SELECT   *
+SELECT *
 FROM tab
 WHERE 0 = seqNum%10;
 
