@@ -140,6 +140,8 @@ def attached_to_name(PersonID, db_connection, report_file, hide_set_num):
 
     # Select names connected to RIN and that have more than 1 citation attached
     SqlStmt = """
+WITH Families AS (
+)
 SELECT  nt.NameID,
         nt.Date,
         nt.Prefix COLLATE NOCASE,
@@ -250,7 +252,6 @@ def select_name_from_list(rows):
     return rows[event_number - 1][0]
 
 
-
 # ===========================================DIV50==
 def NEW_attached_to_fact(PersonID, db_connection, report_file, hide_set_num):
 
@@ -322,29 +323,61 @@ def attached_to_fact(PersonID, db_connection, report_file, hide_set_num):
 
     # Select all Events connected to RIN that have more than 1 citation attached
     SqlStmt = """
+WITH 
+Constants AS ( SELECT  ?   AS C_PersonID ),
+Families AS (
+    SELECT FamilyID
+    FROM FamilyTable
+    WHERE (FatherID = (SELECT C_PersonID FROM Constants)
+        OR MotherID = (SELECT C_PersonID FROM Constants))
+        )
+
+-- Individual events
 SELECT et.EventID, ftt.Name COLLATE NOCASE, et.Date, et.Details
   FROM EventTable AS et
   INNER JOIN FactTypeTable AS ftt ON ftt.FactTypeID = et.EventType
   INNER JOIN CitationLinkTable AS clt ON clt.OwnerID = et.EventID
-  WHERE et.OwnerID = ?
+  WHERE et.OwnerID = (SELECT C_PersonID FROM Constants)
     AND et.OwnerType = 0
     AND clt.OwnerType = 2
 
 UNION
-
+-- Individual events from aux table
 SELECT et.EventID, ftt.Name COLLATE NOCASE, et.Date, et.Details
   FROM EventTable AS et
   INNER JOIN FactTypeTable AS ftt ON ftt.FactTypeID = et.EventType
   INNER JOIN AuxCitationLinkTable AS aclt ON aclt.OwnerID = et.EventID
-  WHERE et.OwnerID = ?
+  WHERE et.OwnerID = (SELECT C_PersonID FROM Constants)
     AND et.OwnerType = 0
     AND aclt.OwnerType = 2
 
+UNION
+
+-- Family events
+SELECT et.EventID, ftt.Name COLLATE NOCASE, et.Date, et.Details
+  FROM EventTable AS et
+  INNER JOIN FactTypeTable AS ftt ON ftt.FactTypeID = et.EventType
+  INNER JOIN CitationLinkTable AS clt ON clt.OwnerID = et.EventID
+  WHERE et.OwnerID IN (SELECT FamilyID FROM Families)
+    AND et.OwnerType = 1
+    AND clt.OwnerType = 2
+
+UNION
+
+-- Family events from aux table
+  SELECT et.EventID, ftt.Name COLLATE NOCASE, et.Date, et.Details
+  FROM EventTable AS et
+  INNER JOIN FactTypeTable AS ftt ON ftt.FactTypeID = et.EventType
+  INNER JOIN AuxCitationLinkTable AS aclt ON aclt.OwnerID = et.EventID
+  WHERE et.OwnerID IN (SELECT FamilyID FROM Families)
+    AND et.OwnerType = 0
+    AND aclt.OwnerType = 2
+    
 GROUP BY et.EventID
 HAVING COUNT() > 1;
 """
     cur = db_connection.cursor()
-    cur.execute(SqlStmt, (PersonID,PersonID))
+    cur.execute(SqlStmt, (PersonID,))
     rows = cur.fetchall()
 
     number_of_events = len(rows)
