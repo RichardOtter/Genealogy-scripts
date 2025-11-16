@@ -14,6 +14,10 @@ to the \Users\Test folder for convenience.
 
 Examine the \Users\Test\Report.txt generated and compare with the report shown below.
 
+Test relative vs absolute file path for paths specific to this app-
+SEARCH_ROOT_FLDR_PATH
+HASH_FILE_FLDR_PATH
+Others tested in the RM Package test
 
 Ignore file testing
 

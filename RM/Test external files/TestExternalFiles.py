@@ -1,7 +1,8 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
+sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / r'..\RMpy package')))
 
+from os import chdir
 import RMpy.common as RMc       # noqa #type: ignore
 import RMpy.launcher            # noqa #type: ignore
 from RMpy.common import q_str   # noqa #type: ignore
@@ -56,16 +57,17 @@ def main():
 
     # Configuration
     utility_info = {}
-    utility_info["utility_name"]      = "TestExternalFiles" 
-    utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
-    utility_info["config_file_name"]  = "RM-Python-config.ini"
-    utility_info["script_path"]  = Path(__file__).parent
+    utility_info["utility_name"]     = "TestExternalFiles" 
+    utility_info["utility_version"]  = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
+    utility_info["config_file_name"] = "RM-Python-config.ini"
     utility_info["run_features_function"]  = run_selected_features
-    utility_info["allow_db_changes"]  = False
-    utility_info["RMNOCASE_required"] = False
-    utility_info["RMNOCASE_optional"] = False
-    utility_info["RegExp_required"]   = False
-    utility_info["RegExp_optional"]   = False
+    utility_info["allow_db_changes"]       = False
+    utility_info["RMNOCASE_required"]      = False
+    utility_info["RMNOCASE_optional"]      = False
+    utility_info["RegExp_required"]        = False
+    utility_info["RegExp_optional"]        = False
+
+    chdir(Path(__file__).resolve().parent)
 
     RMpy.launcher.launcher(utility_info)
 
@@ -95,6 +97,7 @@ def run_selected_features(config, db_connection, report_file):
         config['OPTIONS'].getboolean('NOT_MEDIA_FLDR')
         config['OPTIONS'].getboolean('SHOW_ORIG_PATH')
         config['OPTIONS'].getboolean('CASE_INSENSITIVE')
+        
         config['OPTIONS'].getboolean('TESTING_USE_LOCAL_RM_XML')
 
     except:

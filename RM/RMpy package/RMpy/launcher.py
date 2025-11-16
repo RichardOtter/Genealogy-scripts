@@ -30,12 +30,11 @@ def launcher(utility_info):
                 "       Enclose the configuration file path parameter with \n"
                 "       double quotes if it contains spaces or special characters.")
         if len(sys.argv) == 2:
+            # use the parameter path as is.
+            # Shell will use current dir for relative paths.
             config_file_path = Path(sys.argv[1])
         else:
-            config_file_name = utility_info["config_file_name"]
-            config_file_path = (
-                RMc.get_current_directory(utility_info["script_path"]) 
-                    / config_file_name )
+            config_file_path = Path(utility_info["config_file_name"])
         # Check that config file exists and that it is readable & valid.
         if not config_file_path.exists():
             raise RMc.RM_Py_Exception(
@@ -98,7 +97,8 @@ def launcher(utility_info):
             raise RMc.RM_Py_Exception('ERROR: DB_PATH must be specified.')
         if not database_path.exists():
             raise RMc.RM_Py_Exception(
-                F"ERROR: Database path not found: {database_path}\n\n\n")
+                F'ERROR: Database path not found:\n'
+                F' "{database_path}"\n')
 
         rmnocase_path = None
         if utility_info["RMNOCASE_required"]:
