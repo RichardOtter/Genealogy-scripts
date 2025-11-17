@@ -1,4 +1,12 @@
+LumpSources.py
+
+Version: 1.0.0
+to be in suite v1.1.0
 First release
-v1.0
+
 Lumps sources
-Used for Newspapers so far
+
+
+add requirements and filters
+
+

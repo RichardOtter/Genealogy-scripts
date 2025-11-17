@@ -10,7 +10,7 @@ _top_level_build_config.yaml
 _util_info.yaml
 
 Confirm documentation correct, both the top level ReadMe in the doc folder
-and the individulal ReadMe's for each utility.
+and the individual ReadMe's for each utility.
 
 Do a test run of the main build script in repo\dev util scripts
 

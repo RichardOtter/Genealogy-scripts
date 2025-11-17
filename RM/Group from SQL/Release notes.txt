@@ -15,11 +15,11 @@ ReadMe now uses template and library for consistency.
 
 
 =========================================================================DIV80==
-v1.3.3
+Version: 1.3.3
 released in suite v1.0.2
 
 =========================================================================DIV80==
-v1.3.0
+Version: 1.3.0
 Now allows multiple line values for key GROUP_NAME
 
 Each assigned group name, one per line, is updated in the same run.

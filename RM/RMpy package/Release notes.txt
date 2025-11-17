@@ -6,12 +6,17 @@ New feature release
 
 Allows specification of config file on command line
 
+Adds new app configurations-
+RMNOCASE_optional
+RegExp_optional
+
 Code improvements:
 minor change in import order
-
+Launcher now sets the current directory to the location of the calling script file.
+No longer calls code to deal with frozen code distributions.
 
 =========================================================================DIV80==
-v1.1.0
+Version: 1.1.0
 released in suite v1.0.2
 
 

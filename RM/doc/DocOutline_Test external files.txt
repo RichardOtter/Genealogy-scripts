@@ -244,6 +244,7 @@ SEARCH_ROOT_FLDR_PATH
 The folder specified in RM's preferences as the Media folder is not 
 necessarily the same as the folder specified by the SEARCH_ROOT_FLDR_PATH
 variable in the config file  (but I recommended that they be the same).
+Use the absolute path of the folder.
 
 
 =========-
@@ -296,6 +297,25 @@ A listing of "DB entires with blank filename or path found" is displayed when a
 media item in the database has a blank file path or file name. These items
 should be fixed first.
 
+=========-
+Paths specified in the Config file and command line
+Paths may, in general, be written as either Absolute or Relative format.
+
+Allows absolute or relative to current directory:
+Command line argument specifying the config file location
+
+Allows absolute or relative to folder containing py file:
+DB__PATH
+REPORT_FILE_PATH
+
+Allows absolute
+REPORT_FILE_DISPLAY_APP
+
+RMNOCASE_PATH
+SEARCH_ROOT_FLDR_PATH
+HASH_FILE_FLDR_PATH
+
+
 
 =========-
 Background information: File paths pointing to external files
@@ -311,7 +331,7 @@ RM 8&9 Relative path symbols
 
 
 =========-
-Switching between RM 8, RM 9 and RM 10
+Switching between RM 8, RM 9, RM 10 and RM 11
 This section probably applies to no-one. Please don't read it and get confused !
 If the machine running the script has had multiple versions of RootsMagic
 installed, over the years, there may be slightly unexpected behavior in some

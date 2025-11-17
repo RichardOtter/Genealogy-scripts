@@ -1,6 +1,6 @@
 ChangeSrcForCitation.py
 
-v1.1.0
+Version: 1.1.0
 to be in suite v1.1.0
 
 New feature release
@@ -23,7 +23,8 @@ Improve imports.
 Used F stings for output.
 
 
-v1.0.2
+=========================================================================DIV80==
+Version: 1.0.2
 in suite v1.0.2
 Maintenance release.
 

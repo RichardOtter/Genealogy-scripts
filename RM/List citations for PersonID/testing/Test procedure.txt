@@ -46,13 +46,6 @@ Report file header content
 Locked database
 Bad SQL
 
-test absolute and relative paths
-given different ways of starting app
-debugger
-terminal
-explorer
-explorer shortcut
-
 
 =========================================================================DIV80==
 common.py

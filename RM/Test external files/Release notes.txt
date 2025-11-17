@@ -18,12 +18,13 @@ Adds hidden testing feature to allow setting of media folder while testing
 
 
 =========================================================================DIV80==
-v1.8.2
-Bug fix-
+Version: 1.8.4
+released in suite 1.0.2
+
+=========================================================================DIV80==
+Version: 1.8.2
+
+Bug fix
 1.8.1 would fail if a file was saved relative to the user's home dir.
 This was introduced in 1.8.1 in moving from os to pathlib for path handling.
 
-
-=========================================================================DIV80==
-v1.8.4 
-released in suite 1.0.2
