@@ -42,7 +42,6 @@ def main():
     utility_info["RMNOCASE_optional"] = True
     utility_info["RegExp_required"]   = False
     utility_info["RegExp_optional"]   = True
-    
 
 
     RMpy.launcher.launcher(utility_info)
@@ -57,6 +56,10 @@ def run_selected_features(config, db_connection, report_file):
 def RunSQLFeature(config, db_connection, report_file):
 
     Divider = "="*60 + "===DIV70=="
+
+#  Turn on printing of executed statements
+    db_connection.set_trace_callback(report_file.write)
+
 
 #   First run the SQL statements
     for n in range(1, 99):

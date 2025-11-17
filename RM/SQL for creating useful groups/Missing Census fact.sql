@@ -1,34 +1,35 @@
---[FACT-Census:  missing]
+--[missing: FACT-Census: 1940]
 --SQL_QUERY =
-  -- Search for missing Census on people with constraints:
+  -- Search for people with missing Census with constraints:
   -- people who might be in census but have no Census or Census_research FACT or SHARED FACT
-  -- Requires Birth place in "United States"
-  -- Requires Birth birth date in specified range (between YearBirth and YearCensus)
+  -- Requires Birth place in C_PlaceBirth
+  -- Requires Birth birth date in specified range (between C_YearBirth and YearCensus)
   -- Death date after YearCensus or no DeathFact
-  -- Person does not have a Census fact or shared census fact (Description starts with YearCensus)
-  -- Does not find people not born in US but residing in USA in 1950
+  -- Person does not have a Census fact or shared census fact (Description starts with C_YearCensus)
+  -- Does not find people not born in C_PlaceBirth but residing in USA in YearCensus
   -- Does not support Census Family type event.
-  -- TO USE: EDIT LINES 14 TO 16
-  -- (make place '' for no selection of birth place e.g. if places do not include country)
+  -- TO USE: EDIT LINES 15 TO 17
   --
   WITH
-  Constants AS ( SELECT
-     1930            AS C_YearCensus,
-     1830            AS C_YearBirth,
+  constants AS (SELECT
+     1950            AS C_YearCensus,
+     1850            AS C_YearBirth,
      'United States' AS C_PlaceBirth
   ),
-  existing_events AS  -- All census events whose Description starts with YearCensus
+  existing_events AS
+  -- Census & Census_research events whose date YYYY=C_YearCensus
   (
   SELECT EventID
   FROM EventTable AS et
   INNER JOIN FactTypeTable AS ftt ON et.EventType = ftt.FactTypeID
   WHERE
-      et.OwnerType = 0
-  AND et.Details LIKE ( (SELECT C_YearCensus FROM Constants) || '%') COLLATE NOCASE
-  AND (ftt.Name COLLATE NOCASE = 'Census' OR ftt.Name COLLATE NOCASE = 'Census_research')
+    et.OwnerType = 0
+    AND CAST(SUBSTR(et.Date, 4,4) as Integer) = (SELECT C_YearCensus FROM constants)
+    AND (ftt.Name COLLATE NOCASE = 'Census' OR ftt.Name COLLATE NOCASE = 'Census_research')
   )
   --
   SELECT personID
+  -- get all people who might have had a census event
   FROM PersonTable AS pt
     INNER JOIN PlaceTable AS plt ON et_birth.PlaceID = plt.PlaceID
     INNER JOIN EventTable AS et_birth ON et_birth.OwnerID = pt.PersonID
@@ -43,13 +44,13 @@
           OR et_death.OwnerID IS NULL)
   --
   EXCEPT
-  -- people who have a census fact of YearCensus type
+  -- people who have a census fact of C_YearCensus
   SELECT et.OwnerID
   FROM EventTable AS et
   INNER JOIN existing_events ON existing_events.EventID = et.EventID
   --
   EXCEPT
-  -- people who are witness to a census fact of YearCensus type
+  -- people who are witness to a census fact of C_YearCensus
   SELECT wt.PersonID
   FROM WitnessTable AS wt
   INNER JOIN existing_events ON existing_events.EventID = wt.EventID

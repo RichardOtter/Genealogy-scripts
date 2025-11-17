@@ -41,7 +41,9 @@ def main():
     utility_info["run_features_function"] = run_selected_features
     utility_info["allow_db_changes"] = True
     utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
     utility_info["RegExp_required"] = False
+    utility_info["RegExp_optional"] = False
 
     RMpy.launcher.launcher(utility_info)
 

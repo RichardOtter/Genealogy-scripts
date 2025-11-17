@@ -43,12 +43,14 @@ def main():
     utility_info["run_features_function"] = lump_sources
     utility_info["allow_db_changes"] = True
     utility_info["RMNOCASE_required"] = True
-    utility_info["RMNOCASE_optional"] = True
+    utility_info["RMNOCASE_optional"] = False
     utility_info["RegExp_required"] = False
     utility_info["RegExp_optional"] = False
 
     RMpy.launcher.launcher(utility_info)
 
+# TODO   this does not confirm that the source number exists
+#  add feature to use source name, confirm its unique for the entire list
 
 # ===================================================DIV60==
 def lump_sources(config, db_connection, report_file):

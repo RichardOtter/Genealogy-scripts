@@ -38,7 +38,9 @@ def main():
     utility_info["run_features_function"]  = run_selected_features
     utility_info["allow_db_changes"]  = True
     utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
     utility_info["RegExp_required"]   = False
+    utility_info["RegExp_optional"]   = False
 
     RMpy.launcher.launcher(utility_info)
 
@@ -117,8 +119,9 @@ def update_group(db_connection, config, report_file, group_name):
         report_file.write(
             str(numInView) + " persons selected by the SQL statement:\n")
     except:
-        raise ("ERROR: SQL_QUERY returned an error when run as a VIEW. \n\n" +
-               "SQL entered was:\n" + SQL_statement + "\n")
+        raise RMc.RM_Py_Exception(
+            "ERROR: SQL_QUERY returned an error when run as a VIEW. \n\n" +
+            "SQL entered was:\n" + SQL_statement + "\n")
 
     report_file.write(SQL_statement + "\n\n\n")
 

@@ -10,6 +10,8 @@ import traceback
 
 import RMpy.common as RMc  # type: ignore
 
+from os import chdir
+
 # ===================================================DIV60==
 def launcher(utility_info):
 
@@ -20,6 +22,9 @@ def launcher(utility_info):
     # Errors go to console window
     # ===========================================DIV50==
     try:
+        # set the current directory so relative paths work
+        chdir(utility_info["script_path"])
+
         # Configuration file location- 
         # either specified by quoted command line argument or default
         # encoded as UTF-8 (no BOM).
@@ -47,14 +52,14 @@ def launcher(utility_info):
             config.read(config_file_path, 'utf-8')
         except:
             raise RMc.RM_Py_Exception(
-                F"\n\nERROR: The {config_file_name}"
+                F"\n\nERROR: The {config_file_path}"
                 F" file contains a format error and cannot be parsed.\n")
         try:
             report_path = config['FILE_PATHS']['REPORT_FILE_PATH']
         except:
             raise RMc.RM_Py_Exception(
                 F"\n\nERROR: REPORT_FILE_PATH must be specified in the"
-                F" {config_file_name}\n\n")
+                F" {config_file_path}\n\n")
         try:
             # Use UTF-8 encoding for the report file. Test for write-ability
             open(report_path,  mode='w', encoding='utf-8')
