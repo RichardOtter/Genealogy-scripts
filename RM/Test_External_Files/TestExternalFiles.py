@@ -59,7 +59,7 @@ def main():
     utility_info["utility_name"]     = "TestExternalFiles" 
     utility_info["utility_version"]  = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
     utility_info["config_file_name"] = "RM-Python-config.ini"
-    utility_info["script_path"]      = Path(__file__).parent
+    utility_info["script_path"]      = Path(__file__).parent.resolve()
     utility_info["run_features_function"]  = run_selected_features
     utility_info["allow_db_changes"]       = False
     utility_info["RMNOCASE_required"]      = False
@@ -98,14 +98,15 @@ def run_selected_features(config, db_connection, report_file):
         
         config['OPTIONS'].getboolean('TESTING_USE_LOCAL_RM_XML')
 
+        if config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER'):
+            # app is in test mode.
+            # Set the path to the RM media folder preference setting
+            # overriding what might be in the production RM xml config file
+            G_media_directory_path = parent_dir / 'media'
+
     except:
         raise RMc.RM_Py_Exception(
             "One of the OPTIONS values could not be interpreted as either on or off.\n")
-
-    if config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER'):
-        # app is in test mode. Set the path to the RM media folder
-        # overriding what might be in the production RM xml config file
-        G_media_directory_path = parent_dir / 'media'
 
 
     # Run all of the requested options.
@@ -668,7 +669,7 @@ def expand_relative_dir_path(in_path_str: str) -> Path:
         if len(path) == 1:
             absolute_path = G_media_directory_path
         else:
-            absolute_path = G_media_directory_path / path[2:]
+            absolute_path = Path(G_media_directory_path) / path[2:]
 
     elif path[0] == "~":
         absolute_path = Path(path).expanduser()
@@ -693,6 +694,8 @@ def get_media_directory() ->Path:
 
     #  Relies on the RM installed xml file containing application preferences
     #  File location set by RootsMagic installer
+    RM_Config_FilePath_13 = Path(r"AppData\Roaming\RootsMagic\Version 13\RootsMagicUser.xml")
+    RM_Config_FilePath_12 = Path(r"AppData\Roaming\RootsMagic\Version 12\RootsMagicUser.xml")
     RM_Config_FilePath_11 = Path(r"AppData\Roaming\RootsMagic\Version 11\RootsMagicUser.xml")
     RM_Config_FilePath_10 = Path(r"AppData\Roaming\RootsMagic\Version 10\RootsMagicUser.xml")
     RM_Config_FilePath_9 =  Path(r"~ppData\Roaming\RootsMagic\Version 9\RootsMagicUser.xml")

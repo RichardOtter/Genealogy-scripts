@@ -37,7 +37,7 @@ def launcher(utility_info):
         if len(sys.argv) == 2:
             # use the parameter path as is.
             # Shell will use current dir for relative paths.
-            config_file_path = Path(sys.argv[1])
+            config_file_path = Path(sys.argv[1]).resolve()
         else:
             config_file_path = Path(utility_info["config_file_name"])
         # Check that config file exists and that it is readable & valid.

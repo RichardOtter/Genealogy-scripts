@@ -2,6 +2,7 @@ Have TestExternalFiles.py and RMpy package ready to test in its normal
 development location.
 Confirm the files in testing and in TestData are ready.
 
+
 Create a C:\Users\Test folder and give yourself full access right to it.
 
 If Users\Test was previously created, remove all files from it.
@@ -14,10 +15,6 @@ to the \Users\Test folder for convenience.
 
 Examine the \Users\Test\Report.txt generated and compare with the report shown below.
 
-Test relative vs absolute file path for paths specific to this app-
-SEARCH_ROOT_FLDR_PATH
-HASH_FILE_FLDR_PATH
-Others tested in the RM Package test
 
 Ignore file testing
 
@@ -28,6 +25,32 @@ Then edit Ignore file and uncomment-
 **/sub1
 # of files in media folder will go from 17 to 4.
 i.e. the **/dub1 ignores the entire sub1 folder and contents and sub folders.
+
+
+Test path for ini file on command line
+
+__Run TestExternalFiles with test.ini RELATIVE
+Target-
+"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\TestExternalFiles.py" test.ini
+Start in-
+C:\Users\Test\
+Produced-
+ERROR: The configuration file: "C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\test.ini" was not found.
+Interpretation-
+Script starts and then quickly ChDir from the Start in folder to the location of the py file 
+(C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Test_External_Files)
+and then looks for ini file there, as shown by the error message.
+
+__Run TestExternalFiles with test.ini (abs path to ini file)
+Target-
+"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\TestExternalFiles.py" C:\Users\Test\test.ini
+Start in-
+C:\Users\Test\
+Produced-
+Works. Since ini file path is abs, it doesn't matter what current dir is set to.
+
+No ini file path, use default
+normal use-  works
 
 
 Annotated version follows the original.
