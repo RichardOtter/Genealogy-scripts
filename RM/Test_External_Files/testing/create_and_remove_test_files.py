@@ -44,8 +44,8 @@ def main():
     test_db_file = 'TestData-RMpython.rmtree'
     test_ignore_file = 'TestExternalFiles_ignore.txt'
     test_ini_file ='test.ini'
-    test_run_TEF_shortcut = '__Run TestExternalFiles with test.ini.lnk'
-    test_run_TEF_RELATIVE_shortcut = '__Run TestExternalFiles with test.ini RELATIVE bad.lnk'
+    test_run_TEF_shortcut_1 = '__Run TestExternalFiles with test.ini.lnk'
+    test_run_TEF_shortcut_2 = '__Run TestExternalFiles with test.ini RELATIVE bad.lnk'
     cmd_1 = 'Run RM with Home=Test.cmd'
     cmd_2 = 'Run TEF with Home=Test.cmd'
 
@@ -119,29 +119,30 @@ def main():
 
     ]
 
-    db_file_in_test_root = RM_test_root / test_db_file
-    ignore_file_in_test_media = RM_test_media / test_ignore_file
-    ini_file_in_RM_test = RM_test_root / '..' / test_ini_file
-    test_run_TEF_shortcut_in_base_user_dir = base_user_dir / test_run_TEF_shortcut
-    test_run_TEF_shortcut_2_in_base_user_dir = base_user_dir / test_run_TEF_RELATIVE_shortcut
-    cmd_1_in_base_user_dir = base_user_dir / cmd_1
-    cmd_2_in_base_user_dir = base_user_dir / cmd_2
+    # destination names
+    db_file_dest = RM_test_root / test_db_file
+    ignore_file_dest = RM_test_media / test_ignore_file
+    ini_file_dest = RM_test_root / '..' / test_ini_file
+    test_run_TEF_shortcut_1_dest = base_user_dir / test_run_TEF_shortcut_1
+    test_run_TEF_shortcut_2_dest = base_user_dir / test_run_TEF_shortcut_2
+    cmd_1_in_dest = base_user_dir / cmd_1
+    cmd_2_in_dest = base_user_dir / cmd_2
 
     if action == 'remove':
-        if db_file_in_test_root.exists():
-            db_file_in_test_root.unlink()
-        if ignore_file_in_test_media.exists():
-            ignore_file_in_test_media.unlink()
-        if ini_file_in_RM_test.exists():
-            ini_file_in_RM_test.unlink()
-        if test_run_TEF_shortcut_in_base_user_dir.exists():
-            test_run_TEF_shortcut_in_base_user_dir.unlink()
-        if test_run_TEF_shortcut_2_in_base_user_dir.exists():
-            test_run_TEF_shortcut_2_in_base_user_dir.unlink()
-        if cmd_1_in_base_user_dir.exists():
-            cmd_1_in_base_user_dir.unlink()
-        if cmd_2_in_base_user_dir.exists():
-            cmd_2_in_base_user_dir.unlink()
+        if db_file_dest.exists():
+            db_file_dest.unlink()
+        if ignore_file_dest.exists():
+            ignore_file_dest.unlink()
+        if ini_file_dest.exists():
+            ini_file_dest.unlink()
+        if test_run_TEF_shortcut_1_dest.exists():
+            test_run_TEF_shortcut_1_dest.unlink()
+        if test_run_TEF_shortcut_2_dest.exists():
+            test_run_TEF_shortcut_2_dest.unlink()
+        if cmd_1_in_dest.exists():
+            cmd_1_in_dest.unlink()
+        if cmd_2_in_dest.exists():
+            cmd_2_in_dest.unlink()
 
 
     iterable = file_fldr_list
@@ -180,24 +181,34 @@ def main():
     test_ini_file ='test.ini'
     test_files_home_fldr
 
+    # SRC names
+    test_db_file_src              = test_db_home_fldr / test_db_file
+    test_ignore_file_src          = test_files_home_fldr / test_ignore_file
+    ini_file_src                  = test_files_home_fldr / test_ini_file
+    test_run_TEF_shortcut_1_src  = test_files_home_fldr / test_run_TEF_shortcut_1
+    test_run_TEF_shortcut_2_src  = test_files_home_fldr / test_run_TEF_shortcut_1
+    cmd_1_in_src                = test_files_home_fldr / cmd_1
+    cmd_2_in_src                = test_files_home_fldr / cmd_2
+
+
     if action == 'create':
             # shutil.copyfile  src, dest
-        if not db_file_in_test_root.exists():
-            shutil.copyfile( test_db_home_fldr / test_db_file, db_file_in_test_root)
-        if not ignore_file_in_test_media.exists():
-            shutil.copyfile( test_files_home_fldr / test_ignore_file, ignore_file_in_test_media)
-        if not ini_file_in_RM_test.exists():
-            shutil.copyfile( test_files_home_fldr / test_ini_file, ini_file_in_RM_test)
+        if not db_file_dest.exists():
+            shutil.copyfile( test_db_file_src, db_file_dest)
+        if not ignore_file_dest.exists():
+            shutil.copyfile(test_ignore_file_src, ignore_file_dest)
+        if not ini_file_dest.exists():
+            shutil.copyfile( ini_file_src, ini_file_dest)
 
-        if not test_run_TEF_shortcut_in_base_user_dir.exists():
-            shutil.copyfile( test_files_home_fldr / test_run_TEF_shortcut, test_run_TEF_shortcut_in_base_user_dir)
-        if not test_run_TEF_shortcut_2_in_base_user_dir.exists():
-            shutil.copyfile( test_files_home_fldr / test_run_TEF_shortcut, test_run_TEF_shortcut_2_in_base_user_dir)
+        if not test_run_TEF_shortcut_1_dest.exists():
+            shutil.copyfile( test_run_TEF_shortcut_1_src, test_run_TEF_shortcut_1_dest)
+        if not test_run_TEF_shortcut_2_dest.exists():
+            shutil.copyfile(  test_run_TEF_shortcut_2_src, test_run_TEF_shortcut_2_dest)
 
-        if not cmd_1_in_base_user_dir.exists():
-            shutil.copyfile( test_files_home_fldr / cmd_1, cmd_1_in_base_user_dir)
-        if not cmd_2_in_base_user_dir.exists():
-            shutil.copyfile( test_files_home_fldr / cmd_2, cmd_2_in_base_user_dir)
+        if not cmd_1_in_dest.exists():
+            shutil.copyfile( cmd_1_in_src, cmd_1_in_dest)
+        if not cmd_2_in_dest.exists():
+            shutil.copyfile( cmd_2_in_src, cmd_2_in_dest)
 
     input("press enter to continue and exit")
 
