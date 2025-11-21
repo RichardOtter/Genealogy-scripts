@@ -4,14 +4,6 @@
 
 -- database: ../../../../../Genealogy/GeneDB/Otter-Saito.rmtree
 
-
-
-
-
-
-
-
-
 WITH
  Constants AS (SELECT
     1     AS C_Matcher,
