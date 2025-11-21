@@ -19,15 +19,13 @@ def main():
     # CONSTANTS
     REPO_ROOT_PATH = Path(
         r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts")
-    VERSION_REPLACE_TEXT = r'UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE'
     TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
+    VERSION_REPLACE_TEXT = r'UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE'
 
     try:
-        # get a file type time stamp string
-
         time_stamp = time_stamp_now("file")
-        top_level_config_path = (
-            REPO_ROOT_PATH / "dev util scripts" / TOP_LEVEL_CONFIG_NAME)
+        dev_util_fldr_path= REPO_ROOT_PATH / "dev util scripts"
+        top_level_config_path = (dev_util_fldr_path / TOP_LEVEL_CONFIG_NAME)
 
         if (not Path(top_level_config_path).exists()):
             print("Can't find the top level config file.\n")
@@ -47,7 +45,7 @@ def main():
     release_dir_path = Path(project_root_dir_path) / release_dir_name
     distribution_dir_path = release_dir_path / distribution_dir_name
 
-    top_level_readme_path = REPO_ROOT_PATH / "RM" / "doc" / "_ReadMe Top Level.txt"
+    top_level_readme_path = REPO_ROOT_PATH / "doc" / "_ReadMe Top Level.txt"
 
     if release_dir_path.exists():
         raise Exception("Release dir already exists")
@@ -63,7 +61,7 @@ def main():
         project_dir_path = distribution_dir_path / project
         Path.mkdir(project_dir_path)
         try:
-            utility_level_config_path = REPO_ROOT_PATH / "RM" / project / "_util_info.yaml"
+            utility_level_config_path = REPO_ROOT_PATH / project / "_util_info.yaml"
             with open(utility_level_config_path, 'r') as proj_lev:
                 doc = yaml.safe_load(proj_lev)
                 utility_version = doc["Version"]
@@ -80,7 +78,7 @@ def main():
         #  copy the files and folders that will be distributed in the zip
 
         # copy files to the distribution folder
-        src_project_dir = Path(REPO_ROOT_PATH) / "RM" / project
+        src_project_dir = Path(REPO_ROOT_PATH) /  project
         for file in distribution_file_list:
             shutil.copy(src_project_dir / file,
                         distribution_dir_path / project)

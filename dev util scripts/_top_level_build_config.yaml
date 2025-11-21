@@ -5,14 +5,14 @@ SuiteVersion: 1.0.3
 
 SuiteName: RM_Utilities_Suite
 
-ProjectRootDirPath: C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM
+ProjectRootDirPath: C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts
 
 ProjectList:
  - Change source for citation
  - Change source template
  - Modify citation list
  - Color from group
- - Convert Fact
+ - Convert fact
  - Group from SQL
  - List citations for PersonID
  - Run SQL

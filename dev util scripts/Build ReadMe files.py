@@ -11,22 +11,23 @@ from pathlib import Path
 # the top level yaml config file is also here.
 
 
+
+
+
 def main():
 
     # CONSTANTS
     REPO_ROOT_PATH = Path(
         r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts")
-    VERSION_REPLACE_TEXT = r'UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE'
     TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
-    RM_PATH = REPO_ROOT_PATH / "RM"
-
-    file1="_DB get fresh copy.cmd"
-    file2="_DB reset test db.cmd"
+    VERSION_REPLACE_TEXT = r'UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE'
+    doc_folder = REPO_ROOT_PATH / "doc"
 
     try:
+        time_stamp = time_stamp_now("file")
         dev_util_fldr_path= REPO_ROOT_PATH / "dev util scripts"
         top_level_config_path = dev_util_fldr_path / TOP_LEVEL_CONFIG_NAME
-        
+
         if (not Path(top_level_config_path).exists()):
             print("Can't find the top level config file.\n")
 
@@ -40,14 +41,13 @@ def main():
         print("Problem getting the values from the top level yaml file.\n")
         exit()
     
-    doc_folder = REPO_ROOT_PATH / "RM" / "doc"
 
     # Process each doc template
     for project in project_list:
-        project_dir_path = RM_PATH / project
+        project_dir_path = REPO_ROOT_PATH / project
         template_file_path = doc_folder / F"DocOutline_{project}.txt"
         # doc_file_path = doc_folder / F"docFinal-{project}.txt"
-        doc_file_path = RM_PATH / project / "ReadMe.txt"
+        doc_file_path = project_dir_path/ "ReadMe.txt"
         lib_file_path = doc_folder / "DocLibrary_snippets.txt"
         print (template_file_path)
         with open(template_file_path, 'r') as doc_template, \
@@ -61,6 +61,7 @@ def main():
                 else:
                     doc_final.write(line)
 
+    pause_with_message()
     return
 
 
@@ -82,6 +83,27 @@ def get_snippet(label, lib_file):
     if len(snippet) == 0:
         raise Exception(F'Snippet "{label}" not found in Text library file.')
     return snippet
+
+
+# ===================================================DIV60==
+def time_stamp_now(type=""):
+
+    # return a TimeStamp string
+    now = datetime.now()
+    if type == '':
+        dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+    elif type == 'file':
+        dt_string = now.strftime("%Y-%m-%d_%H%M%S")
+    return dt_string
+
+# ===================================================DIV60==
+def pause_with_message(message=None):
+
+    if (message != None):
+        input(str(message))
+    else:
+        input("\nPress the <Enter> key to exit...")
+    return
 
 
 # ===================================================DIV60==
