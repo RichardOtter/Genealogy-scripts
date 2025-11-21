@@ -5,7 +5,7 @@
 *.url
 
 # ignore vscode stuff
-.vscode/
+# .vscode/
 
 #  ignore python temp
 __pycache__
@@ -31,4 +31,4 @@ RM/Release*/
 # ignore files in doc not to be checked in
 DocFull_*
 
-Test Data/TestData-RMpython-FULL.sql
+Test Data/TestData-*FULL.sql

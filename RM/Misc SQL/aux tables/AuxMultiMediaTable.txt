@@ -1,3 +1,21 @@
+-- Not yet in use
+-- Consider how know updates to external files should be handled
+-- what happens if a mismatch is detected
+-- a date that the hash was created would be good.
+-- hash column should not be named md5, perhaps another column will have type
+-- need a trigger for when a new row is added ??? to main table
+-- foreign key constraint will delete the row in the aux table when the matching
+-- row in main table is deleted
+
+
+CREATE TABLE AuxMultimediaTable (
+AuxMultimediaTableID INTEGER PRIMARY KEY,
+MD5Hash TEXT,
+UTCModDate FLOAT,
+FOREIGN KEY (AuxMultimediaTableID) REFERENCES MultimediaTable(MediaID)
+    ON DELETE CASCADE
+);
+
 
 
 INSERT INTO AuxMultimediaTable

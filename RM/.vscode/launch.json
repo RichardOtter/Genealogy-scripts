@@ -1,0 +1,51 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "PYD: Current File, No args",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "PYD: TestExternalFiles test env",
+            "cwd":  "${workspaceFolder}/Test external files",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TestExternalFiles.py",
+            "console": "integratedTerminal",
+            "args": "testing/test.ini"
+        }
+        {
+            "name": "PYD: TestExternalFiles dev",
+            "cwd":  "${workspaceFolder}/Test external files",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TestExternalFiles.py",
+            "console": "integratedTerminal",
+            "args": "testing/test.ini"
+        }
+        {
+            "name": "PYD: GroupFromSQL.py dev",
+            "cwd":  "${workspaceFolder}/Group from SQL",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "GroupFromSQL.py",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini"
+        }
+        {
+            "name": "PYD: ColorFromGroup.py dev",
+            "cwd":  "${workspaceFolder}/Color from group",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "ColorFromGroup.py",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini"
+        }
+    ]
+}

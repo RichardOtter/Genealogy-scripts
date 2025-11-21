@@ -1,0 +1,15 @@
+{
+    "cSpell.words": [
+        "aclt",
+        "Excep",
+        "facttype",
+        "FACTTYPE",
+        "fldr",
+        "rmnocase",
+        "unifuzz"
+    ],
+    "python.analysis.extraPaths": [
+        "./RM-RMpy module"
+    ],
+    "cSpell.enabled": true
+}

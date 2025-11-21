@@ -65,6 +65,14 @@ see-
 For restore-
 write utility if it is needed
 
+-- restore saved citation note to CitationTable
+UPDATE CitationTable 
+SET ActualText = SavedActualText
+FROM AuxCitationTable 
+WHERE  CitationID = AuxCitationID;
+
+
+
 =========================================================================DIV80==
 Remove Aux tables
 DROP TABLE AuxDNATable;

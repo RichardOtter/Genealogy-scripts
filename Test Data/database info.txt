@@ -11,6 +11,10 @@ by removing:
     LDS temples  from PlaceTable(paces with ID <1000,  record 1-216 records)
     standard templates from SourceTemplateTable (templates with ID <1000, records 1-439)
 
+For the v11 reduced dumps, left the first 5 records for Source templates
+and the first 5 records for places (LDS temples).
+
+
 For now, only TestData-RMpython-REDUCED.sql is checked into git.
 And testing will be done on the original TestData-RMpython.rmtree
 which has never been dumped-restored.
@@ -38,22 +42,28 @@ No obvious problems.
 
 
 To create the dump file from the RM database:
+(database file must not be read-only)
 
-\bin\sqlite3
-.open TestData-RMpython-FULL.sql
+\bin\SQLite\sqlite3
+.open TestData-RMpython.rmtree
+.output out-file.sql
 .dump
 .exit
 
 
 To restore RM database from a dump.sql file:
 
-\bin\sqlite3
+\bin\SQLite\sqlite3
 .open TestData-RMpython-reduced.rmtree
 .load "C:/Users/rotter/Genealogy/GeneDB/SW/unifuzz64.dll"
 .read TestData-RMpython-REDUCED.sql
 .exit
 
-Open TestData-RMpython-reduced.rmtree in RM and rebuild indexes.
+Open TestData-RMpython-reduced.rmtree 
+in RM and rebuild indexes.
+What if version needs to be updated?
+May not be able to do a version schema update while indexes are unstable.
+
 
 
 

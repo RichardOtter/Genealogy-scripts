@@ -10,13 +10,13 @@ ProjectRootDirPath: C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts
 ProjectList:
  - Change source for citation
  - Change source template
- - Modify_citation_list
- - Color from Group
+ - Modify citation list
+ - Color from group
  - Convert Fact
  - Group from SQL
  - List citations for PersonID
  - Run SQL
- - Test_External_Files
+ - Test external files
  - Lump sources
 
  

@@ -135,3 +135,5 @@ SELECT ct.CitationID, ct.ActualText
 FROM CitationTable AS ct
 INNER JOIN SourceTable AS st ON ct.SourceID = st.SourceID
 WHERE st.Name LIKE 'RRdb MyHr%' COLLATE NOCASE;
+
+
