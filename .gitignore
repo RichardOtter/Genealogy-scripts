@@ -26,7 +26,7 @@ Report_*.txt
 HIDE_*
 
 # ignore Releases storage folder and Release build folder
-RM/Release*/
+Release*/
 
 # ignore files in doc not to be checked in
 DocFull_*
