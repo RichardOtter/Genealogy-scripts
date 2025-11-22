@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "PYD: Current File, No args",
             "type": "debugpy",
@@ -12,25 +13,43 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "PYD: TestExternalFiles test env",
-            "cwd":  "${workspaceFolder}/Test external files",
+            "name": "PYD: Change source for citation dev",
+            "cwd":  "${workspaceFolder}/Change source for citation",
             "type": "debugpy",
             "request": "launch",
-            "program": "TestExternalFiles.py",
+            "program": "ChangeSrcForCitation.py",
             "console": "integratedTerminal",
-            "args": "testing/test.ini"
+            "args": "testing/dev.ini"
         }
         {
-            "name": "PYD: TestExternalFiles dev",
-            "cwd":  "${workspaceFolder}/Test external files",
+            "name": "PYD: Change source template dev",
+            "cwd":  "${workspaceFolder}/Change source template",
             "type": "debugpy",
             "request": "launch",
-            "program": "TestExternalFiles.py",
+            "program": "ChangeSourceTemplate.py",
             "console": "integratedTerminal",
-            "args": "testing/test.ini"
+            "args": "testing/dev.ini"
         }
         {
-            "name": "PYD: GroupFromSQL.py dev",
+            "name": "PYD: Color from group dev",
+            "cwd":  "${workspaceFolder}/Color from group",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "ColorFromGroup.py",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini"
+        }
+        {
+            "name": "PYD: Convert fact.py dev",
+            "cwd":  "${workspaceFolder}/Convert fact",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "ConvertFact.py",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini"
+        }
+        {
+            "name": "PYD: Group from SQL dev",
             "cwd":  "${workspaceFolder}/Group from SQL",
             "type": "debugpy",
             "request": "launch",
@@ -39,13 +58,58 @@
             "args": "testing/dev.ini"
         }
         {
-            "name": "PYD: ColorFromGroup.py dev",
-            "cwd":  "${workspaceFolder}/Color from group",
+            "name": "PYD: List citations for PersonID dev",
+            "cwd":  "${workspaceFolder}/List citations for PersonID",
             "type": "debugpy",
             "request": "launch",
-            "program": "ColorFromGroup.py",
+            "program": "GroupFromSQL.py",
             "console": "integratedTerminal",
             "args": "testing/dev.ini"
+        }
+        {
+            "name": "PYD: Lump sources dev",
+            "cwd":  "${workspaceFolder}/Lump sources",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "LumpSources.py",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini"
+        }
+        {
+            "name": "PYD: Modify citation list dev",
+            "cwd":  "${workspaceFolder}/Modify citation list",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "ModifyCitationList.py",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini"
+        }
+        {
+            "name": "PYD: Run SQL dev",
+            "cwd":  "${workspaceFolder}/Run SQL",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "RunSQL.py",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini"
+        }
+        {
+            "name": "PYD: TestExternalFiles dev",
+            "cwd":  "${workspaceFolder}/Test external files",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TestExternalFiles.py",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini"
+        }
+        {
+            "name": "PYD: Test external files test env",
+            "cwd":  "${workspaceFolder}/Test external files",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TestExternalFiles.py",
+            "console": "integratedTerminal",
+            "args": "testing/test.ini"
         }
     ]
 }
