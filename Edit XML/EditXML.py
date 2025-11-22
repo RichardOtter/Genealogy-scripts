@@ -1,11 +1,15 @@
-import os
+
 import sys
+from pathlib import Path
+sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
+
+import RMpy.common as RMc       # noqa #type: ignore
+import RMpy.launcher            # noqa #type: ignore
+from RMpy.common import q_str   # noqa #type: ignore
+
+import os
 import xml.etree.ElementTree as ET
 import re
-
-sys.path.append( r'..\\RM -RMpy package' )
-import RMpy.launcher # type: ignore
-import RMpy.common as RMc # type: ignore
 
 # Requirements:
 #   RootsMagic database file

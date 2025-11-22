@@ -2,10 +2,11 @@ import sys
 from pathlib import Path
 sys.path.append( r'.' )
 
+import RMpy.common as RMc  # type: ignore
+
 from enum import Enum
 from datetime import date
 
-import RMpy.common as RMc  # type: ignore
 
 ## RM Internal Date structure
 

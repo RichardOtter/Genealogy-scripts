@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
+sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
 
 import RMpy.common as RMc       # noqa #type: ignore
 import RMpy.launcher            # noqa #type: ignore
@@ -33,7 +33,9 @@ def main():
     utility_info["run_features_function"]  = run_selected_features
     utility_info["allow_db_changes"]  = False
     utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
     utility_info["RegExp_required"]   = False
+    utility_info["RegExp_optional"]   = False
 
     RMpy.launcher.launcher(utility_info)
 

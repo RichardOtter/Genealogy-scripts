@@ -1,11 +1,12 @@
 import sys
-import xml.etree.ElementTree as ET
 from pathlib import Path
-sys.path.append(str(Path.resolve(Path.cwd() / r'..\RMpy package')))
+sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
 
 import RMpy.common as RMc       # noqa #type: ignore
 import RMpy.launcher            # noqa #type: ignore
 from RMpy.common import q_str   # noqa #type: ignore
+
+import xml.etree.ElementTree as ET
 
 # Requirements:
 #   RootsMagic database file
