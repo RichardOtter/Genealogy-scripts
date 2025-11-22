@@ -1,6 +1,6 @@
 =========================================================================DIV80==
-Convert an existing fact from one fact type to another
-ConvertFact.py
+Change the source for a given citation
+ChangeSrcForCitation.py
 
 
 Utility application for use with RootsMagic databases
@@ -28,19 +28,27 @@ computer. "Installing python" is described in the appendix below.
 =========================================================================DIV80==
 Purpose
 
-This utility can convert existing facts of one fact type to facts of a different
-fact type. e.g. "Residence (fam)" to "Residence", or "Census" to "Census 1950".
+A RootsMagic database contains records for Sources and Citations. Sources are
+also called "Master Sources". Citations are also called "Source Details".
 
-Simply changing the fact type for an existing fact is trivial using SQL.
-Complications arise when a family fact is converted to a Individual fact or when
-the fact to be changed has witnesses (was shared).
-ConvertFact will test all of these cases and guide you.
+Sources are created using a Source Template. If 2 sources are created
+from the same source template, they will have the same fundamental structure.
 
-ConvertFact will not create new fact types or roles. That can't be helpfully
-automated and remains a task to be done by the user within RM.
+A Citation is created as a child of a Source. Citations of different sources
+created using the same source template will have the same fundamental
+structure as each other.
 
-ConvertFact can be configured to convert only a subset of the facts of a certain
-fact type based on the date of the fact and/or the description of the fact.
+This simple utility will move a citation from one source to another source,
+but only if the 2 sources were created using the same source template.
+
+For example, if you lump obituary sourced by newspaper, you will have a
+number of sources (newspapers) all based on the same source template.
+When entering a citation, you may accidentally cite a source set up for the
+wrong newspaper. Instead of deleting and recreating the citation, use this
+utility to move the citation to the correct source.
+
+The utility will carry along all of the uses of the citation, along with web
+links and media.
 
 
 =========================================================================DIV80==
@@ -55,10 +63,10 @@ are the ones desired.
 =========================================================================DIV80==
 Compatibility
 
-Tested with a RootsMagic v 10.0.7 database
-using Python for Windows v3.13.4   64bit
+Tested with a RootsMagic v 11.0.2 database
+using Python for Windows v3.14   64bit
 
-The py file has not been tested on MacOS but could probably be
+The python script file has not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
 
 =========================================================================DIV80==
@@ -70,10 +78,11 @@ It is in the form of a single text file with a "py" file name extension
 needs the Python package RMpy, which is a folder included in the distribution
 zip file.
 
-Most input to the utility is through the configuration file. The the default
-name of the configuration file (called, hereinafter, the "config file") is
-"RM-Python-config.ini". It should be located in the same folder as the
-MainScriptFile py file and the RMpy folder. At a minimum, the config
+Input to the utility is through the configuration file and. for some of the
+utilities, the command terminal.
+The the default name of the configuration file (called, hereinafter, the
+"config file") is "RM-Python-config.ini". It should be located in the same
+folder as the MainScriptFile py file and the RMpy folder. At a minimum, the config
 file gives the name and location of the database on which the utility operates.
 
 One config file can be shared among other RM utilities in the suite. Each
@@ -130,24 +139,28 @@ always operate on databases copied into a working folder.
 =========================================================================DIV80==
 Running the utility in detail
 
+While the database name and location is specified in the config file, the actual
+instructions for which citations and sources to modify are entered at a series
+of prompts in the black terminal window.
+
 ==========-
 Install Python for Windows x64  -see "APPENDIX  Python install" below.
 
 ==========-
 Create a folder on your computer that you will not confuse with other
-folders. It will be referred to as the "working folder".
+folders- the "working folder".
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
-      ConvertFact.py                   (file)
+      ChangeSrcForCitation.py          (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
 ==========-
 Make a copy of your database, move the copy into the working folder.
 
-Rename the database copy to "TEST.rmtree" in order to prevent any confusion 
-about the purpose of the copy.
+Rename the database copy to "TEST.rmtree" in order to prevent any
+confusion about the purpose of the copy.
 
 ==========-
 Edit the sample RM-Python-config.ini file in the working folder.
@@ -173,199 +186,75 @@ report file name and its location.
 If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
 
-==========-
-Look at the [CV_PARAMS] section of the config file containing keys for the 
-parameters needed to describe the desired changes:
-
-FACTTYPE_CURRENT
-FACTTYPE_NEW
-ROLE
-
-Now look at the [SOURCE_FILTER] section which contains the keys that specify
-which sources are changed.
-
-DESC
-DATE
-
-Full details of how to specify the parameters are in the Notes section below.
-
-==========-
 Save the config file but leave it open in Notepad.
 
 =========-
-Double click the "ConvertFact.py" file in the working folder
+Open the TEST.rmtree database file in RootsMagic.
+Having the file open in RM allows one to copy citation and source names, needed
+by the utility, directly from the RM window.
+
+=========-
+Double click the "ChangeSrcForCitation.py" file in the working folder
 to start the utility.
 
 =========-
-A terminal window is momentarily displayed while the utility processes
-the commands.
+A terminal window will open and prompt you to enter the name of
+the citation to move and the source that it should be moved to.
+
+In both cases, only enough of the name needs to be
+entered to make it unique among all citations for all sources.
+
+It is suggested that you copy and paste from the RM source edit window.
+There is no need to manually type input.
+
+The standard 'SQL Like' wild card characters % and _ may be used.
+% matches 0 or more characters, _ matches one character.
+This utility silently adds a % to the end of the citation name  and
+source name text entered.
 
 =========-
-The terminal window closes and the report file is displayed in Notepad for
-your inspection.
+After the source name is entered, either a confirmation or error message
+is displayed.
+In either case, a prompt to change another citation is shown. Respond with
+either y or n.
 
 =========-
-Open the TEST.rmtree database in RM and confirm the desired changes have
-been accomplished.
+If "n" is entered in response to the "Change another citation" prompt,
+the terminal window is closed and the utility is exited.
+
+=========-
+The report file is displayed in Notepad for you inspection.
+
+=========-
+Confirm the desired changes have been accomplished in RootsMagic
 
 =========-
 Consider whether to rename TEST.rmtree and use it as your research database.
 
-
 =========================================================================DIV80==
 Notes
 
-===========-
-The config file must be edited to indicate the conversion that should be done.
+=========-
+If the full citation name is not unique, then as a workaround, you
+could add some text to the citation name of the citation you want
+to modify to make the name unique.
 
-The task is specified by the key value pairs. or example-
+=========-
+All entered information is verified before it is used. It is unlikely that
+random data would be accepted by the utility.
 
-[CV_PARAMS]
-FACTTYPE_CURRENT  = Census (family)
-FACTTYPE_NEW      = Census
-ROLE              = Spouse
-
-Note that the value can have embedded spaces.
-Space characters between the = and the value are ignored.
-
-===========-
-Fact Type name lists
-
-Fact Type full names are listed in RM by the "Fact types" window found in
-several places in the RM user interface-
-  In the Edit Person window upon clicking the + button (Add fact button or Alt+A)
-  In the three dot menu in the Person tab.
-  In the command pallet. (type in "fact")
-
-This window also displays, in the right side panel -
-* Whether the fact type is Individual or Family.
-* The full fact type name and its assigned abbreviation.
-The specification of fact types in the config file uses the full fact type name,
-not the abbreviation.
-
-===========-
-Fact Type fields used
-
-It is best to check the fields used in both fact types before making the change.
-If the fields used by the current and new fact types differ (date, place,
-description), no data is lost in the conversion.
-
-===========-
-Fact types in RM come in two categories: Individual and Family.
-
-Facts of the Individual type are linked to a single person while facts of the
-family type are linked to a database family.
-An RM database family consists either 2 or 1 persons, labeled internally as
-Father and Mother. Either the father or mother may be "unknown"
-(and thus set to 0 in the database). Database families, by design, do not
-include any offspring.
-
-===========-
-Supported fact type conversions:
-
-Individual => Individual
-Family => Individual
-Family => Family
-
-Not allowed:
-Individual => Family
-
-
-Configuration items in config file required for each type conversion:
-
-* Individual => Individual
-FACTTYPE_CURRENT (full name of the fact type of the facts that that 
-                  should be converted)
-FACTTYPE_NEW (full name of the fact type that existing facts should 
-                 be converted to)
-(ROLE is ignored)
-
-* Family => Individual
-FACTTYPE_CURRENT
-FACTTYPE_NEW
-ROLE (name of an existing role associated with the FACTTYPE_NEW)
-
-* Family => Family
-FACTTYPE_CURRENT
-FACTTYPE_NEW
-(ROLE is ignored)
-
-===========-
-Limiting which Facts are changed
-
-There maybe situations in which only a subset of Facts should be changed to a
-new fact type. One can limit the facts by fields that describe them- 
-the Description and the Date-
-
-Some examples-
-
-[SOURCE_FILTER]
-DESC              = %New York%
-DATE              = 1930
-
-if you want to convert only facts whose descriptions start with the
-words "New York", then enter-
-
-[SOURCE_FILTER]
-DESC              = New York%
-DATE              =
-
-notice the trailing percent sign.
-If the fact descriptions should only contain "New York" somewhere in the text,
-enter-
-
-[SOURCE_FILTER]
-DESC              = %New York%
-DATE              =
-
-The percent sign % wildcard matches any sequence of zero or more characters.
-The underscore _ wildcard matches any single character.
-
-To limit the facts converted by their Date, use the DATE value.
-The DATE value is always a four digit year.
-For example-
-
-[SOURCE_FILTER]
-DESC              = 
-DATE              = 1930
-
-The values for DESC and DATE are optional. If all facts of a certain type are to be converted,
-leave these fields blank-
-
-[SOURCE_FILTER]
-DESC              = 
-DATE              = 
-
-===========-
-Complications handled by this utility
-
-The first complication comes with converting a Family fact to a Individual fact.
-
-A family fact is linked to a father-mother couple. If the father is know, then
-the new Individual fact will be linked to the father. If the mother is also
-known, the mother will be added as a witness to the new Individual fact.
-Her role is specified in the config file as "ROLE =".
-
-If the father is not known then the new Individual fact will be linked to the
-mother. There is no new witness added, so the ROLE config file item is ignored.
-
-
-The second complication arises when the facts of FACTTYPE_CURRENT have witnesses.
-
-Background: Every witness is assigned a role in RM when the fact is shared.
-Each fact type has its own set of roles. Many of the roles have the same name,
-for instance "Witness" however they are still separate and the sentence assigned
-to each of the roles are probably different.
-
-If the original fact type, say Census (fam) had a role named "Spouse", and that
-fact type is to be converted to "Census", then the fact of type census will
-have the former witness transferred to it maintaining the former role, in this
-case "Spouse". If "Census" does not have already have a role named Spouse,
-the utility will complain and request that you create such a role for "Census"
-before the conversion can be completed.
-
-You don't have to recreate all of the roles that exist for the FACTTYPE_CURRENT,
-only the ones that are in use. ConvertFact will tell you which ones.
+Checks made by the utility:
+1- User is asked for the citation name of the citation to modify.
+    a) the name must be found.
+    b) the name must be unique among all citations for all sources.
+   You will be made aware of problems.
+2- User is asked for the source that is to be used as the new parent of
+   the citation.
+    a) the source name must be found.
+    b) the source name must be unique.
+    c) the existing source used by the citation and the new source
+       specified must both use the same source template.
+   You will be made aware of problems.
 
 
 =========================================================================DIV80==
@@ -479,17 +368,11 @@ the various versions of Python.
 Click the Get button for the latest version.
 
 Python.org web site download and install
-Download the current version of Python 3, (or see direct link below
-for the current as of this date)
-https://www.python.org/downloads/windows/
+https://www.python.org/downloads/
 
-Click on the link near the top of page. Then ...
-Find the link near bottom left side of the page, in the "Stable Releases"
-section, labeled "Download Windows installer (64-bit)"
+Click on the button near the top of page: "Download Python install manager"
 Click it and save the installer.
-
-Direct link to recent (as of 2025-06) version installer-
-https://www.python.org/ftp/python/3.13.4/python-3.13.4-amd64.exe
+Go to the download location and run the installer.
 
 The Python installation requires about 100 Mbytes.
 It is easily and cleanly removed using the standard Windows method found in

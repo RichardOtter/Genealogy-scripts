@@ -1,6 +1,6 @@
 =========================================================================DIV80==
-Color code people by group membership
-ColorFromGroup.py
+Test usage and status of external/media files
+TestExternalFiles.py
 
 
 Utility application for use with RootsMagic databases
@@ -28,30 +28,59 @@ computer. "Installing python" is described in the appendix below.
 =========================================================================DIV80==
 Purpose
 
-This utility will change the color coding/color high-lighting of people in
-the database based on their group membership.
-While this is easily done with RM, this utility allows a series of commands
-to be executed with one run.
-It is a perfect complement to the utility GroupFromSQL.
+The database includes links to external files which RM calls "media files".
+These files appear in the RM Media tab.
+
+As the number of linked files increases, user errors become more likely.
+* A file on disk may get renamed or moved, breaking the link from the database.
+    RM has tools to fix these, but it does not give a log of what it has done.
+    There is a report that can be run, but with effort.
+* A file may be added to the media folder on disk but then not added to the
+    database. A common oversight when working quickly.
+* A file may be added to RM, but then detached from all source, facts etc,
+    leaving it "un-tagged". No harm in leaving it, but de-cluttering may be
+    desirable.
+* A file may be added to the database more than once.
+* A file from a far-flung folder may be added and it's location forgotten.
+* A file may be renamed, or misplaced or its contents altered. One will not be
+  able to verify the original file's contents are the same as in the current file.
+
+This utility will identify these issues.
+It is recommended to run this script daily as part of your backup routine.
+
+A Hash file might be generated annually and archived with the full dataset.
 
 
 =========================================================================DIV80==
 Backups
 
 IMPORTANT
-This utility modifies the RM database file.
-You should run this script on a copy of your database file (or at least
-have multiple known-good backups) until you are confident that the changes made
-are the ones desired.
+This script only reads the database file and makes no changes.
+However, you should run this script on a copy of your database file or at least
+have multiple known-good backups until you are confident that the the database
+remains intact after use. At that point, run this utility of your
+"production" database.
 
 =========================================================================DIV80==
 Compatibility
 
-Tested with a RootsMagic v 10.0.7 database
-using Python for Windows v3.13.4   64bit
+Tested with a RootsMagic v 11.0.2 database
+using Python for Windows v3.14   64bit
 
-The py file has not been tested on MacOS but could probably be
+The python script file has not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
+
+
+Probably still works with RootsMagic v7, although it has not been
+recently tested.
+
+=========================================================================DIV80==
+Performance
+
+A database with 7,000 media files requires about 3 seconds run time for 5
+features turned on without hash file.
+Generating a hash file for 7,000 image files takes roughly a minute.
+
 
 =========================================================================DIV80==
 Overview
@@ -62,10 +91,11 @@ It is in the form of a single text file with a "py" file name extension
 needs the Python package RMpy, which is a folder included in the distribution
 zip file.
 
-Most input to the utility is through the configuration file. The the default
-name of the configuration file (called, hereinafter, the "config file") is
-"RM-Python-config.ini". It should be located in the same folder as the
-MainScriptFile py file and the RMpy folder. At a minimum, the config
+Input to the utility is through the configuration file and. for some of the
+utilities, the command terminal.
+The the default name of the configuration file (called, hereinafter, the
+"config file") is "RM-Python-config.ini". It should be located in the same
+folder as the MainScriptFile py file and the RMpy folder. At a minimum, the config
 file gives the name and location of the database on which the utility operates.
 
 One config file can be shared among other RM utilities in the suite. Each
@@ -120,6 +150,56 @@ always operate on databases copied into a working folder.
 
 
 =========================================================================DIV80==
+Capabilities
+
+The utility can perform several functions, as configured in the config file's
+OPTIONS section, either separately or in combination:
+
+CHECK_FILES
+    Checks that each file referenced in the RM database actually
+    exists on disk at the specified location. Any file path link found in
+    the database but not found on disk is listed.
+
+UNREF_FILES
+    Lists all files found in the folder specified by SEARCH_ROOT_FLDR_PATH in
+    the config file (see below) that are NOT referenced in the RM database.
+    This will find files that were perhaps added to the folder but were
+    mistakenly never added to the database.
+    This feature is designed for use when media files referenced by RM are all
+    under a single folder hierarchy.
+
+NO_TAG_FILES
+    Lists all files found in RM's Media tab that have zero tags.
+
+FOLDER_LIST
+    Lists all folders referenced in the RM database.
+    A file in an unexpected location may have been accidentally added to the
+    database. This list will make it obvious.
+
+NOT_MEDIA_FLDR
+    Lists all files that are not in the RM "Media folder" as specified in the 
+    RM preferences settings. Best practice is to set the "Media Folder" in 
+    preferences and use that folder as the location for all media.
+
+DUP_FILEPATHS
+    Lists files that have been added more than one time to the database. These
+    will appear more than once in RM's Media tab.
+
+DUP_FILENAMES
+    Lists files that have the same filename. This is not usually a problem, but
+    being aware of the duplicate names may help your organizing efforts.
+
+HASH_FILE
+    Generates a text file containing a listing of each media file's name,
+    location and HASH value, currently set to use MD5.
+    https://en.wikipedia.org/wiki/MD5
+    The HASH text file, when requested, is generated at the location
+    specified in the config file.
+    While MD5 is no longer considered secure for cryptography, it serves well
+    for this purpose.
+
+
+=========================================================================DIV80==
 Running the utility in detail
 
 ==========-
@@ -127,11 +207,11 @@ Install Python for Windows x64  -see "APPENDIX  Python install" below.
 
 ==========-
 Create a folder on your computer that you will not confuse with other
-folders. It will be referred to as the "working folder".
+folders- the "working folder".
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
-      ColorFromGroup.py                (file)
+      TestExternalFiles.py             (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
@@ -140,39 +220,6 @@ Make a copy of your database, move the copy into the working folder.
 
 Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
-
-==========-
-Edit the RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
-
-Check that the DB_PATH key in the config file is pointing to the
-desired database.
-If the above steps were followed, the path in the sample config file
-is already correct, i.e. TEST.rmtree
-
-Save the config file but leave it open in Notepad.
-
-==========-
-Before running the utility, you will want to confirm that a group exists
-in your database that will be the basis of the color operation.
-Make sure that you know the exact spelling of the name and that there
-is only one group with that name.
-
-==========-
-Next, determine the color group that you wish to modify and the specific
-color number. To get the numbers, open the color coding window in RM.
-Looking at the "Current color code set" drop down menu at the top of the window,
-the top-most item is set 1, the bottom is set 10. By default they are named
-"Color code set 1"  etc.. If they have been renamed, count down the groups
-to get the set's number. Looking at the left hand column of colors,
-counting from the top color, Pink is 1, Slate is 27.
-
-Next, determine what actions you wish to perform.
-Usually, if you want to make a group correspond to a color, you will want to
-reset/clear that color before assigning group members. This will take care of 
-cases in which people have been removed from groups.
-So for every group that you want to color, you will want to do a clear and then
-a color operation on that group.
 
 ==========-
 Edit the sample RM-Python-config.ini file in the working folder.
@@ -200,224 +247,213 @@ the [FILE_PATHS] section are needed.
 
 Save the config file but leave it open in Notepad.
 
-==========-
-Next, tell the utility what color operations to perform.
-This requires a bit of explanation.
-Each operation is contained in a separate section of the config file.
-In a color operation section, reside 4 key=value pairs. These 4 items
-define a color code operation.
+=========-
+TODO
+CONTINUE TO FILL IN TH CONFIG FILE
 
-ACTION can be one of: set, clearAny, clearOnlyIf, or setOnlyIf.
-COLOR_CODE_SET takes a value of 1 to 10
-COLOR takes a value of 1 to 27
-GROUP takes a name of a group or "_ALL" which indicates all people in
-      the database. The "_ALL" option is only usable
-      with the clearAny and ClearOnlyIf actions.
-
-Taken together, these 4 parameters give all of the necessary information 
-for a color operation.
-
-The distinctions between set vs setOnlyIf  and clearAny vs. ClearOnlyIf is
-a bit subtle.
-
-set vs setOnlyIf
-The set action will always color code the people under consideration (either 
-a group or all) no matter what color they are currently coded as.
-The setOnlyIf action has an extra criterion, for the people under consideration
-(either a group or all), only those people who currently have no color code
-will be color coded with the specified COLOR.
-
-clearAny vs. ClearOnlyIf
-ClearAny is simplest. For the people under consideration (either a group or all)
-the person's color code is cleared (set to 0).
-ClearOnlyIf has an extra criterion, for the people under consideration (either
-a group or all), only those people who are currently color coded by the color
-indicated by the COLOR parameter, have their color code cleared (set to 0).
-Note that the COLOR value is ignored for the clearAny operation.
-
-
-As mentioned above, each set of color operation parameters is in its own 
-section. The section name is completely arbitrary, but you may want to use 
-a name that is similar to the group and add a character at the end to 
-indicate Set or Clear. See the sample config file.
-
-You can create as many of these sections as you wish. Each of these sections
-will have all four color operation parameters (key-value pairs).
-
-The last item to cover is the OPTIONS section.
-It contains one key named: COLOR_COMMAND. It's value can be a single name, 
-or it can be a multi-line value containing multiple names.
-
-The key's value correspond to the section names you created earlier to
-contain the 4 color parameters.
-The section names listed in the COLOR_COMMAND are the color operations that 
-will actually be performed by a run of the utility.
-
-The color operations in a utility run are performed in the order that
-they are listed in the COLOR_COMMAND's value.
-
-Example:
-
-#-----------------------------------------------
-[OPTIONS]
-COLOR_COMMAND =
-  Color_my_family_C
-  Color_my_family_S
-
-[Color_my_family_C]
-ACTION = clear
-COLOR_CODE_SET = 5
-COLOR = 1
-GROUP = _ALL
-
-[Color_my_family_S]
-ACTION = set
-COLOR_CODE_SET = 5
-COLOR = 1
-GROUP = FamGroup
-#-----------------------------------------------
-
-In this example, there are 3 sections: OPTIONS, Color_my_family_C, 
-and Color_my_family_S.
-
-The COLOR_COMMAND key in OPTIONS lists the sections that contain actions 
-to execute.
-
-When COLOR_COMMAND needs to specify more than one section name, it is entered
-as a multi-line value. There are 3 rules for multi-line values:
-1 each section name is on a separate line
-2 each line, after the first, must be indented with at least one space.
-3 the value can not contain an empty line.
-
-
-The key can contain one section name, like
-COLOR_COMMAND =   Color_my_family_C
-
-or multiple section names, like-
-COLOR_COMMAND = Color_my_family_C
-  Color_my_family_S
-
-or
-
-COLOR_COMMAND =
-  Color_my_family_C
-  Color_my_family_S
-
-
-Your config file can contain multiple color action sections, but only those
-listed in COLOR_COMMAND will be executed. The others are ignored. 
-
-You may want to keep unused sections in the config file for future use. 
-
-The keys in the color command section are ACTION, COLOR_CODE_SET, COLOR, and GROUP.
-ACTION is either set or clear
-COLOR_CODE_SET is a number from 1 to 10.
-COLOR is the color to use 1-27
-GROUP is the RM group name that specifies which people are to have their code
-code set.
-If the ACTION is clear, then the GROUP should be set to "_ALL".
-If ACTION is set, then GROUP must be the name of an existing RM group.
-
-ACTION clear only clears a particular color in a particular color code set.
-It does this for all people (thus the group name placeholder "_ALL")
-
-The utility does not allow clearing all colors in a color code set or
-clearing colors in multiple color code sets.
-
-==========-
-After confirming that your edits to the config file are saved,
-
-Double click the "ColorFromGroup.py" file in the working folder to run
-the utility.
+=========-
+Double click the "TestExternalFiles.py" file in the working folder
+to start the utility.
 
 =========-
 A terminal window is displayed while the utility processes
 the commands.
 
 =========-
-The terminal terminal window closes and the report file is displayed
-in Notepad for you inspection.
+The terminal window is closed and the utility is exited.
 
 =========-
-Open the TEST.rmtree database in RM and confirm the desired changes have
-been accomplished.
+The report file is displayed in Notepad for you inspection.
 
 =========-
-Consider whether to rename TEST.rmtree and use it as your research database.
+Examine the report and note any discrepancies from what was expected
+
+This utility does not change the database.
 
 
 =========================================================================DIV80==
 Notes
 
 =========-
-The GROUP key specifies which people in the database the color operation 
-is to be performed on. It can be either the name of a RM person group or "_ALL".
-
-_ALL will operate on all people in the database. It may only be used 
-for clear color operations.
-
-=========-
-ACTION can be one of: set, clearAny, ClearOnlyIf, or setOnlyIf.
-
-COLOR_CODE_SET takes a value of 1 to 10
-
-COLOR takes a value of 1 to 27
-
-GROUP takes a name of a group or "_ALL" which indicates all people in
-      the database. The "_ALL" option is only usable
-      with the clearAny and ClearOnlyIf actions.
-
-Taken together, these 4 parameters give all of the necessary information 
-for a color operation.
-
-The distinctions between set vs setOnlyIf  and clearAny vs. ClearOnlyIf is
-a bit subtle.
-
-set vs setOnlyIf
-The set action will always color code the people under consideration (either 
-a group or all) no matter what color they are currently coded as.
-The setOnlyIf action has an extra criterion, for the people under consideration
-(either a group or all), only those people who currently have no color code
-will be color coded with the specified COLOR.
-
-clearAny vs. ClearOnlyIf
-ClearAny is simplest. For the people under consideration (either a group or all)
-the person's color code is cleared (set to 0).
-ClearOnlyIf has an extra criterion, for the people under consideration (either
-a group or all), only those people who are currently color coded by the color
-indicated by the COLOR parameter, have their color code cleared (set to 0).
-Note that the COLOR value is ignored for the clearAny operation.
-
-The choice between each pair will depend on the exact circumstances: what other
-color operations have been performed and the order in which they were done.
-The same considerations apply when using the RM user interface to do color
-coding.
-
-RM's command "Clear Color for people selected above" does the 
-equivalent of the clearAny option in this utility. No matter what color happens
-to be selected, the color of the selected people is cleared.
-
-The previous release of this software used the clearOnlyIf option.
+CHECK_FILES feature: By default, folder path and file name capitalization in
+the database and in the file system path name must match for the file to be
+found by this utility. They do not need to match for RM to find the file. 
+The author's opinion is that case miss-matches should be fixed.
+This behavior can be reversed by the setting the  
+option CASE_INSENSITIVE to "on".
 
 =========-
-Updating the colorization of a group while the database is open in RM
-works OK. However, RM will not refresh the screen based on an external update.
-So, switch screens and then return to see the updated color coding.
+UNREF_FILES
+This option is designed so that your goal should be to produce a report
+with no unreferenced files found. That result is easy to interpret.
+If a file is added to the media folder but not added to the RM database,
+it will show up om this list.
+
+ However, there may be files and folders of files that you want to store
+ near your media files, but are not actually referenced by the database.
+
+ To shorten the list of unreferenced items, a specified set of files and folders
+ within the SEARCH_ROOT_FLDR_PATH folder can be ignored and not displayed in the
+ Unreferenced Files report. There are two methods of specifying the objects
+ to ignore:
+ 1: the IGNORED_OBJECTS section can be used to tell the utility to not include 
+ certain files in the list of unreferenced files. See below.
+ 2: The option IGNORED_ITEMS_FILE can be set to on or off. When the option is
+ set to on, the specification of the files/folders to ignore is done by the
+ file TestExternalFiles_ignore.txt which should be found in the
+ SEARCH_ROOT_FLDR_PATH folder. The TestExternalFiles_ignore.txt file contains
+ a set of exclusion patterns. A pattern may contain wildcard characters.
+ The format of the patterns can be found in many on-line sources, for example-
+     https://www.atlassian.com/git/tutorials/saving-changes/gitignore#git-ignore-patterns
+     https://git-scm.com/docs/gitignore
+A sample file is included in the zip file.
+   
+To use these kind of match patterns containing wild cards, one must turn on the
+option IGNORED_ITEMS_FILE, create a text file named TestExternalFiles_ignore.txt, 
+in the root of the SEARCH_ROOT_FLDR_PATH folder, and then edit that file to
+contain the patterns for the files to ignore.
+
+The TestExternalFiles_ignore.txt must be stored in utf-8 format if it 
+contains non-ASCII 
+characters. (Same as for the config file)
+
 
 =========-
-On some occasions, the utility report file will display a "Database
-Locked" message. In that case, close RM and re-run the utility, then re-open
-RM. It's not clear why this sometimes happens, but it is rare.
-No database damage has ever been seem after many hundreds of uses.
-"Database locked" is a normal operating message encountered from SQLite.
+IGNORED_OBJECTS
+IGNORED_OBJECTS FILES and FOLDERS settings in the config file are only used 
+when the IGNORED_ITEMS_FILE setting is set to off.
+
+FILES
+Add file names that should not be reported as being unreferenced.
+One name per line. Indented with at least one space character.
+No paths, just file names.
+All files with this name are ignored no matter where they are within
+the SEARCH_ROOT_FLDR_PATH folder
+
+FOLDERS
+Add folder names whose entire contents should not be reported as being
+unreferenced.
+One name per line. Indented with at least one space character.
+No paths, just folder names. (e.g. Folder1   and not  C:\Users\me\Folder1 )
+All folders with this name have their contents ignored no matter where they
+are within the SEARCH_ROOT_FLDR_PATH folder
+
+I suggest that you organize your file and folders so that ignored folders
+all have the same name, even though there may be many of them in different
+locations in the media folder.
 
 =========-
-This utility only changes the database's PersonTable.
+SEARCH_ROOT_FLDR_PATH
+The folder specified in RM's preferences as the Media folder is not 
+necessarily the same as the folder specified by the SEARCH_ROOT_FLDR_PATH
+variable in the config file  (but I recommended that they be the same).
+Use the absolute path of the folder.
+
 
 =========-
-This utility will, if so configured, modify a pre-existing color coding
-that may be important to you. Take care when assigning the actions in the
-config file.
+UNREF_FILES
+The value of- "# DB links minus # non-ignored files" should, in a
+sense, be zero. However, if a folder is ignored, but there are linked files
+within, then the value will be positive.
+
+
+=========-
+DUP_FILEPATHS
+Files with the same path and name may be duplicated in the media tab
+intentionally as they might have different captions etc.
+
+
+=========-
+DUP_FILENAMES
+Files listed have the same file names, ignoring case.
+Duplicate file names are not a error. This function is provided as a
+organizational tool. This feature does not check the file contents,
+only the names. Use the HASH_File feature to distinguish file contents.
+
+
+=========-
+SHOW_ORIG_PATH (RM v8 through v10 only)
+A display option is available for files found by either the CHECK_FILES or
+NO_TAG_FILES or DUP_FILES
+The option is turned on with the option SHOW_ORIG_PATH in the config file.
+With this option on, the path for each file is shown twice,
+- the path on disk, that is, after any RM8-9 token in the path has been expanded.
+- the path as saved in the database with the relative path anchor token 
+not expanded.
+See the note below "Background information" regarding relative paths in RM.
+
+
+
+=========-
+IGNORED_OBJECTS section of the config file
+Due to how the config file is parsed by the python library, files and folders
+whose names start with the # character cannot be added to the FILES or FOLDERS.
+Instead, they are considered comments. There is a way to overcome this
+limitation but the explanation of how is not worth the confusion it would
+create. Bottom line- if you really want to add the file or folder, change
+its name so it doesn't start with a # - or use the new ignore file method to
+exclude files.
+
+
+=========-
+A listing of "DB entires with blank filename or path found" is displayed when a
+media item in the database has a blank file path or file name. These items
+should be fixed first.
+
+=========-
+Paths specified in the Config file and command line
+Paths may, in general, be written as either Absolute or Relative format.
+
+Allows absolute or relative to current directory:
+Command line argument specifying the config file location
+
+Allows absolute or relative to folder containing py file:
+DB__PATH
+REPORT_FILE_PATH
+
+Allows absolute
+REPORT_FILE_DISPLAY_APP
+
+RMNOCASE_PATH
+SEARCH_ROOT_FLDR_PATH
+HASH_FILE_FLDR_PATH
+
+
+
+=========-
+Background information: File paths pointing to external files
+in RM 7:   all paths are absolute starting with a drive letter
+in RM 8&9: absolute file path starting with a drive letter
+        or
+        a path relative to another location.
+RM 8&9 Relative path symbols
+(these are expanded when found in the first position of the stored path)
+    ?    media folder as set in RM preferences
+    ~    home directory  (%USERPROFILE%)
+    *    RM main database file location
+
+
+=========-
+Switching between RM 8, RM 9, RM 10 and RM 11
+This section probably applies to no-one. Please don't read it and get confused !
+If the machine running the script has had multiple versions of RootsMagic
+installed, over the years, there may be slightly unexpected behavior in some
+cases. RootsMagic saves some of its settings in an .xml file located in the
+user's home folder/AppData/Roaming/RootsMagic. A separate sub folder is
+created for each RM major version. The script will read the Media Folder
+location setting found in the highest installed RM version .xml file.
+This is fine if you are not using ver 8 after having installed ver 9, or
+when the same media folder location has been used for ver 8 and later.
+
+When run on a RM7 database, the Media Folder location is not needed so the
+XML file is not referenced, so switching  between ver 7 and ver 10 will not
+be an issue.
+
+
+=========-
+Files attached to RM Tasks are not analyzed by this utility and they do not 
+appear in the RM Media tab.
+
 
 =========================================================================DIV80==
 APPENDIX  Config file: location, contents and editing
@@ -598,17 +634,11 @@ the various versions of Python.
 Click the Get button for the latest version.
 
 Python.org web site download and install
-Download the current version of Python 3, (or see direct link below
-for the current as of this date)
-https://www.python.org/downloads/windows/
+https://www.python.org/downloads/
 
-Click on the link near the top of page. Then ...
-Find the link near bottom left side of the page, in the "Stable Releases"
-section, labeled "Download Windows installer (64-bit)"
+Click on the button near the top of page: "Download Python install manager"
 Click it and save the installer.
-
-Direct link to recent (as of 2025-06) version installer-
-https://www.python.org/ftp/python/3.13.4/python-3.13.4-amd64.exe
+Go to the download location and run the installer.
 
 The Python installation requires about 100 Mbytes.
 It is easily and cleanly removed using the standard Windows method found in
@@ -651,13 +681,75 @@ sure that it works, Then make your edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
 
+=========-
+Multiline Values
+Probably the trickiest part of the config file is the IGNORED_OBJECTS section.
+The FOLDERS and FILENAMES keys are multi-line values.
+Each line of the value should be on a separate line indented with at least 
+one blank. An empty line generates an error.
+Multi-line values may not contain comment lines (lines starting with a #).
+
+examples-
+
+correct format-
+
+[IGNORED_OBJECTS]
+FOLDERS =
+  Folder1
+  Folder2
+  Folder3
+
+
+incorrect format- (empty line not allowed)
+
+[IGNORED_OBJECTS]
+FOLDERS =
+  Folder1
+
+  Folder2
+  Folder3
+
+
+incorrect format (not indented)
+
+[IGNORED_OBJECTS]
+FOLDERS =
+  Folder1
+Folder2
+  Folder3
+
+
+incorrect format- (no comments allowed)
+
+[IGNORED_OBJECTS]
+FOLDERS =
+  Folder1
+# Folder2
+  Folder3
+
+incorrect format- (# comment indicator only allowed at start of line)
+
+[IGNORED_OBJECTS]
+FOLDERS =    # a comment
+  Folder1
+  Folder2
+  Folder3
+
+incorrect format (no empty lines)
+
+[IGNORED_OBJECTS]
+FOLDERS =
+
+  Folder1
+  Folder2
+  Folder3
+
 
 =========================================================================DIV80==
 TODO
 
-*  Consider adding abilities:
-*  to specify color by name, color set by name.
-*  to rename a color to the group that it represents
+*  Add code to find duplicate files represented by different relative paths
+   in database.
 *  ?? what would you find useful?
 
 

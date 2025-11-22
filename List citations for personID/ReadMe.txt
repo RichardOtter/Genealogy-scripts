@@ -1,6 +1,6 @@
 =========================================================================DIV80==
-Change the source for a given citation
-ChangeSrcForCitation.py
+List all citations for a person given the RIN/PersonID
+ListCitationsForPersonID.py
 
 
 Utility application for use with RootsMagic databases
@@ -28,48 +28,52 @@ computer. "Installing python" is described in the appendix below.
 =========================================================================DIV80==
 Purpose
 
-A RootsMagic database contains records for Sources and Citations. Sources are
-also called "Master Sources". Citations are also called "Source Details".
+Generates  an alphabetically sorted list of source names and citation names
+associated with a person. The list includes citations attached-
 
-Sources are created using a Source Template. If 2 sources are created
-from the same source template, they will have the same fundamental structure.
+    to the specified person
+    to facts attached to the person
+    to facts shared to the person
+    to names attached to the person
+    to "family" objects that the person is in
+    to facts attached to "family" objects that the person is in
+    to associations that the person is a member of
 
-A Citation is created as a child of a Source. Citations of different sources
-created using the same source template will have the same fundamental
-structure as each other.
+the output also includes the number of citations found.
 
-This simple utility will move a citation from one source to another source,
-but only if the 2 sources were created using the same source template.
-
-For example, if you lump obituary sourced by newspaper, you will have a
-number of sources (newspapers) all based on the same source template.
-When entering a citation, you may accidentally cite a source set up for the
-wrong newspaper. Instead of deleting and recreating the citation, use this
-utility to move the citation to the correct source.
-
-The utility will carry along all of the uses of the citation, along with web
-links and media.
+The results are saved to a report file which is automatically displayed.
 
 
 =========================================================================DIV80==
 Backups
 
 IMPORTANT
-This utility modifies the RM database file.
-You should run this script on a copy of your database file (or at least
-have multiple known-good backups) until you are confident that the changes made
-are the ones desired.
+This script only reads the database file and makes no changes.
+However, you should run this script on a copy of your database file or at least
+have multiple known-good backups until you are confident that the the database
+remains intact after use. At that point, run this utility of your
+"production" database.
 
 =========================================================================DIV80==
 Compatibility
 
-Tested with a RootsMagic v 10.0.7 database
-using Python for Windows v3.13.4   64bit
+Tested with a RootsMagic v 11.0.2 database
+using Python for Windows v3.14   64bit
 
-The py file has not been tested on MacOS but could probably be
+The python script file has not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
 
-=========================================================================DIV80==
+======================================================================
+Backups
+
+IMPORTANT
+This script only reads the database file and makes no changes.
+However, you should run this script on a copy of your database file or at least
+have multiple known-good backups until you are confident that the the database
+remains intact after use. At that point, run this utility of your
+"production" database.
+
+======================================================================
 Overview
 
 This program is what is called a "command line utility".
@@ -78,10 +82,11 @@ It is in the form of a single text file with a "py" file name extension
 needs the Python package RMpy, which is a folder included in the distribution
 zip file.
 
-Most input to the utility is through the configuration file. The the default
-name of the configuration file (called, hereinafter, the "config file") is
-"RM-Python-config.ini". It should be located in the same folder as the
-MainScriptFile py file and the RMpy folder. At a minimum, the config
+Input to the utility is through the configuration file and. for some of the
+utilities, the command terminal.
+The the default name of the configuration file (called, hereinafter, the
+"config file") is "RM-Python-config.ini". It should be located in the same
+folder as the MainScriptFile py file and the RMpy folder. At a minimum, the config
 file gives the name and location of the database on which the utility operates.
 
 One config file can be shared among other RM utilities in the suite. Each
@@ -138,10 +143,6 @@ always operate on databases copied into a working folder.
 =========================================================================DIV80==
 Running the utility in detail
 
-While the database name and location is specified in the config file, the actual
-instructions for which citations and sources to modify are entered at a series
-of prompts in the black terminal window.
-
 ==========-
 Install Python for Windows x64  -see "APPENDIX  Python install" below.
 
@@ -150,8 +151,8 @@ Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 
 ==========-
-Copy these items from the downloaded zip file to the working folder-
-      ChangeSrcForCitation.py          (file)
+*  Copy these items from the downloaded zip file to the working folder-
+      ListCitationsForPersonID.py      (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
@@ -185,76 +186,26 @@ report file name and its location.
 If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
 
-Save the config file but leave it open in Notepad.
+Save the config file.
 
 =========-
-Open the TEST.rmtree database file in RootsMagic.
-Having the file open in RM allows one to copy citation and source names, needed
-by the utility, directly from the RM window.
-
-=========-
-Double click the "ChangeSrcForCitation.py" file in the working folder
+Double click the "ListCitationsForPersonID.py" file in the working folder
 to start the utility.
 
 =========-
-A terminal window will open and prompt you to enter the name of
-the citation to move and the source that it should be moved to.
-
-In both cases, only enough of the name needs to be
-entered to make it unique among all citations for all sources.
-
-It is suggested that you copy and paste from the RM source edit window.
-There is no need to manually type input.
-
-The standard 'SQL Like' wild card characters % and _ may be used.
-% matches 0 or more characters, _ matches one character.
-This utility silently adds a % to the end of the citation name  and
-source name text entered.
-
-=========-
-After the source name is entered, either a confirmation or error message
-is displayed.
-In either case, a prompt to change another citation is shown. Respond with
-either y or n.
-
-=========-
-If "n" is entered in response to the "Change another citation" prompt,
-the terminal window is closed and the utility is exited.
+A terminal window is momentarily displayed while the utility processes
+the commands and then the terminal window is closed and the
+utility is exited.
 
 =========-
 The report file is displayed in Notepad for you inspection.
 
 =========-
-Confirm the desired changes have been accomplished in RootsMagic
+No changes are mde to the database by this utility.
 
-=========-
-Consider whether to rename TEST.rmtree and use it as your research database.
 
 =========================================================================DIV80==
 Notes
-
-=========-
-If the full citation name is not unique, then as a workaround, you
-could add some text to the citation name of the citation you want
-to modify to make the name unique.
-
-=========-
-All entered information is verified before it is used. It is unlikely that
-random data would be accepted by the utility.
-
-Checks made by the utility:
-1- User is asked for the citation name of the citation to modify.
-    a) the name must be found.
-    b) the name must be unique among all citations for all sources.
-   You will be made aware of problems.
-2- User is asked for the source that is to be used as the new parent of
-   the citation.
-    a) the source name must be found.
-    b) the source name must be unique.
-    c) the existing source used by the citation and the new source
-       specified must both use the same source template.
-   You will be made aware of problems.
-
 
 =========================================================================DIV80==
 APPENDIX  Config file: location, contents and editing
@@ -367,17 +318,11 @@ the various versions of Python.
 Click the Get button for the latest version.
 
 Python.org web site download and install
-Download the current version of Python 3, (or see direct link below
-for the current as of this date)
-https://www.python.org/downloads/windows/
+https://www.python.org/downloads/
 
-Click on the link near the top of page. Then ...
-Find the link near bottom left side of the page, in the "Stable Releases"
-section, labeled "Download Windows installer (64-bit)"
+Click on the button near the top of page: "Download Python install manager"
 Click it and save the installer.
-
-Direct link to recent (as of 2025-06) version installer-
-https://www.python.org/ftp/python/3.13.4/python-3.13.4-amd64.exe
+Go to the download location and run the installer.
 
 The Python installation requires about 100 Mbytes.
 It is easily and cleanly removed using the standard Windows method found in
@@ -422,6 +367,7 @@ You may want to look at- https://en.wikipedia.org/wiki/INI_file
 =========================================================================DIV80==
 TODO
 
+*   consider alternate output formats
 *  ?? what would you find useful?
 
 

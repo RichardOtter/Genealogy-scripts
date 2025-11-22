@@ -1,6 +1,6 @@
 =========================================================================DIV80==
-Test usage and status of external/media files
-TestExternalFiles.py
+Lump sources that were entered as split sources
+LumpSources.py
 
 
 Utility application for use with RootsMagic databases
@@ -28,59 +28,37 @@ computer. "Installing python" is described in the appendix below.
 =========================================================================DIV80==
 Purpose
 
-The database includes links to external files which RM calls "media files".
-These files appear in the RM Media tab.
+This utility will assist users in converting a set of "split" source to a set
+of "lumped" sources.
+The split sources must each have just one citation. The utility moves that
+citation to another pre-existing "lumped" source.
 
-As the number of linked files increases, user errors become more likely.
-* A file on disk may get renamed or moved, breaking the link from the database.
-    RM has tools to fix these, but it does not give a log of what it has done.
-    There is a report that can be run, but with effort.
-* A file may be added to the media folder on disk but then not added to the
-    database. A common oversight when working quickly.
-* A file may be added to RM, but then detached from all source, facts etc,
-    leaving it "un-tagged". No harm in leaving it, but de-cluttering may be
-    desirable.
-* A file may be added to the database more than once.
-* A file from a far-flung folder may be added and it's location forgotten.
-* A file may be renamed, or misplaced or its contents altered. One will not be
-  able to verify the original file's contents are the same as in the current file.
 
-This utility will identify these issues.
-It is recommended to run this script daily as part of your backup routine.
-
-A Hash file might be generated annually and archived with the full dataset.
+Currenlt- user must know the source ID  of receiving sources
 
 
 =========================================================================DIV80==
 Backups
 
-IMPORTANT
-This script only reads the database file and makes no changes.
-However, you should run this script on a copy of your database file or at least
-have multiple known-good backups until you are confident that the the database
-remains intact after use. At that point, run this utility of your
-"production" database.
+VERY IMPORTANT
+This utility makes changes to the RM database file. It can change a large number
+of data items in a single run depending on the parameters specified.
+You will likely not be satisfied with your first run of the utility and you will
+want to try again, perhaps several times, each time making changes to your
+configuration file.
+You must run this script on a copy of your database file or have at least
+multiple known-good backups.
+
+Read about additional considerations in the Precautions section below.
 
 =========================================================================DIV80==
 Compatibility
 
-Tested with a RootsMagic v 10.0.7 database
-using Python for Windows v3.13.4   64bit
+Tested with a RootsMagic v 11.0.2 database
+using Python for Windows v3.14   64bit
 
-The py file has not been tested on MacOS but could probably be
+The python script file has not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
-
-
-Probably still works with RootsMagic v7, although it has not been
-recently tested.
-
-=========================================================================DIV80==
-Performance
-
-A database with 7,000 media files requires about 3 seconds run time for 5
-features turned on without hash file.
-Generating a hash file for 7,000 image files takes roughly a minute.
-
 
 =========================================================================DIV80==
 Overview
@@ -91,10 +69,11 @@ It is in the form of a single text file with a "py" file name extension
 needs the Python package RMpy, which is a folder included in the distribution
 zip file.
 
-Most input to the utility is through the configuration file. The the default
-name of the configuration file (called, hereinafter, the "config file") is
-"RM-Python-config.ini". It should be located in the same folder as the
-MainScriptFile py file and the RMpy folder. At a minimum, the config
+Input to the utility is through the configuration file and. for some of the
+utilities, the command terminal.
+The the default name of the configuration file (called, hereinafter, the
+"config file") is "RM-Python-config.ini". It should be located in the same
+folder as the MainScriptFile py file and the RMpy folder. At a minimum, the config
 file gives the name and location of the database on which the utility operates.
 
 One config file can be shared among other RM utilities in the suite. Each
@@ -149,56 +128,6 @@ always operate on databases copied into a working folder.
 
 
 =========================================================================DIV80==
-Capabilities
-
-The utility can perform several functions, as configured in the config file's
-OPTIONS section, either separately or in combination:
-
-CHECK_FILES
-    Checks that each file referenced in the RM database actually
-    exists on disk at the specified location. Any file path link found in
-    the database but not found on disk is listed.
-
-UNREF_FILES
-    Lists all files found in the folder specified by SEARCH_ROOT_FLDR_PATH in
-    the config file (see below) that are NOT referenced in the RM database.
-    This will find files that were perhaps added to the folder but were
-    mistakenly never added to the database.
-    This feature is designed for use when media files referenced by RM are all
-    under a single folder hierarchy.
-
-NO_TAG_FILES
-    Lists all files found in RM's Media tab that have zero tags.
-
-FOLDER_LIST
-    Lists all folders referenced in the RM database.
-    A file in an unexpected location may have been accidentally added to the
-    database. This list will make it obvious.
-
-NOT_MEDIA_FLDR
-    Lists all files that are not in the RM "Media folder" as specified in the 
-    RM preferences settings. Best practice is to set the "Media Folder" in 
-    preferences and use that folder as the location for all media.
-
-DUP_FILEPATHS
-    Lists files that have been added more than one time to the database. These
-    will appear more than once in RM's Media tab.
-
-DUP_FILENAMES
-    Lists files that have the same filename. This is not usually a problem, but
-    being aware of the duplicate names may help your organizing efforts.
-
-HASH_FILE
-    Generates a text file containing a listing of each media file's name,
-    location and HASH value, currently set to use MD5.
-    https://en.wikipedia.org/wiki/MD5
-    The HASH text file, when requested, is generated at the location
-    specified in the config file.
-    While MD5 is no longer considered secure for cryptography, it serves well
-    for this purpose.
-
-
-=========================================================================DIV80==
 Running the utility in detail
 
 ==========-
@@ -210,9 +139,14 @@ folders- the "working folder".
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
-      TestExternalFiles.py             (file)
+      LumpSources.py                   (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
+
+==========-
+Download the SQLite extension file: unifuzz64.dll   -see below
+   (This dll provides a RMNOCASE collation used by RM.)
+   Move the unifuzz64.dll file to the working folder.
 
 ==========-
 Make a copy of your database, move the copy into the working folder.
@@ -231,7 +165,7 @@ The items in a section are key-value pairs.
 
 For example, in the sample config file, there is a section named 
 [FILE_PATHS].
-In that section, reside 3 key-value pairs, one of which is 
+In that section, reside 4 key-value pairs, one of which is 
 DB_PATH = TEST.rmtree
 
 "DB_PATH" is the key, "TEST.rmtree" is the value.
@@ -240,6 +174,9 @@ key-value pairs are separated with a = character.
 
 The utility needs to know where the RM database file is located, the output
 report file name and its location.
+
+The utility also needs to know where the unifuzz64.dll file is.  Its path
+is give an the value of the key RMNOCASE.
 
 If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
@@ -250,208 +187,71 @@ Save the config file but leave it open in Notepad.
 TODO
 CONTINUE TO FILL IN TH CONFIG FILE
 
+
+[LUMP_OPTIONS]
+TEMPLATE_CHECK_OVERRIDE= off
+
+[LUMP_MAPPINGS]
+MAPPING_SRC_CIT = 
+    "PublicationName"    >  NULL
+    "PublicationPlace"   >  NULL
+
+MAPPING_IDENT_SRC = 
+     "%-pHTH=%"  >  6815
+
+
+
+
 =========-
-Double click the "TestExternalFiles.py" file in the working folder
+Double click the "LumpSources.py" file in the working folder
 to start the utility.
 
 =========-
-A terminal window is displayed while the utility processes
-the commands.
-
-=========-
-The terminal window is closed and the utility is exited.
+A terminal window is momentarily displayed while the utility processes
+the commands and then the terminal window is closed and the
+utility is exited.
 
 =========-
 The report file is displayed in Notepad for you inspection.
 
 =========-
-Examine the report and note any discrepancies from what was expected
+IMPORTANT:
+Open the TEST.rmtree database in RM and before anything else,
+perform the "Rebuild Indexes" database tool command
+From Left hand icon panel, select the Tools icon to open the Tools listing,
+then select Database Tools=>Rebuild indexes=>Run selected tool.
 
-This utility does not change the database.
+=========-
+Confirm that the desired changes have been accomplished.
+
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
 
 
 =========================================================================DIV80==
 Notes
 
 =========-
-CHECK_FILES feature: By default, folder path and file name capitalization in
-the database and in the file system path name must match for the file to be
-found by this utility. They do not need to match for RM to find the file. 
-The author's opinion is that case miss-matches should be fixed.
-This behavior can be reversed by the setting the  
-option CASE_INSENSITIVE to "on".
-
 =========-
-UNREF_FILES
-This option is designed so that your goal should be to produce a report
-with no unreferenced files found. That result is easy to interpret.
-If a file is added to the media folder but not added to the RM database,
-it will show up om this list.
-
- However, there may be files and folders of files that you want to store
- near your media files, but are not actually referenced by the database.
-
- To shorten the list of unreferenced items, a specified set of files and folders
- within the SEARCH_ROOT_FLDR_PATH folder can be ignored and not displayed in the
- Unreferenced Files report. There are two methods of specifying the objects
- to ignore:
- 1: the IGNORED_OBJECTS section can be used to tell the utility to not include 
- certain files in the list of unreferenced files. See below.
- 2: The option IGNORED_ITEMS_FILE can be set to on or off. When the option is
- set to on, the specification of the files/folders to ignore is done by the
- file TestExternalFiles_ignore.txt which should be found in the
- SEARCH_ROOT_FLDR_PATH folder. The TestExternalFiles_ignore.txt file contains
- a set of exclusion patterns. A pattern may contain wildcard characters.
- The format of the patterns can be found in many on-line sources, for example-
-     https://www.atlassian.com/git/tutorials/saving-changes/gitignore#git-ignore-patterns
-     https://git-scm.com/docs/gitignore
-A sample file is included in the zip file.
-   
-To use these kind of match patterns containing wild cards, one must turn on the
-option IGNORED_ITEMS_FILE, create a text file named TestExternalFiles_ignore.txt, 
-in the root of the SEARCH_ROOT_FLDR_PATH folder, and then edit that file to
-contain the patterns for the files to ignore.
-
-The TestExternalFiles_ignore.txt must be stored in utf-8 format if it 
-contains non-ASCII 
-characters. (Same as for the config file)
-
-
 =========-
-IGNORED_OBJECTS
-IGNORED_OBJECTS FILES and FOLDERS settings in the config file are only used 
-when the IGNORED_ITEMS_FILE setting is set to off.
-
-FILES
-Add file names that should not be reported as being unreferenced.
-One name per line. Indented with at least one space character.
-No paths, just file names.
-All files with this name are ignored no matter where they are within
-the SEARCH_ROOT_FLDR_PATH folder
-
-FOLDERS
-Add folder names whose entire contents should not be reported as being
-unreferenced.
-One name per line. Indented with at least one space character.
-No paths, just folder names. (e.g. Folder1   and not  C:\Users\me\Folder1 )
-All folders with this name have their contents ignored no matter where they
-are within the SEARCH_ROOT_FLDR_PATH folder
-
-I suggest that you organize your file and folders so that ignored folders
-all have the same name, even though there may be many of them in different
-locations in the media folder.
-
-=========-
-SEARCH_ROOT_FLDR_PATH
-The folder specified in RM's preferences as the Media folder is not 
-necessarily the same as the folder specified by the SEARCH_ROOT_FLDR_PATH
-variable in the config file  (but I recommended that they be the same).
-Use the absolute path of the folder.
 
 
-=========-
-UNREF_FILES
-The value of- "# DB links minus # non-ignored files" should, in a
-sense, be zero. However, if a folder is ignored, but there are linked files
-within, then the value will be positive.
+=========================================================================DIV80==
+Precautions before using the modified database
 
+Once you are satisfied with the results of the modifications made by this
+software, don't hurry to start using the resulting file for research.
+Continue your work for several days using the original database to allow
+further thought. Then run the utility again with your perfected config
+file on a new copy of your now-current database. Inspect the results and then
+use the modified database as your normal research file.
 
-=========-
-DUP_FILEPATHS
-Files with the same path and name may be duplicated in the media tab
-intentionally as they might have different captions etc.
+The week delay will give you time to think about what could go wrong. You should
+consider unexpected changes to your data that you did not want.
 
-
-=========-
-DUP_FILENAMES
-Files listed have the same file names, ignoring case.
-Duplicate file names are not a error. This function is provided as a
-organizational tool. This feature does not check the file contents,
-only the names. Use the HASH_File feature to distinguish file contents.
-
-
-=========-
-SHOW_ORIG_PATH (RM v8 through v10 only)
-A display option is available for files found by either the CHECK_FILES or
-NO_TAG_FILES or DUP_FILES
-The option is turned on with the option SHOW_ORIG_PATH in the config file.
-With this option on, the path for each file is shown twice,
-- the path on disk, that is, after any RM8-9 token in the path has been expanded.
-- the path as saved in the database with the relative path anchor token 
-not expanded.
-See the note below "Background information" regarding relative paths in RM.
-
-
-
-=========-
-IGNORED_OBJECTS section of the config file
-Due to how the config file is parsed by the python library, files and folders
-whose names start with the # character cannot be added to the FILES or FOLDERS.
-Instead, they are considered comments. There is a way to overcome this
-limitation but the explanation of how is not worth the confusion it would
-create. Bottom line- if you really want to add the file or folder, change
-its name so it doesn't start with a # - or use the new ignore file method to
-exclude files.
-
-
-=========-
-A listing of "DB entires with blank filename or path found" is displayed when a
-media item in the database has a blank file path or file name. These items
-should be fixed first.
-
-=========-
-Paths specified in the Config file and command line
-Paths may, in general, be written as either Absolute or Relative format.
-
-Allows absolute or relative to current directory:
-Command line argument specifying the config file location
-
-Allows absolute or relative to folder containing py file:
-DB__PATH
-REPORT_FILE_PATH
-
-Allows absolute
-REPORT_FILE_DISPLAY_APP
-
-RMNOCASE_PATH
-SEARCH_ROOT_FLDR_PATH
-HASH_FILE_FLDR_PATH
-
-
-
-=========-
-Background information: File paths pointing to external files
-in RM 7:   all paths are absolute starting with a drive letter
-in RM 8&9: absolute file path starting with a drive letter
-        or
-        a path relative to another location.
-RM 8&9 Relative path symbols
-(these are expanded when found in the first position of the stored path)
-    ?    media folder as set in RM preferences
-    ~    home directory  (%USERPROFILE%)
-    *    RM main database file location
-
-
-=========-
-Switching between RM 8, RM 9, RM 10 and RM 11
-This section probably applies to no-one. Please don't read it and get confused !
-If the machine running the script has had multiple versions of RootsMagic
-installed, over the years, there may be slightly unexpected behavior in some
-cases. RootsMagic saves some of its settings in an .xml file located in the
-user's home folder/AppData/Roaming/RootsMagic. A separate sub folder is
-created for each RM major version. The script will read the Media Folder
-location setting found in the highest installed RM version .xml file.
-This is fine if you are not using ver 8 after having installed ver 9, or
-when the same media folder location has been used for ver 8 and later.
-
-When run on a RM7 database, the Media Folder location is not needed so the
-XML file is not referenced, so switching  between ver 7 and ver 10 will not
-be an issue.
-
-
-=========-
-Files attached to RM Tasks are not analyzed by this utility and they do not 
-appear in the RM Media tab.
+If you start using the newly modified database immediately, you'll lose work
+if you missed a problem only to find it later and have to revert to a backup
+from before the database was modified.
 
 
 =========================================================================DIV80==
@@ -610,6 +410,20 @@ KEY_NAME =
   # item2
   item3
 
+MAPPING_ value format
+
+Values that this utility names "MAPPING_" have additional format requirements.
+
+Each line must have 2 names- old field name and new field name, separated by
+a ">" character.
+The word "NULL" may substitute for either old or new field name.
+
+Names may be enclosed in double quotes.  Quotes are required when a name
+contains a blank or ">" character at the beginning, end, or anywhere within it.
+
+The white space between the names and ">" character is ignored.
+
+
 Encoding
 If there are any non-ASCII characters in the config file then the file must be
 saved in UTF-8 format, with no byte order mark (BOM).
@@ -633,17 +447,11 @@ the various versions of Python.
 Click the Get button for the latest version.
 
 Python.org web site download and install
-Download the current version of Python 3, (or see direct link below
-for the current as of this date)
-https://www.python.org/downloads/windows/
+https://www.python.org/downloads/
 
-Click on the link near the top of page. Then ...
-Find the link near bottom left side of the page, in the "Stable Releases"
-section, labeled "Download Windows installer (64-bit)"
+Click on the button near the top of page: "Download Python install manager"
 Click it and save the installer.
-
-Direct link to recent (as of 2025-06) version installer-
-https://www.python.org/ftp/python/3.13.4/python-3.13.4-amd64.exe
+Go to the download location and run the installer.
 
 The Python installation requires about 100 Mbytes.
 It is easily and cleanly removed using the standard Windows method found in
@@ -652,6 +460,36 @@ Windows=>Settings=>Installed apps
 Run the Python installer selecting all default options.
 Note: by default, the Python installer places the software in the user's
 home folder in the standard location.
+
+
+=========================================================================DIV80==
+APPENDIX  unifuzz64.dll download
+
+The SQLiteToolsforRootsMagic website has been around for many years and is run
+by a trusted RM user. Many posts to public RootsMagic user forums mention use
+of unifuzz64.dll from the SQLiteToolsforRootsMagic website. This author has
+also used it for years.
+
+direct download:
+https://sqlitetoolsforrootsmagic.com/wp-content/uploads/2018/05/unifuzz64.dll
+
+the link above is found in this context-
+https://sqlitetoolsforrootsmagic.com/rmnocase-faking-it-in-sqlite-expert-command-line-shell-et-al/
+
+
+MD5 hash values are used to confirm the identity and integrity of files.
+
+    MD5 hash                            File size         File name
+    06a1f485b0fae62caa80850a8c7fd7c2    256,406 bytes    unifuzz64.dll
+
+In Windows, to generate the MD5 hash of a file named [file name]:
+Open a terminal window and enter:
+certutil -hashfile [file name]  MD5
+
+where [file name] is the fie you wish to compute the MD5 has for.
+
+So, to verify the unifuzz file-
+certutil -hashfile unifuzz64.dll  MD5
 
 
 =========================================================================DIV80==
@@ -685,78 +523,10 @@ above. If all else fails, start over with the supplied config file and make
 sure that it works, Then make your edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
-
-=========-
-Multiline Values
-Probably the trickiest part of the config file is the IGNORED_OBJECTS section.
-The FOLDERS and FILENAMES keys are multi-line values.
-Each line of the value should be on a separate line indented with at least 
-one blank. An empty line generates an error.
-Multi-line values may not contain comment lines (lines starting with a #).
-
-examples-
-
-correct format-
-
-[IGNORED_OBJECTS]
-FOLDERS =
-  Folder1
-  Folder2
-  Folder3
-
-
-incorrect format- (empty line not allowed)
-
-[IGNORED_OBJECTS]
-FOLDERS =
-  Folder1
-
-  Folder2
-  Folder3
-
-
-incorrect format (not indented)
-
-[IGNORED_OBJECTS]
-FOLDERS =
-  Folder1
-Folder2
-  Folder3
-
-
-incorrect format- (no comments allowed)
-
-[IGNORED_OBJECTS]
-FOLDERS =
-  Folder1
-# Folder2
-  Folder3
-
-incorrect format- (# comment indicator only allowed at start of line)
-
-[IGNORED_OBJECTS]
-FOLDERS =    # a comment
-  Folder1
-  Folder2
-  Folder3
-
-incorrect format (no empty lines)
-
-[IGNORED_OBJECTS]
-FOLDERS =
-
-  Folder1
-  Folder2
-  Folder3
-
-
 =========================================================================DIV80==
 TODO
 
-*  Add code to find duplicate files represented by different relative paths
-   in database.
 *  ?? what would you find useful?
-
 
 =========================================================================DIV80==
 Feedback

@@ -1,6 +1,6 @@
 =========================================================================DIV80==
-Lump sources that were entered as split sources
-LumpSources.py
+Group persons by using SQL
+GroupFromSQL.py
 
 
 Utility application for use with RootsMagic databases
@@ -28,36 +28,30 @@ computer. "Installing python" is described in the appendix below.
 =========================================================================DIV80==
 Purpose
 
-This utility will assist users in converting a set of "split" source to a set
-of "lumped" sources.
-The split sources must each have just one citation. The utility moves that
-citation to another pre-existing "lumped" source.
+This utility uses SQL to query the database file and create a RM group in the
+RM database independently of RM. Groups may be created with RootsMagic software,
+of course, but the types of queries are much more limited.
 
-
-Currenlt- user must know the source ID  of receiving sources
+This utility will update one or more RM groups from any SQL query that returns
+a list of RINs/PersonIDs.
 
 
 =========================================================================DIV80==
 Backups
 
-VERY IMPORTANT
-This utility makes changes to the RM database file. It can change a large number
-of data items in a single run depending on the parameters specified.
-You will likely not be satisfied with your first run of the utility and you will
-want to try again, perhaps several times, each time making changes to your
-configuration file.
-You must run this script on a copy of your database file or have at least
-multiple known-good backups.
-
-Read about additional considerations in the Precautions section below.
+IMPORTANT
+This utility modifies the RM database file.
+You should run this script on a copy of your database file (or at least
+have multiple known-good backups) until you are confident that the changes made
+are the ones desired.
 
 =========================================================================DIV80==
 Compatibility
 
-Tested with a RootsMagic v 10.0.7 database
-using Python for Windows v3.13.4   64bit
+Tested with a RootsMagic v 11.0.2 database
+using Python for Windows v3.14   64bit
 
-The py file has not been tested on MacOS but could probably be
+The python script file has not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
 
 =========================================================================DIV80==
@@ -69,10 +63,11 @@ It is in the form of a single text file with a "py" file name extension
 needs the Python package RMpy, which is a folder included in the distribution
 zip file.
 
-Most input to the utility is through the configuration file. The the default
-name of the configuration file (called, hereinafter, the "config file") is
-"RM-Python-config.ini". It should be located in the same folder as the
-MainScriptFile py file and the RMpy folder. At a minimum, the config
+Input to the utility is through the configuration file and. for some of the
+utilities, the command terminal.
+The the default name of the configuration file (called, hereinafter, the
+"config file") is "RM-Python-config.ini". It should be located in the same
+folder as the MainScriptFile py file and the RMpy folder. At a minimum, the config
 file gives the name and location of the database on which the utility operates.
 
 One config file can be shared among other RM utilities in the suite. Each
@@ -137,15 +132,10 @@ Create a folder on your computer that you will not confuse with other
 folders- the "working folder".
 
 ==========-
-Copy these items from the downloaded zip file to the working folder-
-      LumpSources.py                   (file)
+*  Copy these items from the downloaded zip file to the working folder-
+      GroupFromSQL.py                  (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
-
-==========-
-Download the SQLite extension file: unifuzz64.dll   -see below
-   (This dll provides a RMNOCASE collation used by RM.)
-   Move the unifuzz64.dll file to the working folder.
 
 ==========-
 Make a copy of your database, move the copy into the working folder.
@@ -164,7 +154,7 @@ The items in a section are key-value pairs.
 
 For example, in the sample config file, there is a section named 
 [FILE_PATHS].
-In that section, reside 4 key-value pairs, one of which is 
+In that section, reside 3 key-value pairs, one of which is 
 DB_PATH = TEST.rmtree
 
 "DB_PATH" is the key, "TEST.rmtree" is the value.
@@ -174,54 +164,83 @@ key-value pairs are separated with a = character.
 The utility needs to know where the RM database file is located, the output
 report file name and its location.
 
-The utility also needs to know where the unifuzz64.dll file is.  Its path
-is give an the value of the key RMNOCASE.
-
 If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
 
-Save the config file but leave it open in Notepad.
+
+==========-
+Create or find a SQL statement that returns the RINs of the people you want
+to put into a group.
+for example, the SQL that returns all of the people in a database is-
+
+SELECT PersonID FROM PersonTable
+
+Enter the SQL statement into the config file so the utility can use it.
+
+[OPTIONS]
+GROUP_NAME = GroupEveryone
+
+#-----------------------------------------------
+[GroupEveryone]
+SQL_QUERY = SELECT PersonID FROM PersonTable
+
+#-----------------------------------------------
+
+Shown are two sections: "OPTIONS" and "GroupEveryone".
+
+Section "OPTIONS" has one key :"GROUP_NAME" which has the value "GroupEveryone".
+
+Section "GroupEveryone" has one key: "SQL_QUERY" which has the
+value "SELECT PersonID FROM PersonTable".
+
+This example, if run with the utility, will update the group GroupEveryone, already 
+existing in the database, using the SQL statement show.
+The example SQL_QUERY is very simple and fits on the same line as the key name.
+Real SQL will be much more complex and require multiple lines.
+Each line of a multi line Value must be indented at least one space.
+
+for example:
+
+SQL_QUERY =
+   --
+   -- selects person whose married name starts with 'sm'
+   SELECT pt.PersonId
+   FROM PersonTable AS pt
+   INNER JOIN NameTable AS nt ON pt.PersonId = nt.OwnerId
+   WHERE nt.NameType = 5    -- married name
+   AND nt.surname LIKE 'sm%'
+
+The SQL_QUERY key specifies the SQL statement that will be run.
+It must return a set of PersonID's. The statement may begin on the next line,
+as above, as long as the SQL lines are all indented with white space.
+Blank lines are not allowed.
+Use indented SQL comments (--) to add spacing for readability.
+
+# style comments are not allowed in multi line values.
+
+
+The GROUP_NAME value in OPTIONS may also have multiple lines, that is
+multiple group names. Each of those group will be updated in the same run
+of the utility and listed separately in the report.
+
+Your config file can contain multiple sections each with SQL statements.
+Only the sections specified by [OPTIONS] GROUP_NAME will be used. The others
+are ignored.
 
 =========-
-TODO
-CONTINUE TO FILL IN TH CONFIG FILE
-
-
-[LUMP_OPTIONS]
-TEMPLATE_CHECK_OVERRIDE= off
-
-[LUMP_MAPPINGS]
-MAPPING_SRC_CIT = 
-    "PublicationName"    >  NULL
-    "PublicationPlace"   >  NULL
-
-MAPPING_IDENT_SRC = 
-     "%-pHTH=%"  >  6815
-
-
-
-
-=========-
-Double click the "LumpSources.py" file in the working folder
+Double click the "GroupFromSQL.py" file in the working folder
 to start the utility.
 
 =========-
-A terminal window is momentarily displayed while the utility processes
-the commands and then the terminal window is closed and the
-utility is exited.
+A terminal window is displayed while the utility processes
+the commands.
 
 =========-
 The report file is displayed in Notepad for you inspection.
 
 =========-
-IMPORTANT:
-Open the TEST.rmtree database in RM and before anything else,
-perform the "Rebuild Indexes" database tool command
-From Left hand icon panel, select the Tools icon to open the Tools listing,
-then select Database Tools=>Rebuild indexes=>Run selected tool.
-
-=========-
-Confirm that the desired changes have been accomplished.
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.
 
 =========-
 Consider whether to rename TEST.rmtree and use it as your research database.
@@ -231,27 +250,78 @@ Consider whether to rename TEST.rmtree and use it as your research database.
 Notes
 
 =========-
+This utility will not help you write the SQL statement and is not a good
+working environment in which to create your SQL statement.
+Confirm you query works before running it in this utility. (Or get the SQL from
+a source that has confirmed its results. This app is written so that incorrect
+SQL will not damage your database, only give groups with unwanted members.)
+It is suggested that you write and debug your SQL in a GUI SQLite manager app,
+such as "SQLite Expert Personal", the 64bit version, a free app. Several others
+are also available.
+
+Note that the SQL statement is run in an environment that does not have the
+RMNOCASE collation used by RM for most name type columns. Use "COLLATE NOCASE"
+to avoid errors.
+
 =========-
+Also remember, that groups in RM, are always groups of Persons. So if you want
+to find all RM facts with a certain characteristic, you need to create a group of
+the people that have that fact attached. Once the group is created, you will
+need to search each person's edit window for the fact you are interested in.
+
 =========-
+Due to technical issue regarding RMNOCASE, this utility will not actually create a
+new group. Instead use RM to create the group name before using this utility.
+The process is simple-
+Open the database in RM,
+Click the Command palette icon in the top right corner of the RM window.
+Type "Group" and select the "Groups" command.
+In the Add New Group window, type the name of the new group and hit Save.
+Be sure the name is unique among group names.
+Leave the Type set to "Simple" as is the default.
 
+The same Add New Group window can be accessed by clicking the large plus icon in
+the groups tab in the "Side View" which by default is on the left.
 
-=========================================================================DIV80==
-Precautions before using the modified database
+=========-
+Updating the contents of a group while the database is open in RM works OK.
+However, RM lists using group (simple style) filters do not have a refresh button,
+so, for example, if you displaying People view filtered by the group that has been
+updated, you'll need to switch to another group and then back again to see the
+effect of the group having been updated.
 
-Once you are satisfied with the results of the modifications made by this
-software, don't hurry to start using the resulting file for research.
-Continue your work for several days using the original database to allow
-further thought. Then run the utility again with your perfected config
-file on a new copy of your now-current database. Inspect the results and then
-use the modified database as your normal research file.
+=========-
+On some occasions, the utility report file will display a "Database
+Locked" message. In that case, close RM and re-run the utility, then re-open 
+RM. It's not clear why this sometimes happens, but it is rare. 
+For some reason, RM keeps an open transaction which prevents other processes
+from making updates.
+No database damage has ever been seem after many hundreds of uses. 
+"Database locked" is a normal message encountered from SQLite.
 
-The week delay will give you time to think about what could go wrong. You should
-consider unexpected changes to your data that you did not want.
+Less important notes.
 
-If you start using the newly modified database immediately, you'll lose work
-if you missed a problem only to find it later and have to revert to a backup
-from before the database was modified.
+=========-
+All SQL statements have not tested :)
+The utility takes the input SQL and creates a temporary view based on it. If that
+fails, an appropriate error is returned. That should protect against SQL that
+modifies/deletes data. (This is not tested beyond simple cases.)
 
+=========-
+This utility will, if so configured, modify a pre-existing group that may be
+important to you. Take care when assigning the group name: [OPTIONS] GROUP_NAME.
+
+=========-
+This utility only changes the GroupsTable in the database
+
+=========-
+This utility creates a temporary view named: PersonIdList_RJO_utils and
+deletes it when done.
+
+=========-
+(For testing) To create a "database locked" situation, start a transaction
+in an external SQLite tool, try to run this utility. Will get locked message 
+until transaction in SQLite Expert is either committed or RolledBack.
 
 =========================================================================DIV80==
 APPENDIX  Config file: location, contents and editing
@@ -409,20 +479,6 @@ KEY_NAME =
   # item2
   item3
 
-MAPPING_ value format
-
-Values that this utility names "MAPPING_" have additional format requirements.
-
-Each line must have 2 names- old field name and new field name, separated by
-a ">" character.
-The word "NULL" may substitute for either old or new field name.
-
-Names may be enclosed in double quotes.  Quotes are required when a name
-contains a blank or ">" character at the beginning, end, or anywhere within it.
-
-The white space between the names and ">" character is ignored.
-
-
 Encoding
 If there are any non-ASCII characters in the config file then the file must be
 saved in UTF-8 format, with no byte order mark (BOM).
@@ -446,17 +502,11 @@ the various versions of Python.
 Click the Get button for the latest version.
 
 Python.org web site download and install
-Download the current version of Python 3, (or see direct link below
-for the current as of this date)
-https://www.python.org/downloads/windows/
+https://www.python.org/downloads/
 
-Click on the link near the top of page. Then ...
-Find the link near bottom left side of the page, in the "Stable Releases"
-section, labeled "Download Windows installer (64-bit)"
+Click on the button near the top of page: "Download Python install manager"
 Click it and save the installer.
-
-Direct link to recent (as of 2025-06) version installer-
-https://www.python.org/ftp/python/3.13.4/python-3.13.4-amd64.exe
+Go to the download location and run the installer.
 
 The Python installation requires about 100 Mbytes.
 It is easily and cleanly removed using the standard Windows method found in
@@ -465,36 +515,6 @@ Windows=>Settings=>Installed apps
 Run the Python installer selecting all default options.
 Note: by default, the Python installer places the software in the user's
 home folder in the standard location.
-
-
-=========================================================================DIV80==
-APPENDIX  unifuzz64.dll download
-
-The SQLiteToolsforRootsMagic website has been around for many years and is run
-by a trusted RM user. Many posts to public RootsMagic user forums mention use
-of unifuzz64.dll from the SQLiteToolsforRootsMagic website. This author has
-also used it for years.
-
-direct download:
-https://sqlitetoolsforrootsmagic.com/wp-content/uploads/2018/05/unifuzz64.dll
-
-the link above is found in this context-
-https://sqlitetoolsforrootsmagic.com/rmnocase-faking-it-in-sqlite-expert-command-line-shell-et-al/
-
-
-MD5 hash values are used to confirm the identity and integrity of files.
-
-    MD5 hash                            File size         File name
-    06a1f485b0fae62caa80850a8c7fd7c2    256,406 bytes    unifuzz64.dll
-
-In Windows, to generate the MD5 hash of a file named [file name]:
-Open a terminal window and enter:
-certutil -hashfile [file name]  MD5
-
-where [file name] is the fie you wish to compute the MD5 has for.
-
-So, to verify the unifuzz file-
-certutil -hashfile unifuzz64.dll  MD5
 
 
 =========================================================================DIV80==
@@ -531,7 +551,9 @@ You may want to look at- https://en.wikipedia.org/wiki/INI_file
 =========================================================================DIV80==
 TODO
 
+* COLOR:  Consider adding color coding functions.
 *  ?? what would you find useful?
+
 
 =========================================================================DIV80==
 Feedback
