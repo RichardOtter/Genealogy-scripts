@@ -114,12 +114,12 @@
         },
         {
             "name": "PYD: Test external files test env",
-            "cwd":  "${workspaceFolder}/Test external files",
+            "cwd":  "C:/Users/Test/RM_test_root",
             "type": "debugpy",
             "request": "launch",
-            "program": "TestExternalFiles.py",
+            "program": "${workspaceFolder}/Test external files/TestExternalFiles.py",
             "console": "integratedTerminal",
-            "args": "testing/test.ini",
+            "args": ["${workspaceFolder}/Test external files/testing/test.ini"],
             "stopOnEntry": true
         }
     ]

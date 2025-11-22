@@ -39,7 +39,8 @@ def main():
 
     # Source files
     test_db_home_fldr = Path(r'C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Test Data')
-    test_files_home_fldr = Path(r'C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\testing')
+    tef_app_home= Path(r'C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Test external files')
+    test_files_home_fldr = tef_app_home / 'testing'
 
     test_db_file = 'TestData-RMpython.rmtree'
     test_ignore_file = 'TestExternalFiles_ignore.txt'
@@ -48,7 +49,7 @@ def main():
     test_run_TEF_shortcut_2 = '__Run TestExternalFiles with test.ini RELATIVE bad.lnk'
     cmd_1 = 'Run RM with Home=Test.cmd'
     cmd_2 = 'Run TEF with Home=Test.cmd'
-
+    tef_app = "TestExternalFiles.py"
 
     # Destination files & folders            Assumes existence of \Users\Test
     base_user_dir = Path(R'C:\Users\Test')
@@ -127,6 +128,7 @@ def main():
     test_run_TEF_shortcut_2_dest = base_user_dir / test_run_TEF_shortcut_2
     cmd_1_in_dest = base_user_dir / cmd_1
     cmd_2_in_dest = base_user_dir / cmd_2
+    tef_app_in_dest = base_user_dir / tef_app
 
     if action == 'remove':
         if db_file_dest.exists():
@@ -143,7 +145,8 @@ def main():
             cmd_1_in_dest.unlink()
         if cmd_2_in_dest.exists():
             cmd_2_in_dest.unlink()
-
+        if tef_app_in_dest.exists():
+            tef_app_in_dest.unlink()
 
     iterable = file_fldr_list
     if action == 'remove':
@@ -189,6 +192,7 @@ def main():
     test_run_TEF_shortcut_2_src  = test_files_home_fldr / test_run_TEF_shortcut_1
     cmd_1_in_src                = test_files_home_fldr / cmd_1
     cmd_2_in_src                = test_files_home_fldr / cmd_2
+    tef_app_in_src              - tef_app_home / tef_app
 
 
     if action == 'create':
@@ -209,7 +213,8 @@ def main():
             shutil.copyfile( cmd_1_in_src, cmd_1_in_dest)
         if not cmd_2_in_dest.exists():
             shutil.copyfile( cmd_2_in_src, cmd_2_in_dest)
-
+        if not tef_app_in_dest.exists():
+            shutil.copyfile( tef_app_in_src, tef_app_in_dest)
     input("press enter to continue and exit")
 
 
