@@ -1,0 +1,21 @@
+{
+  "title": "vsCode - Remember Open Files (vscrof)",
+  "workspace": {
+    "name": "repo Genealogy-scripts",
+    "rootPath": "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts"
+  },
+  "path": "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/.vscrof/vscrof.json",
+  "files": {
+    "0":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/Change source for citation/ReadMe.txt",
+    "1":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/Change source template/ReadMe.txt",
+    "2":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/Modify citation list/ReadMe.txt",
+    "3":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/Color from Group/ReadMe.txt",
+    "4":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/Convert fact/ReadMe.txt",
+    "5":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/Group from SQL/ReadMe.txt",
+    "6":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/List citations for PersonID/ReadMe.txt",
+    "7":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/Lump sources/ReadMe.txt",
+    "8":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/RMpy package/ReadMe.txt",
+    "9":   "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/Run SQL/ReadMe.txt",
+    "10":  "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/Test external files/ReadMe.txt"
+  }
+}
