@@ -11,3 +11,4 @@ DistributionFileList:
 
 DistributionFolderList:
   - ..\RMpy package\RMpy
+  - ..\SQL for creating useful groups
