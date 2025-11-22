@@ -1,13 +1,13 @@
 # Genealogy-scripts and utilities
 
-updated: 2025-07-18
+updated: 2025-11-21
 
 These are scripts I've written to help my work with RootsMagic genealogy software.
 They directly access the SQLite database used by RootsMagic (RM) to store its data.
 
 Some are simple SQL in .sql txt files and there are several Python scripts.
 
-The are tested only on Windows 11 x64 OS with Python 3x. Most have been tested only with RM v10 databases.
+The are tested only on Windows 11 x64 OS with Python 3.n Most have been tested only with RM v11 databases.
 I don't have a MacOS computer to test with, but I'd guess that most could easily be ported. Let me know if you have any results.
 
 "Released" scripts means that-
@@ -72,10 +72,15 @@ sophisticated off the shelf software.
 This utility will run one or two SQL statements on a database and display the
 results in a report file. It will also run a SQL command script. 
 
-### Citation Sort Order
+### Modify citation list
 
-A utility to allow the user to re-order the listing of citations attached to
-Persons, Names, or Facts.\
+A utility to allow the user to hide citations both in the list of citations
+attached to Persons, Names, or Facts and in reports generated.
+Now that RM has direct support for changing the order of citations, that feature
+in this app is less useful.
+However the ability to hide citations (say a citation to a birth certificate index
+when the actual birth certificate is cited) is still useful.
+These hidden citations may be restored using this same app.
 See [SQLiteTools site](https://sqlitetoolsforrootsmagic.com/forum/topic/sorting-the-order-of-rm9-citations/)
 for a compatible SQL script that will update a  citations ordering in one step based on selected criteria.
 
@@ -85,8 +90,6 @@ Utility to change the fact type for a set of facts. For instance, convert all
 "Census (fam)" facts with date 1940 to "Census" facts. Handles witnesses and Fam->Personal conversions.\
 Probably most useful for projects imported from TMG, or when introducing a custom fact.
 
-## NOT RELEASED
-
 ### Lump sources
 
 I started in TMG as splitting all sources. Now in RM, I am lumping the sources for
@@ -94,6 +97,8 @@ which it makes sense to me. So far, Find_a_Grave, Census and Social Security SSD
 newspaper articles, and all Ancestry collections. These scripts do that.
 They will need modification for your circumstances. These are not released and
 require Python development to run.
+
+## NOT RELEASED
 
 ## Non Python
 
@@ -124,59 +129,28 @@ script is moved elsewhere, copy the "RMpy" folder to be in the same directory as
 
 NOTE: the following lines substitute "me" for your user name, and NNN for the python ver code.
 
-Python may be installed for all users  or for only the current user.
+The new PythonInstallManager handles things that had to be done manually in the past.
 
-"All users" install goes into-\
-C:\Program File\PythonNNN
-
-"Current user only" install goes into-\
-C:\Users\me\AppData\Local\Programs\PythonNNN\
+Python will be installed to-\
+C:\Users\me\AppData\Local\Python\
 
 For a new install or each major upgrade of python, do the following:
 
-Adjust path to include-\
-C:\Users\me\AppData\Local\Programs\PythonNNN\
-or\
-C:\Program File\Python\PythonNNN\
-so that one can start python with the command "python".
-
-If you don't add it, use the full path to run it-
-C:\Users\me\AppData\Local\Programs\PythonNNN\python
-or\
-C:\Program File\PythonNNN\python
-
-Adjust path to include-
-C:\Users\me\AppData\Local\Programs\PythonNNN\Scripts\
-or\
-C:\Program File\PythonNNN\Scripts
-
-If you don't add it, use full path to invoke-
-C:\Users\me\AppData\Local\Programs\PythonNNN\Scripts\pip\
-or\
-C:\Program File\PythonNNN\Scripts\pip
-
-confirm pip is working by attempting to run it-
-
-can start pip in several ways:
-
-|   command       |  comment  |
-|---|---|
-| pip | will work only if it is in the path|
-| python -m pip |  will work only if python is in the path |
-| py -m pip | only available as optional install using installer from python web site |
+confirm pip is working by attempting to run it:/
+py -m pip
 
 Install these packages:
 
 ```text
-python.exe -m pip install --upgrade pip
+py -m pip install --upgrade pip
 
-pip install --upgrade PyYAML
+py -m pip install --upgrade PyYAML
 
-pip install --upgrade wakepy
+py -m pip install --upgrade wakepy
 ```
 
-wakepy is used in some long-running scripts to keep computer awake\
 PyYAML is used by build scripts
+wakepy is used in some long-running scripts to keep computer awake\
 
 ## The following packages are NO LONGER USED  They were used for building frozen executables (exe files)
 
