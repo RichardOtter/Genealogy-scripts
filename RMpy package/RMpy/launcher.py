@@ -86,15 +86,21 @@ def launcher(utility_info):
     # ===========================================DIV50==
     try:
         try:
-            report_display_app = Path(config['FILE_PATHS']['REPORT_FILE_DISPLAY_APP'])
+            report_display_app_str = config['FILE_PATHS']['REPORT_FILE_DISPLAY_APP']
+            if "\n" in report_display_app_str:
+                # multiline parameter. Second line contains argument
+                report_display_app_str_list = report_display_app_str.split("\n")
+                report_display_app = Path(report_display_app_str_list[0])
+                report_display_app_arg = report_display_app_str_list[1]
         except:
             pass
         if report_display_app is not None and not report_display_app.exists():
-            bad_path = report_display_app
-            report_display_app = None
-            raise RMc.RM_Py_Exception(
-                F"ERROR: Path for report file display app not found:"
-                F" {bad_path}")
+            if not (report_display_app.str).contains("code.cmd"):
+                bad_path = report_display_app
+                report_display_app = None
+                raise RMc.RM_Py_Exception(
+                    F"ERROR: Path for report file display app not found:"
+                    F" {bad_path}")
 
         try:
             database_path = Path(config['FILE_PATHS']['DB_PATH'])
@@ -208,7 +214,10 @@ def launcher(utility_info):
         report_file.close()
         if report_display_app is not None:
             # display the report file
-            subprocess.Popen([report_display_app, report_path])
+            if report_display_app_arg == None:
+                subprocess.Popen([report_display_app, report_path])
+            else:
+                subprocess.Popen([report_display_app, report_display_app_arg, report_path])
     return 0
 
 
