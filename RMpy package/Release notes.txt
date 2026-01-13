@@ -4,11 +4,20 @@ Version: 1.2.0
 to be in suite v1.1.0
 New feature release
 
-Allows specification of config file on command line
+Testing:
+Tested with new environment: procedure and standard test database.
+
+Doc:
+new ReadMe
 
 Adds new app configurations-
 RMNOCASE_optional
 RegExp_optional
+
+Now allows multiline value in config file for the REPORT_FILE_DISPLAY_APP
+if if is a single line variable, no chnage from before, if a second line
+is present, the text on the second line is used as a argument on the command
+line between the app name and the file name.
 
 Code improvements:
 minor change in import order
