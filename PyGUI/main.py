@@ -1,9 +1,10 @@
 import sqlite3
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import scrolledtext
 
 DB_PATH = r"DB\TEST-PyGUI.rmtree"
-DEBUG = True  # set to False when you're happy
+DEBUG = False   # Set to True for console debugging
 
 # ---------------------------------------------------------
 # 1. JOIN QUERY AND COLUMN MAPPINGS
@@ -11,41 +12,37 @@ DEBUG = True  # set to False when you're happy
 
 JOIN_SQL = """
 WITH
- constants AS (SELECT
-    4  AS C_Matcher,      -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
-    5  AS C_DnaService,   -- 2 Anc, 5 MyHer
-    1  AS C_Offset ),
  tab AS (
   SELECT 
     (ROW_NUMBER() OVER (
-        ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC
-    ))
-    - (SELECT C_Offset FROM constants) AS SeqNum,
+        ORDER BY Sort1 DESC, Sort2 ASC, DNATable.RecID ASC
+    )),
     DNATable.RecID,
     Label2,
     SharedCM,
+    Note,
     adt.AuxDNATableID,
-    Sort1,
-    Sort2,
+    adt.Sort1,
+    adt.Sort2,
     adt.UTCModDate
+
   FROM DNATable
   INNER JOIN AuxDNATable AS adt
     ON adt.AuxDNATableID = DNATable.RecID
-  WHERE ID1 = (SELECT C_Matcher FROM constants)
-    AND DNAProvider = (SELECT C_DnaService FROM constants)
-  ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC
+
+  ORDER BY Sort1 DESC, Sort2 ASC, DNATable.RecID ASC
 )
 SELECT *
 FROM tab
-WHERE SeqNum = ?
+WHERE RecID = ?
 """
 
-# Columns returned by the JOIN query (in order)
 JOIN_COLUMNS = [
     "SeqNum",
     "RecID",
     "Label2",
     "SharedCM",
+    "Note",
     "AuxDNATableID",
     "Sort1",
     "Sort2",
@@ -53,38 +50,48 @@ JOIN_COLUMNS = [
 ]
 
 # ---------------------------------------------------------
-# 2. FIELD LAYOUT AND MAPPINGS
+# 2. FIELD LAYOUT (Entry + Text widgets)
 # ---------------------------------------------------------
 
 FIELD_LAYOUT = {
     "RecID":       {"row": 1, "col": 0,  "width": 10, "readonly": True},
-    "SeqNum":      {"row": 1, "col": 3,  "width": 10, "readonly": True},
+    "SeqNum":      {"row": 1, "col": 30,  "width": 10, "readonly": True},
+
     "Label2":      {"row": 2, "col": 0,  "width": 40},
     "SharedCM":    {"row": 3, "col": 0,  "width": 10},
+
     "Sort1":       {"row": 4, "col": 0,  "width": 10},
-    "Sort2":       {"row": 4, "col": 3,  "width": 10},
-    # "AuxDNATableID": hidden on purpose
-    "UTCModDate":  {"row": 7, "col": 0,  "width": 25, "readonly": True},
+    "Sort2":       {"row": 4, "col": 30,  "width": 10},
+
+    # Multi-line text field
+    "Note":        {"row": 6, "col": 0, "width": 50, "height": 6, "type": "ScrolledText"},
+
+    "UTCModDate":  {"row": 7, "col": 0,  "width": 25, "readonly": True}
 }
 
 VISIBLE_FIELDS = set(FIELD_LAYOUT.keys())
 
-# Mapping of GUI fields → (table, column)
+# ---------------------------------------------------------
+# 3. WRITABLE MAP + PRIMARY KEYS
+# ---------------------------------------------------------
+
 WRITABLE_MAP = {
     "Label2":   ("DNATable", "Label2"),
     "SharedCM": ("DNATable", "SharedCM"),
+    "Note":     ("DNATable", "Note"),
+
     "Sort1":    ("AuxDNATable", "Sort1"),
-    "Sort2":    ("AuxDNATable", "Sort2"),
+    "Sort2":    ("AuxDNATable", "Sort2")
+
 }
 
-# Primary key columns for each table
 PRIMARY_KEYS = {
     "DNATable":    "RecID",
     "AuxDNATable": "AuxDNATableID",
 }
 
 # ---------------------------------------------------------
-# 3. APPLICATION CLASS
+# 4. APPLICATION CLASS
 # ---------------------------------------------------------
 
 class JoinedRecordApp:
@@ -105,24 +112,19 @@ class JoinedRecordApp:
     # ---------------------------------------------------------
 
     def build_ui(self):
-        tk.Label(
-            self.root,
-            text="SeqNum:",
-            font=("Arial", 10, "bold")
-        ).grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        tk.Label(self.root, text="PKNum:", font=("Arial", 10, "bold")).grid(
+            row=0, column=0, padx=5, pady=5, sticky="w"
+        )
 
         self.id_entry = tk.Entry(self.root, width=10)
         self.id_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
 
-        tk.Button(
-            self.root,
-            text="Load",
-            command=self.load_by_id
-        ).grid(row=0, column=2, padx=5, pady=5, sticky="w")
+        tk.Button(self.root, text="Load", command=self.load_by_id).grid(
+            row=0, column=2, padx=5, pady=5, sticky="w"
+        )
 
         for field in JOIN_COLUMNS:
 
-            # Skip hidden fields
             if field not in FIELD_LAYOUT:
                 continue
 
@@ -140,10 +142,18 @@ class JoinedRecordApp:
                 sticky="w"
             )
 
-            entry = tk.Entry(self.root, width=layout["width"])
+            widget_type = layout.get("type", "entry")
 
-            if layout.get("readonly", False):
-                entry.config(state="readonly")
+            if widget_type == "ScrolledText":
+                entry = scrolledtext.ScrolledText(
+                    self.root,
+                    width=layout["width"],
+                    height=layout.get("height", 4)
+                )
+            else:
+                entry = tk.Entry(self.root, width=layout["width"])
+                if layout.get("readonly", False):
+                    entry.config(state="readonly")
 
             entry.grid(
                 row=layout["row"],
@@ -156,54 +166,53 @@ class JoinedRecordApp:
             entry.bind("<KeyRelease>", self.on_field_change)
             self.entries[field] = entry
 
-        tk.Button(
-            self.root,
-            text="Save Changes",
-            command=self.save_record
-        ).grid(row=20, column=0, columnspan=4, pady=15)
+        tk.Button(self.root, text="Save Changes", command=self.save_record).grid(
+            row=20, column=0, columnspan=4, pady=15
+        )
 
     # ---------------------------------------------------------
-    # LOAD RECORD BY SeqNum
+    # LOAD RECORD
     # ---------------------------------------------------------
 
     def load_by_id(self):
         try:
-            record_seq = int(self.id_entry.get())
+            pk_num = int(self.id_entry.get())
         except ValueError:
-            messagebox.showerror("Invalid", "SeqNum must be an integer")
+            messagebox.showerror("Invalid", "PKNum must be an integer")
             return
 
-        if DEBUG:
-            print(f"[DEBUG] Loading record with SeqNum={record_seq}")
-
-        self.cursor.execute(JOIN_SQL, (record_seq,))
+        self.cursor.execute(JOIN_SQL, (pk_num,))
         row = self.cursor.fetchone()
 
         if row is None:
-            messagebox.showerror("Not found", f"No record with SeqNum {record_seq}")
+            messagebox.showerror("Not found", f"No record with SeqNum {pk_num}")
             return
 
         self.current_row = dict(zip(JOIN_COLUMNS, row))
 
-        if DEBUG:
-            print("[DEBUG] current_row loaded:", self.current_row)
+        for col, value in self.current_row.items():
 
-        for col_name, value in self.current_row.items():
-
-            if col_name not in self.entries:
+            if col not in self.entries:
                 continue
 
-            widget = self.entries[col_name]
+            widget = self.entries[col]
             text_value = "" if value is None else str(value)
 
-            if widget.cget("state") == "readonly":
+            if isinstance(widget, tk.Text):
                 widget.config(state="normal")
-                widget.delete(0, tk.END)
-                widget.insert(0, text_value)
-                widget.config(state="readonly")
+                widget.delete("1.0", tk.END)
+                widget.insert("1.0", text_value)
+                if FIELD_LAYOUT[col].get("readonly", False):
+                    widget.config(state="disabled")
             else:
-                widget.delete(0, tk.END)
-                widget.insert(0, text_value)
+                if widget.cget("state") == "readonly":
+                    widget.config(state="normal")
+                    widget.delete(0, tk.END)
+                    widget.insert(0, text_value)
+                    widget.config(state="readonly")
+                else:
+                    widget.delete(0, tk.END)
+                    widget.insert(0, text_value)
 
             widget.config(bg="white")
 
@@ -214,29 +223,30 @@ class JoinedRecordApp:
     def on_field_change(self, event):
         widget = event.widget
 
-        field_name = None
-        for f, entry_widget in self.entries.items():
-            if entry_widget is widget:
-                field_name = f
+        field = None
+        for f, w in self.entries.items():
+            if w is widget:
+                field = f
                 break
 
-        if field_name is None:
+        if field is None:
             return
 
-        if widget.cget("state") == "readonly":
+        if FIELD_LAYOUT[field].get("readonly", False):
             return
 
-        new_value = widget.get().strip()
-        old_raw = self.current_row[field_name]
+        if isinstance(widget, tk.Text):
+            new_value = widget.get("1.0", tk.END).strip()
+        else:
+            new_value = widget.get().strip()
+
+        old_raw = self.current_row[field]
         old_value = "" if old_raw is None else str(old_raw).strip()
 
-        if new_value != old_value:
-            widget.config(bg="#fff2a8")
-        else:
-            widget.config(bg="white")
+        widget.config(bg="#fff2a8" if new_value != old_value else "white")
 
     # ---------------------------------------------------------
-    # SAVE RECORD (ONLY CHANGED FIELDS)
+    # SAVE RECORD
     # ---------------------------------------------------------
 
     def save_record(self):
@@ -246,92 +256,44 @@ class JoinedRecordApp:
 
         updates_by_table = {}
 
-        # Detect changed, writable fields
         for field, (table, column) in WRITABLE_MAP.items():
-
-            if field not in self.entries:
-                continue
 
             widget = self.entries[field]
 
-            if widget.cget("state") == "readonly":
-                continue
+            if isinstance(widget, tk.Text):
+                new_value = widget.get("1.0", tk.END).strip()
+            else:
+                new_value = widget.get().strip()
 
-            new_value = widget.get().strip()
             old_raw = self.current_row[field]
             old_value = "" if old_raw is None else str(old_raw).strip()
-
-            if DEBUG:
-                print(f"[DEBUG] Check field {field}: old={repr(old_value)} new={repr(new_value)}")
 
             if new_value == old_value:
                 continue
 
-            if table not in updates_by_table:
-                updates_by_table[table] = {}
-
-            updates_by_table[table][column] = new_value
-
-        if DEBUG:
-            print("[DEBUG] updates_by_table:", updates_by_table)
+            updates_by_table.setdefault(table, {})[column] = new_value
 
         if not updates_by_table:
             messagebox.showinfo("No changes", "No fields were modified.")
             return
 
-        changed_fields = []
-        for table, updates in updates_by_table.items():
-            for col in updates.keys():
-                changed_fields.append(f"{table}.{col}")
-
-        field_list = "\n".join(changed_fields)
-
-        confirm = messagebox.askyesno(
-            "Confirm Save",
-            f"The following fields were modified:\n\n{field_list}\n\nSave these changes?"
-        )
-
-        if not confirm:
-            return
-
-        # Execute UPDATEs
         for table, updates in updates_by_table.items():
             pk_col = PRIMARY_KEYS[table]
             pk_value = self.current_row[pk_col]
 
-            set_clause = ", ".join([f"{col}=?" for col in updates.keys()])
+            set_clause = ", ".join([f"{col}=?" for col in updates])
             sql = f"UPDATE {table} SET {set_clause} WHERE {pk_col}=?"
             params = list(updates.values()) + [pk_value]
 
-            if DEBUG:
-                print(f"[DEBUG] Executing UPDATE for {table}")
-                print("        SQL:", sql)
-                print("        PARAMS:", params)
-
             self.cursor.execute(sql, params)
 
-            if DEBUG:
-                print(f"[DEBUG] {table} rowcount after UPDATE:", self.cursor.rowcount)
-
         self.conn.commit()
-        messagebox.showinfo("Saved", "Changes saved successfully.")
-
-        # Reload current row from DB to sync current_row with DB values
-        # (optional, but keeps highlighting logic consistent)
-        seqnum = self.current_row["SeqNum"]
-        if DEBUG:
-            print(f"[DEBUG] Reloading row after save, SeqNum={seqnum}")
-        self.cursor.execute(JOIN_SQL, (seqnum,))
-        row = self.cursor.fetchone()
-        if row is not None:
-            self.current_row = dict(zip(JOIN_COLUMNS, row))
-            if DEBUG:
-                print("[DEBUG] current_row after save:", self.current_row)
+        # messagebox.showinfo("Saved", "Changes saved successfully.")
 
     def __del__(self):
         try:
             self.conn.close()
-        except Exception:
+        except:
             pass
 
 
@@ -343,4 +305,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = JoinedRecordApp(root)
     root.mainloop()
-    
