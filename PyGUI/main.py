@@ -55,16 +55,16 @@ JOIN_COLUMNS = [
 
 FIELD_LAYOUT = {
     "RecID":       {"row": 1, "col": 0,  "width": 10, "readonly": True},
-    "SeqNum":      {"row": 1, "col": 30,  "width": 10, "readonly": True},
+    "SeqNum":      {"row": 1, "col": 2,  "width": 10, "readonly": True},
 
     "Label2":      {"row": 2, "col": 0,  "width": 40},
     "SharedCM":    {"row": 3, "col": 0,  "width": 10},
 
     "Sort1":       {"row": 4, "col": 0,  "width": 10},
-    "Sort2":       {"row": 4, "col": 30,  "width": 10},
+    "Sort2":       {"row": 4, "col": 2,  "width": 10},
 
-    # Multi-line text field
-    "Note":        {"row": 6, "col": 0, "width": 50, "height": 6, "type": "ScrolledText"},
+    # Multi-line ScrolledText field
+    "Note":        {"row": 6, "col": 0, "width": 20, "height": 6, "type": "ScrolledText"},
 
     "UTCModDate":  {"row": 7, "col": 0,  "width": 25, "readonly": True}
 }
@@ -112,6 +112,7 @@ class JoinedRecordApp:
     # ---------------------------------------------------------
 
     def build_ui(self):
+
         tk.Label(self.root, text="PKNum:", font=("Arial", 10, "bold")).grid(
             row=0, column=0, padx=5, pady=5, sticky="w"
         )
