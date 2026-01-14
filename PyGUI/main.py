@@ -113,15 +113,31 @@ class JoinedRecordApp:
 
     def build_ui(self):
 
-        tk.Label(self.root, text="PKNum:", font=("Arial", 10, "bold")).grid(
+        root.columnconfigure(0, weight=1)
+        root.rowconfigure(1, weight=1)
+
+        top_frame = tk.Frame(self.root, highlightbackground="black", 
+                             highlightthickness=1, bg="lightblue")
+        top_frame.grid(row=0, column=0, sticky="EW")
+        top_frame.rowconfigure(0, weight=1)
+
+
+        bottom_frame =tk.Frame(self.root,highlightbackground="black", 
+                               highlightthickness=1,bg="lightgreen")
+        bottom_frame.grid(row=1, column=0, pady=20, sticky="NSEW")
+        bottom_frame.columnconfigure(0, weight=1)
+        bottom_frame.rowconfigure(1, weight=1)
+
+
+        tk.Label(top_frame, text="PKNum:", font=("Arial", 10, "bold")).grid(
             row=0, column=0, padx=5, pady=5, sticky="w"
         )
 
-        self.id_entry = tk.Entry(self.root, width=10)
+        self.id_entry = tk.Entry(top_frame, width=10)
         self.id_entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
 
-        tk.Button(self.root, text="Load", command=self.load_by_id).grid(
-            row=0, column=2, padx=5, pady=5, sticky="w"
+        tk.Button(top_frame, text="Load", command=self.load_by_id).grid(
+            row=0, column=1, padx=100, pady=5, sticky="w"
         )
 
         for field in JOIN_COLUMNS:
@@ -132,7 +148,7 @@ class JoinedRecordApp:
             layout = FIELD_LAYOUT[field]
 
             tk.Label(
-                self.root,
+                top_frame,
                 text=field,
                 font=("Arial", 10, "bold")
             ).grid(
@@ -147,27 +163,26 @@ class JoinedRecordApp:
 
             if widget_type == "ScrolledText":
                 entry = scrolledtext.ScrolledText(
-                    self.root,
-                    width=layout["width"],
-                    height=layout.get("height", 4)
+                    bottom_frame,
+                    width=layout["width"]
                 )
+                entry.grid(row=0, column=0, sticky="NSEW")
             else:
-                entry = tk.Entry(self.root, width=layout["width"])
+                entry = tk.Entry(top_frame, width=layout["width"])
                 if layout.get("readonly", False):
                     entry.config(state="readonly")
-
-            entry.grid(
-                row=layout["row"],
-                column=layout["col"] + 1,
-                padx=5,
-                pady=5,
-                sticky="w"
-            )
+                entry.grid(
+                    row=layout["row"],
+                    column=layout["col"] + 1,
+                    padx=5,
+                    pady=5,
+                    sticky="w"
+                )
 
             entry.bind("<KeyRelease>", self.on_field_change)
             self.entries[field] = entry
 
-        tk.Button(self.root, text="Save Changes", command=self.save_record).grid(
+        tk.Button(top_frame, text="Save Changes", command=self.save_record).grid(
             row=20, column=0, columnspan=4, pady=15
         )
 
