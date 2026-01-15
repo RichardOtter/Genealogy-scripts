@@ -31,7 +31,9 @@ ORDER BY st.Name COLLATE NOCASE ASC
 -- List the sources that use a particular template (by ID)
 SELECT st.NAME
 FROM SourceTable AS st
-WHERE st.TemplateID=?;
+WHERE st.TemplateID=?
+ORDER BY st.name COLLATE NOCASE ASC;
+
 
 
 -- Another template usage query
