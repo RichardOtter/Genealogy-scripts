@@ -4,7 +4,13 @@ Version: 1.0.0
 to be in suite v1.1.0
 First release
 
+
 Lumps sources
+Wll combine multiple source and convert them to citations of a specified,
+existing source.
+
+uses RMpy package v1.2
+    Allows specification of config file on command line
 
 
 add requirements and filters

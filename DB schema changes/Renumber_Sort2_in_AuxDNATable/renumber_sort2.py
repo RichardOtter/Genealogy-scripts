@@ -29,6 +29,8 @@ combos = [
 (6, 1)
 ]
 
+# DB_path = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Renumber_Sort2_in_AuxDNATable\DB\TEST-Renumber_Sort2_in_AuxDNATable.rmtree"
+DB_path= r"C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree"
 
 def renumber_sort2(db_path, combos):
     sql = """
@@ -70,4 +72,4 @@ def renumber_sort2(db_path, combos):
 # Example usage:
 # renumber_sort2("mydatabase.sqlite", combos)
 
-renumber_sort2(r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Renumber_Sort2_in_AuxDNATable\DB\TEST-Renumber_Sort2_in_AuxDNATable.rmtree", combos)
+renumber_sort2(DB_path, combos)
