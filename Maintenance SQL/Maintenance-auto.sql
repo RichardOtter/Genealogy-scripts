@@ -97,7 +97,7 @@ UPDATE URLTable
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111800644/person%'
     AND Name <> 'ANC_SmithBurke';
 
---  DNA MATACHES - WEBLINK ON PERSON
+--  DNA MATCHES - WEBLINK ON PERSON
 UPDATE URLTable
   SET Name='ANC_DNA_RichardOtter'
   WHERE OwnerType =0
@@ -121,6 +121,12 @@ UPDATE URLTable
   WHERE OwnerType =0
     AND URL LIKE '%compare/45a402e6-6944-4e5c-bec3-6b8d1b062ace/with%'
     AND Name <> 'ANC_DNA_EthelImai';
+
+UPDATE URLTable
+  SET Name='ANC_DNA_TamaraChao'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/d62e8649-8142-4b8a-b577-21120c60b69b/with%'
+    AND Name <> 'ANC_DNA_TamaraChao';
 
 UPDATE URLTable
   SET Name='ANC_DNA_RomanOtter'
