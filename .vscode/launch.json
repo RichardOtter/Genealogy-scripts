@@ -121,6 +121,16 @@
             "console": "integratedTerminal",
             "args": ["${workspaceFolder}/Test external files/testing/test.ini"],
             "stopOnEntry": true
+        },
+        {
+            "name": "Renumber Sort2",
+            "cwd":  "${workspaceFolder}/DB schema changes/Renumber_Sort2_in_AuxDNATable",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "renumber_sort2.py",
+            "console": "integratedTerminal",
+            "args": "",
+            "stopOnEntry": true
         }
     ]
 }
