@@ -1,0 +1,65 @@
+Find linkage path between any two Persons in RM database.
+
+Iterations of the app, using Copilot AI  2026-01
+chat named: Shortest Path RootsMagic
+
+
+===========================================DIV50==
+SQL that might work.sql
+Shortest path
+connections: parent-child, spouse
+
+===========================================DIV50==
+FindLinkagePath -1.py
+Shortest path
+connections: parent-child, spouse
+
+===========================================DIV50==
+working-1  (p-c and spouse.py
+Shortest path
+connections: parent-child, spouse
+relationships labeled in output
+
+===========================================DIV50==
+adds associations- working.py
+Shortest path
+connections: parent-child, spouse, associations
+relationships labeled in output
+
+===========================================DIV50==
+LinkFind.py
+Shortest path
+connections: parent-child, spouse, associations, shared-facts
+relationships labeled in output
+
+===========================================DIV50==
+all paths -just par child spo.py
+Shortest & ALL path
+connections: parent-child, spouse, associations
+relationships labeled in output
+for all path, just use parent-child, spouse connections
+
+===========================================DIV50==
+Short_All_options.py
+Shortest & ALL path
+connections: parent-child, spouse, associations
+relationships labeled in output
+options to set allowed connection types
+
+===========================================DIV50==
+Short full options filtered.py
+Shortest & ALL path
+connections: parent-child, spouse, associations
+relationships labeled in output
+options to set allowed connection types
+add filters to reduce non-significant all path output
+
+===========================================DIV50==
+person-family.py
+finds path thru persons and Family objects
+Shortest & ALL path
+connections: parent-child, spouse, associations
+relationships labeled in output
+options to set allowed connection types
+add filters to reduce non-significant all path output
+
