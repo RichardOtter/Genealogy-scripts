@@ -59,7 +59,7 @@ if delete row in aux dna table, nothing happens in dnatable.
 =========================================================================DIV80==
 For backup-
 see-
-"C:\Users\rotter\Development\Maintenance\Extract and Backup aux tables.py"
+"C:\Users\rotter\Development\repo Maintenance\Extract and Backup aux tables.py"
 
 =========================================================================DIV80==
 For restore-
