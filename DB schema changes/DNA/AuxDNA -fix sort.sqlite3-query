@@ -1,0 +1,15 @@
+-- database: C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree
+WITH
+ Constants AS (SELECT
+    4     AS C_Matcher,
+    5     AS C_DnaService,
+    220  AS C_cMonly        -- NULL or integer (cM * 10)
+    )
+SELECT ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC) AS Num,
+    Label2, Sort1, Sort2, Label1, dt.rowid, adt.rowid, SharedCM
+FROM DNATable as dt
+left JOIN AuxDNATable AS adt ON dt.RecID = adt.AuxDNATableID
+WHERE DNAProvider = (SELECT C_DnaService FROM Constants)
+ AND ID1 = (SELECT C_Matcher FROM Constants)
+ AND IIF((SELECT C_cMonly FROM Constants) is not NULL, Sort1 = (SELECT C_cMonly FROM Constants), true)
+ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC;

@@ -1,0 +1,6 @@
+-- database: ../../Otter-Saito.rmtree
+
+SELECT RecID, Label1, Label2, SharedCM, DNAProvider
+FROM DNATable
+GROUP BY ID1, Label2, SharedCM
+HAVING Count(*) >1;

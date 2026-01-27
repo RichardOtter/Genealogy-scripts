@@ -6,7 +6,8 @@
         "FACTTYPE",
         "fldr",
         "rmnocase",
-        "unifuzz"
+        "unifuzz",
+        "windll"
     ],
     "python.analysis.extraPaths": [
         "./RM-RMpy module"

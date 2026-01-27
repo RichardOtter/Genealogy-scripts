@@ -1,0 +1,245 @@
+=========================================================================DIV80==
+-- Create the table and trigger
+
+CREATE TABLE AuxDNATable (
+AuxDNATableID INTEGER PRIMARY KEY,
+Sort1 INTEGER,
+Sort2 INTEGER,
+Info TEXT,
+UTCModDate FLOAT,
+FOREIGN KEY (AuxDNATableID) REFERENCES DNATable(RecID)
+    ON DELETE CASCADE
+);
+
+CREATE TRIGGER IF NOT EXISTS AuxDNATable_UTCModDate
+AFTER UPDATE ON AuxDNATable
+FOR EACH ROW
+BEGIN
+  UPDATE AuxDNATable
+  SET UTCModDate = julianday('now') - 2415018.5
+  WHERE rowid = NEW.rowid;
+END;
+
+
+-- Sort1 is always generated automatically and based on SharedCM
+-- Sort2 is adjusted manually to fix the displayed sort order
+-- usually the set of matches with the same Sort1 value are all adjusted
+-- with values 10 and up. This allows inserts for new records.
+
+-- UTCModDate will have a non null value only if the record was updated.
+
+-- Info general information about the match that may be used in future
+-- to display, ORDER BY by Sort1 ASC, Sort2 ASC, RecID
+-- not clear about adding the RecID at end of sort list. 
+
+-- tested-  delete a row in dnatable, the corresponding row in aux dna table is deleted.
+-- if delete row in aux dna table, nothing happens in dnatable.
+
+-- edit a row in AuxDNATable and the utcModDate is updated.
+
+=========================================================================DIV80==
+
+
+
+--  1       Richard
+--  4       Rose
+--  17      Roman
+--  12      Ethel
+--  6       Gloria
+--  1530    Tamara
+
+--  1       23andMe
+--  2       Ancestry
+--  5       MyHeritage
+
+=========================================================================DIV80==
+-- run after creating new DNATable entried via the RM GUI
+-- only needed before testing completeness against web pages
+
+INSERT OR IGNORE INTO AuxDNATable
+(AuxDNATableID, Sort1, Sort2, UTCModDate)
+SELECT
+  RecID,
+  cast(round(SharedCM, 2) *10 as INT),
+  0,
+  NULL
+FROM DNATable;
+
+
+--===========================================DIV50==
+-- main test SQL
+-- shows  DNA Table sorted by AuxDNATable steps of 10
+-- or all by commenting out last where clause
+
+-- https://www.sqlitetutorial.net/sqlite-window-functions/sqlite-row_number/
+-- if there are discrepancies, figure out:
+-- are the duplicates in DNA Table, 
+-- are there missing items
+--  is it a sorting problem
+
+-- if sorting, figure out which sort1 values have badly sorted values
+-- then display them in VSCode and update Sort2 for them. 
+-- UTCModDate will be auto updated via trigger.
+
+WITH
+ constants AS (SELECT
+    4  AS C_Matcher,  -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
+    5  AS C_DnaService,  -- 2 Anc, 5 MyHer
+    1  AS C_Offset ),
+ tab AS (
+  SELECT 
+  (ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC))
+    -(SELECT C_Offset FROM constants) AS SeqNum,
+   Label2, Sort1, Sort2, SharedCM, adt.UTCModDate
+  FROM DNATable
+  INNER JOIN AuxDNATable AS adt ON AuxDNATableID = RecID
+  WHERE ID1=(SELECT C_Matcher FROM constants)
+    AND DNAProvider=(SELECT C_DnaService FROM constants)
+  ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC)
+SELECT *
+FROM tab
+WHERE 0 = seqNum%10;
+
+===========================================DIV50==
+-- Display a CM value set in order to add sort2 values
+
+WITH
+ Constants AS (SELECT
+    4     AS C_Matcher,
+    5     AS C_DnaService,
+    215  AS C_cMonly        -- NULL or integer (cM * 10)
+    )
+SELECT ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC) AS Num,
+    Label2, Sort1, Sort2, Label1, dt.rowid, adt.rowid, SharedCM
+FROM DNATable as dt
+left JOIN AuxDNATable AS adt ON dt.RecID = adt.AuxDNATableID
+WHERE DNAProvider = (SELECT C_DnaService FROM Constants)
+ AND ID1 = (SELECT C_Matcher FROM Constants)
+ AND IIF((SELECT C_cMonly FROM Constants) is not NULL, Sort1 = (SELECT C_cMonly FROM Constants), true)
+ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC;
+
+
+
+===========================================DIV50==
+-- Look for duplicate Label 2 entries
+WITH Constants AS (SELECT
+    17   AS C_Matcher, 
+     2   AS C_DnaServiice )
+
+  SELECT SharedCM, Label2, COUNT(*) AS c
+  FROM 
+   ID1=(SELECT C_Matcher FROM constants)
+    AND DNAProvider=(SELECT C_DnaServiice FROM constants)
+  GROUP BY Label2
+  HAVING c >1
+  ORDER BY SharedCM DESC;
+  
+===========================================DIV50==
+
+
+
+--===========================================DIV50==
+-- testing
+
+Alternative sorting idea
+Tried adding very small numbers 10e-6 to sharedcm in RM gui
+but it did not chnage the database.
+Probably rounds to 2 decimal places first
+Also made the change directly in SQL, but it didn't chnage sorting in RM
+Probably sorts onm the rounded number.
+
+So this technique will not work
+
+
+
+=========================================================================DIV80==
+-- shows same as RM DNA Table in GUI (? confirm)
+
+WITH
+ Constants AS (SELECT
+    1     AS C_Matcher,       -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
+     5     AS C_DnaService,   -- 2 Anc, 5 MyHer
+     300  AS C_cMonly         -- NULL or integer (cM * 10)
+    )
+SELECT ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC) AS Num,
+    Label2, Sort1, Sort2, Label1, dt.rowid, adt.rowid, SharedCM
+FROM DNATable as dt
+INNER JOIN AuxDNATable AS adt ON dt.RecID = adt.AuxDNATableID
+WHERE DNAProvider = (SELECT C_DnaService FROM Constants)
+ AND ID1 = (SELECT C_Matcher FROM Constants)
+ AND IIF((SELECT C_cMonly FROM Constants) is not NULL, Sort1 = (SELECT C_cMonly FROM Constants), true)
+ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC;
+    SELECT   row_number() 
+         over ( ORDER BY SharedCM desc) || '     '|| round(SharedCM, 2)|| '   ' || label2
+      FROM DNATable
+      WHERE ID1 = 4
+      AND DNAProvider = 5
+    ORDER BY SharedCM desc
+    
+=========================================================================DIV80==
+
+-- 
+-- shows same as RM DNA Table in GUI (? confirm)
+WITH
+ constants AS ( SELECT
+    4  AS C_Matcher,  -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
+    5  AS C_DnaService,  -- 2 Anc, 5 MyHer
+    1  AS C_Offset ),
+ tab AS (
+  SELECT 
+  (ROW_NUMBER() 
+    OVER( ORDER BY SharedCM DESC)
+    )-(SELECT C_Offset FROM constants) AS SeqNum,
+  SharedCM, Label2 
+  FROM DNATable
+  WHERE ID1=(SELECT C_Matcher FROM constants)
+    AND DNAProvider=(SELECT C_DnaService FROM constants)
+  ORDER BY SharedCM DESC
+  )
+SELECT   *
+FROM tab
+WHERE 0 = seqNum%10;
+
+
+===========================================DIV50==
+
+
+Fix the existing table to include Info
+pragma foreign_keys = off;
+drop table if exists AuxDNATable2;
+
+CREATE TABLE AuxDNATable2 (
+AuxDNATableID INTEGER PRIMARY KEY,
+Sort1 INTEGER,
+Sort2 INTEGER,
+Info TEXT,
+UTCModDate FLOAT,
+FOREIGN KEY (AuxDNATableID) REFERENCES DNATable(RecID)
+    ON DELETE CASCADE
+);
+
+
+INSERT INTO AuxDNATable2
+(AuxDNATableID,
+Sort1,
+Sort2,
+Info,
+UTCModDate)
+SELECT 
+AuxDNATableID,
+Sort1,
+Sort2,
+NULL,
+UTCModDate
+FROM
+AuxDNATable;
+
+
+drop table if exists AuxDNATable;
+ALTER TABLE AuxDNATable2 RENAME TO AuxDNATable;
+pragma foreign_keys = on;
+
+
+
+
+===========================================DIV50==

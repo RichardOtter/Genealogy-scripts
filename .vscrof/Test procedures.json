@@ -1,0 +1,21 @@
+{
+  "title": "vsCode - Remember Open Files (vscrof)",
+  "workspace": {
+    "name": "repo Genealogy-scripts",
+    "rootPath": "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts"
+  },
+  "path": "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/.vscrof/Test procedure.json",
+  "files": {
+    "0":   "Change source for citation/testing/Test procedure.txt",
+    "1":   "Change source template/testing/Test procedure.txt",
+    "2":   "Modify citation list/testing/Test procedure.txt",
+    "3":   "Color from Group/testing/Test procedure.txt",
+    "4":   "Convert fact/testing/Test procedure.txt",
+    "5":   "Group from SQL/testing/Test procedure.txt",
+    "6":   "List citations for PersonID/testing/Test procedure.txt",
+    "7":   "Lump sources/testing/Test procedure.txt",
+    "8":   "RMpy package/testing/Test procedure.txt",
+    "9":   "Run SQL/testing/Test procedure.txt",
+    "10":  "Test external files/testing/Test procedure.txt"
+  }
+}

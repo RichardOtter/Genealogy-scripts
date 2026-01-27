@@ -1,0 +1,12 @@
+-- database: c:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree
+
+INSERT OR IGNORE INTO AuxDNATable
+(AuxDNATableID, Sort1, Sort2, Info, UTCModDate)
+SELECT
+  RecID,
+  cast(round(SharedCM, 2) *10 as INT),
+  0,
+  null,
+  julianday('now') - 2415018.5
+FROM DNATable;
+

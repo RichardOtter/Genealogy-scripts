@@ -124,13 +124,23 @@
         },
         {
             "name": "Renumber Sort2",
-            "cwd":  "${workspaceFolder}/DB schema changes/Renumber_Sort2_in_AuxDNATable",
+            "cwd":  "${workspaceFolder}/DB schema changes/DNA/Renumber_Sort2_in_AuxDNATable",
             "type": "debugpy",
             "request": "launch",
             "program": "renumber_sort2.py",
             "console": "integratedTerminal",
             "args": "",
             "stopOnEntry": true
-        }
+        },
+        {
+            "name": "PYD: InsertNewRecords",
+            "cwd":  "${workspaceFolder}/DB schema changes/Media",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "InsertNewRecords.py",
+            "console": "integratedTerminal",
+            "args": ["testing/dev.ini"],
+            "stopOnEntry": false
+        },
     ]
 }

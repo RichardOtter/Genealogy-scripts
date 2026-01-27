@@ -1,0 +1,27 @@
+-- database: C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Renumber_Sort2_in_AuxDNATable\DB\TEST-Renumber_Sort2_in_AuxDNATable.rmtree
+
+WITH
+ constants AS (SELECT
+    12  AS C_Matcher,  --  17 Roman, 4 Rose, 1 RJO, 6 GCS, 12 EAI, 1530 TSC
+    2  AS C_DnaService,  -- 2 Anc, 5 MyHer
+    0  AS C_Offset,  -- -0 shows people at bottom on ANC page
+    0  AS C_PageView ),  -- 1=page view, 0=line view
+ tab AS (
+  SELECT 
+  (ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC))
+    -(SELECT C_Offset FROM constants) AS SeqNum,
+   Label2, Sort1, Sort2, SharedCM, adt.UTCModDate, RecID, AuxDNATableID, Note
+  FROM DNATable
+  LEFT JOIN AuxDNATable AS adt ON AuxDNATableID = RecID
+  WHERE ID1=(SELECT C_Matcher FROM constants)
+    AND DNAProvider=(SELECT C_DnaService FROM constants)
+  ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC)
+SELECT *
+FROM tab
+WHERE SeqNum % (
+        CASE
+            WHEN (SELECT C_PageView FROM constants) = 1 THEN 20
+            ELSE 1
+        END
+      ) = 0;
+
