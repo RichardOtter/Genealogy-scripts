@@ -5,7 +5,7 @@ LIB_INTRO
 Utility application for use with RootsMagic databases
 
 RootsMagic (RM) software (https://RootsMagic.com) uses a SQLite relational
-database (https://Sqlite.org) as its data storage file.
+database (https://sqlite.org) as its data storage file.
 
 Access to the RM data file via third party tools is a major advantage RM
 has over other genealogy project management applications.
@@ -28,7 +28,7 @@ computer. "Installing python" is described in the appendix below.
 LIB_Compatibility
 Compatibility
 
-Tested with a RootsMagic v 11.0.2 database
+Tested with a RootsMagic v 11.0.3 database
 using Python for Windows v3.14   64bit
 
 The python script file has not been tested on MacOS but could probably be
@@ -176,7 +176,7 @@ APPENDIX  unifuzz64.dll download
 The SQLiteToolsforRootsMagic website has been around for many years and is run
 by a trusted RM user. Many posts to public RootsMagic user forums mention use
 of unifuzz64.dll from the SQLiteToolsforRootsMagic website. This author has
-also used it for years.
+also used it for years and can vouch for its safety.
 
 direct download:
 https://sqlitetoolsforrootsmagic.com/wp-content/uploads/2018/05/unifuzz64.dll
@@ -210,20 +210,23 @@ will be recognized as the utility's configuration file when placed in the same
 directory as the MainScriptFile py file for the utility. Each utility is
 distributed with a sample config file to get you started.
 
+"MainScriptFile.py" refers to the py file having the name of the utility you
+are running, for example, TestExternalFiles.py, ChangeSourceTemplate.py etc
+
 Alternatively, the configuration file name and location can be specified
 on the command-line as an argument to the script. This argument overrides
 the default configuration file name and location.
 
-For example, if the script "RMutility.py" is executed from a terminal window
+For example, if the script "MainScriptFile.py" is executed from a terminal window
 which has the folder "C:\Users\me\TestFolder" as its 'current directory', it
 will use the configuration file "C:\Users\me\TestFolder\RM-Python-config.ini"
 if it exists. If the utility is run with an explicit argument, such as:
-RMutility.py "C:\Users\me\Documents\RM-Python-config.ini"
-then the specified configuration file will be used instead.
+MainScriptFile.py "C:\Users\me\Documents\RM-Python-config.ini"
+then the specified ini configuration file will be used instead.
 
 Note also that the file name is not restricted to the default.
 For instance, running the utility from a terminal window as:
-RMutility.py config_mine.ini
+MainScriptFile.py config_mine.ini
 will instruct the utility to use config_mine.ini in the current directory
 as its configuration file.
 
@@ -244,8 +247,8 @@ editor program.)
 
 
 Format and conventions
-The file uses the standard ini file format. The config file is made up of the
-elements: Sections, Keys, Values and Comments.
+The config file uses the standard ini file format. The config file is made up
+of the elements: Sections, Keys, Values and Comments.
 
 A name in square brackets is a section name that identifies the start
 of a section. A section continues until a new section starts. The order of
@@ -258,7 +261,9 @@ should be in a named section.
 A name on the left side of a "=" sign is a key.
 Text on the right side of a "=" is the value assigned to the key on the left.
 Comment lines start with a "#" character and are only included to help
-the user read and understand the file. They are ignored by the utility software.
+the human user read and understand the file. They are ignored by the utility
+software. Comments may appear anywhere in the config file EXCEPT in multi line
+values. See below.
 
 For an example, here is a section containing 3 key-values used by all of the
 RM utilities:
