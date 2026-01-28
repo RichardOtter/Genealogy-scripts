@@ -1,6 +1,6 @@
 
 
---AuxDNATable
+--  AuxDNATable
 CREATE TABLE AuxDNATable (
 AuxDNATableID INTEGER PRIMARY KEY,
 Sort1 INTEGER,
@@ -10,6 +10,7 @@ FOREIGN KEY (AuxDNATableID) REFERENCES DNATable(RecID)
     ON DELETE CASCADE
 );
 
+--  AuxDNATable trigger
 CREATE TRIGGER IF NOT EXISTS AuxDNATable_UTCModDate
 AFTER UPDATE ON AuxDNATable
 FOR EACH ROW
@@ -20,14 +21,47 @@ BEGIN
 END;
 
 
-CREATE TABLE AuxMultimediaTable (
-AuxMultimediaTableID INTEGER PRIMARY KEY,
-MD5Hash TEXT,
+--  DNATable trigger
+CREATE TRIGGER DNATable_AuxDNATable
+AFTER INSERT ON DNATable
+FOR EACH ROW
+BEGIN
+  INSERT OR IGNORE INTO AuxDNATable
+         (AuxDNATableID, Sort1, Sort2, Info, UTCModDate)
+  VALUES (
+     NEW.RecID,
+     CAST(ROUND(NEW.SharedCM, 2) * 10 AS INT),
+     999999,
+     NULL,
+     julianday('now') - 2415018.5
+  );
+END;
+
+
+--  AuxMultimediaTable
+CREATE TABLE IF NOT EXISTS AuxMultimediaTable (
+AuxMultimediaID INTEGER PRIMARY KEY,
+HashType TEXT,
+Hash TEXT,
+TimeCreation FLOAT,
+TimeModification FLOAT,
 UTCModDate FLOAT,
 FOREIGN KEY (AuxMultimediaTableID) REFERENCES MultimediaTable(MediaID)
     ON DELETE CASCADE
 );
 
+--  AuxMultimediaTable trigger
+CREATE TRIGGER IF NOT EXISTS AuxMultimediaTable_UTCModDate
+AFTER UPDATE ON AuxMultimediaTable
+FOR EACH ROW
+BEGIN
+  UPDATE AuxMultimediaTable
+  SET UTCModDate = julianday('now') - 2415018.5
+  WHERE rowid = NEW.rowid;
+END;
+
+
+--  AuxCitationLinkTable
 CREATE TABLE IF NOT EXISTS AuxCitationLinkTable (
 AuxLinkID INTEGER PRIMARY KEY,
 CitationID INTEGER,
@@ -59,9 +93,9 @@ if delete row in aux dna table, nothing happens in dnatable.
 =========================================================================DIV80==
 For backup-
 see-
-"C:\Users\rotter\Development\repo Maintenance\Extract and Backup aux tables.py"
+DB schema changes\Extract and Backup aux tables.py
 
-=========================================================================DIV80==
+
 For restore-
 write utility if it is needed
 
@@ -72,12 +106,14 @@ FROM AuxCitationTable
 WHERE  CitationID = AuxCitationID;
 
 
-
 =========================================================================DIV80==
 Remove Aux tables
-DROP TABLE AuxDNATable;
-DROP TABLE AuxMultimediaTable;
-DROP TABLE AuxCitationLinkTable;
+Don't drop the tables unless exported
+
+DROP TABLE IF EXIST AuxDNATable;
+DROP TRIGGER IF EXIST DNATable_AuxDNATable;
+DROP TABLE IF EXIST AuxMultimediaTable;
+DROP TABLE IF EXIST AuxCitationLinkTable;
 
 =========================================================================DIV80==
 

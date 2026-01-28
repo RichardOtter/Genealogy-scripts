@@ -133,11 +133,11 @@
             "stopOnEntry": true
         },
         {
-            "name": "PYD: InsertNewRecords",
+            "name": "PYD: ExternalFileInfo",
             "cwd":  "${workspaceFolder}/DB schema changes/Media",
             "type": "debugpy",
             "request": "launch",
-            "program": "InsertNewRecords.py",
+            "program": "ExternalFileInfo.py",
             "console": "integratedTerminal",
             "args": ["testing/dev.ini"],
             "stopOnEntry": false

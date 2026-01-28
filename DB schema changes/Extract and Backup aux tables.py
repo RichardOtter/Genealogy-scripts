@@ -3,6 +3,11 @@ from pathlib import Path
 from datetime import datetime
 
 
+# Handles tables:       confirm TODO
+#   AuxDNATable
+#   AuxMediaTable
+#   AuxCitationLinkTable
+
 # ===================================================DIV60==
 def main():
 
