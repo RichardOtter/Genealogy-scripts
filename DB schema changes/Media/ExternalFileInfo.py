@@ -1,32 +1,3 @@
-
-# Inset initial records into AuxMultimediaTable
-
-# Get list of records in
-# Can iterate them one ata a time- or 
-# get a batch of all records that need an Aux record create.
-
-#   SQL to get list
-#   PK, File path, file NameError
-#   need to expand the file path
-#   
-#   
-#   
-#   
-#   
-#   """
-#   INSERT INTO AuxMultimediaTable
-#   VALUES (
-#   :PK,
-#   'MD5',
-#   :hash,
-#   :create_JD,
-#   :modification_JD,
-#   julianday('now') - 2415018.5
-#   );
-#   """
-
-
-
 import sys
 from pathlib import Path
 sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / '../../RMpy package')))
@@ -44,7 +15,7 @@ import ctypes
 import datetime
 
 
-MJD_OFFSET = 2_400_000.5
+MJD_OFFSET =  2_415_018.5   # the microsoft standard used in Excel
 FILETIME_EPOCH = datetime.datetime(1601, 1, 1, tzinfo=datetime.timezone.utc)
 
 # ===================================================DIV60==
@@ -110,8 +81,7 @@ def run_selected_features(config, db_connection, report_file):
 # ===================================================DIV60==
 def initial_populate_feature(config, db_connection, report_file):
 
-    feature_name = "Files Not Found"
-    label_original_path = "Path stored in database:  "
+    feature_name = "initial populate"
     missing_items = 0
 
     section("START", feature_name, report_file)
@@ -120,22 +90,52 @@ def initial_populate_feature(config, db_connection, report_file):
     # for each file link in the multimedia table
     cur = get_db_file_list(db_connection)
     for row in cur:
-        if len(str(row[0])) == 0 or len(str(row[1])) == 0:
+        if len(str(row[1])) == 0 or len(str(row[2])) == 0:
             continue
-        MediaID = row[0]
+        media_ID = row[0]
         dir_path_original = row[1]
         file_name = row[2]
         dir_path = expand_relative_dir_path(dir_path_original)
         file_path = dir_path / file_name
 
+        file_dates = get_file_mjd_tuple_float(file_path)
 
-    if missing_items > 0:
-        report_file.write(f"\nNumber of file links in "
-                          f"database not found on disk: {missing_items} \n")
+        # take hash
+        BUF_SIZE = 65536  # reads in 64kb chunks
 
-    if missing_items == 0:
-        report_file.write("\n    No files were found missing.\n")
-    section("END", feature_name, report_file)
+        md5 = hashlib.md5()
+        # or sha1 = hashlib.sha1()
+
+        with open(file_path, 'rb') as f:
+            while True:
+                data = f.read(BUF_SIZE)
+                if not data:
+                    break
+                md5.update(data)
+
+        sub_vars = {
+            "media_ID" : media_ID,
+            "file_creation_date" : file_dates[0],
+            "file_modification_date" : file_dates[1],
+            "hash_type" : "MD5",
+            "hash_value" : md5.hexdigest()
+        }
+
+        SQL_stmt = """
+        INSERT INTO AuxMultimediaTable
+        VALUES (
+        :media_ID,
+        :hash_type,
+        :hash_value,
+        :file_creation_date,
+        :file_modification_date,
+        julianday('now') - 2415018.5
+        );
+        """
+
+        cur = db_connection.cursor()
+        cur.execute(SQL_stmt, sub_vars)
+
     return
 
 
@@ -157,17 +157,6 @@ def file_hash_feature(config, db_connection, report_file):
             "ERROR: HASH_FILE_FLDR_PATH must be specified for this option.\n")
 
     hash_file_path = hash_file_folder / Path("MediaFiles_HASH_" + RMc.time_stamp_now("file") + ".txt")
-
-    try:
-        hash_file = open(hash_file_path,  mode='w', encoding='utf-8')
-    except:
-        raise RMc.RM_Py_Exception(
-            f"ERROR: Cannot create the hash file:{RMc.q_str(hash_file_path)} \n\n")
-
-    report_file.write(
-        f"MD5 hash of files saved in file:\n"
-        f"{hash_file_path} \n\n")
-    cur = get_db_file_list(db_connection)
 
     for row in cur:
         if len(str(row[0])) == 0 or len(str(row[1])) == 0:
@@ -440,6 +429,8 @@ def mjd_float_to_datetime(mjd):
         year, month, day_int,
         tzinfo=datetime.timezone.utc
     ) + datetime.timedelta(seconds=seconds)
+
+
 
 # ---------------------------------------------------------
 # NTFS timestamp helpers

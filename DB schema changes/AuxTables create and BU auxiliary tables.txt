@@ -40,13 +40,13 @@ END;
 
 --  AuxMultimediaTable
 CREATE TABLE IF NOT EXISTS AuxMultimediaTable (
-AuxMultimediaID INTEGER PRIMARY KEY,
+AuxMediaID INTEGER PRIMARY KEY,
 HashType TEXT,
 Hash TEXT,
 TimeCreation FLOAT,
 TimeModification FLOAT,
 UTCModDate FLOAT,
-FOREIGN KEY (AuxMultimediaTableID) REFERENCES MultimediaTable(MediaID)
+FOREIGN KEY (AuxMediaID) REFERENCES MultimediaTable(MediaID)
     ON DELETE CASCADE
 );
 
