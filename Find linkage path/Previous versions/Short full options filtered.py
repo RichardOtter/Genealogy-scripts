@@ -14,7 +14,7 @@ def main():
     Command-line entry point for running a relationship search.
     Adjust the parameters here as needed.
     """
-    db_path = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
+    db_path = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
 
     start_id = 1
     target_id = 17
@@ -535,7 +535,7 @@ def find_paths(
 # =========================================================
 
 if __name__ == "__main__":
-    DB_PATH = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
+    DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
 
 
         # Standard Python entry point

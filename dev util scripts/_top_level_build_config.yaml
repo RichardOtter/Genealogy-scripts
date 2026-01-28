@@ -5,7 +5,7 @@ SuiteVersion: 1.0.3
 
 SuiteName: RM_Utilities_Suite
 
-ProjectRootDirPath: C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts
+ProjectRootDirPath: C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts
 
 ProjectList:
  - Change source for citation

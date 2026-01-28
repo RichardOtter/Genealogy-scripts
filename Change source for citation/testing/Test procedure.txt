@@ -6,7 +6,7 @@ Change Source for Citation
 
 Configuration
 DB				Test data
-"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Test Data\TestData-RMpython.rmtree"
+"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Test Data\TestData-RMpython.rmtree"
 2025-07-16
 
 Refresh with new copy of the database.
@@ -81,7 +81,7 @@ Utility version          = vUTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE
 Python version           = v3.13.5
 SQLite library version   = v3.49.1
 Database last changed on = 2025-07-16 20:58:40
-Database processed       = C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Change source for citation\DB\TEST-Change source for citation.rmtree
+Database processed       = C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\RM\Change source for citation\DB\TEST-Change source for citation.rmtree
 
 
 
@@ -209,7 +209,7 @@ Utility version          = vUTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE
 Python version           = v3.13.5
 SQLite library version   = v3.49.1
 Database last changed on = 2025-07-18 20:37:18
-Database processed       = C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Change source for citation\DB\TEST-Change source for citation.rmtree
+Database processed       = C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\RM\Change source for citation\DB\TEST-Change source for citation.rmtree
 
 
 

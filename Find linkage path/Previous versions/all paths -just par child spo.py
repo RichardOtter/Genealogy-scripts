@@ -299,7 +299,7 @@ def find_all_relationship_paths(db_path, start_id, target_id, max_depth=20):
 # ---------------------------------------------------------
 
 if __name__ == "__main__":
-    DB_PATH = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
+    DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
 
     # Single shortest path
     path, names, table = find_relationship_path(DB_PATH,  3, 21121)

@@ -31,19 +31,19 @@ Test path for ini file on command line
 
 __Run TestExternalFiles with test.ini RELATIVE
 Target-
-"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\TestExternalFiles.py" test.ini
+"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\TestExternalFiles.py" test.ini
 Start in-
 C:\Users\Test\
 Produced-
-ERROR: The configuration file: "C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\test.ini" was not found.
+ERROR: The configuration file: "C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\test.ini" was not found.
 Interpretation-
 Script starts and then quickly ChDir from the Start in folder to the location of the py file 
-(C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Test_External_Files)
+(C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\RM\Test_External_Files)
 and then looks for ini file there, as shown by the error message.
 
 __Run TestExternalFiles with test.ini (abs path to ini file)
 Target-
-"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\TestExternalFiles.py" C:\Users\Test\test.ini
+"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\RM\Test_External_Files\TestExternalFiles.py" C:\Users\Test\test.ini
 Start in-
 C:\Users\Test\
 Produced-

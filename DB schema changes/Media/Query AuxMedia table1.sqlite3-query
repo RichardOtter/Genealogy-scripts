@@ -1,4 +1,4 @@
--- database: ./TEST-DB schema changes.rmtree
+-- database: ../DB/TEST-DB schema changes.rmtree
 
 Select datetime(TimeCreation + 2415018.5, 'localtime'), datetime(amt.UTCModDate + 2415018.5, 'localtime'), datetime(TimeModification + 2415018.5, 'localtime'),*
 from MultiMediaTable

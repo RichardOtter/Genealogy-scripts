@@ -2,9 +2,9 @@
   "title": "vsCode - Remember Open Files (vscrof)",
   "workspace": {
     "name": "repo Genealogy-scripts",
-    "rootPath": "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts"
+    "rootPath": "c:/Users/rotter/dev/Genealogy/repo Genealogy-scripts"
   },
-  "path": "c:/Users/rotter/Development/Genealogy/repo Genealogy-scripts/.vscrof/Test procedure.json",
+  "path": "c:/Users/rotter/dev/Genealogy/repo Genealogy-scripts/.vscrof/Test procedure.json",
   "files": {
     "0":   "Change source for citation/testing/Test procedure.txt",
     "1":   "Change source template/testing/Test procedure.txt",

@@ -14,7 +14,7 @@ DEFAULT_ALLOWED_TYPES = {
     "shared_fact": False,
 }
 
-DB_PATH = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
+DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
 
     # Example: genealogical edges only, shortest path + all paths
 allowed = {

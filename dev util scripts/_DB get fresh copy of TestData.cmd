@@ -3,7 +3,7 @@ REM Copy the test database to the local dev database folder
 SET DB_EXTEN=rmtree
 SET DB_BU_EXTEN=rmtreeBU
 
-SET TEST_DB_PATH=C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Test Data
+SET TEST_DB_PATH=C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Test Data
 SET TEST_DB_NAME=TestData-RMpython
 
 SET DEV_DB_PATH=.

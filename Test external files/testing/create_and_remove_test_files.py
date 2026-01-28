@@ -38,8 +38,8 @@ def main():
 #    action = 'create'
 
     # Source files
-    test_db_home_fldr = Path(r'C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Test Data')
-    tef_app_home= Path(r'C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Test external files')
+    test_db_home_fldr = Path(r'C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Test Data')
+    tef_app_home= Path(r'C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Test external files')
     test_files_home_fldr = tef_app_home / 'testing'
 
     test_db_file = 'TestData-RMpython.rmtree'

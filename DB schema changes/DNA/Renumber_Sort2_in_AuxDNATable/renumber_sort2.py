@@ -29,7 +29,7 @@ combos = [
 (6, 1)
 ]
 
-# DB_path = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Renumber_Sort2_in_AuxDNATable\DB\TEST-Renumber_Sort2_in_AuxDNATable.rmtree"
+# DB_path = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Renumber_Sort2_in_AuxDNATable\DB\TEST-Renumber_Sort2_in_AuxDNATable.rmtree"
 DB_path= r"C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree"
 
 def renumber_sort2(db_path, combos):

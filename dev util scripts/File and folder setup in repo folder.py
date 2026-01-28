@@ -14,7 +14,7 @@ def main():
 
     # CONSTANTS
     REPO_ROOT_PATH = Path(
-        r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts")
+        r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts")
     TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
 
     file1="_DB get fresh copy of Production.cmd"

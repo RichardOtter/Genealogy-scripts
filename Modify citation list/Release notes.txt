@@ -1,8 +1,17 @@
-CitationSortOrder.py
+ModifyCitationList.py
 
 Version: 1.1.0
 to be in suite v1.1.0
 New feature release
+
+
+Changed the name of the app to deemphasize the change sort order feature, which
+is now included in RM. 
+New feature- hide a citation by moving its linh record to a new Aux database table.
+
+The "hidden" citation will not appear in the RM app as attached to a citation list
+nor will it print in the corresponding reports.
+The citation may be restored and made Not Hidden also by this app.
 
 User can now reorder more than one citation list without restarting the app.
 

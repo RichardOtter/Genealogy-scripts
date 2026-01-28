@@ -260,7 +260,7 @@ def Convert ( conn, oldSourceID, newSourceID):
 def main():
 
     # Configuration file
-    #  IniFile="C:/Users/rotter/Development/Genealogy/Genealogy-scripts/RM -LumpSources/" + "RM-Python-config.ini"
+    #  IniFile="C:/Users/rotter/dev/Genealogy/Genealogy-scripts/RM -LumpSources/" + "RM-Python-config.ini"
     IniFile="RM-Python-config.ini"
 
     # ini file must be in "current directory" and encoded as UTF-8 if non-ASCII chars present (no BOM)

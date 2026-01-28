@@ -241,7 +241,7 @@ def find_relationship_path(db_path, start_id, target_id):
 # Run against your test DB
 # ---------------------------------------------------------
 
-DB_PATH = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
+DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
 path, names, table = find_relationship_path(DB_PATH, 1, 4333)
 
 print("Path IDs:", path)

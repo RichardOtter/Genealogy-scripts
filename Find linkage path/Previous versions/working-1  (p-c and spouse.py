@@ -113,7 +113,7 @@ def find_relationship_path(db_path, start_id, target_id):
 # Your requested lines
 # ---------------------------------------------------------
 
-DB_PATH = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
+DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
 path, names, table = find_relationship_path(DB_PATH, 1, 17)
 
 print("Path IDs:", path)

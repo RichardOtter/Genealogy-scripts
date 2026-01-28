@@ -11,7 +11,7 @@ def main():
     Simple entry point for running a relationship search.
     Adjust parameters here as needed.
     """
-    db_path = r"C:\Users\rotter\Development\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
+    db_path = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Find linkage path\DB\TEST-Find linkage path.rmtree"
 
     start_id = 1
     target_id = 17
