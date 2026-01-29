@@ -41,10 +41,11 @@ END;
 --  AuxMultimediaTable
 CREATE TABLE IF NOT EXISTS AuxMultimediaTable (
 AuxMediaID INTEGER PRIMARY KEY,
+FileSize INTEGER,
+FileTimeCreation FLOAT,
+FileTimeModification FLOAT,
 HashType TEXT,
 Hash TEXT,
-TimeCreation FLOAT,
-TimeModification FLOAT,
 UTCModDate FLOAT,
 FOREIGN KEY (AuxMediaID) REFERENCES MultimediaTable(MediaID)
     ON DELETE CASCADE
@@ -59,6 +60,7 @@ BEGIN
   SET UTCModDate = julianday('now') - 2415018.5
   WHERE rowid = NEW.rowid;
 END;
+
 
 
 --  AuxCitationLinkTable
