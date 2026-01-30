@@ -61,8 +61,17 @@ def run_selected_features(config, db_connection, report_file):
     # test option values conversion to boolean
     # if missing, treated as false
     try:
-        config['OPTIONS'].getboolean('INITIAL_POPULATE')
-        config['OPTIONS'].getboolean('UNREF_FILES')
+        config['OPTIONS'].getboolean('MAIN')
+        config['OPTIONS'].getboolean('UPDATE')
+        config['OPTIONS'].getboolean('TESTING_USE_LOCAL_RM_XML')
+
+        if config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER'):
+            # app is in test mode.
+            # Set the path to the RM media folder preference setting
+            # overriding what might be in the production RM xml config file
+            G_media_directory_path =parent_dir.parent / "media" / 'testing' / 'media folder'
+            report_file.write(f"Test mode: TESTING_MODE_USE_TEST_MEDIA_FOLDER\n")
+            report_file.write(f"Media folder ={G_media_directory_path}\n\n")
 
     except:
         raise RMc.RM_Py_Exception(
@@ -70,12 +79,144 @@ def run_selected_features(config, db_connection, report_file):
 
 
     # Run all of the requested options.
-    if config['OPTIONS'].getboolean('INITIAL_POPULATE'):
-        initial_populate_feature(config, db_connection, report_file)
+    if config['OPTIONS'].getboolean('MAIN'):
+        main_feature(config, db_connection, report_file)
 
     section("FINAL", "", report_file)
 
 
+# ===================================================DIV60==
+def main_feature(config, db_connection, report_file):
+
+    feature_name = "Update populate"
+    missing_items = 0
+    C_hash_type = "MD5"
+
+    try:
+        config['OPTIONS'].getboolean('UPDATE')
+    except:
+        raise RMc.RM_Py_Exception(
+            "One of the OPTIONS values could not be interpreted as either on or off.\n")
+
+    update_aux_table = False
+    if config['OPTIONS'].getboolean('UPDATE'):
+        update_aux_table = True
+        report_file.write(f"UPDATE mode: AuxMultimediaTable will be updated to match files in filesystem\n")
+
+
+
+    section("START", feature_name, report_file)
+
+    count_missing_fs_files = 0
+    count_missing_aux_rows = 0
+    count_aux_rows = 0
+    count_hash_differs = 0
+    count_mod_date_differs = 0
+    count_create_date_differs = 0
+
+# TEST files in TESTING_MODE_USE_TEST_MEDIA_FOLDER  mode:
+# ignore the files not found messages (although they constitute test cases)
+#     C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\Media\testing\media folder\sub1\DBTest file s1 01.jpg
+#     C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\Media\testing\media folder\sub1\DBTest file s1 02.jpg
+#     C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\Media\testing\media folder\sub1\DBTest file s1 03.jpg
+
+
+    # for each file link in the multimedia table
+    cur = get_full_info_db_file_list(db_connection)
+    # SELECT  MediaID, MediaPath, MediaFile, AuxMediaID, FileSize, FileTimeCreation, FileTimeModification, HashType, Hash
+    for row in cur:
+
+        media_id            = int(row[0] or 0)
+        file_fldr_path_db   = str(row[1])
+        file_name           = str(row[2])
+        aux_media_id        = row[3]
+        file_size           = int(row[4] or 0)
+        file_create_date    = float(row[5] or 0)
+        file_mod_date       = float(row[6] or 0)
+        hash_type           = str(row[7])
+        hash                = str(row[8])
+
+        if len(file_fldr_path_db) == 0 or len(file_name) == 0:
+            continue
+
+        file_fldr_path = expand_relative_dir_path(file_fldr_path_db)
+        file_path = file_fldr_path / file_name
+
+        if not file_path.exists() or not file_path.is_file():
+            # Just increment the counter and write to log. Nothing else to do.
+            count_missing_fs_files += 1
+            report_file.write(f"Missing file: {file_path}\n")
+            continue
+
+        # get data from files in filesystem
+        file_data = get_file_info_tuple(file_path)
+        fs_file_size        = file_data[0]
+        fs_file_create_date = file_data[1]
+        fs_file_mod_date    = file_data[2]
+
+        fs_hash = get_file_MD5(file_path)
+
+    # Data now available 
+    # from database
+        #  media_id
+        #  file_fldr_path
+        #  file_name
+        #  file_size
+        #  file_time_create
+        #  file_time_mod
+        #  hash_type
+        #  hash
+    # from filesystem
+        #  fs_file_size
+        #  fs_file_time_create
+        #  fs_file_time_mod
+        #  fs_md5
+
+
+        sub_vars = {
+            "media_ID" : media_id,
+            "file_size" : fs_file_size,
+            "file_creation_date" : fs_file_create_date,
+            "file_modification_date" : fs_file_mod_date,
+            "hash_type" : C_hash_type,
+            "hash_value" : fs_hash
+        }
+
+        #   is there an Aux table row?
+        if aux_media_id is None :
+            count_missing_aux_rows += 1
+            report_file.write(f"Missing AuxMultimediaTable row  {media_id=}\n{file_path}\n\n")
+            if update_aux_table:
+               update_aux_row(db_connection, sub_vars)
+            else:
+                continue
+        
+        #compare values
+        if hash != fs_hash:
+            count_hash_differs += 1
+            report_file.write(f"hash differs  {media_id=}\n{file_path}\n\n")
+            if update_aux_table:
+               update_aux_row(db_connection, sub_vars)
+
+        if file_mod_date != fs_file_mod_date:
+            count_mod_date_differs += 1
+            report_file.write(f"file_mod_date differs  {media_id=}\n{file_path}\n\n")
+            if update_aux_table:
+               update_aux_row(db_connection, sub_vars)
+
+        if file_create_date != fs_file_create_date:
+            count_create_date_differs += 1
+            report_file.write(f"file_create_date differs  {media_id=}\n{file_path}\n\n")
+            if update_aux_table:
+               update_aux_row(db_connection, sub_vars)
+
+        count_aux_rows += 1
+
+
+    report_file.write(f"\n\n\n{count_missing_aux_rows=}\n\n")
+    report_file.write(f"{count_aux_rows=}\n\n")
+
+    return
 
 
 # ===================================================DIV60==
@@ -89,6 +230,7 @@ def initial_populate_feature(config, db_connection, report_file):
 
     # for each file link in the multimedia table
     cur = get_db_file_list(db_connection)
+    #   SELECT  MediaID, MediaPath, MediaFile
     for row in cur:
         if len(str(row[1])) == 0 or len(str(row[2])) == 0:
             continue
@@ -98,7 +240,7 @@ def initial_populate_feature(config, db_connection, report_file):
         dir_path = expand_relative_dir_path(dir_path_original)
         file_path = dir_path / file_name
 
-        file_dates = get_file_mjd_tuple_float(file_path)
+        file_data = get_file_info_tuple(file_path)
 
         # take hash
         BUF_SIZE = 65536  # reads in 64kb chunks
@@ -115,8 +257,9 @@ def initial_populate_feature(config, db_connection, report_file):
 
         sub_vars = {
             "media_ID" : media_ID,
-            "file_creation_date" : file_dates[0],
-            "file_modification_date" : file_dates[1],
+            "file_size" : file_data[0],
+            "file_creation_date" : file_data[1],
+            "file_modification_date" : file_data[2],
             "hash_type" : "MD5",
             "hash_value" : md5.hexdigest()
         }
@@ -139,66 +282,23 @@ def initial_populate_feature(config, db_connection, report_file):
     return
 
 
-
 # ===================================================DIV60==
-def file_hash_feature(config, db_connection, report_file):
+def get_file_MD5(file_path):
 
-    feature_name = "Generate media files hash"
-    found_some_missing_files = False
+    # take hash
+    BUF_SIZE = 65536  # reads in 64kb chunks
 
-    print("\n Please wait, HASH file may take several minutes to generate.\n")
+    md5 = hashlib.md5()
+    # or sha1 = hashlib.sha1()
 
-    section("START", feature_name, report_file)
-    # get option
-    try:
-        hash_file_folder = Path(config['FILE_PATHS']['HASH_FILE_FLDR_PATH'])
-    except:
-        raise RMc.RM_Py_Exception(
-            "ERROR: HASH_FILE_FLDR_PATH must be specified for this option.\n")
+    with open(file_path, 'rb') as f:
+        while True:
+            data = f.read(BUF_SIZE)
+            if not data:
+                break
+            md5.update(data)
 
-    hash_file_path = hash_file_folder / Path("MediaFiles_HASH_" + RMc.time_stamp_now("file") + ".txt")
-
-    for row in cur:
-        if len(str(row[0])) == 0 or len(str(row[1])) == 0:
-            continue
-        dir_path = expand_relative_dir_path(row[0])
-        file_path = dir_path / row[1]
-        if not dir_path.exists():
-            found_some_missing_files = True
-            report_file.write(
-                f"Directory path not found: \n{dir_path} \n"
-                f" for file: {RMc.q_str(row[1])} \n")
-
-        else:
-            if file_path.exists():
-                if not file_path.is_file():
-                    found_some_missing_files = True
-                    report_file.write(
-                        f"File path is not a file: \n{file_path} \n")
-                # take hash
-                BUF_SIZE = 65536  # reads in 64kb chunks
-
-                md5 = hashlib.md5()
-                # or sha1 = hashlib.sha1()
-
-                with open(file_path, 'rb') as f:
-                    while True:
-                        data = f.read(BUF_SIZE)
-                        if not data:
-                            break
-                        md5.update(data)
-                hash_file.write(f"{file_path!s} \n"
-                                f"{md5.hexdigest()} \n\n")
-            else:
-                found_some_missing_files = True
-                report_file.write(f"File path not found: \n{file_path} \n")
-
-    if not found_some_missing_files:
-        report_file.write("\n    All files were processed.\n")
-    section("END", feature_name, report_file)
-
-    return
-
+    return md5.hexdigest()
 
 
 
@@ -222,6 +322,43 @@ def get_db_file_list(db_connection):
   SELECT  MediaID, MediaPath, MediaFile
   FROM MultimediaTable
     ORDER BY MediaPath, MediaFile COLLATE NOCASE
+  """
+    cur = db_connection.cursor()
+    cur.execute(SqlStmt)
+    return cur
+
+# ===================================================DIV60==
+def update_aux_row(db_connection, db_values):
+
+        SQL_stmt = """
+        INSERT OR IGNORE INTO AuxMultimediaTable
+        VALUES (
+        :media_ID,
+        :file_size,
+        :file_creation_date,
+        :file_modification_date,
+        :hash_type,
+        :hash_value,
+        julianday('now') - 2415018.5
+        );
+        """
+
+        cur = db_connection.cursor()
+        cur.execute(SQL_stmt, db_values)
+
+
+
+
+# ===================================================DIV60==
+def get_full_info_db_file_list(db_connection):
+
+    SqlStmt = """
+  SELECT  MediaID, MediaPath, MediaFile,
+            AuxMediaID, FileSize, FileTimeCreation, FileTimeModification,
+            HashType, Hash, mmt.UTCModDate, amt.UTCModDate
+  FROM MultimediaTable AS mmt
+  LEFT JOIN AuxMultimediaTable AS amt ON MediaID = AuxMediaID
+    ORDER BY MediaID
   """
     cur = db_connection.cursor()
     cur.execute(SqlStmt)
@@ -475,9 +612,9 @@ def set_ntfs_times(path, created_dt, modified_dt):
 # MAIN FUNCTIONS (float MJD version, using modern stat fields)
 # ---------------------------------------------------------
 
-def get_file_mjd_tuple_float(path):
+def get_file_info_tuple(path):
     """
-    Return (created_mjd_float, modified_mjd_float) for a file.
+    Return (file_size, created_mjd_float, modified_mjd_float) for a file.
     Uses st_ctime_ns and st_mtime_ns (nanosecond precision).
     """
     stat = os.stat(path)
@@ -490,6 +627,7 @@ def get_file_mjd_tuple_float(path):
     )
 
     return (
+        stat.st_size,
         datetime_to_mjd_float(created),
         datetime_to_mjd_float(modified)
     )
