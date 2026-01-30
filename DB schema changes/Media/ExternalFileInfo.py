@@ -93,13 +93,13 @@ def main_feature(config, db_connection, report_file):
     C_hash_type = "MD5"
 
     try:
-        config['OPTIONS'].getboolean('UPDATE')
+        config['OPTIONS'].getboolean('AUXMULTIMEDIATABLE_UPDATE')
     except:
         raise RMc.RM_Py_Exception(
             "One of the OPTIONS values could not be interpreted as either on or off.\n")
 
     update_aux_table = False
-    if config['OPTIONS'].getboolean('UPDATE'):
+    if config['OPTIONS'].getboolean('AUXMULTIMEDIATABLE_UPDATE'):
         update_aux_table = True
         report_file.write(f"UPDATE mode: AuxMultimediaTable will be updated to match files in filesystem\n")
 
@@ -173,7 +173,7 @@ def main_feature(config, db_connection, report_file):
         #  fs_md5
 
 
-        sub_vars = {
+        fs_values = {
             "media_ID" : media_id,
             "file_size" : fs_file_size,
             "file_creation_date" : fs_file_create_date,
@@ -187,7 +187,7 @@ def main_feature(config, db_connection, report_file):
             count_missing_aux_rows += 1
             report_file.write(f"Missing AuxMultimediaTable row  {media_id=}\n{file_path}\n\n")
             if update_aux_table:
-               update_aux_row(db_connection, sub_vars)
+               insert_aux_row(db_connection, fs_values)
             else:
                 continue
         
@@ -196,19 +196,19 @@ def main_feature(config, db_connection, report_file):
             count_hash_differs += 1
             report_file.write(f"hash differs  {media_id=}\n{file_path}\n\n")
             if update_aux_table:
-               update_aux_row(db_connection, sub_vars)
+               update_aux_row(db_connection, fs_values)
 
         if file_mod_date != fs_file_mod_date:
             count_mod_date_differs += 1
             report_file.write(f"file_mod_date differs  {media_id=}\n{file_path}\n\n")
             if update_aux_table:
-               update_aux_row(db_connection, sub_vars)
+               update_aux_row(db_connection, fs_values)
 
         if file_create_date != fs_file_create_date:
             count_create_date_differs += 1
             report_file.write(f"file_create_date differs  {media_id=}\n{file_path}\n\n")
             if update_aux_table:
-               update_aux_row(db_connection, sub_vars)
+               update_aux_row(db_connection, fs_values)
 
         count_aux_rows += 1
 
@@ -328,24 +328,41 @@ def get_db_file_list(db_connection):
     return cur
 
 # ===================================================DIV60==
+def insert_aux_row(db_connection, db_values):
+
+    SQL_stmt = """
+INSERT OR IGNORE INTO AuxMultimediaTable
+VALUES (
+    :media_ID,
+    :file_size,
+    :file_creation_date,
+    :file_modification_date,
+    :hash_type,
+    :hash_value,
+    julianday('now') - 2415018.5
+    )
+"""
+
+    cur = db_connection.cursor()
+    cur.execute(SQL_stmt, db_values)
+
+# ===================================================DIV60==
 def update_aux_row(db_connection, db_values):
 
-        SQL_stmt = """
-        INSERT OR IGNORE INTO AuxMultimediaTable
-        VALUES (
-        :media_ID,
-        :file_size,
-        :file_creation_date,
-        :file_modification_date,
-        :hash_type,
-        :hash_value,
-        julianday('now') - 2415018.5
-        );
-        """
+    SQL_stmt = """
+UPDATE AuxMultimediaTable
+SET
+    FileSize = :file_size,
+    FileTimeCreation = :file_creation_date,
+    FileTimeModification = :file_modification_date,
+    HashType = :hash_type,
+    Hash = :hash_value,
+    UTCModDate = julianday('now') - 2415018.5
+WHERE AuxMediaID =  :media_ID;
+"""
 
-        cur = db_connection.cursor()
-        cur.execute(SQL_stmt, db_values)
-
+    cur = db_connection.cursor()
+    cur.execute(SQL_stmt, db_values)
 
 
 
