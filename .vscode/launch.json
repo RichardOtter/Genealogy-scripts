@@ -134,7 +134,7 @@
         },
         {
             "name": "PYD: ExternalFileInfo",
-            "cwd":  "${workspaceFolder}/DB schema changes/Media",
+            "cwd":  "${workspaceFolder}/DB schema changes/Multimedia",
             "type": "debugpy",
             "request": "launch",
             "program": "ExternalFileInfo.py",
