@@ -258,16 +258,16 @@ def auxmedia_feature(config, db_connection, report_file):
         if file_mod_date != fs_file_mod_date:
             count_mod_date_conflict += 1
             report_file.write(F"\nfile modification date differs  {media_id};  {file_path},\n"
-                              F"database value: {mjd_float_to_datetime(file_mod_date)}\n"
-                              F"filesystem    : {mjd_float_to_datetime(fs_file_mod_date)}\n\n")
+                              F"database value: {local_time_str(file_mod_date)}\n"
+                              F"filesystem    : {local_time_str(fs_file_mod_date)}\n\n")
             if update_aux_table:
                 row_update_needed = True
 
         if file_create_date != fs_file_create_date:
             count_create_date_conflict += 1
             report_file.write(F"\nfile creation date differs  {media_id};  {file_path},\n"
-                              F"database value: {mjd_float_to_datetime(file_create_date)}\n"
-                              F"filesystem    : {mjd_float_to_datetime(fs_file_create_date)}\n\n")
+                              F"database value: {local_time_str(file_create_date)}\n"
+                              F"filesystem    : {local_time_str(fs_file_create_date)}\n\n")
             if update_aux_table:
                 row_update_needed = True
 
@@ -586,10 +586,7 @@ def datetime_to_mjd_float(dt):
 
     return jd - MJD_OFFSET
 
-
-# ---------------------------------------------------------
-def mjd_float_to_datetime(mjd):
-    """Convert Microsoft MJD float → datetime (UTC)."""
+def mjd_float_to_datetime(mjd, LocalTZ=False):
     jd = mjd + MJD_OFFSET
 
     Z = int(jd + 0.5)
@@ -614,10 +611,17 @@ def mjd_float_to_datetime(mjd):
     frac = day - day_int
     seconds = frac * 86400
 
-    return datetime.datetime(
-        year, month, day_int,
-        tzinfo=datetime.timezone.utc
-    ) + datetime.timedelta(seconds=seconds)
+    dt = datetime.datetime(year, month, day_int, tzinfo=datetime.timezone.utc) \
+         + datetime.timedelta(seconds=seconds)
+
+    if LocalTZ:
+        return dt.astimezone()   # system local timezone
+
+    return dt
+
+# ---------------------------------------------------------
+def local_time_str(mjd):
+    return mjd_float_to_datetime(mjd, LocalTZ=True).strftime("%Y-%m-%d %H:%M:%S")
 
 
 # ---------------------------------------------------------
