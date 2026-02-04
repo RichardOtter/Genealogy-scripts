@@ -1,8 +1,11 @@
 import sqlite3
 
-
 DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\DB\TEST-DB schema changes.rmtree"          # <-- update
-LOG_table = "AuxChangeLog"   # <-- update
+LOG_table = "AuxChangeLogTable"   # <-- update
+file_path_create = f"DB Schema changes/Logging/generated/_logging_trigger_full.sql"
+file_path_drop = f"DB Schema changes/Logging/generated/_logging_trigger_drop.sql"
+output_file_trigger = open(file_path_create,  mode='w', encoding='utf-8')
+output_file_drop_trigger = open(file_path_drop,  mode='w', encoding='utf-8')
 
 conn = sqlite3.connect(DB_PATH)
 cur = conn.cursor()
@@ -18,16 +21,24 @@ tables = [
 ]
 
 for table in tables:
-   
-    # Load columns except PK
+    if table in ("AuxChangeLog", "AuxChangeLogTable", "AddressLinkTable", 
+                 "AddressTable", "AncestryTable", "FamilySearchTable",
+                 "HealthTable", "AuxCitationLinkTable"):
+        continue    # don't log this table
+
+    trigger_name = f"{table}_{LOG_table}_update"
+
+    # Load columns except PK of BLOB types
     cur.execute(f"PRAGMA table_info({table})")
     cols=[]
     for row in cur.fetchall():
       if row[5] == 1:
           pk= row[1]
       else:
-          cols.append(row[1])
-
+        if row[2] != "BLOB":
+            cols.append(row[1])
+        else:
+            continue  # BLOBs cannot go into JSON
 
     col_lines = []
     for col in cols:
@@ -35,18 +46,12 @@ for table in tables:
             f"      '{col}',  CASE WHEN OLD.{col}  IS DISTINCT FROM NEW.{col}   THEN json_object( 'old',OLD.{col},  'new',NEW.{col})   END,"
             )
 
-    # FIX: last line must NOT end with a comma, and must close all json_patch(
     # Remove trailing comma
     col_lines[-1] = col_lines[-1].rstrip(',')
 
-    # for p in patches:
-    #     print(p, "\n")
-    # print("\n\n\n")
-
-
     # Build the trigger
     trigger = f"""
-    CREATE TRIGGER {table}_AuxLogUpdate
+    CREATE TRIGGER {trigger_name}
     AFTER UPDATE ON {table}
     FOR EACH ROW
     BEGIN
@@ -60,7 +65,7 @@ for table in tables:
             json_patch('{{}}', json_object(
 """
 
-    # Add json_patch lines
+    # Add column specific lines
     for p in col_lines:
         trigger += f"        {p}\n"
 
@@ -69,12 +74,16 @@ for table in tables:
         WHERE t.diff IS NOT NULL
           AND t.diff <> '{}';
     END;
+    \n\n\n
     """
 
-    file_path = f"DB Schema changes/Logging/generated/logging_trigger_{table}__full.sql"
-    output_file = open(file_path,  mode='w', encoding='utf-8')
-    output_file.write(trigger)
-    output_file.close()
+    output_file_trigger.write(trigger)
 
+    drop_sql =  f"DROP TRIGGER IF EXISTS {trigger_name}; "
+    output_file_drop_trigger.write(drop_sql +"\n\n")
+
+
+output_file_trigger.close()
+output_file_drop_trigger.close()
 
 
