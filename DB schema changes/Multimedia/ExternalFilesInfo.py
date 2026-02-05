@@ -35,7 +35,7 @@ G_db_file_folder_path = None
 G_DEBUG = False
 
 # These are used by the time conversion routines
-MJD_OFFSET =  2_415_018.5   # the microsoft standard used in Excel
+MMJD_OFFSET =  2_415_018.5   # the microsoft standard used in Excel
 FILETIME_EPOCH = datetime.datetime(1601, 1, 1, tzinfo=datetime.timezone.utc)
 
 # ===================================================DIV60==
@@ -75,24 +75,9 @@ def run_selected_features(config, db_connection, report_file):
     # test option values conversion to boolean
     # if missing, treated as false
     try:
-        config['OPTIONS'].getboolean('AUXMULTIMEDIATABLE_UPDATE')
+    #    config['OPTIONS'].getboolean('EXTERNALFILESINFO_UPDATE')
         config['OPTIONS'].getboolean('TESTING_USE_LOCAL_RM_XML')
-
-        if config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER'):
-            # app is in test mode.
-            # Set the path to the RM media folder preference setting
-            # overriding what might be in the production RM xml config file
-
-            # TEST files in TESTING_MODE_USE_TEST_MEDIA_FOLDER  mode:
-            #  referenced by the Test Data RM database
-            # ignore the files not found messages (although they constitute test cases)
-            #     C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\Media\testing\media folder\sub1\DBTest file s1 01.jpg
-            #     C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\Media\testing\media folder\sub1\DBTest file s1 02.jpg
-            #     C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\Media\testing\media folder\sub1\DBTest file s1 03.jpg
-
-            G_media_directory_path =parent_dir.parent / "Multimedia" / 'testing' / 'test media folder'
-            report_file.write(F"Test mode: TESTING_MODE_USE_TEST_MEDIA_FOLDER\n")
-            report_file.write(F"Media folder ={G_media_directory_path}\n\n")
+        config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER')
 
     except:
         raise RMc.RM_Py_Exception(
@@ -101,6 +86,23 @@ def run_selected_features(config, db_connection, report_file):
 
     # Run all of the requested options.
     #if config['OPTIONS'].getboolean('MAIN'):
+
+    if config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER'):
+    # app is in test mode.
+    # Set the path to the RM media folder preference setting
+    # overriding what might be in the production RM xml config file
+
+    # TEST files in TESTING_MODE_USE_TEST_MEDIA_FOLDER  mode:
+    #  referenced by the Test Data RM database
+    # ignore the files not found messages (although they constitute test cases)
+    #     C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\Media\testing\media folder\sub1\DBTest file s1 01.jpg
+    #     C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\Media\testing\media folder\sub1\DBTest file s1 02.jpg
+    #     C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\Media\testing\media folder\sub1\DBTest file s1 03.jpg
+
+        G_media_directory_path =parent_dir.parent / "Multimedia" / 'testing' / 'test media folder'
+        report_file.write(F"Test mode: TESTING_MODE_USE_TEST_MEDIA_FOLDER\n")
+        report_file.write(F"Test Media folder ={G_media_directory_path}\n\n")
+
 
     auxmedia_feature(config, db_connection, report_file)
 
@@ -117,45 +119,86 @@ def auxmedia_feature(config, db_connection, report_file):
 
     # Test the options format
     try:
-        config['OPTIONS'].getboolean('AUXMULTIMEDIATABLE_ADD')
-        config['OPTIONS'].getboolean('AUXMULTIMEDIATABLE_UPDATE')
+        config['OPTIONS'].getboolean('EXTERNALFILESINFO_ADD_FAST')
+        config['OPTIONS'].getboolean('EXTERNALFILESINFO_ADD')
+        config['OPTIONS'].getboolean('EXTERNALFILESINFO_UPDATE')
     except:
         raise RMc.RM_Py_Exception(
             "One of the OPTIONS values could not be interpreted as either on or off.\n")
 
-    update_aux_table = False
-    add_aux_table = False
 
-    if config['OPTIONS'].getboolean('AUXMULTIMEDIATABLE_ADD'):
-        add_aux_table = True
-        report_file.write(F"ADD mode: Missing rows will be added to the AuxMultimediaTable.\n")
 
-    if config['OPTIONS'].getboolean('AUXMULTIMEDIATABLE_UPDATE'):
-        update_aux_table = True
-        report_file.write(F"UPDATE mode: AuxMultimediaTable will be updated to match files in filesystem\n")
+#   EXTERNALFILESINFO_ADD_FAST
+# most common task
+# go thru list, ignore missing files and db entries with no info
+# find missing aux rows and add them with full fs data
+
+
+#   EXTERNALFILESINFO_ADD
+# done initially
+#       Create Aux table if missing
+# go thru list, ignore missing files and db entries with no info
+# find missing aux rows and add them with full fs data
+# do compares db vs fs
+
+#   EXTERNALFILESINFO_COMPARE
+# do compare but do not add or update
+
+
+#   EXTERNALFILESINFO_UPDATE
+#       DO not Create Aux table if missing
+# go thru list, ignore missing files and db entries with no info
+# do compares db vs fs
+# update aux rows if data is not correct
+
+
+    add_MODE = False
+    add_fast_MODE = False
+    update_MODE = False
+    compare_MODE = False
+
+
+    if config['OPTIONS'].getboolean('EXTERNALFILESINFO_ADD'):
+        add_MODE = True
+        report_file.write(F"ADD mode: Missing rows will be added to the AuxMultimediaTable.\n\n")
+
+    if config['OPTIONS'].getboolean('EXTERNALFILESINFO_ADD_FAST'):
+        add_fast_MODE = True
+        report_file.write(F"ADD FAST mode: Missing rows will be added to the AuxMultimediaTable.\n\n")
+
+    if config['OPTIONS'].getboolean('EXTERNALFILESINFO_COMPARE'):
+        compare_MODE = True
+        report_file.write(F"COMPARE mode: read only. No changes will be made.\n\n")
+
+    if config['OPTIONS'].getboolean('EXTERNALFILESINFO_UPDATE'):
+        update_MODE = True
+        report_file.write(F"UPDATE mode: AuxMultimediaTable will be updated to match files in filesystem\n\n")
+
+    # Option logic
+    # only one should be active
+    if sum([add_MODE, add_fast_MODE, update_MODE, compare_MODE]) != 1:
+        raise RMc.RM_Py_Exception( "Only one option may be active in a run.")
 
     # create table if in ADD mode
     if not table_exists(db_connection, "AuxMultimediaTable" ):
-        if add_aux_table:
+        if add_MODE:
             create_aux_media_table(db_connection)
-            report_file.write(F"\nAuxMultimediaTable created.\n\n")
+            report_file.write("\nAuxMultimediaTable created.\n\n")
         else:
-            raise RMc.RM_Py_Exception("The aux table has not been added.\n"
+            raise RMc.RM_Py_Exception("\nERROR==== The Aux table has not been added.\n"
                 "Run again in ADD mode to create the table and populate it.\n")
-
-
-    section("START", feature_name, report_file)
 
     count_missing_fs_files = 0
     count_missing_aux_rows = 0
     count_added_aux_rows = 0
+    count_updated_aux_rows = 0
     count_aux_rows = 0
     count_size_conflict = 0
     count_hash_conflict = 0
     count_mod_date_conflict = 0
     count_create_date_conflict = 0
-    count_updated_aux_rows = 0
 
+    section("START", feature_name, report_file)
 
     # for each file link in the multimedia table
     cur = get_full_info_db_file_list(db_connection)
@@ -164,6 +207,7 @@ def auxmedia_feature(config, db_connection, report_file):
     #     HashType, Hash, mmt.UTCModDate, amt.UTCModDate
     for row in cur:
 
+        # extract info from database row
         media_id            = int(row[0] or 0)
         file_fldr_path_db   = str(row[1])
         file_name           = str(row[2])
@@ -176,18 +220,20 @@ def auxmedia_feature(config, db_connection, report_file):
         MMTable_update_time = float(row[9] or 0)
         AMTable_update_time = float(row[10] or 0)
 
+        # Check for blank file name parts
         if len(file_fldr_path_db) == 0 or len(file_name) == 0:
-            report_file.write(F"\n==== Either the path ({file_fldr_path_db}) or filename ({file_name}) \n"
-                              "for record # {media_id} is blank and will be ignored.\n")
+            report_file.write(F"\nERROR==== Either the path ({file_fldr_path_db}) or filename ({file_name}) \n"
+                              "for record # {media_id} is blank and will be ignored. Fix this! \n")
             continue
 
         file_fldr_path = expand_relative_dir_path(file_fldr_path_db)
         file_path = file_fldr_path / file_name
 
+        # Check for missing file in filesystem
         if not file_path.exists() or not file_path.is_file():
             # Just increment the counter and write to log. Nothing else to do.
             count_missing_fs_files += 1
-            report_file.write(F"\n==== Missing file: {file_path}\n")
+            report_file.write(F"\nERROR==== Missing file:\n{file_path}\n\n")
             continue
 
         # get data from files in filesystem
@@ -195,7 +241,8 @@ def auxmedia_feature(config, db_connection, report_file):
         fs_file_size        = file_data[0]
         fs_file_create_date = file_data[1]
         fs_file_mod_date    = file_data[2]
-        fs_hash = get_file_MD5(file_path)
+        # add_fast_MODE only uses hash when adding a row
+        fs_hash = "" if add_fast_MODE else get_file_MD5(file_path)
 
     # Data now available 
     # from database
@@ -214,71 +261,74 @@ def auxmedia_feature(config, db_connection, report_file):
         #  fs_file_size
         #  fs_file_create_date
         #  fs_file_mod_date
-        #  fs_hash
+        #  fs_hash (if not add_fast_MODE)
 
         fs_values = {
             "media_ID" : media_id,
             "file_size" : fs_file_size,
             "file_creation_date" : fs_file_create_date,
             "file_modification_date" : fs_file_mod_date,
-            "hash_type" : C_hash_type,
+            "hash_type" : C_hash_type,  # may be blank
             "hash_value" : fs_hash
         }
 
-        #   is there an Aux table row?
+        # Check for an Aux table row?
         if aux_media_id is None:
             count_missing_aux_rows += 1
-            if add_aux_table:
-               insert_aux_row(db_connection, fs_values)
-               count_added_aux_rows += 1
-               continue
+            # add the row if in either add_MODE
+            if add_MODE or add_fast_MODE:
+                if add_fast_MODE:
+                    fs_values["hash_value"] = get_file_MD5(file_path)
+                insert_aux_row(db_connection, fs_values)
+                report_file.write(F"\nAdded AuxMultimediaTable row for: {media_id=}\n{file_path}\n\n")
+                count_added_aux_rows += 1
+                continue  # to the next media table item
             else:
                 report_file.write(F"Missing AuxMultimediaTable row  {media_id=}\n{file_path}\n\n")
-                continue
+                continue  # to the next media table item
         
-        row_update_needed = False
+        # add_fast_MODE dows not do data comparisons
+        if add_fast_MODE:
+            continue  # to the next media table item
 
-        #compare values
+        #compare database vs filesystem info
+        row_update_needed = False
         if file_size != fs_file_size:
             count_size_conflict += 1
             report_file.write(F"\nsize differs  {media_id};  {file_path},\n"
                               F"database value: {file_size}\n"
                               F"filesystem    : {fs_file_size}\n\n")
-            if update_aux_table:
-                row_update_needed = True
+            row_update_needed = True
 
         if hash != fs_hash:
             count_hash_conflict += 1
             report_file.write(F"\nhash differs  {media_id};  {file_path},\n"
                               F"database value: {hash}\n"
                               F"filesystem    : {fs_hash}\n\n")
-            if update_aux_table:
-                row_update_needed = True
+            row_update_needed = True
 
         if file_mod_date != fs_file_mod_date:
             count_mod_date_conflict += 1
             report_file.write(F"\nfile modification date differs  {media_id};  {file_path},\n"
                               F"database value: {local_time_str(file_mod_date)}\n"
                               F"filesystem    : {local_time_str(fs_file_mod_date)}\n\n")
-            if update_aux_table:
-                row_update_needed = True
+            row_update_needed = True
 
         if file_create_date != fs_file_create_date:
             count_create_date_conflict += 1
             report_file.write(F"\nfile creation date differs  {media_id};  {file_path},\n"
                               F"database value: {local_time_str(file_create_date)}\n"
                               F"filesystem    : {local_time_str(fs_file_create_date)}\n\n")
-            if update_aux_table:
-                row_update_needed = True
+            row_update_needed = True
 
-        if row_update_needed:
+        if update_MODE and row_update_needed:
             update_aux_row(db_connection, fs_values)
             count_updated_aux_rows += 1
         
         count_aux_rows += 1
 
-
-    report_file.write(F"\n\n\n{count_missing_aux_rows=}\n")
+    report_file.write("\n\n\n====Summary\n")
+    report_file.write(F"{count_missing_aux_rows=}\n")
     report_file.write(F"{count_missing_fs_files=}\n")
     report_file.write(F"{count_added_aux_rows=}\n")
     report_file.write(F"{count_updated_aux_rows=}\n")
@@ -335,10 +385,8 @@ VALUES (
     julianday('now') - 2415018.5
     )
 """
-
     cur = db_connection.cursor()
     cur.execute(SQL_stmt, db_values)
-
 
 
 # ===================================================DIV60==
@@ -348,6 +396,7 @@ def table_exists(conn, table_name):
         (table_name,)
     )
     return cur.fetchone() is not None
+
 
 # ===================================================DIV60==
 def update_aux_row(db_connection, db_values):
@@ -363,7 +412,6 @@ SET
     UTCModDate = julianday('now') - 2415018.5
 WHERE AuxMediaID =  :media_ID;
 """
-
     cur = db_connection.cursor()
     cur.execute(SQL_stmt, db_values)
 
@@ -404,7 +452,6 @@ FOREIGN KEY (AuxMediaID) REFERENCES MultimediaTable(MediaID)
     cur = db_connection.cursor()
     cur.execute(SqlStmt)
 
-
     SqlStmt = """
 --  AuxMultimediaTable trigger
 CREATE TRIGGER IF NOT EXISTS AuxMultimediaTable_UTCModDate
@@ -418,35 +465,6 @@ END;
 """
     cur = db_connection.cursor()
     cur.execute(SqlStmt)
-
-
-# ===================================================DIV60==
-def report_empty_paths(db_connection, report_file):
-
-    # First check database for empty paths or filenames
-    # easier to handle them now than later
-
-    SqlStmt = """
-    SELECT  MediaPath, MediaFile, Caption, Description
-    FROM MultimediaTable
-    WHERE MediaPath == ''
-       OR MediaFile == ''COLLATE NOCASE
-    """
-    cur = db_connection.cursor()
-    cur.execute(SqlStmt)
-
-    rows = cur.fetchall()
-    if len(rows) != 0:
-        report_file.write(
-            F"{len(rows)} entires with blank filename or path found:\n\n")
-        for row in rows:
-            # MediaPath, MediaFile, Caption, Description
-            report_file.write(
-                F"Path       = {row[0]} \n"
-                F"File Name  = {row[1]} \n"
-                F"Caption    = {row[2]} \n"
-                F"Description= {row[3]} \n\n")
-
 
 
 # ===================================================DIV60==
@@ -584,10 +602,10 @@ def datetime_to_mjd_float(dt):
         day_fraction + B - 1524.5
     )
 
-    return jd - MJD_OFFSET
+    return jd - MMJD_OFFSET
 
 def mjd_float_to_datetime(mjd, LocalTZ=False):
-    jd = mjd + MJD_OFFSET
+    jd = mjd + MMJD_OFFSET
 
     Z = int(jd + 0.5)
     F = (jd + 0.5) - Z
