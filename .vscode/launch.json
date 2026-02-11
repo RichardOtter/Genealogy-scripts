@@ -133,11 +133,11 @@
             "stopOnEntry": true
         },
         {
-            "name": "PYD: ExternalFileInfo",
+            "name": "PYD: ExternalFilesInfo",
             "cwd":  "${workspaceFolder}/DB schema changes/Multimedia",
             "type": "debugpy",
             "request": "launch",
-            "program": "ExternalFileInfo.py",
+            "program": "ExternalFilesInfo.py",
             "console": "integratedTerminal",
             "args": ["testing/dev.ini"],
             "stopOnEntry": false

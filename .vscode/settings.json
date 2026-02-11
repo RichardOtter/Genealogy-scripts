@@ -4,6 +4,7 @@
         "auxmedia",
         "AUXMULTIMEDIATABLE",
         "Excep",
+        "EXTERNALFILESINFO",
         "facttype",
         "FACTTYPE",
         "fldr",
@@ -14,5 +15,7 @@
     "python.analysis.extraPaths": [
         "./RM-RMpy module"
     ],
-    "cSpell.enabled": true
+    "cSpell.enabled": true,
+    "editor.foldingStrategy": "auto",
+    "python.useEnvironmentsExtension": true
 }

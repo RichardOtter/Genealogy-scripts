@@ -22,8 +22,8 @@ CREATE TEMP VIEW Unmod_Citations_to_MyHr AS
 SELECT CitationID
 FROM CitationTable AS ct
 INNER JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-WHERE st.Name LIKE 'RRdb MyHr%' COLLATE NOCASE
-AND ct.ActualText NOT LIKE '%\_AUTOEDIT-2025%' ESCAPE '\';
+WHERE st.Name LIKE 'RRdb MYH%' COLLATE NOCASE
+AND ct.ActualText NOT LIKE '%\_AUTOEDIT-2026-02-10-01%' ESCAPE '\';
 
 
 -- save original note text
@@ -93,7 +93,7 @@ UPDATE  CitationTable
 SET ActualText= regexp_replace(
     ActualText, 
     '(?s)(Additional actions|Family tree\r\nGenealogy).*\z', 
-    '\r\n===========================================DIV50==\r\n_AUTOEDIT-2025-11-19-01\r\n')
+    '\r\n===========================================DIV50==\r\n_AUTOEDIT-2026-02-10-01\r\n')
 WHERE  CitationID IN (SELECT CitationID FROM Unmod_Citations_to_MyHr);
 
 
@@ -115,14 +115,15 @@ WHERE  CitationID IN (SELECT CitationID FROM Unmod_Citations_to_MyHr);
 
 
 
-
 -- check result, show all MyHr citations
-SELECT ct.CitationID, ct.ActualText
+SELECT ct.CitationID, ct.CitationName, ct.ActualText
 FROM CitationTable AS ct
 INNER JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-WHERE st.Name LIKE 'RRdb MyHr%' COLLATE NOCASE;
+WHERE st.Name LIKE 'RRdb MYH%' COLLATE NOCASE;
 
 
+
+-- REVERT BACK
 
 -- restore saved citation note to CitationTable
 UPDATE CitationTable 
@@ -131,9 +132,9 @@ FROM AuxCitationTable
 WHERE  CitationID = AuxCitationID;
 
 -- check result, show all MyHr citations
-SELECT ct.CitationID, ct.ActualText
+SELECT ct.CitationID, ct.CitationName, ct.ActualText
 FROM CitationTable AS ct
 INNER JOIN SourceTable AS st ON ct.SourceID = st.SourceID
-WHERE st.Name LIKE 'RRdb MyHr%' COLLATE NOCASE;
+WHERE st.Name LIKE 'RRdb MYH%' COLLATE NOCASE;
 
 

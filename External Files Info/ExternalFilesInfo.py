@@ -25,6 +25,36 @@ import hashlib
 # precise than NTFS dates and worse for MacOS file dates
 # but that is in the nanosecond range.
 
+
+
+
+#   EXTERNALFILESINFO_ADD_FAST
+# most common task when the number of files is large and speed is desired
+
+# do not Create Aux table if missing, just print error
+# do not do any data compares
+# go thru media list, list missing files and db entries with no info 
+# find missing aux rows and add them with full fs data
+
+#   EXTERNALFILESINFO_ADD
+# done for first run
+
+# Create AuxMultimediaTable if missing
+# go thru media list, list missing files and db entries with no info 
+# find missing aux rows and add them with full fs data
+# do compare of db vs fs for existing aux media records, list mismatches
+
+#   EXTERNALFILESINFO_COMPARE
+# do not Create Aux table if missing, just print error
+# go thru media list, list missing files and db entries with no info 
+# do compare but do not add or update
+
+#   EXTERNALFILESINFO_UPDATE
+# do not Create Aux table if missing, just print error
+# go thru list, ignore missing files and db entries with no info
+# do compares db vs fs
+# update aux rows if data for filesystem file has changed
+
 # ===================================================DIV60==
 #  Globals
 
@@ -75,7 +105,6 @@ def run_selected_features(config, db_connection, report_file):
     # test option values conversion to boolean
     # if missing, treated as false
     try:
-    #    config['OPTIONS'].getboolean('EXTERNALFILESINFO_UPDATE')
         config['OPTIONS'].getboolean('TESTING_USE_LOCAL_RM_XML')
         config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER')
 
@@ -125,31 +154,6 @@ def auxmedia_feature(config, db_connection, report_file):
     except:
         raise RMc.RM_Py_Exception(
             "One of the OPTIONS values could not be interpreted as either on or off.\n")
-
-
-
-#   EXTERNALFILESINFO_ADD_FAST
-# most common task
-# go thru list, ignore missing files and db entries with no info
-# find missing aux rows and add them with full fs data
-
-
-#   EXTERNALFILESINFO_ADD
-# done initially
-#       Create Aux table if missing
-# go thru list, ignore missing files and db entries with no info
-# find missing aux rows and add them with full fs data
-# do compares db vs fs
-
-#   EXTERNALFILESINFO_COMPARE
-# do compare but do not add or update
-
-
-#   EXTERNALFILESINFO_UPDATE
-#       DO not Create Aux table if missing
-# go thru list, ignore missing files and db entries with no info
-# do compares db vs fs
-# update aux rows if data is not correct
 
 
     add_MODE = False

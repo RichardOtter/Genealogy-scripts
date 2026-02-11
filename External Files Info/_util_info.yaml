@@ -1,15 +1,15 @@
 
-UtilityName:  ExternalFileInfo
+UtilityName:  ExternalFilesInfo
 
 # last release NONE
 Version: 0.0.1
   
 DistributionFileList:
-  - ExternalFileInfo.py
+  - ExternalFilesInfo.py
   - RM-Python-config.ini
   - ReadMe.txt
 
 
 DistributionFolderList:
-  - ..\..\RMpy package\RMpy
+  - ..\RMpy package\RMpy
 

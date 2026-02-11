@@ -2,8 +2,8 @@ import sqlite3
 
 
 DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\DB\TEST-DB schema changes.rmtree"          # <-- update
-TABLE = "EventTable"         # <-- update
-PK_COL = "EventID"           # <-- update
+TABLE = "NameTable"         # <-- update
+PK_COL = "NameID"           # <-- update
 LOG_TABLE = "AuxChangeLog"   # <-- update
 
 conn = sqlite3.connect(DB_PATH)
@@ -57,4 +57,9 @@ trigger += """    ) ) AS DIFF
 END;
 """
 
-print(trigger)
+file_path = f"DB Schema changes/Logging/logging_trigger_{TABLE}__full.sql"
+output_file = open(file_path,  mode='w', encoding='utf-8')
+output_file.write(trigger)
+output_file.close()
+
+
