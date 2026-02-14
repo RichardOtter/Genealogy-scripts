@@ -1,8 +1,12 @@
-import os
+import sys
 from pathlib import Path
-import yaml    # type: ignore
-from datetime import datetime
+sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
 
+import RMpy.common as RMc       # noqa #type: ignore
+
+import os
+import yaml    # type: ignore
+# from datetime import datetime
 
 # this file lives in the dir:  repo root/dev util scripts
 # the top level yaml config file is also here.
@@ -24,7 +28,7 @@ def main():
     doc_folder = REPO_ROOT_PATH / "doc"
 
     try:
-        time_stamp = time_stamp_now("file")
+        time_stamp = RMc.time_stamp_now("file")
         dev_util_fldr_path= REPO_ROOT_PATH / "dev util scripts"
         top_level_config_path = dev_util_fldr_path / TOP_LEVEL_CONFIG_NAME
         

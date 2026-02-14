@@ -196,9 +196,29 @@ certutil -hashfile [file name]  MD5
 
 where [file name] is the fie you wish to compute the MD5 has for.
 
-So, to verify the unifuzz file-
+So, for example, to display the MD5 of the unifuzz file, enter-
 certutil -hashfile unifuzz64.dll  MD5
 
+=========================================================================DIV80==
+LIB_APPENDIX  Database with external file links from a new location
+APPENDIX  Using a database with external file links from a new directory location
+
+RM finds media files linked to a database by several methods. In my opinion, 
+the method to find all media files in the Media Folder, as specified in the RM
+Preferences, is the most reliable, but the other methods can certainly be
+useful in come circumstances.
+One of the  other"search methods" is to find a file by noting it location in
+relation to the database file. This is fine unless the database file is moved
+and the files are not.
+This point needs to be made in regards to the instructions for testing the
+utility app described here. When you make a copy of your database and move the
+copy to the "Working folder", as instructed above, some of the database's 
+external files may not be found when running the database in the new location.
+This is only temporary. Move the database back to it's original location and
+the media files will be found again.
+So, while the database is in its temporary test location, don't be alarmed to
+see red X's on media file thumbnails. Don't try to fix the links until you have
+returned the database to its usual directory location.
 
 =========================================================================DIV80==
 LIB_APPENDIX  Config file: location, contents and editing

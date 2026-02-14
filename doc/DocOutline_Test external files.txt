@@ -351,7 +351,8 @@ be an issue.
 Files attached to RM Tasks are not analyzed by this utility and they do not 
 appear in the RM Media tab.
 
-
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Database with external file links from a new location
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
 INCLUDE: LIB_APPENDIX  Config File: multi-line value

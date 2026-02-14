@@ -1,72 +1,73 @@
 =========================================================================DIV80==
-<LONG-NAME>
-<SHORT-NAME>
+<LONG-DESCRIPTIVE-NAME>
+<PY-FILE-NAME>
 
-Intro
-CONSTANT
+INCLUDE: LIB_INTRO
 =========================================================================DIV80==
 Purpose
-variable
+VARIABLE
 =========================================================================DIV80==
-Backups
-3 versions
+INCLUDE: LIB_Backups small changes
+OR
+INCLUDE: LIB_Backups large changes
+OR
+INCLUDE: LIB_Backups read only
 =========================================================================DIV80==
-Compatibility
-CONSTANT
-just 1 extra line added re v7 in TestExternalFiles
+INCLUDE: LIB_Compatibility
+1 extra line added re v7 in TestExternalFiles
 =========================================================================DIV80==
 Performance
-ONLY TEST EXTERNAL FILES (not in lib)
+VARIABLE
+ONLY in TestExternalFiles
 =========================================================================DIV80==
-Overview
-CONSTANT
+INCLUDE: LIB_Overview
 =========================================================================DIV80==
 Capabilities
-ONLY TEST EXTERNAL FILES (not in lib)
+VARIABLE
+ONLY in TestExternalFiles
 =========================================================================DIV80==
 Running the utility in detail
-variable
+VARIABLE
 =========================================================================DIV80==
 Notes
-variable
+VARIABLE
 =========================================================================DIV80==
-Precautions before using the modified database
+INCLUDE: LIB_Precautions before using the modified database
 CONSTANT
-only in the 2  big change
+ONLY in the 2 big change scripts
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Database with external file links from a new location
+ONLY in TestExternalFiles and ExternalFilesInfo
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
 INCLUDE: LIB_APPENDIX  Config File: multi-line value
 INCLUDE: LIB_APPENDIX  Config File: Mapping value
 INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
-APPENDIX  Python installation
-CONSTANT
+INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==
-APPENDIX  unifuzz64.dll download
-CONSTANT
+INCLUDE: LIB_APPENDIX  unifuzz64.dll download
 only in RunSQL & LumpSources
 =========================================================================DIV80==
-Troubleshooting
-CONSTANT
+INCLUDE: LIB_APPENDIX  Troubleshooting
 added sections
 =========================================================================DIV80==
 Developer Notes
+VARIABLE
 ONLY TEST EXTERNAL FILES (not in lib)
 =========================================================================DIV80==
 TODO
-variable
+VARIABLE
 =========================================================================DIV80==
-Feedback
-CONSTANT
+INCLUDE: LIB_Feedback
 =========================================================================DIV80==
-Distribution
-CONSTANT
+INCLUDE: LIB_Distribution
 =========================================================================DIV80==
 
 
 
 
-apps thta use multi line values in config need extra trouble shooting
+apps that use multi line values in config need extra troubleshooting
 TestExternalFile		ignored items
 ColorFromGroup			list of ini sections
 ChangeSourceTemplate	mapping

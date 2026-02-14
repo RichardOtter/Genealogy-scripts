@@ -227,6 +227,8 @@ the utility, then re-open RM.
 =========================================================================DIV80==
 INCLUDE: LIB_Precautions before using the modified database
 =========================================================================DIV80==
+INCLUDE: LIB_APPENDIX  Database with external file links from a new location
+=========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
 INCLUDE: LIB_APPENDIX  Config File: multi-line value SQL
 INCLUDE: LIB_APPENDIX  Config File: encoding
