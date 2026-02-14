@@ -26,6 +26,7 @@ def main():
     file3="_DB get fresh copy of TestData.cmd"
 
     doc_folder = REPO_ROOT_PATH / "doc"
+    links_folder = doc_folder / "Links"
 
     try:
         time_stamp = RMc.time_stamp_now("file")
@@ -52,9 +53,9 @@ def main():
 
         # create a hard link in the docs folder for each ReaMe
         try:
-            os.link(project_dir_path / 'ReadMe.txt', doc_folder / F"DocFull_{project}")
+            os.link(project_dir_path / 'ReadMe.txt', links_folder / F"DocFull_{project}.txt")
         except FileExistsError:
-            print(f"Error: The file '{doc_folder / F"DocFull_{project}"}' already exists.")
+            print(f"Error: The file '{links_folder / F"DocFull_{project}"}' already exists.")
 
         #create a DB folder in each project folder
         project_DB_path = project_dir_path / "DB"
@@ -94,7 +95,19 @@ def main():
         except FileExistsError:
             print(f"Error: The file '{project_DB_path / file3}' already exists.")
 
+    pause_with_message()
     return
+
+
+# ===================================================DIV60==
+def pause_with_message(message=None):
+
+    if (message != None):
+        input(str(message))
+    else:
+        input("\nPress the <Enter> key to exit...")
+    return
+
 
 # ===================================================DIV60==
 # Call the "main" function
