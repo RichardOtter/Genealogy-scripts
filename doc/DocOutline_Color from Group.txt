@@ -19,14 +19,7 @@ INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-Running the utility in detail
-
-==========-
-Install Python for Windows x64  -see "APPENDIX  Python install" below.
-
-==========-
-Create a folder on your computer that you will not confuse with other
-folders. It will be referred to as the "working folder".
+INCLUDE: LIB_Step_by_Step_small_changes-1
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
@@ -34,22 +27,7 @@ Copy these items from the downloaded zip file to the working folder-
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-==========-
-Make a copy of your database, move the copy into the working folder.
-
-Rename the database copy to "TEST.rmtree" in order to prevent any
-confusion about the purpose of the copy.
-
-==========-
-Edit the RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing" if you need help)
-
-Check that the DB_PATH key in the config file is pointing to the
-desired database.
-If the above steps were followed, the path in the sample config file
-is already correct, i.e. TEST.rmtree
-
-Save the config file but leave it open in Notepad.
+INCLUDE: LIB_Step_by_Step_small_changes-2
 
 ==========-
 Before running the utility, you will want to confirm that a group exists

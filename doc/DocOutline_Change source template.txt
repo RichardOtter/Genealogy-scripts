@@ -35,7 +35,6 @@ citations.
 This utility does not move data BETWEEN source fields and citation fields.
 Other utilities can do that. (see: LumpSources another utility in this suite.)
 
-
 =========================================================================DIV80==
 INCLUDE: LIB_Backups large changes
 =========================================================================DIV80==
@@ -43,52 +42,14 @@ INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-Running the utility in detail
-
-==========-
-Install Python for Windows x64  -see "APPENDIX  Python install" below.
-
-==========-
-Create a folder on your computer that you will not confuse with other
-folders- the "working folder".
-
+INCLUDE: LIB_Step_by_Step_small_changes-1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ChangeSourceTemplate.py          (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-==========-
-Make a copy of your database, move the copy into the working folder.
-
-Rename the database copy to "TEST.rmtree" in order to prevent any
-confusion about the purpose of the copy.
-
-==========-
-Edit the sample RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing"
-if you need help)
-
-A summary of the config file structure:
-The names in square brackets are section names.
-The items in a section are key-value pairs.
-
-For example, in the sample config file, there is a section named 
-[FILE_PATHS].
-In that section, reside 3 key-value pairs, one of which is 
-DB_PATH = TEST.rmtree
-
-"DB_PATH" is the key, "TEST.rmtree" is the value.
-key-value pairs are separated with a = character.
-
-
-The utility needs to know where the RM database file is located, the output
-report file name and its location.
-
-If you followed the above instructions, no changes to any of the key-values in
-the [FILE_PATHS] section are needed.
-
-
+INCLUDE: LIB_Step_by_Step_small_changes-2
 ==========-
 STEP 0		Option    All options = off
 
@@ -142,8 +103,9 @@ Now you know what to expect when running the utility and how to configure the
 config file. You're ready to start, but first, you need to figure out what needs
 to be accomplished and tell the utility.
 
-Assumed scenario: There is a source template in the RM file that is not quite right. You've used
-it to create sources, and, because of the template, they're not quite right either.
+Assumed scenario: There is a source template in the RM file that is not quite 
+right. You've used it to create sources, and, because of the template, they're
+not quite right either.
 Check your database and determine the exact name of the not-quite-right template.
 
 Look at the config file, still open in NotePad and find the section :
@@ -168,6 +130,12 @@ Your config file in NotePad should now have the new names:
 TEMPLATE_OLD    = not-quite-right template name
 TEMPLATE_NEW    = new and improved template name
 
+for example, using a RM built-in template
+
+[SOURCE_TEMPLATES]
+TEMPLATE_OLD    = Birth Registration, state level
+TEMPLATE_NEW    = Birth Registration, state level-NEW
+
 Now look back at the OPTIONS section of the config file, and change the line-
 CHECK_TEMPLATE_NAMES   = off
 to
@@ -178,15 +146,12 @@ Save the config file but leave it open in Notepad.
 =========-
 Double click the "ChangeSourceTemplate.py" file in the working folder
 to start the utility.
-
-=========-
 A terminal window is momentarily displayed while the utility processes
 the commands and then the terminal window is closed and the
 utility is exited.
-
-=========-
 The report file is displayed in Notepad for you inspection.
 
+=========-
 Check that there are no error messages listed in the Report file.
 If a source template name couldn't be found, fix the config file, save it and
 re-run the utility until you get it right.
@@ -198,10 +163,10 @@ See NOTES section for details on how to enclose names in quotes to fix.
 ==========-
 STEP 2		Option LIST_SOURCES = on
 
-Now comes the question of which sources should have their SourceTemplate 
+Now comes the question of which sources should have their SourceTemplate
 switched. A common use case will require that all of the sources using the old
-template should be switched over to use the new template. Other situations 
-are also possible in which only a subset of all sources using the old template 
+template should be switched over to use the new template. Other situations
+are also possible in which only a subset of all sources using the old template
 should be switched over to the new template.
 
 In the config file, look for the line:
@@ -224,15 +189,12 @@ Save the config file but leave it open in Notepad.
 =========-
 Double click the "ChangeSourceTemplate.py" file in the working folder
 to start the utility.
-
-=========-
 A terminal window is momentarily displayed while the utility processes
 the commands and then the terminal window is closed and the
 utility is exited.
-
-=========-
 The report file is displayed in Notepad for you inspection.
 
+=========-
 Check that there are no error messages listed in the Report file. You should
 see a list of all sources that were created using the Old Template.
 Any or all of these listed sources may be converted to the new template.
@@ -246,7 +208,8 @@ The wildcard match may use the two SQL LIKE wildcard characters "%" and "_".
 Note that the search is not case sensitive and more than one wildcard character
 can be used in a search. See Notes for further ideas.
 
-(for additional help, see, for instance: https://www.sqlitetutorial.net/sqlite-like/ )
+For additional help, see, for instance:
+https://www.sqlitetutorial.net/sqlite-like/
 
 ==========-
 STEP 3		Option LIST_TEMPLATE_DETAILS = on
@@ -273,17 +236,16 @@ Save the config file but leave it open in Notepad.
 =========-
 Double click the "ChangeSourceTemplate.py" file in the working folder
 to start the utility.
-
-=========-
 A terminal window is momentarily displayed while the utility processes
 the commands and then the terminal window is closed and the
 utility is exited.
-
-=========-
 The report file is displayed in Notepad for you inspection.
 
-(Leave the report open in Notepad. It will be used in the next step.)
 
+=========-
+Leave the report open in Notepad. It will be used in the next step.
+
+=========-
 Check that there are no error messages listed in the Report file.
 You will see a list of all the fields in the old and new templates.
 
@@ -296,7 +258,7 @@ keys MAPPING_SOURCE and MAPPING_CITATION.
 These values tell the utility how to transfer the information when
 switching templates.
 
-We'll create the mapping from the information in the report file just created.
+We'll create the mapping from the information in the report file just displayed.
 
 Using the built-in source template "Birth Registration, state level"
 as an example-
@@ -750,7 +712,6 @@ INCLUDE: LIB_APPENDIX  Config File: encoding
 INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Troubleshooting
-
 ===========-
 Error Message:
 Tried to create duplicate Name in XML.
@@ -778,7 +739,6 @@ CITATION_MAPPING =
   Field_2     >     Field_1
   temp        >     Field_2
   temp        >     NULL
-
 
 =========================================================================DIV80==
 Developer Notes
@@ -854,37 +814,14 @@ underscore characters. The escape character followed by a percent symbol (%),
 underscore (_), or a second instance of the escape character itself matches a
 literal percent symbol, underscore, or a single escape character, respectively.
 
-
 =========================================================================DIV80==
 TODO
 
-*  consider allowing text to be used in the left side of a mapping instead of
-   existing text in an existing field.
-*  allow the text mentioned above to come from a parsing of the note fields
 *  ?? what would you find useful?
 
 
 =========================================================================DIV80==
-Feedback
-The author appreciates comments and suggestions regarding this software.
-RichardJOtter@gmail.com
-
-Public comments may be made at-
-https://github.com/ricko2001/Genealogy-scripts/discussions
-
-
-Also see:
-My website containing other RootsMagic relevant information:
-https://RichardOtter.github.io
-
-My Linked-In profile at-
-https://www.linkedin.com/in/richardotter/
-
-
+INCLUDE: LIB_Feedback
 =========================================================================DIV80==
-Distribution
-Everyone is free to use this utility. However, instead of
-distributing it yourself, please instead distribute the URL
-of my website where I describe it- https://RichardOtter.github.io
-
+INCLUDE: LIB_Distribution
 =========================================================================DIV80==

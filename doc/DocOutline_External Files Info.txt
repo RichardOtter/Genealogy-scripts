@@ -29,14 +29,7 @@ can take some time. My 7,000 files take about 2 minutes.
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-Running the utility in detail
-
-==========-
-Install Python for Windows x64  -see "APPENDIX  Python install" below.
-
-==========-
-Create a folder on your computer that you will not confuse with other
-folders. It will be referred to as the "working folder".
+INCLUDE: LIB_Step_by_Step_small_changes-1
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
@@ -44,35 +37,7 @@ Copy these items from the downloaded zip file to the working folder-
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-==========-
-Make a copy of your database, move the copy into the working folder.
-
-Rename the database copy to "TEST.rmtree" in order to prevent any confusion 
-about the purpose of the copy.
-
-==========-
-Edit the sample RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing"
-if you need help)
-
-A summary of the config file structure:
-The names in square brackets are section names.
-The items in a section are key-value pairs.
-
-For example, in the sample config file, there is a section named 
-[FILE_PATHS].
-In that section, reside 3 key-value pairs, one of which is 
-DB_PATH = TEST.rmtree
-
-"DB_PATH" is the key, "TEST.rmtree" is the value.
-key-value pairs are separated with a = character.
-
-
-The utility needs to know where the RM database file is located, the output
-report file name and its location.
-
-If you followed the above instructions, no changes to any of the key-values in
-the [FILE_PATHS] section are needed.
+INCLUDE: LIB_Step_by_Step_small_changes-2
 
 ==========-
 Look at the [OPTIONS] section of the config file containing keys for the 
@@ -108,7 +73,7 @@ ERROR==== The Aux table has not been added.
     Run again in ADD mode to create the table and populate it.
 
 This is expected.
-Now that you have run the app, go back to the config file and chnage the options to-
+Now that you have run the app, go back to the config file and change the options to-
 EXTERNALFILESINFO_ADD_FAST = off
 EXTERNALFILESINFO_ADD = on
 EXTERNALFILESINFO_UPDATE = off
@@ -173,23 +138,17 @@ INCLUDE: LIB_APPENDIX  Database with external file links from a new location
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
 INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
-APPENDIX  Python installation
-CONSTANT
+INCLUDE: LIB_APPENDIX  Python install
 =========================================================================DIV80==
-Troubleshooting
-CONSTANT
-added sections
-=========================================================================DIV80==
-Developer Notes
-ONLY TEST EXTERNAL FILES (not in lib)
+INCLUDE: LIB_APPENDIX  Troubleshooting
 =========================================================================DIV80==
 TODO
-variable
-=========================================================================DIV80==
-Feedback
-CONSTANT
-=========================================================================DIV80==
-Distribution
-CONSTANT
-=========================================================================DIV80==
 
+*  ?? what would you find useful?
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_Feedback
+=========================================================================DIV80==
+INCLUDE: LIB_Distribution
+=========================================================================DIV80==

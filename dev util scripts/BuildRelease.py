@@ -1,4 +1,5 @@
 import os
+import ctypes
 from pathlib import Path
 import yaml    # type: ignore
 from datetime import datetime
@@ -167,12 +168,20 @@ def time_stamp_now(type=""):
 
 
 # ===================================================DIV60==
-def pause_with_message(message=None):
+def launched_from_explorer():
+    # Buffer for up to 20 PIDs
+    arr = (ctypes.c_uint * 20)()
+    count = ctypes.windll.kernel32.GetConsoleProcessList(arr, 10)
+    return count == 2
 
+
+# ===================================================DIV60==
+def pause_with_message(message=None):
+# Don't pause when running from a terminal or when input output is redirected
     if (message != None):
-        input(str(message))
-    else:
-        input("\nPress the <Enter> key to exit...")
+        print(str(message))
+    if launched_from_explorer():
+        input("\n" "Press the <Enter> key to continue...")
     return
 
 

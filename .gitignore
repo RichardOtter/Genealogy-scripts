@@ -28,6 +28,9 @@ HIDE_*
 # ignore Releases storage folder and Release build folder
 Release*/
 
+# ignore folder f hard links to readme files
+Doc/Links/
+
 # ignore files in doc not to be checked in
 DocFull_*
 

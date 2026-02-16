@@ -24,9 +24,8 @@ When entering a citation, you may accidentally cite a source set up for the
 wrong newspaper. Instead of deleting and recreating the citation, use this
 utility to move the citation to the correct source.
 
-The utility will carry along all of the uses of the citation, along with web
-links and media.
-
+The moved citation will retain all the links to its uses along with web links
+and media.
 
 =========================================================================DIV80==
 INCLUDE: LIB_Backups small changes
@@ -35,57 +34,14 @@ INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-Running the utility in detail
-
-While the database name and location is specified in the config file, the actual
-instructions for which citations and sources to modify are entered at a series
-of prompts in the black terminal window.
-
-==========-
-Install Python for Windows x64  -see "APPENDIX  Python install" below.
-
-==========-
-Create a folder on your computer that you will not confuse with other
-folders- the "working folder".
-
+INCLUDE: LIB_Step_by_Step_small_changes-1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ChangeSrcForCitation.py          (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-==========-
-Make a copy of your database, move the copy into the working folder.
-
-Rename the database copy to "TEST.rmtree" in order to prevent any
-confusion about the purpose of the copy.
-
-==========-
-Edit the sample RM-Python-config.ini file in the working folder.
-(See the section "APPENDIX  Config file: location, contents and editing"
-if you need help)
-
-A summary of the config file structure:
-The names in square brackets are section names.
-The items in a section are key-value pairs.
-
-For example, in the sample config file, there is a section named 
-[FILE_PATHS].
-In that section, reside 3 key-value pairs, one of which is 
-DB_PATH = TEST.rmtree
-
-"DB_PATH" is the key, "TEST.rmtree" is the value.
-key-value pairs are separated with a = character.
-
-
-The utility needs to know where the RM database file is located, the output
-report file name and its location.
-
-If you followed the above instructions, no changes to any of the key-values in
-the [FILE_PATHS] section are needed.
-
-Save the config file but leave it open in Notepad.
-
+INCLUDE: LIB_Step_by_Step_small_changes-2
 =========-
 Open the TEST.rmtree database file in RootsMagic.
 Having the file open in RM allows one to copy citation and source names, needed
@@ -107,7 +63,7 @@ There is no need to manually type input.
 
 The standard 'SQL Like' wild card characters % and _ may be used.
 % matches 0 or more characters, _ matches one character.
-This utility silently adds a % to the end of the citation name  and
+This utility always adds a % to the end of the citation name and
 source name text entered.
 
 =========-
@@ -124,18 +80,22 @@ the terminal window is closed and the utility is exited.
 The report file is displayed in Notepad for you inspection.
 
 =========-
-Confirm the desired changes have been accomplished in RootsMagic
+Confirm the desired changes have been accomplished in RootsMagic.
 
 =========-
 Consider whether to rename TEST.rmtree and use it as your research database.
 
+This utility makes small changes to the database. Once you feel comfortable with
+the utility run results, You may consider operating directly on you production
+database.
+
 =========================================================================DIV80==
 Notes
 
+INCLUDE: LIB_NOTES CONFIG STD KEYS
 =========-
-If the full citation name is not unique, then as a workaround, you
-could add some text to the citation name of the citation you want
-to modify to make the name unique.
+If the full citation name is not unique: as a workaround, add a character to the
+end of the citation name to make the name unique, at least temporarily.
 
 =========-
 All entered information is verified before it is used. It is unlikely that

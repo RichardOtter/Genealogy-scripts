@@ -1,4 +1,5 @@
 import os
+import ctypes
 from pathlib import Path
 import yaml    # type: ignore
 from datetime import datetime
@@ -11,9 +12,7 @@ from pathlib import Path
 # the top level yaml config file is also here.
 
 
-
-
-
+# ===================================================DIV60==
 def main():
 
     # CONSTANTS
@@ -38,33 +37,34 @@ def main():
             project_root_dir_path = doc["ProjectRootDirPath"]
             project_list = doc["ProjectList"]
     except:
-        print("Problem getting the values from the top level yaml file.\n")
-        exit()
-    
+        raise Exception("Problem getting the values from the top level yaml file.\n")
 
-    # Process each doc template
-    for project in project_list:
-        project_dir_path = REPO_ROOT_PATH / project
-        template_file_path = doc_folder / F"DocOutline_{project}.txt"
-        # doc_file_path = doc_folder / F"docFinal-{project}.txt"
-        doc_file_path = project_dir_path/ "ReadMe.txt"
-        lib_file_path = doc_folder / "DocLibrary_snippets.txt"
-        print (template_file_path)
-        with open(template_file_path, 'r') as doc_template, \
-             open(doc_file_path, 'w') as doc_final:
-            
-            for line in doc_template:
-                if line.startswith("INCLUDE: "):
-                    label = line[9::]
-                    for lib_line in get_snippet(label, lib_file_path):
-                        doc_final.write(lib_line)
-                else:
-                    doc_final.write(line)
-
-    pause_with_message()
+    try:
+        # Process each doc template
+        for project in project_list:
+            project_dir_path = REPO_ROOT_PATH / project
+            template_file_path = doc_folder / F"DocOutline_{project}.txt"
+            # doc_file_path = doc_folder / F"docFinal-{project}.txt"
+            doc_file_path = project_dir_path/ "ReadMe.txt"
+            lib_file_path = doc_folder / "DocLibrary_snippets.txt"
+            print (template_file_path)
+            with open(template_file_path, 'r') as doc_template, \
+                open(doc_file_path, 'w') as doc_final:
+                
+                for line in doc_template:
+                    if line.startswith("INCLUDE: "):
+                        label = line[9::]
+                        for lib_line in get_snippet(label, lib_file_path):
+                            doc_final.write(lib_line)
+                    else:
+                        doc_final.write(line)
+    except (Exception) as e:
+        print(e)
+    finally:
+        pause_with_message()
     return
 
-
+# ===================================================DIV60==
 def get_snippet(label, lib_file):
 
     term = "=========================================================================DIV80=="
@@ -96,13 +96,27 @@ def time_stamp_now(type=""):
         dt_string = now.strftime("%Y-%m-%d_%H%M%S")
     return dt_string
 
+
+# ===================================================DIV60==
+def launched_from_explorer():
+    # Check how many processes are attached to the console
+    arr = (ctypes.c_uint * 10)()
+    count = ctypes.windll.kernel32.GetConsoleProcessList(arr, 10)
+
+    # VS Code always sets TERM_PROGRAM=vscode
+    in_vscode = os.environ.get("TERM_PROGRAM", "").lower() == "vscode"
+
+    # Explorer launch: count == 2 AND not VS Code
+    return count == 2 and not in_vscode
+
+
 # ===================================================DIV60==
 def pause_with_message(message=None):
-
+# Don't pause when running from a terminal or when input output is redirected
     if (message != None):
-        input(str(message))
-    else:
-        input("\nPress the <Enter> key to exit...")
+        print(str(message))
+    if launched_from_explorer():
+        input("\n" "Press the <Enter> key to continue...")
     return
 
 
@@ -110,5 +124,6 @@ def pause_with_message(message=None):
 # Call the "main" function
 if __name__ == '__main__':
     main()
+
 
 # ===================================================DIV60==

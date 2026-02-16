@@ -1,7 +1,9 @@
+import os
 import sys
 from pathlib import Path
 from datetime import datetime
 import sqlite3
+import ctypes
 
 
 # ===================================================DIV60==
@@ -50,7 +52,7 @@ def reindex_RMNOCASE(dbConnection):
     cur = dbConnection.cursor()
     cur.execute(SqlStmt, ())
 
-    
+
 # ===================================================DIV60==
 def q_str(in_str):
 
@@ -58,12 +60,27 @@ def q_str(in_str):
 
 
 # ===================================================DIV60==
-def pause_with_message(message=None):
+def launched_from_explorer():
+    # Check how many processes are attached to the console
+    arr = (ctypes.c_uint * 10)()
+    count = ctypes.windll.kernel32.GetConsoleProcessList(arr, 10)
 
+    # VS Code always sets TERM_PROGRAM=vscode
+    in_vscode = os.environ.get("TERM_PROGRAM", "").lower() == "vscode"
+
+    # Explorer launch: count == 2 AND not VS Code
+    return count == 2 and not in_vscode
+
+
+# ===================================================DIV60==
+def pause_with_message(message=None):
+# Don't pause when running from a terminal or when input output is redirected
     if (message != None):
         print(str(message))
-    input("\n" "Press the <Enter> key to continue...")
+    if launched_from_explorer():
+        input("\n" "Press the <Enter> key to continue...")
     return
+
 
 # ===================================================DIV60==
 def get_current_directory(script_path: Path) ->Path:
@@ -81,6 +98,7 @@ def get_current_directory(script_path: Path) ->Path:
 class RM_Py_Exception(Exception):
 
     '''Exceptions thrown for configuration/database/application logic issues'''
+
 
 # ===================================================DIV60==
 

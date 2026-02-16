@@ -21,14 +21,14 @@ files in a text editor to read all implementation details and assess safety.
 
 A Python py script file is executed using the Python language interpreter.
 The interpreter is a separate piece of software easily installed on your
-computer. "Installing python" is described in the appendix below.
-
+computer. "Installing python" is described in the appendix below for Windows
+computers. MacOS computers already have it installed.
 
 =========================================================================DIV80==
 LIB_Compatibility
 Compatibility
 
-Tested with a RootsMagic v 11.0.3 database
+Tested with a RootsMagic v 11.0.4 database
 using Python for Windows v3.14   64bit
 
 The python script file has not been tested on MacOS but could probably be
@@ -72,52 +72,40 @@ remains intact after use. At that point, run this utility of your
 
 =========================================================================DIV80==
 LIB_Overview
-Overview
+General Overview
 
-This program is what is called a "command line utility".
-It is in the form of a single text file with a "py" file name extension
-(referred to, in this section, as "MainScriptFile.py"). The utility also
-needs the Python package RMpy, which is a folder included in the distribution
-zip file.
+This program is what is called a "command line utility". It is in the form of a
+single text file with a "py" file name extension ("MainScriptFile.py") along
+with the package "RMpy" which is a folder included in the distribution zip file. 
+The MainScriptFile relies on code in the RMpy folder.
+These utilities are not installed in the traditional Windows sense, they are
+simply copied to the computer.
 
-Input to the utility is through the configuration file and. for some of the
-utilities, the command terminal.
-The the default name of the configuration file (called, hereinafter, the
+The utilities are configured by editing a configuration file. This
+configuration tells the utility which database to use and how to display the output.
+(Some of the utilities use the command terminal to interact with the user.)
+The default name of the configuration file (called, hereinafter, the
 "config file") is "RM-Python-config.ini". It should be located in the same
-folder as the MainScriptFile py file and the RMpy folder. At a minimum, the config
-file gives the name and location of the database on which the utility operates.
+folder as the MainScriptFile.py file and the RMpy folder.
 
-One config file can be shared among other RM utilities in the suite. Each
-utility will extract the information it needs from the config file.
+To install and use the utility for the first time (specifics below):
 
-To install and use the script for the first time:
+*  Install Python for Windows x64.
 
-*  Install Python for Windows x64  -see "APPENDIX  Python install" below.
-
-*  Create a new folder on your computer, perhaps within your home folder.
-   This folder will be called the "working folder".
-
-   (Your home folder is "C:\Users\me", where "me" is your user name.
-   This is a safe location that will not be taken over by OneDrive.)
+*  Create a new folder on your computer, the "working folder".
 
 *  Make a copy of your database, move the copy into the working folder.
-   Rename the copy to TEST.rmtree
 
-*  Copy the program files/folder from the downloaded zip file to
-   the working folder.
-
-*  Copy the sample config file from the downloaded zip file to
-   the working folder.
+*  Copy the required files from the downloaded zip file to the working folder.
 
 *  Edit the config file in the working folder to tell the utility what to
    do and where to do it.
 
-*  Double click the MainScriptFile .py file to run the utility.
+*  Double click the MainScriptFile.py file to run the utility.
 
-*  A window titled "Command Prompt" with a black background and white text will
-appear. Some utilities will keep this window open and request commands and
-information, other utilities will only show the window for a moment, others
-will have the window displayed for the length of the utility's processing time.
+*  A window (terminal window) with a black background and white text will appear.
+Some utilities will keep this window open and request data, other utilities will
+only show the window while the command is processing.
 
 *  The terminal window will close and a summary report will be displayed
 in NotePad.
@@ -127,47 +115,134 @@ the working folder is most prudent when a user is just getting familiar with
 a new or updated utility.
 
 Some utilities are read only and do not change the database at all, while others
-affect only small amount of data. Once the user has confidence in the operation
-of such a low-impact utility, one can start operating directly on the research
-(production) database, always assuming that at least several known-good backups
-exist.
+affect only small amount of data.
+Once the user has confidence in the operation of such a low-impact utility, one
+can start operating directly on the research (production) database, always
+assuming that at least several known-good backups exist.
 
-Other utilities that involve more configuration and make larger changes should
+Other utilities that require more configuration and make larger changes should
 always operate on databases copied into a working folder.
 
 *****  Details follow below. *****
 
+=========================================================================DIV80==
+LIB_Step_by_Step_small_changes-1
+Running the utility - step by step
+
+The steps listed here run the utility on a copy of your database created in a
+new directory location. Once you feel comfortable with how the app operates,
+you will want to run the app on your production database in its usual
+folder location.
+
+==========-
+Install Python for Windows x64  -see "APPENDIX  Python install" below.
+
+==========-
+Create a folder on your computer that you will not confuse with other
+folders. It will be referred to as the "working folder".
+
+You may want to create it within your home folder. Your home folder is
+"C:\Users\me", where "me" is your user name. This is a safe location that will
+not be taken over by OneDrive.
+
+=========================================================================DIV80==
+LIB_Step_by_Step_small_changes-2
+==========-
+Make a copy of your database, move the copy into the working folder.
+
+Rename the database copy to "TEST.rmtree" in order to prevent any
+confusion about the purpose of the copy.
+
+==========-
+Edit the sample RM-Python-config.ini file in the working folder.
+(See the section "APPENDIX  Config file: location, contents and editing"
+if you need help)
+
+A summary of the config file structure:
+The names in square brackets are section names.
+The items in a section are key-value pairs.
+
+For example, in the sample config file, there is a section named [FILE_PATHS].
+In that section, reside several key-value pairs, one of which is 
+DB_PATH = TEST.rmtree
+
+"DB_PATH" is the key, "TEST.rmtree" is the value. key-value pairs are separated
+with an equals sign character.
+
+The utility needs to know where the RM database file is located, the output
+report file name and its location.
+
+If you followed the above instructions, no changes to any of the key-values in
+the [FILE_PATHS] section are needed.
+
+Save the config file but leave it open in Notepad.
+
+=========================================================================DIV80==
+LIB_NOTES CONFIG STD KEYS
+=========-
+Keys used by all of the utilities.
+DB_PATH, REPORT_FILE_PATH, REPORT_FILE_DISPLAY_APP
+
+See "APPENDIX  Config file: location, contents and editing" for more general
+editing information.
+
+These keys all appear in the [FILE_PATHS] section of the config file.
+
+DB_PATH     =  TEST.rmtree
+DB_PATH     =  my TEST database.rmtree
+DB_PATH     =  my database folder\TEST.rmtree
+DB_PATH     =  ..\..\TEST.rmtree
+DB_PATH     =  Y:\weird drive\TEST.rmtree
+
+Specifies the file path to the RM database to be analyzed.
+The path may be an absolute or relative path.
+Leading an trailing white space is ignored.
+
+REPORT_FILE_PATH         = Report.txt
+REPORT_FILE_PATH         = ..\Report.txt
+
+The name and path to the report file generated for each run.
+This path must be writeable.
+An existing file will be overwritten.
+The path may be absolute or relative path.
+Leading an trailing white space is ignored
+
+REPORT_FILE_DISPLAY_APP  = C:\Windows\System32\notepad.exe
+
+The application used to display the report at the end of the run.
+If this key is not given (say, the line is commented out), then the report is
+generated but not displayed.
 
 =========================================================================DIV80==
 LIB_APPENDIX  Python install
 APPENDIX  Python install
 
-Either install Python from the Microsoft Store
+Install Python from either:
+from the Microsoft Store (preferred)
 or
-Download and install from the Python.org web site
+from the Python.org web site
 
 From Microsoft Store
-Run a command in Windows by pressing the keyboard key combination
-"Windows + R", then in the small window, type Python.
-Windows store will open in your browser and you will be be shown
-the various versions of Python.
-Click the Get button for the latest version.
+From the Windows Start menu, open the Microsoft Store app.
+In the search field at the top of the Store home page, 
+enter "Python Install Manager".
+You should then see the Python Install Manager / Python Software Foundation page.
+Click the "Get" button and follow the instructions.
+
 
 Python.org web site download and install
 https://www.python.org/downloads/
 
 Click on the button near the top of page: "Download Python install manager"
 Click it and save the installer.
-Go to the download location and run the installer.
+Go to the download location and run the installer using the default options.
 
-The Python installation requires about 100 Mbytes.
-It is easily and cleanly removed using the standard Windows method found in
-Windows=>Settings=>Installed apps
-
-Run the Python installer selecting all default options.
 Note: by default, the Python installer places the software in the user's
 home folder in the standard location.
 
+A Python installation requires about 100 Mbytes.
+It is easily and cleanly removed using the standard Windows method found in
+Windows=>Settings=>Installed apps
 
 =========================================================================DIV80==
 LIB_APPENDIX  unifuzz64.dll download
@@ -175,7 +250,7 @@ APPENDIX  unifuzz64.dll download
 
 The SQLiteToolsforRootsMagic website has been around for many years and is run
 by a trusted RM user. Many posts to public RootsMagic user forums mention use
-of unifuzz64.dll from the SQLiteToolsforRootsMagic website. This author has
+of unifuzz64.dll from the SQLiteToolsforRootsMagic website. The author has
 also used it for years and can vouch for its safety.
 
 direct download:
@@ -199,20 +274,23 @@ where [file name] is the fie you wish to compute the MD5 has for.
 So, for example, to display the MD5 of the unifuzz file, enter-
 certutil -hashfile unifuzz64.dll  MD5
 
+The path to the unifuzz64.dll file in the config file is given by the
+RMNOCASE key. Same rules as for the DB_PATH key.
+
 =========================================================================DIV80==
 LIB_APPENDIX  Database with external file links from a new location
 APPENDIX  Using a database with external file links from a new directory location
 
 RM finds media files linked to a database by several methods. In my opinion, 
-the method to find all media files in the Media Folder, as specified in the RM
-Preferences, is the most reliable, but the other methods can certainly be
-useful in come circumstances.
-One of the  other"search methods" is to find a file by noting it location in
+the most reliable method to find all media files in the Media Folder, as 
+specified in the RM Preferences. The other methods can certainly be
+useful in some circumstances.
+One of the  other"search methods" is to find a file by recording it location in
 relation to the database file. This is fine unless the database file is moved
 and the files are not.
 This point needs to be made in regards to the instructions for testing the
 utility app described here. When you make a copy of your database and move the
-copy to the "Working folder", as instructed above, some of the database's 
+copy to the "Working folder", as instructed earlier, some of the database's 
 external files may not be found when running the database in the new location.
 This is only temporary. Move the database back to it's original location and
 the media files will be found again.
@@ -250,12 +328,11 @@ MainScriptFile.py config_mine.ini
 will instruct the utility to use config_mine.ini in the current directory
 as its configuration file.
 
-A configuration file that is used from the command line can be renamed so as
+A configuration file that is used from the command line can be named so as
 to convey its purpose.
 A Windows shortcut can also be constructed with the above described script name
 with config file name argument to allow execution from the desktop with a
 double mouse click.
-
 
 Editing
 Use any text editor to edit the configuration file. The Windows built-in
@@ -264,7 +341,6 @@ To edit the configuration file, first open the Notepad app and then use the
 mouse to drag the configuration file onto the open Notepad window.
 (By default, files with the .ini extension are not associated with an
 editor program.)
-
 
 Format and conventions
 The config file uses the standard ini file format. The config file is made up
@@ -282,8 +358,7 @@ A name on the left side of a "=" sign is a key.
 Text on the right side of a "=" is the value assigned to the key on the left.
 Comment lines start with a "#" character and are only included to help
 the human user read and understand the file. They are ignored by the utility
-software. Comments may appear anywhere in the config file EXCEPT in multi line
-values. See below.
+software. Comments may appear most anywhere in the config file.
 
 For an example, here is a section containing 3 key-values used by all of the
 RM utilities:
@@ -294,25 +369,12 @@ DB_PATH         = TEST.rmtree
 REPORT_FILE_PATH  = ..\Report_utilName.txt
 REPORT_FILE_DISPLAY_APP  = C:\Windows\system32\Notepad.exe
 
+[OPTIONS]
+UPPER_CASE = on
+
 The 3 keys, DB_PATH, REPORT_FILE_PATH, and REPORT_FILE_DISPLAY_APP are all
-in the [FILE_PATHS] section. The utility requires that their values be file
-paths, as shown.
+in the [FILE_PATHS] section. The UPPER_CASE key is in the OPTIONS section.
 The second line is a comment.
-
-The file path may be absolute, as in REPORT_FILE_DISPLAY_APP above, or it may
-be relative to the current directory, as in DB_PATH and REPORT_FILE_PATH above.
-
-The DB_PATH points to the database that is to be analyzed/modified.
-See the sections "Backups" and "Running the utility in detail", above, for help
-in deciding which database to use. New users will always want to point to a
-copy of the main database.
-
-The utilities all generate a report file. The file's name and location can be
-specified by REPORT_FILE_PATH key.
-
-If REPORT_FILE_DISPLAY_APP key has a valid value, then the report file will be
-automatically displayed by the named application.
-
 
 =========================================================================DIV80==
 LIB_APPENDIX  Config File: multi-line value
@@ -332,7 +394,7 @@ looks much more tidy and is easier to read.
 There must be one or more blank lines at the end of a value separating it
 from the next key or section marker or comment.
 
-Comment lines are not allowed within a multi-line value.
+!! Comment lines are not allowed within a multi-line value. !!
 
 Examples-
 
@@ -453,10 +515,6 @@ SQL_STATEMENT_1 =
    WHERE nt.NameType = 5    -- married name
    AND nt.surname LIKE 'sm%'
 
-
-
-
-
 =========================================================================DIV80==
 LIB_APPENDIX  Config File: Mapping value
 MAPPING_ value format
@@ -472,7 +530,6 @@ contains a blank or ">" character at the beginning, end, or anywhere within it.
 
 The white space between the names and ">" character is ignored.
 
-
 =========================================================================DIV80==
 LIB_APPENDIX  Config File: encoding
 Encoding
@@ -482,7 +539,6 @@ The included sample config file has an accented ä in the first line comment to
 force it to be in the correct format.
 File format is an option in the "Save file" dialog box in NotePad.
 
-
 =========================================================================DIV80==
 LIB_APPENDIX  Troubleshooting
 APPENDIX  Troubleshooting
@@ -490,15 +546,15 @@ APPENDIX  Troubleshooting
 =========-
 No Report File displayed
 
-If the report is created, but not displayed, check the config
-file line- REPORT_FILE_DISPLAY_APP
+If the terminal windows displays the message: RM-Python-config.ini file contains
+a format error, see the section below.
 
 If no report file is generated, look at the terminal window for error messages
 that will help you fix the problem. There may be something wrong with the config
 file line- REPORT_FILE_PATH.
 
-If the terminal windows displays the message: RM-Python-config.ini file contains
-a format error, see the section below.
+If the report is created, but not displayed, check the config
+file line- REPORT_FILE_DISPLAY_APP
 
 If no report file is generated and the black command console window closes
 before you can read it, try first opening a command line console, cd'ing to
@@ -521,7 +577,7 @@ Precautions before using the modified database
 
 Once you are satisfied with the results of the modifications made by this
 software, don't hurry to start using the resulting file for research.
-Continue your work for several days using the original database to allow
+Continue your usual work for several days using the original database to allow
 further thought. Then run the utility again with your perfected config
 file on a new copy of your now-current database. Inspect the results and then
 use the modified database as your normal research file.
@@ -533,7 +589,6 @@ If you start using the newly modified database immediately, you'll lose work
 if you missed a problem only to find it later and have to revert to a backup
 from before the database was modified.
 
-
 =========================================================================DIV80==
 LIB_Feedback
 Feedback
@@ -541,7 +596,7 @@ Feedback
 The author appreciates comments and suggestions regarding this software.
 RichardJOtter@gmail.com
 
-Public comments may be made at-
+Public comments and bug reports may be made at-
 https://github.com/ricko2001/Genealogy-scripts/discussions
 
 
@@ -552,7 +607,6 @@ https://RichardOtter.github.io
 My Linked-In profile at-
 https://www.linkedin.com/in/richardotter/
 
-
 =========================================================================DIV80==
 LIB_Distribution
 Distribution
@@ -560,7 +614,6 @@ Distribution
 Everyone is free to use this utility. However, instead of
 distributing it yourself, please instead distribute the URL
 of my website where I describe it- https://RichardOtter.github.io
-
 
 =========================================================================DIV80==
 

@@ -27,10 +27,15 @@ VARIABLE
 ONLY in TestExternalFiles
 =========================================================================DIV80==
 Running the utility in detail
+=========================================================================DIV80==
+LIB_Step_by_Step_small_changes-1
+VARIABLE
+LIB_Step_by_Step_small_changes-2
 VARIABLE
 =========================================================================DIV80==
 Notes
 VARIABLE
+INCLUDE: LIB_NOTES CONFIG STD KEYS
 =========================================================================DIV80==
 INCLUDE: LIB_Precautions before using the modified database
 CONSTANT
@@ -40,8 +45,11 @@ INCLUDE: LIB_APPENDIX  Database with external file links from a new location
 ONLY in TestExternalFiles and ExternalFilesInfo
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+
 INCLUDE: LIB_APPENDIX  Config File: multi-line value
 INCLUDE: LIB_APPENDIX  Config File: Mapping value
+ONLY in  ChangeSourceTemplate and LUumpSources
+
 INCLUDE: LIB_APPENDIX  Config File: encoding
 =========================================================================DIV80==
 INCLUDE: LIB_APPENDIX  Python install
