@@ -23,10 +23,8 @@ As the number of linked files increases, user errors become more likely.
   able to verify the original file's contents are the same as in the current file.
 
 This utility will identify these issues.
-It is recommended to run this script daily as part of your backup routine.
-
-A Hash file might be generated annually and archived with the full dataset.
-
+It is recommended to run this script as part of your backup routine when
+mew files are being added.
 
 =========================================================================DIV80==
 INCLUDE: LIB_Backups read only
@@ -90,14 +88,18 @@ HASH_FILE
     Generates a text file containing a listing of each media file's name,
     location and HASH value, currently set to use MD5.
     https://en.wikipedia.org/wiki/MD5
-    The HASH text file, when requested, is generated at the location
+    The HASH text file, when requested, is generated at the folder location
     specified in the config file.
     While MD5 is no longer considered secure for cryptography, it serves well
     for this purpose.
 
+    A separate RM utility app ExternalFilesInfo has been released that stores the
+    hash info and more within the database file. That is now the recommended
+    solution.
+
 
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_small_changes-1
+INCLUDE: LIB_Step_by_Step_1
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
@@ -105,8 +107,7 @@ Copy these items from the downloaded zip file to the working folder-
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_Step_by_Step_small_changes-2
-
+INCLUDE: LIB_Step_by_Step_2
 Save the config file but leave it open in Notepad.
 
 =========-

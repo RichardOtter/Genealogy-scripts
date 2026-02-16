@@ -27,7 +27,7 @@ INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_small_changes-1
+INCLUDE: LIB_Step_by_Step_1
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
@@ -35,7 +35,7 @@ Copy these items from the downloaded zip file to the working folder-
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_Step_by_Step_small_changes-2
+INCLUDE: LIB_Step_by_Step_2
 ==========-
 Look at the [CV_PARAMS] section of the config file containing keys for the 
 parameters needed to describe the desired changes:

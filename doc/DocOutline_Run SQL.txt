@@ -24,7 +24,7 @@ INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_small_changes-1
+INCLUDE: LIB_Step_by_Step_1
 
 ==========-
 *  Copy these items from the downloaded zip file to the working folder-
@@ -37,37 +37,35 @@ INCLUDE: LIB_Step_by_Step_small_changes-1
    (This dll provides a RMNOCASE collation used by RM.)
    Move the unifuzz64.dll file to the working folder.
 
-INCLUDE: LIB_Step_by_Step_small_changes-2
+INCLUDE: LIB_Step_by_Step_2
 
 The utility also needs to know where the unifuzz64.dll file is.  Its path
 is give an the value of the key RMNOCASE.
 
 Save the config file but leave it open in Notepad.
-
+You will now be editing additional settings.
 
 =========-
 Enter your SQL statement into the config file using key-value pairs in the
 [SQL] section of the file.
 
 The utility will run up to 99 SQL statements. They are written in the config
-file as
-
-For example:
+file as, for example:
 
 [SQL]
-SQL_STATEMENT_1 = SELECT PersonID FROM PersonTable
+SQL_STATEMENT_1 = SELECT PersonID FROM PersonTable;
 
 
 This section "SQL" has one key: "SQL_STATEMENT_1" which has the
-value "SELECT PersonID FROM PersonTable".
+value "SELECT PersonID FROM PersonTable;".
 
 This example, if run with the utility, will run the very simple SQL statement
 and print out all of the RINs in the database.
 The example SQL text is very simple and fits on the same line as the key name.
-Real SQL will be more complex and require multiple lines.
-Each line of a multi line Value must be indented at least one space.
+Real SQL will be more complex and require multiple lines for human readability.
 
-for example:
+Each line of a multi line Value must be indented at least one space.
+For example:
 
 [SQL]
 SQL_STATEMENT_1 =
@@ -124,7 +122,7 @@ SELECT changes(); statement to display how many rows were changed.
 This utility will not help you write the SQL statement and is not a good
 working environment in which to create your SQL statement.
 Confirm you query works before running it in this utility. (Or get the SQL from
-a source that has confirmed its results.)
+a source that has verified its results.)
 
 =========-
 Confirm the config file has the proper entries and that is has been saved.
@@ -155,21 +153,22 @@ been accomplished.
 =========================================================================DIV80==
 Notes
 
-INCLUDE: LIB_NOTES CONFIG STD KEYS
-
-This utility automatically loads the collation sequence RMNOCASE from the 
+This utility optionally loads the collation sequence RMNOCASE from the 
 unifuzz64.dll file.  That means that the RMNOCASE collation, used in many RM
-tables is available. However, the collation sequence in unifuzz64 is not
-identical to the one in the RM application.
-Problems arise when accessing indexes created with one collation with SQL
-using the other.
+tables is available if the RMNOCASE key is set to the location of unifuzz64.dd.
+However, the collation sequence in unifuzz64 is not identical to the one in the
+RM application. Problems arise when accessing indexes created with one
+collation with SQL using the other.
 
 =========-
 If your SQL makes any **changes** to an RMONCASE collated column, you must
 run the SQL:
 REINDEX RMNOCASE;
-as SQL_STATEMENT_1 or at the start of your script file. 
-Put your updating SQL in following statements. 
+as SQL_STATEMENT_1 or at the start of your script file.
+Put your updating SQL in following statements.
+
+RootsMagic must be closed when the SQL is run.
+
 After running the SQL, run the RM "Rebuild Indexes" tool immediately after
 opening the modified database in RM.
 From Left hand icon panel, select the Tools icon to open the Tools listing,
@@ -181,15 +180,13 @@ or
 2 code the SQL to use the SQLite built-in NOCASE collation as an override 
 to the RMNOCASE.
 
-On the other hand...
-Many users have not done this for read only queries and have not had a problem. 
-
 =========-
 On some occasions, the utility terminal window will display a "Database
 Locked" message. In that case: Close the terminal window, Close RM and re-run
 the utility, then re-open RM.
 "Database locked" is a normal message encountered with SQLite.
 
+INCLUDE: LIB_NOTES CONFIG STD KEYS
 
 =========================================================================DIV80==
 INCLUDE: LIB_Precautions before using the modified database

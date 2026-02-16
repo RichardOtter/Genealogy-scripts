@@ -20,7 +20,7 @@ INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_small_changes-1
+INCLUDE: LIB_Step_by_Step_1
 
 ==========-
 *  Copy these items from the downloaded zip file to the working folder-
@@ -28,7 +28,7 @@ INCLUDE: LIB_Step_by_Step_small_changes-1
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_Step_by_Step_small_changes-2
+INCLUDE: LIB_Step_by_Step_2
 
 ==========-
 Create or find a SQL statement that returns the RINs of the people you want
@@ -79,7 +79,6 @@ Blank lines are not allowed.
 Use indented SQL comments (--) to add spacing for readability.
 
 # style comments are not allowed in multi line values.
-
 
 The GROUP_NAME value in OPTIONS may also have multiple lines, that is
 multiple group names. Each of those group will be updated in the same run
@@ -134,13 +133,13 @@ need to search each person's edit window for the fact you are interested in.
 =========-
 Due to technical issue regarding RMNOCASE, this utility will not actually create a
 new group. Instead use RM to create the group name before using this utility.
-The process is simple-
+The process is easy-
 Open the database in RM,
-Click the Command palette icon in the top right corner of the RM window.
+Click the Command palette icon (F2 key) in the top right corner of the RM window.
 Type "Group" and select the "Groups" command.
 In the Add New Group window, type the name of the new group and hit Save.
 Be sure the name is unique among group names.
-Leave the Type set to "Simple" as is the default.
+Be sure to leave the group type set to "Simple", the default.
 
 The same Add New Group window can be accessed by clicking the large plus icon in
 the groups tab in the "Side View" which by default is on the left.
@@ -155,7 +154,7 @@ effect of the group having been updated.
 =========-
 On some occasions, the utility report file will display a "Database
 Locked" message. In that case, close RM and re-run the utility, then re-open 
-RM. It's not clear why this sometimes happens, but it is rare. 
+RM. It's not clear why this sometimes happens, but it is rare.
 For some reason, RM keeps an open transaction which prevents other processes
 from making updates.
 No database damage has ever been seem after many hundreds of uses. 

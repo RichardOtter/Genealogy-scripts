@@ -29,16 +29,14 @@ can take some time. My 7,000 files take about 2 minutes.
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_small_changes-1
-
+INCLUDE: LIB_Step_by_Step_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ExternalFileInfo.py              (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_Step_by_Step_small_changes-2
-
+INCLUDE: LIB_Step_by_Step_2
 ==========-
 Look at the [OPTIONS] section of the config file containing keys for the 
 parameters needed to describe the desired changes:
@@ -48,7 +46,7 @@ EXTERNALFILESINFO_ADD = off
 EXTERNALFILESINFO_UPDATE = off
 EXTERNALFILESINFO_COMPARE = on
 
-Leave these alone fo now.
+Leave these alone for now.
 Full details of how to specify the parameters are in the Notes section below.
 
 ==========-

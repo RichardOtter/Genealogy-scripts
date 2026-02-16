@@ -28,9 +28,9 @@ ONLY in TestExternalFiles
 =========================================================================DIV80==
 Running the utility in detail
 =========================================================================DIV80==
-LIB_Step_by_Step_small_changes-1
+LIB_Step_by_Step_1
 VARIABLE
-LIB_Step_by_Step_small_changes-2
+LIB_Step_by_Step_2
 VARIABLE
 =========================================================================DIV80==
 Notes

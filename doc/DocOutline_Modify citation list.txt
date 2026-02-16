@@ -28,7 +28,7 @@ While the database name and location is specified in the config file, the actual
 instructions for which citations and sources to modify are entered at a series
 of prompts in the black terminal window.
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_small_changes-1
+INCLUDE: LIB_Step_by_Step_1
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
@@ -42,7 +42,9 @@ Make a copy of your database, move the copy into the working folder.
 Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
-INCLUDE: LIB_Step_by_Step_small_changes-2
+INCLUDE: LIB_Step_by_Step_2
+
+Save the config file.
 
 =========-
 Open the TEST.rmtree in RootsMagic and find the citation list that is to be

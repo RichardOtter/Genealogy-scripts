@@ -10,7 +10,8 @@ the database based on their group membership.
 While this is easily done with RM, this utility allows a series of commands
 to be executed with one run.
 It is a perfect complement to the utility GroupFromSQL.
-
+First run GroupFromSQL to update a set of groups, then run ColorFromGroup to
+update the colors. Two double clicks and you're done.
 
 =========================================================================DIV80==
 INCLUDE: LIB_Backups small changes
@@ -19,15 +20,16 @@ INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_small_changes-1
-
+INCLUDE: LIB_Step_by_Step_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ColorFromGroup.py                (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_Step_by_Step_small_changes-2
+INCLUDE: LIB_Step_by_Step_2
+Save the config file but leave it open in Notepad.
+You will now be editing additional settings.
 
 ==========-
 Before running the utility, you will want to confirm that a group exists
@@ -67,7 +69,6 @@ DB_PATH = TEST.rmtree
 
 "DB_PATH" is the key, "TEST.rmtree" is the value.
 key-value pairs are separated with a = character.
-
 
 The utility needs to know where the RM database file is located, the output
 report file name and its location.

@@ -42,14 +42,14 @@ INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_small_changes-1
+INCLUDE: LIB_Step_by_Step_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ChangeSourceTemplate.py          (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_Step_by_Step_small_changes-2
+INCLUDE: LIB_Step_by_Step_2
 ==========-
 STEP 0		Option    All options = off
 
@@ -76,6 +76,7 @@ the utility is run, the remaining options are ignored. So, to avoid confusion,
 always check that only one option is set to on.
 
 Save the config file but leave it open in Notepad.
+You will now be editing additional settings.
 
 =========-
 Double click the "ChangeSourceTemplate.py" file in the working folder
@@ -240,7 +241,6 @@ A terminal window is momentarily displayed while the utility processes
 the commands and then the terminal window is closed and the
 utility is exited.
 The report file is displayed in Notepad for you inspection.
-
 
 =========-
 Leave the report open in Notepad. It will be used in the next step.
@@ -485,7 +485,8 @@ Consider whether to rename TEST.rmtree and use it as your research database.
 Notes
 
 ===========-
-Template specified data fields
+Template specified data fields in RM
+
 Both sources and citations are each displayed in RM in 2 separate panels.
 In RM, open the source tab to see the listing of all sources.
 Click on one to select it.
@@ -504,11 +505,9 @@ The rows of the "Citation Details" table are "Citation Name" and others.
 As above, the "others" are the data fields defined for this particular citation
 and they are specified by the Source Template.
 
-
 ===========-
-All possible Source Template changes
-
-for Source template that are already in use by Sources and its Citations.
+Listing of all possible Source Template changes to a Source template
+already in use by Sources and its Citations.
 
 These alterations:
 *    change source template name
@@ -521,7 +520,7 @@ These alterations:
 *    change short footnote template
 *    change bibliography template
 
-May be made at anytime. No negative consequence. The changes will be immediately
+May be made at anytime with no negative consequence. The changes will be immediately
 seen in all new and existing source and citations. This utility is not needed.
 Converting a field type from say, "name" type to "date" would not make much
 sense if the field's existing data actually has name data in it. But it can be
@@ -536,15 +535,17 @@ automatically generated will not be updated with what would be the new
 auto generated name using the new order of citation fields.
 If this is objectionable, one could open each citation, delete the existing
 citation name and let it be auto generated using the new template information.
-(Possible task for a new utility app?)
+This utility will not update Citation Names.
+(Possible task for a new utility app?) 
 
 
 The alteration:
-*    change state of check-box ("This is a source detail field")
+*    change state of the check-box "This is a source detail field"
 
 This change implies movement of data from a source to a citation
 or vice versa. This could be called "Lumping" or "Splitting" source info.
-Do not use this utility. (See the suite site for the LumpSources utility.)
+This utility will not fix problems created by doing this alteration.
+See the LumpSources utility as a possible solution.
 
 
 These alterations:
@@ -557,7 +558,7 @@ structure.
 
 If the utility is not used and these changes are made:
 *    change field name
-Data is be invisible when accessed with the new name. The old date remains, but
+Data is be invisible when accessed with the new name. The old data remains, but
 is hidden. (it will still be accessible by the footnote templates, but the old
 field will not show during data entry/edit.)
 *    add new fields
@@ -651,6 +652,9 @@ displayed. In any case you can quotation marks e.g. "Name ", or " Name" or "My N
 ===========-
 Running the utility with MAKE_CHANGES = off does not make any changes to your
 database. You can run it as many times as you need.
+
+INCLUDE: LIB_NOTES CONFIG STD KEYS
+
 
 ===========-
 The utility fixes sources and citations that have missing XML field elements.
@@ -816,9 +820,10 @@ literal percent symbol, underscore, or a single escape character, respectively.
 
 =========================================================================DIV80==
 TODO
-
 *  ?? what would you find useful?
 
+A utility to update the Citation Name to either the standard name or a custom
+name operating on a select group of sources.
 
 =========================================================================DIV80==
 INCLUDE: LIB_Feedback

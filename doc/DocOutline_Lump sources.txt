@@ -21,7 +21,7 @@ INCLUDE: LIB_Compatibility
 =========================================================================DIV80==
 INCLUDE: LIB_Overview
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_small_changes-1
+INCLUDE: LIB_Step_by_Step_1
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
@@ -34,11 +34,11 @@ Download the SQLite extension file: unifuzz64.dll   -see below
    (This dll provides a RMNOCASE collation used by RM.)
    Move the unifuzz64.dll file to the working folder.
 
-INCLUDE: LIB_Step_by_Step_small_changes-2
+INCLUDE: LIB_Step_by_Step_2
 
 =========-
 TODO
-CONTINUE TO FILL IN TH CONFIG FILE
+CONTINUE TO FILL IN THE CONFIG FILE
 
 
 [LUMP_OPTIONS]
@@ -51,9 +51,6 @@ MAPPING_SRC_CIT =
 
 MAPPING_IDENT_SRC = 
      "%-pHTH=%"  >  6815
-
-
-
 
 =========-
 Double click the "LumpSources.py" file in the working folder

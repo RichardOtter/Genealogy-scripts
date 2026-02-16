@@ -126,7 +126,7 @@ always operate on databases copied into a working folder.
 *****  Details follow below. *****
 
 =========================================================================DIV80==
-LIB_Step_by_Step_small_changes-1
+LIB_Step_by_Step_1
 Running the utility - step by step
 
 The steps listed here run the utility on a copy of your database created in a
@@ -146,7 +146,7 @@ You may want to create it within your home folder. Your home folder is
 not be taken over by OneDrive.
 
 =========================================================================DIV80==
-LIB_Step_by_Step_small_changes-2
+LIB_Step_by_Step_2
 ==========-
 Make a copy of your database, move the copy into the working folder.
 
@@ -174,8 +174,6 @@ report file name and its location.
 
 If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
-
-Save the config file but leave it open in Notepad.
 
 =========================================================================DIV80==
 LIB_NOTES CONFIG STD KEYS
