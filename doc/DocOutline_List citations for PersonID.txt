@@ -22,23 +22,21 @@ The results are saved to a report file which is automatically displayed.
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_Backups read only
+INCLUDE: LIB_BACKUPS_READONLY
 =========================================================================DIV80==
-INCLUDE: LIB_Compatibility
+INCLUDE: LIB_COMPATIBILITY
 ======================================================================
-INCLUDE: LIB_Backups read only
-======================================================================
-INCLUDE: LIB_Overview
+INCLUDE: LIB_OVERVIEW
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_1
-
+INCLUDE: LIB_STEPS_0_SMALL_CHANGES
+INCLUDE: LIB_STEPS_1
 ==========-
 *  Copy these items from the downloaded zip file to the working folder-
       ListCitationsForPersonID.py      (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_Step_by_Step_2
+INCLUDE: LIB_STEPS_2
 Save the config file.
 =========-
 Double click the "ListCitationsForPersonID.py" file in the working folder
@@ -60,12 +58,13 @@ No changes are mde to the database by this utility.
 Notes
 
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
-INCLUDE: LIB_APPENDIX  Config File: encoding
+INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
+INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
+INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Python install
+INCLUDE: LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Troubleshooting
+INCLUDE: LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
 TODO
 
@@ -74,7 +73,7 @@ TODO
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_Feedback
+INCLUDE: LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_Distribution
+INCLUDE: LIB_DISTRIBUTION
 =========================================================================DIV80==

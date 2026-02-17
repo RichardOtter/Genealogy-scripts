@@ -18,18 +18,18 @@ Hidden citations may be restored using this utility.
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_Backups small changes
+INCLUDE: LIB_BACKUPS_SMALL_CHANGES
 =========================================================================DIV80==
-INCLUDE: LIB_Compatibility
+INCLUDE: LIB_COMPATIBILITY
 =========================================================================DIV80==
-INCLUDE: LIB_Overview
+INCLUDE: LIB_OVERVIEW
 
 While the database name and location is specified in the config file, the actual
 instructions for which citations and sources to modify are entered at a series
 of prompts in the black terminal window.
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_1
-
+INCLUDE: LIB_STEPS_0_SMALL_CHANGES
+INCLUDE: LIB_STEPS_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ModifyCitationList.py            (file)
@@ -42,7 +42,7 @@ Make a copy of your database, move the copy into the working folder.
 Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
-INCLUDE: LIB_Step_by_Step_2
+INCLUDE: LIB_STEPS_2
 
 Save the config file.
 
@@ -150,12 +150,13 @@ DROP TABLE AuxCitationLinkTable;
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
-INCLUDE: LIB_APPENDIX  Config File: encoding
+INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
+INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
+INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Python install
+INCLUDE: LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Troubleshooting
+INCLUDE: LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
 TODO
 
@@ -164,7 +165,7 @@ TODO
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_Feedback
+INCLUDE: LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_Distribution
+INCLUDE: LIB_DISTRIBUTION
 =========================================================================DIV80==

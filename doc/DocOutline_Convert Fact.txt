@@ -21,21 +21,21 @@ fact type based on the date of the fact and/or the description of the fact.
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_Backups small changes
+INCLUDE: LIB_BACKUPS_SMALL_CHANGES
 =========================================================================DIV80==
-INCLUDE: LIB_Compatibility
+INCLUDE: LIB_COMPATIBILITY
 =========================================================================DIV80==
-INCLUDE: LIB_Overview
+INCLUDE: LIB_OVERVIEW
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_1
-
+INCLUDE: LIB_STEPS_0_SMALL_CHANGES
+INCLUDE: LIB_STEPS_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ConvertFact.py                   (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_Step_by_Step_2
+INCLUDE: LIB_STEPS_2
 ==========-
 Look at the [CV_PARAMS] section of the config file containing keys for the 
 parameters needed to describe the desired changes:
@@ -232,12 +232,13 @@ only the ones that are in use. ConvertFact will tell you which ones.
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
-INCLUDE: LIB_APPENDIX  Config File: encoding
+INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
+INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
+INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Python install
+INCLUDE: LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Troubleshooting
+INCLUDE: LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
 TODO
 
@@ -245,7 +246,7 @@ TODO
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_Feedback
+INCLUDE: LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_Distribution
+INCLUDE: LIB_DISTRIBUTION
 =========================================================================DIV80==

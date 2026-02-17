@@ -36,20 +36,21 @@ This utility does not move data BETWEEN source fields and citation fields.
 Other utilities can do that. (see: LumpSources another utility in this suite.)
 
 =========================================================================DIV80==
-INCLUDE: LIB_Backups large changes
+INCLUDE: LIB_BACKUPS_LARGE_CHANGES
 =========================================================================DIV80==
-INCLUDE: LIB_Compatibility
+INCLUDE: LIB_COMPATIBILITY
 =========================================================================DIV80==
-INCLUDE: LIB_Overview
+INCLUDE: LIB_OVERVIEW
 =========================================================================DIV80==
-INCLUDE: LIB_Step_by_Step_1
+INCLUDE: LIB_STEPS_0_LARGE_CHANGES
+INCLUDE: LIB_STEPS_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ChangeSourceTemplate.py          (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_Step_by_Step_2
+INCLUDE: LIB_STEPS_2
 ==========-
 STEP 0		Option    All options = off
 
@@ -653,9 +654,6 @@ displayed. In any case you can quotation marks e.g. "Name ", or " Name" or "My N
 Running the utility with MAKE_CHANGES = off does not make any changes to your
 database. You can run it as many times as you need.
 
-INCLUDE: LIB_NOTES CONFIG STD KEYS
-
-
 ===========-
 The utility fixes sources and citations that have missing XML field elements.
 This happens when sources or citations have been created with a older template,
@@ -706,16 +704,17 @@ Add a new, Key-Value pair with a particular Key and an empty value.-
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_Precautions before using the modified database
+INCLUDE: LIB_USE_NEW_DB
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
-INCLUDE: LIB_APPENDIX  Config File: multi-line value
-INCLUDE: LIB_APPENDIX  Config File: Mapping value
-INCLUDE: LIB_APPENDIX  Config File: encoding
+INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
+INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
+INCLUDE: LIB_APPENDIX_CONFIG_MULTILINE
+INCLUDE: LIB_APPENDIX_CONFIG_MAPPING
+INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Python install
+INCLUDE: LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Troubleshooting
+INCLUDE: LIB_APPENDIX_TROUBLE
 ===========-
 Error Message:
 Tried to create duplicate Name in XML.
@@ -826,7 +825,7 @@ A utility to update the Citation Name to either the standard name or a custom
 name operating on a select group of sources.
 
 =========================================================================DIV80==
-INCLUDE: LIB_Feedback
+INCLUDE: LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_Distribution
+INCLUDE: LIB_DISTRIBUTION
 =========================================================================DIV80==

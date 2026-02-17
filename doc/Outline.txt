@@ -7,20 +7,20 @@ INCLUDE: LIB_INTRO
 Purpose
 VARIABLE
 =========================================================================DIV80==
-INCLUDE: LIB_Backups small changes
+INCLUDE: LIB_BACKUPS_SMALL_CHANGES
 OR
-INCLUDE: LIB_Backups large changes
+INCLUDE: LIB_BACKUPS_LARGE_CHANGES
 OR
-INCLUDE: LIB_Backups read only
+INCLUDE: LIB_BACKUPS_READONLY
 =========================================================================DIV80==
-INCLUDE: LIB_Compatibility
+INCLUDE: LIB_COMPATIBILITY
 1 extra line added re v7 in TestExternalFiles
 =========================================================================DIV80==
 Performance
 VARIABLE
 ONLY in TestExternalFiles
 =========================================================================DIV80==
-INCLUDE: LIB_Overview
+INCLUDE: LIB_OVERVIEW
 =========================================================================DIV80==
 Capabilities
 VARIABLE
@@ -28,37 +28,39 @@ ONLY in TestExternalFiles
 =========================================================================DIV80==
 Running the utility in detail
 =========================================================================DIV80==
-LIB_Step_by_Step_1
+LIB_STEPS_0_SMALL_CHANGES
+or
+LIB_STEPS_0_LARGE_CHANGES
+
+LIB_STEPS_1
 VARIABLE
-LIB_Step_by_Step_2
+LIB_STEPS_2
 VARIABLE
 =========================================================================DIV80==
 Notes
 VARIABLE
-INCLUDE: LIB_NOTES CONFIG STD KEYS
 =========================================================================DIV80==
-INCLUDE: LIB_Precautions before using the modified database
+INCLUDE: LIB_USE_NEW_DB
 CONSTANT
 ONLY in the 2 big change scripts
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Database with external file links from a new location
-ONLY in TestExternalFiles and ExternalFilesInfo
-=========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Config file: location, contents and editing
+INCLUDE: LIB_APPENDIX_DB_NEW_LOCATION
+        ONLY in TestExternalFiles and ExternalFilesInfo
+INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
+INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
+INCLUDE: LIB_APPENDIX_CONFIG_MULTILINE
+INCLUDE: LIB_APPENDIX_CONFIG_MAPPING
+        ONLY in  ChangeSourceTemplate and LUumpSources
 
-INCLUDE: LIB_APPENDIX  Config File: multi-line value
-INCLUDE: LIB_APPENDIX  Config File: Mapping value
-ONLY in  ChangeSourceTemplate and LUumpSources
-
-INCLUDE: LIB_APPENDIX  Config File: encoding
+INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Python install
+INCLUDE: LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  unifuzz64.dll download
-only in RunSQL & LumpSources
+INCLUDE: LIB_APPENDIX_UNIFUZZ64DLL
+        ONLY in RunSQL & LumpSources
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX  Troubleshooting
-added sections
+INCLUDE: LIB_APPENDIX_TROUBLE
+VARIABLE
 =========================================================================DIV80==
 Developer Notes
 VARIABLE
@@ -67,9 +69,9 @@ ONLY TEST EXTERNAL FILES (not in lib)
 TODO
 VARIABLE
 =========================================================================DIV80==
-INCLUDE: LIB_Feedback
+INCLUDE: LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_Distribution
+INCLUDE: LIB_DISTRIBUTION
 =========================================================================DIV80==
 
 

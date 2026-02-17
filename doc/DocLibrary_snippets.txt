@@ -25,7 +25,7 @@ computer. "Installing python" is described in the appendix below for Windows
 computers. MacOS computers already have it installed.
 
 =========================================================================DIV80==
-LIB_Compatibility
+LIB_COMPATIBILITY
 Compatibility
 
 Tested with a RootsMagic v 11.0.4 database
@@ -35,7 +35,7 @@ The python script file has not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
 
 =========================================================================DIV80==
-LIB_Backups large changes
+LIB_BACKUPS_LARGE_CHANGES
 Backups
 
 VERY IMPORTANT
@@ -50,7 +50,7 @@ multiple known-good backups.
 Read about additional considerations in the Precautions section below.
 
 =========================================================================DIV80==
-LIB_Backups small changes
+LIB_BACKUPS_SMALL_CHANGES
 Backups
 
 IMPORTANT
@@ -60,7 +60,7 @@ have multiple known-good backups) until you are confident that the changes made
 are the ones desired.
 
 =========================================================================DIV80==
-LIB_Backups read only
+LIB_BACKUPS_READONLY
 Backups
 
 IMPORTANT
@@ -71,7 +71,7 @@ remains intact after use. At that point, run this utility of your
 "production" database.
 
 =========================================================================DIV80==
-LIB_Overview
+LIB_OVERVIEW
 General Overview
 
 This program is what is called a "command line utility". It is in the form of a
@@ -116,7 +116,7 @@ a new or updated utility.
 
 Some utilities are read only and do not change the database at all, while others
 affect only small amount of data.
-Once the user has confidence in the operation of such a low-impact utility, one
+Once the user has confidence in the operation of a low-impact utility, one
 can start operating directly on the research (production) database, always
 assuming that at least several known-good backups exist.
 
@@ -126,7 +126,15 @@ always operate on databases copied into a working folder.
 *****  Details follow below. *****
 
 =========================================================================DIV80==
-LIB_Step_by_Step_1
+LIB_STEPS_0_LARGE_CHANGES
+Running the utility - step by step
+
+The steps listed here run the utility on a copy of your database created in a
+new directory location. Always run this utility on a copy as shown here. It
+is likely that several attempts will be needed to obtain satisfactory results.
+
+=========================================================================DIV80==
+LIB_STEPS_0_SMALL_CHANGES
 Running the utility - step by step
 
 The steps listed here run the utility on a copy of your database created in a
@@ -134,6 +142,8 @@ new directory location. Once you feel comfortable with how the app operates,
 you will want to run the app on your production database in its usual
 folder location.
 
+=========================================================================DIV80==
+LIB_STEPS_1
 ==========-
 Install Python for Windows x64  -see "APPENDIX  Python install" below.
 
@@ -146,7 +156,7 @@ You may want to create it within your home folder. Your home folder is
 not be taken over by OneDrive.
 
 =========================================================================DIV80==
-LIB_Step_by_Step_2
+LIB_STEPS_2
 ==========-
 Make a copy of your database, move the copy into the working folder.
 
@@ -176,43 +186,7 @@ If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
 
 =========================================================================DIV80==
-LIB_NOTES CONFIG STD KEYS
-=========-
-Keys used by all of the utilities.
-DB_PATH, REPORT_FILE_PATH, REPORT_FILE_DISPLAY_APP
-
-See "APPENDIX  Config file: location, contents and editing" for more general
-editing information.
-
-These keys all appear in the [FILE_PATHS] section of the config file.
-
-DB_PATH     =  TEST.rmtree
-DB_PATH     =  my TEST database.rmtree
-DB_PATH     =  my database folder\TEST.rmtree
-DB_PATH     =  ..\..\TEST.rmtree
-DB_PATH     =  Y:\weird drive\TEST.rmtree
-
-Specifies the file path to the RM database to be analyzed.
-The path may be an absolute or relative path.
-Leading an trailing white space is ignored.
-
-REPORT_FILE_PATH         = Report.txt
-REPORT_FILE_PATH         = ..\Report.txt
-
-The name and path to the report file generated for each run.
-This path must be writeable.
-An existing file will be overwritten.
-The path may be absolute or relative path.
-Leading an trailing white space is ignored
-
-REPORT_FILE_DISPLAY_APP  = C:\Windows\System32\notepad.exe
-
-The application used to display the report at the end of the run.
-If this key is not given (say, the line is commented out), then the report is
-generated but not displayed.
-
-=========================================================================DIV80==
-LIB_APPENDIX  Python install
+LIB_APPENDIX_PYTHON
 APPENDIX  Python install
 
 Install Python from either:
@@ -243,7 +217,7 @@ It is easily and cleanly removed using the standard Windows method found in
 Windows=>Settings=>Installed apps
 
 =========================================================================DIV80==
-LIB_APPENDIX  unifuzz64.dll download
+LIB_APPENDIX_UNIFUZZ64DLL
 APPENDIX  unifuzz64.dll download
 
 The SQLiteToolsforRootsMagic website has been around for many years and is run
@@ -276,7 +250,7 @@ The path to the unifuzz64.dll file in the config file is given by the
 RMNOCASE key. Same rules as for the DB_PATH key.
 
 =========================================================================DIV80==
-LIB_APPENDIX  Database with external file links from a new location
+LIB_APPENDIX_DB_NEW_LOCATION
 APPENDIX  Using a database with external file links from a new directory location
 
 RM finds media files linked to a database by several methods. In my opinion, 
@@ -297,7 +271,7 @@ see red X's on media file thumbnails. Don't try to fix the links until you have
 returned the database to its usual directory location.
 
 =========================================================================DIV80==
-LIB_APPENDIX  Config file: location, contents and editing
+LIB_APPENDIX_CONFIG_DETAILS
 APPENDIX  Config file: location, contents and editing
 
 Name and location
@@ -375,7 +349,43 @@ in the [FILE_PATHS] section. The UPPER_CASE key is in the OPTIONS section.
 The second line is a comment.
 
 =========================================================================DIV80==
-LIB_APPENDIX  Config File: multi-line value
+LIB_APPENDIX_CONFIG_STD_KEYS
+=========-
+Keys used by all of the utilities.
+DB_PATH, REPORT_FILE_PATH, REPORT_FILE_DISPLAY_APP
+
+See "APPENDIX  Config file: location, contents and editing" for more general
+editing information.
+
+These keys all appear in the [FILE_PATHS] section of the config file.
+
+DB_PATH     =  TEST.rmtree
+DB_PATH     =  my TEST database.rmtree
+DB_PATH     =  my database folder\TEST.rmtree
+DB_PATH     =  ..\..\TEST.rmtree
+DB_PATH     =  Y:\weird drive\TEST.rmtree
+
+Specifies the file path to the RM database to be analyzed.
+The path may be an absolute or relative path.
+Leading an trailing white space is ignored.
+
+REPORT_FILE_PATH         = Report.txt
+REPORT_FILE_PATH         = ..\Report.txt
+
+The name and path to the report file generated for each run.
+This path must be writeable.
+An existing file will be overwritten.
+The path may be absolute or relative path.
+Leading an trailing white space is ignored
+
+REPORT_FILE_DISPLAY_APP  = C:\Windows\System32\notepad.exe
+
+The application used to display the report at the end of the run.
+If this key is not given (say, the line is commented out), then the report is
+generated but not displayed.
+
+=========================================================================DIV80==
+LIB_APPENDIX_CONFIG_MULTILINE
 multi-line value
 
 The ini file format used by the config file allows entry of multi-line values.
@@ -445,7 +455,7 @@ KEY_NAME =
   item3
 
 =========================================================================DIV80==
-LIB_APPENDIX  Config File: multi-line value SQL
+LIB_APPENDIX_CONFIG_MULTILINE_SQL
 =========-
 Multiline Values
 
@@ -514,7 +524,7 @@ SQL_STATEMENT_1 =
    AND nt.surname LIKE 'sm%'
 
 =========================================================================DIV80==
-LIB_APPENDIX  Config File: Mapping value
+LIB_APPENDIX_CONFIG_MAPPING
 MAPPING_ value format
 
 Values that this utility names "MAPPING_" have additional format requirements.
@@ -529,7 +539,7 @@ contains a blank or ">" character at the beginning, end, or anywhere within it.
 The white space between the names and ">" character is ignored.
 
 =========================================================================DIV80==
-LIB_APPENDIX  Config File: encoding
+LIB_APPENDIX_CONFIG_ENCODE
 Encoding
 If there are any non-ASCII characters in the config file then the file must be
 saved in UTF-8 format, with no byte order mark (BOM).
@@ -538,7 +548,7 @@ force it to be in the correct format.
 File format is an option in the "Save file" dialog box in NotePad.
 
 =========================================================================DIV80==
-LIB_APPENDIX  Troubleshooting
+LIB_APPENDIX_TROUBLE
 APPENDIX  Troubleshooting
 
 =========-
@@ -570,7 +580,7 @@ sure that it works, Then make your edits one by one to identify the problem.
 You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
 =========================================================================DIV80==
-LIB_Precautions before using the modified database
+LIB_USE_NEW_DB
 Precautions before using the modified database
 
 Once you are satisfied with the results of the modifications made by this
@@ -588,7 +598,7 @@ if you missed a problem only to find it later and have to revert to a backup
 from before the database was modified.
 
 =========================================================================DIV80==
-LIB_Feedback
+LIB_FEEDBACK
 Feedback
 
 The author appreciates comments and suggestions regarding this software.
@@ -606,7 +616,7 @@ My Linked-In profile at-
 https://www.linkedin.com/in/richardotter/
 
 =========================================================================DIV80==
-LIB_Distribution
+LIB_DISTRIBUTION
 Distribution
 
 Everyone is free to use this utility. However, instead of
