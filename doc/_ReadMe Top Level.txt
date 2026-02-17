@@ -10,6 +10,15 @@ be installed on the computer. See the instructions labeled
 "APPENDIX  Python install"
 included in each of the utility's ReadMe files.
 
+Each folder contains the files needed to run a different utility app.
+Each folder contains-
+* a py text file which contains the actual utility app,
+* a ReadeMe.txt file which contains all you need to know about how to run the utility.
+* a sample configuration file, specific for the app in the dame folder.
+  These could have been all combined into one file, but to prevent confusion
+  for new users they are separate to minimize the contents of each.
+* a copy of the folder named RMpy
+
 Code common to each of the utilities is contained in the Python 
 package named: RMpy. This is the folder named RMpy in each of the utility
 folders. The RMpy folder and its contents are exactly the same in each utility
