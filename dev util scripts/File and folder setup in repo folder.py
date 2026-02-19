@@ -21,9 +21,9 @@ def main():
         r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts")
     TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
 
-    file1="_DB get fresh copy of Production.cmd"
-    file2="_DB reset test db.cmd"
-    file3="_DB get fresh copy of TestData.cmd"
+    file1 = "_DB_Copy1 PRODUCTION.lnk"
+    file2 = "_DB_Copy2 TEST DB.lnk"
+    file3 = "_DB_Copy3 RESET.lnk"
 
     doc_folder = REPO_ROOT_PATH / "doc"
     links_folder = doc_folder / "Links"
@@ -63,14 +63,14 @@ def main():
             os.mkdir(project_DB_path)
         except FileExistsError:
             print(F"Directory '{project_DB_path}' already exists.")
-        # make a hardlink to the db utility cmd files in each DB folder
 
+        # make a hardlink to the db utility shortcut files in each DB folder
         try:
             if not keep_orig:
                 try:
                     os.remove(project_DB_path / file1 )
                 except FileNotFoundError:
-                    continue
+                    pass
             os.link( dev_util_fldr_path / file1, project_DB_path / file1 )
         except FileExistsError:
             print(f"Error: The file '{project_DB_path / file1}' already exists.")
@@ -80,7 +80,7 @@ def main():
                 try:
                     os.remove(project_DB_path / file2 )
                 except FileNotFoundError:
-                    continue
+                    pass
             os.link( dev_util_fldr_path / file2, project_DB_path / file2 )
         except FileExistsError:
             print(f"Error: The file '{project_DB_path / file2}' already exists.")
@@ -90,7 +90,7 @@ def main():
                 try:
                     os.remove(project_DB_path / file3 )
                 except FileNotFoundError:
-                    continue
+                    pass
             os.link( dev_util_fldr_path / file3, project_DB_path / file3 )
         except FileExistsError:
             print(f"Error: The file '{project_DB_path / file3}' already exists.")
