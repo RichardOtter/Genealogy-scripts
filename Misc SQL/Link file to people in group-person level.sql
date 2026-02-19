@@ -56,14 +56,19 @@ Proceed AS (
     WHERE Cnt = 1
 )
 
-INSERT INTO MediaLinkTable (MediaID, OwnerType, OwnerID, IsPrimary, SortOrder,  UTCModDate)
+INSERT INTO MediaLinkTable (MediaID, OwnerType, OwnerID, IsPrimary, 
+    Include1, Include2, Include3, Include4,
+    SortOrder, 
+    RectLeft, RectTop, RectRight, RectBottom, 
+    Comments, UTCModDate)
 SELECT
     (SELECT MediaID FROM Proceed),
     0 AS OwnerType,
     pnf.PersonID,
     1 AS IsPrimary,
+    0 AS Include1, 0 AS Include2, 0 AS Include3, 0 AS Include4,
     0 AS SortOrder,
-    julianday('now') - 2415018.5
-    
+    0 AS RectLeft, 0 AS RectTop, 0 AS RectRight, 0 AS RectBottom,
+    '' AS Comments, julianday('now') - 2415018.5
 FROM PeopleNeedingFile pnf
 JOIN Proceed ON 1 = 1;

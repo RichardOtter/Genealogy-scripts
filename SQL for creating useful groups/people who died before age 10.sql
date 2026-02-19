@@ -1,5 +1,11 @@
 -- database: C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Misc SQL\DB\TEST-Misc SQL.rmtree
 
+-- This SQL uses dates from the EventTable records so it can handle date
+-- modifiers missing in the denormalized dates in the NameTable
+
+-- Not yet tested for multiple events with same name
+-- Should handle Family type events, but not fully tested
+
 --#-----------------------------------------------
 --[GRP: Died before age 10]
 --SQL_QUERY =

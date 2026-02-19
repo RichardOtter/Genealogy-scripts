@@ -1,0 +1,50 @@
+-- database: ../DB/TEST-Misc SQL.rmtree
+
+WITH Constants AS (
+    SELECT
+        'GRP: Died before age 10' AS GroupName,
+        'Died_Young.png'          AS RequiredFile
+),
+
+-- Identify the TagValue that defines the group
+GroupID AS (
+    SELECT TagValue
+    FROM TagTable
+    WHERE TagType = 0
+      AND TagName COLLATE NOCASE = (SELECT GroupName FROM Constants)
+),
+
+-- Expand all StartID–EndID ranges into actual PersonIDs
+GroupPeople AS (
+    SELECT p.PersonID
+    FROM PersonTable p
+    JOIN GroupTable AS gt
+        ON p.PersonID BETWEEN g.StartID AND g.EndID
+    JOIN TagTable AS tt ON tt.TagValue = gt.GroupID
+    WHERE g.GroupID = (SELECT TagValue FROM GroupID)
+),
+
+-- People in the group who DO have the required multimedia file
+PeopleWithFile AS (
+    SELECT DISTINCT ml.OwnerID AS PersonID
+    FROM MediaLinkTable ml
+    JOIN MultimediaTable m
+        ON m.MediaID = ml.MediaID
+    WHERE ml.OwnerType = 0   -- Person-level media link
+      AND ml.OwnerID IN (SELECT PersonID FROM GroupPeople)
+      AND m.MediaFile COLLATE NOCASE = (SELECT RequiredFile FROM Constants)
+)
+
+-- Final: people in the group who DO NOT have the file
+SELECT
+    p.PersonID,
+    n.Given || ' ' || n.Surname AS Name
+FROM GroupPeople gp
+JOIN PersonTable p ON p.PersonID = gp.PersonID
+LEFT JOIN NameTable n
+    ON n.OwnerID = p.PersonID
+   AND n.IsPrimary = 1
+LEFT JOIN PeopleWithFile pwf
+    ON pwf.PersonID = gp.PersonID
+WHERE pwf.PersonID IS NULL
+ORDER BY Name;

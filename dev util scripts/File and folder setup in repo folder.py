@@ -22,7 +22,7 @@ def main():
     TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
 
     file1 = "_DB_Copy1 PRODUCTION.lnk"
-    file2 = "_DB_Copy2 TEST DB.lnk"
+    file2 = "_DB_Copy2 TEST DATA.lnk"
     file3 = "_DB_Copy3 RESET.lnk"
 
     doc_folder = REPO_ROOT_PATH / "doc"
