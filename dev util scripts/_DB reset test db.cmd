@@ -1,4 +1,5 @@
-REM reset the TEST database from the local backup copy
+@ECHO OFF 
+ECHO Reset the TEST database from the local backup copy
 
 SET DB_EXTEN=rmtree
 SET DB_BU_EXTEN=rmtreeBU
@@ -19,7 +20,20 @@ del "%DEV_DB_PATH%\%DEV_DB_NAME%.%DB_EXTEN%"
 
 REM copy the local backup copy to the test DB name
 copy "%DEV_DB_PATH%\%DEV_DB_BACKUP%.%DB_BU_EXTEN%" "%DEV_DB_PATH%\%DEV_DB_NAME%.%DB_EXTEN%"
+CALL :CheckCopy "Creating local backup copy failed."
 
-REM pause and request input to close window - optional
-REM pause
+ECHO All copy operations completed successfully.
+timeout -t 5
+GOTO :EOF
 
+
+:CheckCopy
+REM %1 = error message
+IF %ERRORLEVEL% NEQ 0 (
+    ECHO.
+    ECHO ERROR: %~1
+    ECHO.
+    PAUSE
+    EXIT /B 1
+)
+EXIT /B 0

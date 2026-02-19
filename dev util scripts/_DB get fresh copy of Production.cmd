@@ -1,4 +1,5 @@
-REM Copy the production database to the local dev database folder
+@ECHO OFF
+ECHO Copy the production database to the local dev database folder
 
 SET DB_EXTEN=rmtree
 SET DB_BU_EXTEN=rmtreeBU
@@ -28,6 +29,5 @@ copy "%PRODUCTION_DB_PATH%\%PRODUCTION_DB_NAME%.%DB_EXTEN%" "%DEV_DB_PATH%\%DEV_
 REM create a local backup copy of the test DB
 copy "%DEV_DB_PATH%\%DEV_DB_NAME%.%DB_EXTEN%" "%DEV_DB_PATH%\%DEV_DB_BACKUP%.%DB_BU_EXTEN%"
 
-REM pause and request input to close window - optional
-REM pause
+timeout -t 5
 
