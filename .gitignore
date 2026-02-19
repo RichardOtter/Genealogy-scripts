@@ -1,6 +1,10 @@
 
 # ignore shortcut files
-*.lnk
+ *.lnk
+
+# except in the dev utils folder
+!dev util scripts/*lnk
+
 # ignore browser url files
 *.url
 
