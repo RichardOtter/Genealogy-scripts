@@ -2,67 +2,65 @@ File-
 TestData-RMpython.rmtree
 is the test database for testing the RM utilities.
 
-To avoid adding a large binary file to git, 
+TEST DATA SortDates test -format_v11 -dump -reduced.sql
+is used to create  the RM database for Dat and SortDate testing.
+
+
+They are not kept in git due to size and binary nature.
+Instead SQL dump text files are in git.
+
+For routine testing, see C:\Users\rotter\dev\Genealogy\Test Data\
+for binary databases and full dumps files.
+
+
+Typical workflow-
+From an RM database:
+TestData-RMpython -v11.rmtree
 a sql dump file:
-TestData-RMpython-FULL.sql
-is created and then manually edited to create
-TestData-RMpython-REDUCED.sql
+TestData-RMpython -v11 -FULL.sql
+is created and then manually edited to create:
+TestData-RMpython -v11 -REDUCED.sql
 by removing:
     LDS temples  from PlaceTable(paces with ID <1000,  record 1-216 records)
     standard templates from SourceTemplateTable (templates with ID <1000, records 1-439)
 
+
+
 For the v11 reduced dumps, left the first 5 records for Source templates
 and the first 5 records for places (LDS temples).
 
-
-For now, only TestData-RMpython-REDUCED.sql is checked into git.
-And testing will be done on the original TestData-RMpython.rmtree
-which has never been dumped-restored.
-Need to gain more confidence in the process and use of reduced form.
-
-
-Local files-
-TestData-RMpython.rmtree
-use for testing. Create normal RM backups for safekeeping.
-
-TestData-RMpython-FULL.sql
-SQL dump of full TestData-RMpython.rmtree
-
-TestData-RMpython-REDUCED.sql
-slimed down version as described above.
+For the v11 Date test data, also removed:
+     witness roles
+    --- not very determined process
 
 
 
 
-Test reduced form
-Restored the reduced form and tested in RM v10.
-Created a new place.
-Added a new source template.
-No obvious problems.
-
-
-To create the dump file from the RM database:
+To create the dump file from a RM database:
 (database file must not be read-only)
+(note sqlite3 wants forward slashes in paths)
 
 \bin\SQLite\sqlite3
-.open TestData-RMpython.rmtree
-.output out-file.sql
+.open TestData-RMpython -v11.rmtree
+.output "TestData-RMpython -v11 -FULL.sql"
 .dump
 .exit
 
 
 To restore RM database from a dump.sql file:
+Determine the new rmtree file name first.
 
 \bin\SQLite\sqlite3
-.open TestData-RMpython-reduced.rmtree
-.load "C:/Users/rotter/Genealogy/GeneDB/SW/unifuzz64.dll"
-.read TestData-RMpython-REDUCED.sql
+.open "TestData-RMpython -v11 -FULL.rmtree"
+.load "/Users/rotter/Genealogy/GeneDB/SW/SQLite extensions/unifuzz64.dll"
+.read "TestData-RMpython -v11 -FULL.sql"
 .exit
 
-Open TestData-RMpython-reduced.rmtree 
-in RM and rebuild indexes.
-What if version needs to be updated?
-May not be able to do a version schema update while indexes are unstable.
+Open "TestData-RMpython -v11 -FULL.rmtree"
+in RM and rebuild indexes and exit.
+Make the file read only and make a copy for normal use.
+
+
 
 
 
