@@ -8,7 +8,7 @@
   -- Person does not have a Census fact or shared census fact (Description starts with C_YearCensus)
   -- Does not find people not born in C_PlaceBirth but residing in USA in YearCensus
   -- Does not support Census Family type event.
-  -- TO USE: EDIT LINES 15 TO 17
+  -- TO USE: Edit values in the constants section below.
   --
   WITH
   constants AS (SELECT

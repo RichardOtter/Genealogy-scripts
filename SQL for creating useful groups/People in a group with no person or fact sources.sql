@@ -1,11 +1,10 @@
 --[SRC: People in grp with no Person or Fact src-citations]
 --SQL_QUERY =
   -- people in a specified group with no Person or fact source-citations
-  -- people may still have family, family fact, association,or name citations
-  -- specify the group name in line 9
+  -- ignores family, family fact, association, and name citations
   WITH
     Constants AS (SELECT
-    'GROUP_NAME_GOES_HERE'    AS C_GroupName
+    'GROUP_NAME_GOES_HERE'    AS C_GroupName   -- The group to be analyzed
       ),
     group_members(PersonID) AS (
       SELECT pt.PersonID

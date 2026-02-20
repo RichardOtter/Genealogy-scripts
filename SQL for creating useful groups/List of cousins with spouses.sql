@@ -1,12 +1,10 @@
 --[REL: cousin+spouses]
 --SQL_QUERY =
-  -- Hard coded for starting with PersonID/RIN = 2361  CAO
-  -- See line 3         SELECT   2361   AS C_StartPerson
-  -- C_BirthParentOnly = 0 or 1.   1=only birth parents included
+  -- Configure 2 parameters in the lines immediately following
   WITH RECURSIVE
   Constants AS ( SELECT
-     2361   AS C_StartPerson,
-        1   AS C_BirthParentOnly
+     2361   AS C_StartPerson,     -- The RIN of the root person
+        1   AS C_BirthParentOnly  -- 1 or 0, 1 means only birth parents included
     ),
   cousin_of(CousinID) AS (
     SELECT AncestorID FROM ancestor_of
