@@ -58,7 +58,8 @@ Determine the new rmtree file name first.
 
 Open "TestData-RMpython -v11 -FULL.rmtree"
 in RM and rebuild indexes and exit.
-Make the file read only and make a copy for normal use.
+Make the file read only and then
+make a copy for normal use.
 
 
 

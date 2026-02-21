@@ -17,5 +17,7 @@
     ],
     "cSpell.enabled": true,
     "editor.foldingStrategy": "auto",
-    "python.useEnvironmentsExtension": true
+    "python.useEnvironmentsExtension": true,
+    "terminal.integrated.accessibleViewPreserveCursorPosition": true,
+    "terminal.integrated.defaultProfile.windows": "Command Prompt"
 }

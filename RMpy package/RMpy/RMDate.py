@@ -8,16 +8,29 @@ from enum import Enum
 from datetime import date
 
 
-## RM Internal Date structure
+# RM Internal Date structure
+# organized as characters, numbered from left, origin 0
+# 24 chars total (except for types: . and T)
+# 2 chars  type & structure
+# 11 chars part 1
+# 11 chars part 2
 
 #   0123456789A123456789B1234
-#   0               1   type
-#   1               1   structure
+#   0       1   type
+#   1       1   structure
+# part 1
+#   2       1   BC-AD  (+ or -)
+#   3-10    8   YYYYMMDD
+#   11      1   slash date (. or /)
+#   12      1   confidence
+# part 2
+#   13      1   BC-AD  (+ or -)
+#   14-21   8   YYYYMMDD
+#   22      1   slash date (. or /)
+#   23      1   confidence
 
-#   2      13       1   BC-AD  -/+ year
-#   3-10   14-21    8   YYYYMMDD
-#   11     22       1   slash date
-#   12     23       1   confidence
+# if structure does not require a part 2, then part 2= "+00000000.."
+
 # eg    D.+20250216..+00000000..
 
 # all RM External human readable formats (from RM v9 preferences)
@@ -31,22 +44,29 @@ from datetime import date
 #  JANUARY 10, 1950
 
 # Sort Dates
+# Organized as bits, numbered from the right, origin 0
+
+# SYYYYYYYYYYYYYYMMMMDDDDDD-----YYYYYYYYYYYYYYMMMMDDDDDDFFFFFFFFFF
+
+# num of bits: 1 sign, 14 year, 4 month, 6 day, 5 unused, 14 year, 4 month, 6 day, 10 flag
+
 # S YYYYYYYYYYYYYY MMMM DDDDDD ----- YYYYYYYYYYYYYY MMMM DDDDDD FFFFFFFFFF
 # 3 21F987654321E9 8765 4321D9 87654 321C987654321B 9876 54321A 9876543210
 
-# SYYYYYYYYYYYYYYMMMMDDDDDD-----YYYYYYYYYYYYYYMMMMDDDDDDFFFFFFFFFF
-# bits: 1 sign, 14 year, 4 month, 6 day, 5 unused, 14 year, 4 month, 6 day, 10 flag
-
-
-# P1 and P2 date, 
+# Part 1 (P1) and Part 2 (P2) date,
 # P2-M&D=1      0xFFC00                                        11111111110000000000
 # P2-Y&M&D =1   0x3FFFFFC00                    001111111111111111111111110000000000
 # P1-M&D =1     0x1FF8<<36     0001111111111000000000000000000000000000000000000000
-                
+
 
 # ===================================================DIV60==
 def now_RMDate():
     return to_RMDate(str(date.today()))
+
+
+# ===================================================DIV60==
+def now_RMSortDate():
+    return to_RMsort_date(to_RMDate(str(date.today())))
 
 
 # ===================================================DIV60==
@@ -93,7 +113,7 @@ def from_RMDate(RMDate, form):
     elif char_0_1 == 'D':
         pass  # continue and process D type below
     else:
-        raise Exception("Malformed RM Date: unsuported start character")
+        raise Exception("Malformed RM Date: unsupported start character")
 
     # Process D type dates
 
@@ -114,14 +134,14 @@ def from_RMDate(RMDate, form):
         bc_ad_1 = ''
     else:
         raise Exception("Malformed RM Date: bc_ad_1 indicator")
-    
+
     try:
         year_1 = (RMDate[3:7]).lstrip("0")
         month_1_i = int(RMDate[7:9])
         day_1 = RMDate[9:11].lstrip("0")
     except ValueError as ve:
         raise Exception("Malformed RM Date: Invalid characters in date 1")
-    
+
     char_11_12 = RMDate[11:12]
     DoubleDate_1 = False
     if char_11_12 == '/':
@@ -181,7 +201,7 @@ def from_RMDate(RMDate, form):
 
     fDate_1 = (data_s.get_str_1(StructCodeE, form) + data_c.get_str(ConfidenceE_1, form)
                 + day_1 + NumToMonthStr(month_1_i, form) + month_trsp_1 + year_1 + bc_ad_1)
-    
+
     month_trsp_2 = ''
     fDate = ''
     if single_date:
@@ -209,18 +229,18 @@ def to_RMsort_date(RM_date):
     date_type = RM_date[0:1]
     if date_type == 'T':
         #  9223372036854775807    ( 2^63,  sign bit is 0, largest possible signed 64 bit int)
-        return 0x7F_FF_FF_FF_FF_FF_FF_FF 
+        return 0x7F_FF_FF_FF_FF_FF_FF_FF
     elif date_type == 'Q':
         raise Exception("RM Quaker dates not yet supported")
     elif date_type == 'R':
         raise Exception("RM Quarter dates not yet supported")
     elif date_type == '.':
         #  9223372036854775807    ( 2^63,  sign bit is 0, largest possible signed 64 bit int)
-        return 0x7F_FF_FF_FF_FF_FF_FF_FF 
+        return 0x7F_FF_FF_FF_FF_FF_FF_FF
     elif date_type == 'D':
         pass  # continue and process D type below
     else:
-        raise Exception("Malformed RM Date: unsuported Type character")
+        raise Exception("Malformed RM Date: unsupported Type character")
 
     # Process D type dates
 
@@ -229,24 +249,25 @@ def to_RMsort_date(RM_date):
     date_type_slash_2 = False
     if  RM_date[11:12]== '/':
         date_type_slash_1 == True
-        raise Exception("Slash dates not yet supported")
+        raise Exception("J-G / Slash dates not yet supported")
     if  RM_date[22:23]== '/':
         date_type_slash_1 == True
-        raise Exception("Slash dates not yet supported")
+        raise Exception("J-G / Slash dates not yet supported")
+
     try:
         # include +/- sign in year
         year_1 = int(RM_date[2:7])
         month_1 = int(RM_date[7:9])
         day_1 = int(RM_date[9:11])
     except ValueError as ve:
-        raise Exception("Malformed RM Date: Invalid characters in date part 1")
+        raise Exception("Malformed RM Date: Invalid characters in date part 1  " + ve)
     try:
         # include +/- sign in year
         year_2 = int(RM_date[13:18])
         month_2 = int(RM_date[18:20])
         day_2 = int(RM_date[20:22])
     except ValueError as ve:
-        raise Exception("Malformed RM Date: Invalid characters in date part 2")
+        raise Exception("Malformed RM Date: Invalid characters in date part 2  " + ve)
 
     Char_1_2 = RM_date[1:2]
     struct_data = RMdate_structure()
@@ -292,7 +313,7 @@ def to_RMsort_date(RM_date):
 
 
 # ===================================================DIV60==
-def from_RMsort_date(sort_date):
+def from_RMsort_date(sort_date) -> str:
 
     # cannot produce
     # BC dates
@@ -378,28 +399,28 @@ class RMdate_structure:
             if enum == date_type[0]:
                 return date_type[3]
         raise Exception(
-            "Malformed RM Date: unsuported StructCode: " + str(enum))
+            "Malformed RM Date: unsupported StructCode: " + str(enum))
 
     def get_enum_from_symbol(self, symbol):
         for date_type in RMdate_structure._data:
             if symbol == date_type[1]:
                 return date_type[0]
         raise Exception(
-            "Malformed RM Date: unsuported symbol: " + symbol)
+            "Malformed RM Date: unsupported symbol: " + symbol)
 
     def get_offset_from_symbol(self, symbol):
         for date_type in RMdate_structure._data:
             if symbol == date_type[1]:
                 return date_type[2]
         raise Exception(
-            "Malformed RM Date: unsuported character: " + symbol)
+            "Malformed RM Date: unsupported character: " + symbol)
 
     def get_symbol_from_offset(self, offset):
         for date_type in RMdate_structure._data:
             if offset == date_type[2]:
                 return date_type[1]
         raise Exception(
-            "Malformed RM Date: unsuported offset: " + offset)
+            "Malformed RM Date: unsupported offset: " + offset)
 
     def get_str_1(self, type, format):
         for date_type in RMdate_structure._data:
@@ -446,7 +467,7 @@ class ConfidenceCode(Enum):
 class RMdate_confidence:
 
     _data = (
-        # fmt: off 
+        # fmt: off
         #                0        1       2              3
         #                enum     sym     short          long
         ( ConfidenceCode.NONE,    '.',    "",            ""           ),
