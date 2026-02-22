@@ -1,0 +1,80 @@
+Date in test database
+
+STD_1
+use only part1 of RMDate
+
+
+STD_2
+use both part1 and part2 of RMDate
+
+
+-MOD
+  includes a structure modifier
+  Some of which use 1 part date
+  Some of which require 2 part date
+
+-CONF
+  includes a confidence/accuracy level flag
+  In 1 part dates, present or absent
+  In 2 part dates, may be on part 1, or part 2, or part 1 and part 2
+  
+
+
+-PAR
+  parts of the date are missing
+
+
+  Other test cases:
+  Leap year
+  29 Feb in non-leap years     (RM prevents entry)
+  Maximum pos year
+  Maximum negative year
+  Year 0    (RM prevents entry)
+
+
+FactType codes
+C_Quaker
+C_JulGeor
+Quar_1
+Quar_2
+
+Std_1 BC
+Std_1 FAIL differ
+Std_1_Mod
+Std_1_Conf
+Std_1_Mod+Conf
+Std_1_LY
+Std_1_Mod_Par
+
+    Std_2 BC
+    Std_2 FAIL differ
+Std_2_Mod
+Std_2_Conf
+Std_2_Mod+Conf
+Std_2_Dash
+Std_2_Mod_Par
+
+
+Partial dates-
+Full  DD MMMM YYYY
+MMMM YYYY
+DD YYYY
+DD MMMM
+DD
+MMMM
+
+a zero year is always?? removed
+
+
+
+# TEST CHARACTERIZATION
+
+# EASY
+# (18, 34, 28, 30, 29, 77, 71)
+# 18    no date
+# 34    text date
+# 28                year
+# 30          month            & 44
+# 29      day month
+# 77          month year
+# 71      day month year

@@ -66,7 +66,7 @@ def now_RMDate():
 
 # ===================================================DIV60==
 def now_RMSortDate():
-    return to_RMsort_date(to_RMDate(str(date.today())))
+    return to_RMSortDate(to_RMDate(str(date.today())))
 
 
 # ===================================================DIV60==
@@ -223,10 +223,10 @@ def from_RMDate(RMDate, form):
 
 
 # ===================================================DIV60==
-def to_RMsort_date(RM_date):
-    # RM_date is an RM internal date string
+def to_RMSortDate(RMDate):
+    # RMDate is an RM internal date string
 
-    date_type = RM_date[0:1]
+    date_type = RMDate[0:1]
     if date_type == 'T':
         #  9223372036854775807    ( 2^63,  sign bit is 0, largest possible signed 64 bit int)
         return 0x7F_FF_FF_FF_FF_FF_FF_FF
@@ -247,29 +247,29 @@ def to_RMsort_date(RM_date):
     # Julian date / slash date
     date_type_slash_1 = False
     date_type_slash_2 = False
-    if  RM_date[11:12]== '/':
+    if  RMDate[11:12]== '/':
         date_type_slash_1 == True
         raise Exception("J-G / Slash dates not yet supported")
-    if  RM_date[22:23]== '/':
+    if  RMDate[22:23]== '/':
         date_type_slash_1 == True
         raise Exception("J-G / Slash dates not yet supported")
 
     try:
         # include +/- sign in year
-        year_1 = int(RM_date[2:7])
-        month_1 = int(RM_date[7:9])
-        day_1 = int(RM_date[9:11])
+        year_1 = int(RMDate[2:7])
+        month_1 = int(RMDate[7:9])
+        day_1 = int(RMDate[9:11])
     except ValueError as ve:
         raise Exception("Malformed RM Date: Invalid characters in date part 1  " + ve)
     try:
         # include +/- sign in year
-        year_2 = int(RM_date[13:18])
-        month_2 = int(RM_date[18:20])
-        day_2 = int(RM_date[20:22])
+        year_2 = int(RMDate[13:18])
+        month_2 = int(RMDate[18:20])
+        day_2 = int(RMDate[20:22])
     except ValueError as ve:
         raise Exception("Malformed RM Date: Invalid characters in date part 2  " + ve)
 
-    Char_1_2 = RM_date[1:2]
+    Char_1_2 = RMDate[1:2]
     struct_data = RMdate_structure()
     offset = struct_data.get_offset_from_symbol(Char_1_2)
 
@@ -313,14 +313,14 @@ def to_RMsort_date(RM_date):
 
 
 # ===================================================DIV60==
-def from_RMsort_date(sort_date) -> str:
+def from_RMSortDate(RMSortDate : int) -> str:
 
     # cannot produce
     # BC dates
     # confidence indicators
     # slash dates
 
-    RM_sort_date = int(sort_date)
+    RM_sort_date = int(RMSortDate)
 
     Y1 = (RM_sort_date >> 49) - 10000
     M1 = (RM_sort_date >> 45) & 0xF
@@ -345,10 +345,10 @@ def from_RMsort_date(sort_date) -> str:
     data_s = RMdate_structure()
     FF = data_s.get_symbol_from_offset(F)
 
-    RM_date = ( "D" + FF + ADBC1 + "{:=04}{:=02}{:=02}".format(Y1, M1, D1) + ".."
+    RMDate = ( "D" + FF + ADBC1 + "{:=04}{:=02}{:=02}".format(Y1, M1, D1) + ".."
                          + ADBC2 + "{:=04}{:=02}{:=02}".format(Y2, M2, D2) + ".." )
 
-    return RM_date
+    return RMDate
 
 
 # ===================================================DIV60==
