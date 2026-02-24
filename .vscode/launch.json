@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "stopOnEntry": true
+            "stopOnEntry": false
         },
         {
             "name": "PYD: Change source for citation dev",

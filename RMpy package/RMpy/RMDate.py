@@ -313,7 +313,146 @@ def to_RMSortDate(RMDate):
 
 
 # ===================================================DIV60==
-def from_RMSortDate(RMSortDate : int) -> str:
+def from_RMSortDate(sd: int) -> str:
+    """
+    Inverse of to_RMSortDate(RMDate) for D-type, non-slash RM dates.
+    Returns a 24-character RM internal date string.
+    """
+
+    # Special case: T / '.' types mapped to max 64-bit
+    if sd == 0x7F_FF_FF_FF_FF_FF_FF_FF:
+        # You mapped both 'T' and '.' here; we can't distinguish.
+        # Choose '.' with completely empty dates.
+        return ".+00000000..+00000000.."
+
+    # ---- Extract packed fields ----
+    y1     = (sd >> 49) & 0x7FFF   # 15 bits
+    month1 = (sd >> 45) & 0xF      # 4 bits
+    day1   = (sd >> 39) & 0x3F     # 6 bits
+
+    y2     = (sd >> 20) & 0x3FFF   # 14 bits
+    month2 = (sd >> 16) & 0xF      # 4 bits
+    day2   = (sd >> 10) & 0x3F     # 6 bits
+
+    # Offset is stored in low 20 bits (because of 0xFFC00 usage)
+    offset_raw = sd & 0xFFFFF
+
+    # ---- Undo special FROM/SINCE/AFT encoding for offset 27 + 0xFFC00 ----
+    # In to_RMSortDate you do:
+    #   if offset == (27 + 0xFFC00) and month_1==0 and day_1==0:
+    #       offset  = 27
+    #       month_1 = 0xF
+    #       day_1   = 0x3F
+    #       y2      = 0x3FFF
+    #       month_2 = 0xF
+    #       day_2   = 0x3F
+    #
+    #   if offset == (27 + 0xFFC00) and month_1!=0 and day_1==0:
+    #       offset  = 27
+    #       day_1   = 0x3F
+    #       y2      = 0x3FFF
+    #       month_2 = 0xF
+    #       day_2   = 0x3F
+    #
+    # So if we see offset_raw == 27 and y2/month2/day2 == 0x3FFF/0xF/0x3F,
+    # we restore the original offset 27 + 0xFFC00.
+    if offset_raw == 27 and y2 == 0x3FFF and month2 == 0xF and day2 == 0x3F:
+        offset = 27 + 0xFFC00
+    else:
+        offset = offset_raw
+
+    struct = RMdate_structure()
+    symbol = struct.get_symbol_from_offset(offset)
+    struct_enum = struct.get_enum_from_symbol(symbol)  # not strictly needed here, but symmetric
+
+    # ---- Decode years (undo +10000 bias and sentinels) ----
+
+    def decode_year_1(y, m, d):
+        # You used:
+        #   if year_1 == 0 and ((month_1 != 0) or (day_1 != 0)):
+        #       y1 = 0x3FFF
+        # So if we see y1 == 0x3FFF and month/day non-zero, that means "no year, but month/day present".
+        if y == 0x3FFF and (m != 0 or d != 0):
+            return 0  # year_1 == 0 in RM string
+        # Otherwise normal bias
+        return y - 10000
+
+    def decode_year_2(y, m, d):
+        # You used:
+        #   if year_2 == 0 and month_2 == 0 and day_2 == 0:
+        #       y2 = 0x3FFF
+        #   elif year_2 == 0 and ((month_2 != 0) or (day_2 != 0)):
+        #       y2 = (0x18EF + 10000)
+        #
+        # So we reverse those:
+        if y == 0x3FFF and m == 0 and d == 0:
+            return 0  # completely empty second date
+        if y == (0x18EF + 10000):
+            return 0  # year_2 == 0 but month/day present
+        # Otherwise normal bias
+        return y - 10000
+
+    year1 = decode_year_1(y1, month1, day1)
+    year2 = decode_year_2(y2, month2, day2)
+
+    # ---- Build RM internal date string ----
+    # RM format (24 chars):
+    #   0:  Type ('D','T','Q','R','.')
+    #   1:  Struct symbol
+    #   2:  '+' or '-' for year1
+    # 3-6:  year1 (4 digits)
+    # 7-8:  month1 (2 digits)
+    # 9-10: day1 (2 digits)
+    # 11:   '.' or '/' (we only support '.')
+    # 12:   confidence1 (we'll use '+', since encoder ignores it)
+    # 13:   '+' or '-' for year2
+    # 14-17: year2 (4 digits)
+    # 18-19: month2 (2 digits)
+    # 20-21: day2 (2 digits)
+    # 22:   '.' or '/' (we only support '.')
+    # 23:   confidence2 (we'll use '+')
+
+    def encode_year(y):
+        sign = '+' if y >= 0 else '-'
+        return sign, f"{abs(y):04d}"
+
+    def encode_md(m, d):
+        return f"{m:02d}", f"{d:02d}"
+
+    sign1, year1_str = encode_year(year1)
+    m1_str, d1_str = encode_md(month1, day1)
+
+    sign2, year2_str = encode_year(year2)
+    m2_str, d2_str = encode_md(month2, day2)
+
+    # We cannot recover original confidence chars; encoder never used them.
+    # To be symmetric with your *supported* input, we choose '+' for both.
+    conf1 = '.'
+    conf2 = '.'
+
+    rm = (
+        "D" +          # type
+        symbol +       # struct symbol
+        sign1 +
+        year1_str +
+        m1_str +
+        d1_str +
+        "." +          # no slash support
+        conf2 +
+        sign2 +
+        year2_str +
+        m2_str +
+        d2_str +
+        "." +          # no slash support
+        conf2
+    )
+
+    return rm
+
+
+
+# ===================================================DIV60==
+def orig_from_RMSortDate(RMSortDate : int) -> str:
 
     # cannot produce
     # BC dates

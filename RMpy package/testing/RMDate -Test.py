@@ -83,9 +83,9 @@ def main():
 # ===================================================DIV60==
 def Test(test_item, report_file):
     try:
-        test_std_fmt_from_DB_SortDate = False
-        test_RMDate_from_SortDate = False
-        test_human_readable_from_RMDate = False
+        test_english_date_from_DB_SortDate = True
+        test_RMDate_from_DBSortDate = True
+        test_english_date_from_DB_RMDate = True
         test_SortDate_from_RMDate = True
 
         #   types of date
@@ -99,8 +99,8 @@ def Test(test_item, report_file):
         #   human readable Date
         #   human readable Sort Date
 
-        report_file.write(f"{test_item}\n")
-        print(f"{test_item}\n")
+        report_file.write(f"\n\n{test_item}\n")
+        # print(f"{test_item}\n")
 
         # parse the test item
         in_DB_EvemtID = test_item[0]
@@ -113,48 +113,68 @@ def Test(test_item, report_file):
         # make the function calls and save the results.
 
         # Test the results against expected
+        # test report shows "known correct" = or != "generated"
 
-        if test_RMDate_from_SortDate:
-            out_RMDate_from_SortDate= RMpy.RMDate.from_RMSortDate(in_DB_Sortdate)
-            report_file.write(f"{out_RMDate_from_SortDate=}\n")
+        if test_RMDate_from_DBSortDate:
+            try:
+                report_file.write("Compare RMDate in DB  vs. RMDate derived from DB SortDate\n")
+                out_RMDate_from_SortDate= RMpy.RMDate.from_RMSortDate(in_DB_Sortdate)
+                if in_DB_RMdate != out_RMDate_from_SortDate:
+                    report_file.write(F"{in_DB_EvemtID}  ======= '{in_DB_RMdate}'  !=  '{out_RMDate_from_SortDate}'\n")
+                else:
+                    report_file.write(F"{in_DB_EvemtID}          '{in_DB_RMdate}'  ==  '{out_RMDate_from_SortDate}'\n")
+            except Exception as e:                        
+                report_file.write("\n========================== A test case caused an exception. Continue with test." + str(e) + "\n")
 
-        if test_std_fmt_from_DB_SortDate:
-            out_std_fmt_from_DB_SortDate= RMpy.RMDate.from_RMDate(out_RMDate_from_SortDate, RMpy.RMDate.Format.LONG)
-            report_file.write(f"{out_std_fmt_from_DB_SortDate=}\n")
+        if test_english_date_from_DB_SortDate:
+            try:
+                report_file.write("English date from GUI  vs. English date derived from DB RMDate\n")
+                out_english_date_from_DB_SortDate= RMpy.RMDate.from_RMDate(out_RMDate_from_SortDate, RMpy.RMDate.Format.LONG)
+                if in_GUI_description != out_english_date_from_DB_SortDate:
+                    report_file.write(F"{in_DB_EvemtID} ======== '{in_GUI_description}'  !=  '{out_std_fmt_from_DB_SortDate}'\n")
+                else:
+                    report_file.write(F"{in_DB_EvemtID}          '{in_GUI_description}'  ==  '{out_english_date_from_DB_SortDate}'\n")
+            except Exception as e:                        
+                report_file.write("\n========================== A test case caused an exception. Continue with test." + str(e) + "\n")
 
         # DB internal date to human readable vs GUI date
-            
-        if test_human_readable_from_RMDate:
-            report_file.write("Compare normal format date derived from RMDate   vs. normal format as shown in RM GUI (tests from_RMDate)")
-            out_human_readable_from_RMDate= RMpy.RMDate.from_RMDate(in_DB_RMdate, RMpy.RMDate.Format.LONG)
-            ##report_file.write(RMDate.FromRMDate(In, RMDate.Format.LONG) + "==\n")
-            if out_human_readable_from_RMDate != in_GUI_full_date:
-                report_file.write("   {} ======= '{}'  !=  '{}'  \n".format(in_DB_EvemtID, out_human_readable_from_RMDate, in_GUI_full_date))
-            else:
-                report_file.write("   {}     '{}'  ==  '{}'  \n".format(    in_DB_EvemtID, out_human_readable_from_RMDate, in_GUI_full_date))
+        if test_english_date_from_DB_RMDate:
+            try:
+                report_file.write("English format as shown in RM GUI  vs. English format derived from RMDate in DB\n")
+                out_engliah_date_from_DB_RMDate= RMpy.RMDate.from_RMDate(in_DB_RMdate, RMpy.RMDate.Format.LONG)
+                if out_engliah_date_from_DB_RMDate != in_GUI_full_date:
+                    report_file.write(F"{in_DB_EvemtID} ======= '{in_GUI_full_date}'  !=  '{out_engliah_date_from_DB_RMDate}'\n")
+                else:
+                    report_file.write(F"{in_DB_EvemtID}         '{in_GUI_full_date}'  ==  '{out_engliah_date_from_DB_RMDate}'\n")
+            except Exception as e:                        
+                report_file.write("\n========================== A test case caused an exception. Continue with test." + str(e) + "\n")
 
         if test_SortDate_from_RMDate:
-            report_file.write("Compare sort date derived from RMDate   vs. sort date from DB   (tests to_RMSortDate)\n")
-            out_SortDate_from_RMDate = RMpy.RMDate.to_RMSortDate(in_DB_RMdate)
+            try:
+                report_file.write("Sort date from DB  vs.  sort date derived from DB RMDate\n")
+                out_SortDate_from_DB_RMDate = RMpy.RMDate.to_RMSortDate(in_DB_RMdate)
+                if out_SortDate_from_DB_RMDate != in_DB_Sortdate:
+                    report_file.write(F"{in_DB_EvemtID} ======= '{in_DB_Sortdate}'  !=  '{out_SortDate_from_DB_RMDate}'\n")
+                else:
+                    report_file.write(F"{in_DB_EvemtID}         '{in_DB_Sortdate}'  ==  '{out_SortDate_from_DB_RMDate}'\n")
+            except Exception as e:                        
+                report_file.write("\n========================== A test case caused an exception. Continue with test." + str(e) + "\n")
 
-            # out_internal_Sortdate vs TD_internal_Sortdate
-            if out_SortDate_from_RMDate != in_DB_Sortdate:
-                report_file.write("   {} ======= '{}'  !=  '{}'  \n".format(in_DB_EvemtID, out_SortDate_from_RMDate, in_DB_Sortdate))
-            else:
-                report_file.write("   {}     '{}'  ==  '{}'  \n".format(    in_DB_EvemtID, out_SortDate_from_RMDate, in_DB_Sortdate))
-
-        # DB internal SORT date to human readable vs GUI sort date
-        if test_std_fmt_from_DB_SortDate:
-            report_file.write("Compare human readable format from sort date vs RM Gui version\n")
-            if out_human_readable_from_internal_sort_Date != GUI_sort_date:
-                report_file.write("   {} ======= '{}'  !=  '{}'  \n".format(TD_EvemtID, out_human_readable_from_internal_sort_Date, GUI_sort_date))
-            else:
-                report_file.write("   {}     '{}'  ==  '{}'  \n".format(TD_EvemtID, out_human_readable_from_internal_sort_Date, GUI_sort_date))
+        if test_english_date_from_DB_SortDate:
+            try:
+                report_file.write("English sort date from RM GUI  vs.  English format from sort date\n")
+                out_english_date_from_DB_SortDate
+                if in_GUI_sort_date != out_english_date_from_DB_SortDate:
+                    report_file.write(F"{in_DB_EvemtID} ======= '{in_GUI_sort_date}'  !=  '{out_english_date_from_DB_SortDate}'\n")
+                else:
+                    report_file.write(F"{in_DB_EvemtID}         '{in_GUI_sort_date}'  ==  '{out_english_date_from_DB_SortDate}'\n")
+            except Exception as e:                        
+                report_file.write("\n========================== A test case caused an exception. Continue with test." + str(e) + "\n")
 
         
 
     except Exception as e:
-        report_file.write("\n========================== A test case caused an exception. Continue with next." + str(e) + "\n")
+        report_file.write("\n========================== A test case caused an exception. Continue with test." + str(e) + "\n")
 
 # ===================================================DIV60==
 def get_test_data(db_path : Path, display_data : bool = True) -> []:
