@@ -1,0 +1,84 @@
+[92, 'Std_1', 'D.+00000013..+00000000..', 9222816250905755660, '13 ??? || 13 ??? || DD', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+92          'D.+00000013..+00000000..'  ==  'D.+00000013..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+92 ======== '13 ???'  !=  '13 '
+Sort date from DB  vs.  sort date derived from DB RMDate
+92         '9222816250905755660'  ==  '9222816250905755660'
+English sort date from RM GUI  vs.  English format from sort date
+92 ======= '13 ???'  !=  '13 '
+
+
+[66, 'Std_1', 'D.+99991231..+00000000..', -7187868683162615796, '31 December 9999 || 31 December 9999 || largest date, wrong sort generated $NG', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+66          'D.+99991231..+00000000..'  ==  'D.+99991231..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+66          '31 December 9999'  ==  '31 December 9999'
+Sort date from DB  vs.  sort date derived from DB RMDate
+66 ======= '-7187868683162615796'  !=  '11258875390546935820'
+English sort date from RM GUI  vs.  English format from sort date
+66         '31 December 9999'  ==  '31 December 9999'
+
+
+[83, 'Std_1_LY', 'T29 February 2100', 9223372036854775807, '29 February 2100 || || 29 February 2100 not a leap year', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+83  ======= 'T29 February 2100'  !=  '.'
+English date from GUI  vs. English date derived from DB RMDate
+83 ======== '29 February 2100'  !=  ''
+Sort date from DB  vs.  sort date derived from DB RMDate
+83         '9223372036854775807'  ==  '9223372036854775807'
+English sort date from RM GUI  vs.  English format from sort date
+83         ''  ==  ''
+
+
+
+[38, 'Std_1 FAIL differ', 'D.+19190113..+00000000..', 6709842843205107724, '13 January 1919 || 13 January 1919–1 ||  D & SD differ', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+38          'D.+19190113..+00000000..'  ==  'D.+19190113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+38          '13 January 1919'  ==  '13 January 1919'
+Sort date from DB  vs.  sort date derived from DB RMDate
+38         '6709842843205107724'  ==  '6709842843205107724'
+English sort date from RM GUI  vs.  English format from sort date
+38 ======= '13 January 1919–1'  !=  '13 January 1919'
+
+
+[39, 'Std_1 FAIL differ', 'D.+19190113..+00000000..', 6709842843205107724, '13 January 1919 || 13 January 1919–2 ||  D & SD differ', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+39          'D.+19190113..+00000000..'  ==  'D.+19190113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+39          '13 January 1919'  ==  '13 January 1919'
+Sort date from DB  vs.  sort date derived from DB RMDate
+39         '6709842843205107724'  ==  '6709842843205107724'
+English sort date from RM GUI  vs.  English format from sort date
+39 ======= '13 January 1919–2'  !=  '13 January 1919'
+
+
+BUT 2 DIGIT DAS WORKS
+
+[40, 'Std_1 FAIL differ', 'D.+19210113..+00000000..', 6710968736429375509, '13 January 1921 ||  13 January 1921–10  ||  D & SD differ', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+40  ======= 'D.+19210113..+00000000..'  !=  'D-+19210113..+00100000..'
+English date from GUI  vs. English date derived from DB RMDate
+40 ======== '13 January 1921'  !=  '13 January 1921–10'
+Sort date from DB  vs.  sort date derived from DB RMDate
+40 ======= '6710968736429375509'  !=  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+40         '13 January 1921–10'  ==  '13 January 1921–10'
+
+
+
+
+[8, 'Std_1_Mod', 'DA+19210113..+00000000..', 6710968743112997919, 'after 13 January 1921 || after 13 January 1921 ||  after DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+8  ======= 'DA+19210113..+00000000..'  !=  'DA+19210113..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+8         '6710968743112997919'  ==  '6710968743112997919'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+

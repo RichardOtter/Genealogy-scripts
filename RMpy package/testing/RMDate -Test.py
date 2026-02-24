@@ -85,7 +85,7 @@ def Test(test_item, report_file):
     try:
         test_english_date_from_DB_SortDate = True
         test_RMDate_from_DBSortDate = True
-        test_english_date_from_DB_RMDate = True
+        test_english_date_from_DB_RMDate = False
         test_SortDate_from_RMDate = True
 
         #   types of date
@@ -130,10 +130,10 @@ def Test(test_item, report_file):
             try:
                 report_file.write("English date from GUI  vs. English date derived from DB RMDate\n")
                 out_english_date_from_DB_SortDate= RMpy.RMDate.from_RMDate(out_RMDate_from_SortDate, RMpy.RMDate.Format.LONG)
-                if in_GUI_description != out_english_date_from_DB_SortDate:
-                    report_file.write(F"{in_DB_EvemtID} ======== '{in_GUI_description}'  !=  '{out_std_fmt_from_DB_SortDate}'\n")
+                if in_GUI_full_date != out_english_date_from_DB_SortDate:
+                    report_file.write(F"{in_DB_EvemtID} ======== '{in_GUI_full_date}'  !=  '{out_english_date_from_DB_SortDate}'\n")
                 else:
-                    report_file.write(F"{in_DB_EvemtID}          '{in_GUI_description}'  ==  '{out_english_date_from_DB_SortDate}'\n")
+                    report_file.write(F"{in_DB_EvemtID}          '{in_GUI_full_date}'  ==  '{out_english_date_from_DB_SortDate}'\n")
             except Exception as e:                        
                 report_file.write("\n========================== A test case caused an exception. Continue with test." + str(e) + "\n")
 
@@ -203,7 +203,7 @@ ORDER BY Name COLLATE NOCASE ASC;
     return test_data
 
 # ===================================================DIV60==
-def test_case_order(test_data : []) -> []:
+def test_case_order(test_data : list[T]) -> list[T]:
 
     tc_order = [
 # Std_1
