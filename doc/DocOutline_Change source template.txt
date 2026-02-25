@@ -507,8 +507,8 @@ As above, the "others" are the data fields defined for this particular citation
 and they are specified by the Source Template.
 
 ===========-
-Listing of all possible Source Template changes to a Source template
-already in use by Sources and its Citations.
+Listing of all possible Source Template changes that can affect a Source template
+already in use by Sources and Citations.
 
 These alterations:
 *    change source template name
