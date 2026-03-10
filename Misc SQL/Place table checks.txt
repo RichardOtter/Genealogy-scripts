@@ -1,3 +1,19 @@
+-- PlaceType
+-- 0 Top Level
+-- 1 LDS
+-- 2 Detail
+-- MasterID  for Type=2, points to top level
+
+-- Join the top level place with its detail places
+SELECT pt1.Name AS name_top, pt2.Name AS name_detail
+FROM PlaceTable AS pt1
+LEFT JOIN PlaceTable AS pt2 ON pt2.MasterID = pt1.PlaceID
+WHERE pt1.PlaceType=0
+AND pt2.PlaceType=2     -- required because of data corruption
+--ORDER BY pt1.UTCModDate desc;
+ORDER BY pt1.Name COLLATE NOCASE asc;
+
+
 -- Data Quality checks
 
 -- List orphaned place details rows
@@ -9,10 +25,10 @@ WHERE PlaceType = 2
   );
 
 -- List primary places with non zero masterID
--- unknown significance
+-- unknown significance  -  many found
 SELECT PlaceID, Name
 FROM PlaceTable
-WHERE PlaceType = 1 
+WHERE PlaceType = 0 
     AND MasterID <> 0;
 
 -- Place name starting with [~] mean 'probably at this place'

@@ -1,0 +1,96 @@
+select placeid, note, count(*) from placetable
+where regexp_like(note,'(-?\d{1,3}\.\d{5,6}, -?\d{1,3}\.\d{5,6})\r\n(\d{2,8})')
+order by UTCModDate desc;
+
+49.981670, 9.090000
+9286888
+
+ update placetable
+set note =  regexp_replace(note,'(-?\d{1,3}\.\d{5,6}, -?\d{1,3}\.\d{5,6})\r\n(\d{2,8})', '$1\r\nFSPID=$2');
+ 
+
+on new db
+update placetable
+set note =  regexp_replace(note,'\r\nID=', '\r\nFSPID=');
+ 
+update placetable
+set note =  regexp_replace(note,'\r\n(\d{5,9})', '\r\nFSPID=$1');
+ 
+
+
+select placeid, regexp_capture(note, '.*ID=\d*'), note
+ from placetable
+where regexp_like(note,'FSPID=\d*')
+order by UTCModDate desc;
+
+also found ad fixed 'FSPID= \d*'
+
+
+ scartch
+
+
+select placeid, note from placetable
+where regexp_like(note,'\r\nFSPID=')
+order by UTCModDate desc;
+
+select placeid, regexp_capture(note, '\d{4,}'), note
+ from placetable
+where regexp_like(note,'\r\n\d{4,}')
+order by UTCModDate desc;
+
+
+
+select placeid, regexp_capture(note, 'FSPID=\d*'), note
+ from placetable
+where regexp_like(note,'FSPID=\d*')
+order by UTCModDate desc;
+
+
+select placeid, regexp_capture(note, 'FSPID=\d*'), note
+ from placetable
+where regexp_like(note,'FSPID=\d*')
+order by UTCModDate desc;
+
+update placetable
+set fsid = cast(substr(regexp_capture(note, 'FSPID=\d*'), 7) as integer);
+
+select fsid, cast(substr(regexp_capture(note, 'FSPID=\d*'), 7) as integer)
+ from placetable
+ where regexp_like(note, 'FSPID');
+
+
+ Now fsid column has the id
+
+
+ 
+===========================================DIV50==
+_AUTOUPDATE-FS-PLACES
+Everything below this line is auto updated From FamilySearch Places.
+_UPDATE: 2026-03-09-1707
+
+
+if note does not contain 
+===========================================DIV50==
+_AUTOUPDATE-FS-PLACES
+
+add it to the end of the place note
+
+Now assume it is there-
+
+Using the key in fsID column, 
+get data from FS
+
+create the text including the 
+_UPDATE: date
+and replace text in note with the new text.
+
+It will bin in a string-
+
+
+don't forget to update the UTCModDate.
+
+Should this also populate the lat, long Name & standard name?
+will need rules for different places
+
+Already need rules as regards language !
+

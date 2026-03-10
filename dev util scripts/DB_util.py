@@ -84,8 +84,14 @@ def main():
             dev_db_file,
             "Restoring TEST DB from local backup failed."
         )
+        print('\n\n\n')
+        print("\033[32mReset completed successfully.\033[0m")
+        print("\033[32mReset completed successfully.\033[0m")
+        print("\033[32mReset completed successfully.\033[0m")
+        print("\033[32mReset completed successfully.\033[0m")
+        print('\n\n')
 
-        print("Reset completed successfully.")
+
         timeout_with_break(5)
         return
 
@@ -126,8 +132,12 @@ def main():
         "Creating local backup copy failed."
     )
 
-
-    print("Sync completed successfully.")
+    print('\n\n\n')
+    print("\033[32m DB copy completed successfully.\033[0m")
+    print("\033[32m DB copy completed successfully.\033[0m")
+    print("\033[32m DB copy completed successfully.\033[0m")
+    print("\033[32m DB copy completed successfully.\033[0m")
+    print('\n\n')
     timeout_with_break(5)
 
 
