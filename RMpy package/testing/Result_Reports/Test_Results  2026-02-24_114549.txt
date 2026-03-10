@@ -1,0 +1,1131 @@
+Report generated at      = 2026-02-24 11:45:49
+Utility name             = RMDate -test
+Python version           = v3.14.0
+Database last changed on = 2026-02-24 10:24:10
+Database processed       = C:\Users\rotter\dev\Genealogy\Test Data\RMDate and SortDate test data\TEST DATA Dates -format_v11 -dump -reduced -v003 -RW.rmtree
+
+
+
+18   Std_1              .                         9223372036854775807    || || Blank date                                                                                                          True
+34   Std_1              TText date                9223372036854775807   Text date ||  ||  Text date                                                                                                True
+72   Std_1              D.+00010000..+00000000..  5630062501345361932   1 || 1 ||  Y -1 digit                                                                                                      True
+41   Std_1              D.+00100000..+00000000..  5635129050926153740   10 || 10 || YY -2 digit                                                                                                    True
+42   Std_1              D.+00110000..+00000000..  5635692000879575052   11 || 11 || YY -2 digit                                                                                                    True
+84   Std_1              D.+01230000..+00000000..  5698742395662761996   123 || 123 || YYY -3 digit                                                                                                 True
+28   Std_1              D.+19210000..+00000000..  6710926411914280972   1921 || 1921 || YYYY -4 digit                                                                                              True
+71   Std_1              D.+19210113..+00000000..  6710968743111950348   13 January 1921 || 13 January 1921||  DD MMMM YYYY   NORMAL DATE                                                           True
+27   Std_1              D.+19210100..+00000000..  6710961596286369804   January 1921 || January 1921 || MMMM YYYY    Jan 1921                                                                      True
+29   Std_1              D.+00000113..+00000000..  9222851435277844492   13 January || 13 January  ||  DD MMMM                                                                                      True
+26   Std_1              D.+19210013..+00000000..  6710933558739861516   13 ??? 1921 || 13 ??? 1921 ||  DD YYYY    13 ??? 1921                                                                      True
+92   Std_1              D.+00000013..+00000000..  9222816250905755660   13 ??? || 13 ??? || DD                                                                                                     True
+30   Std_1              D.+00000100..+00000000..  9222844288452263948   January || January || MMMM                                                                                                 True
+66   Std_1              D.+99991231..+00000000..  -7187868683162615796  31 December 9999 || 31 December 9999 || largest date, wrong sort generated $NG                                             True
+67   Std_1              D.+49991231..+00000000..  8444125623440375820   31 December 4999 || 31 December 4999 || largest date with a correct sort date                                              True
+49   Std_1 BC           D.-00100101..+00000000..  5623905785985630220   1 January 10 BC || 1 January 10 BC || YY BC                                                                                True
+50   Std_1 BC           D.-00010101..+00000000..  5628972335566422028   1 January 1 BC || 1 January 1 BC || Y BC                                                                                   True
+51   Std_1 BC           D.-99990101..+00000000..  598701260144652       1 January 9999 BC || 1 January 9999 BC || largest abs year 9999                                                            True
+74   Std_1_LY           D.+19240229..+00000000..  6712701573437325324   29 February 1924 || 29 February 1924 || DD MMMM YYYY leap year                                                             True
+82   Std_1_LY           D.+20000229..+00000000..  6755485769897345036   29 February 2000 || 29 February 2000 || DD MMMM YYYY leap year                                                             True
+83   Std_1_LY           T29 February 2100         9223372036854775807   29 February 2100 || || 29 February 2100 not a leap year                                                                    True
+38   Std_1 FAIL differ  D.+19190113..+00000000..  6709842843205107724   13 January 1919 || 13 January 1919–1 ||  D & SD differ                                                                     True
+39   Std_1 FAIL differ  D.+19190113..+00000000..  6709842843205107724   13 January 1919 || 13 January 1919–2 ||  D & SD differ                                                                     True
+40   Std_1 FAIL differ  D.+19210113..+00000000..  6710968736429375509   13 January 1921 ||  13 January 1921–10  ||  D & SD differ                                                                  True
+9    Std_1_Conf         D.+19210113.A+00000000..  6710968743111950348   about 13 January 1921 || 13 January 1921 || about DD MMMM YYYY                                                             True
+13   Std_1_Conf         D.+19210113.S+00000000..  6710968743111950348   say 13 January 1921 || 13 January 1921 ||  say DD MMMM YYYY                                                                True
+93   Std_1_Conf         D.+19210113.C+00000000..  6710968743111950348   circa 13 January 1921 || 13 January 1921 || circa  DD MMMM YYYY                                                            True
+10   Std_1_Conf         D.+19210113.E+00000000..  6710968743111950348   estimated 13 January 1921 || 13 January 1921 ||  estimated DD MMMM YYYY                                                    True
+94   Std_1_Conf         D.+19210113.L+00000000..  6710968743111950348   calculated 13 January 1921 || 13 January 1921 || calculated DD MMMM YYYY                                                   True
+95   Std_1_Conf         D.+19210113.?+00000000..  6710968743111950348   maybe 13 January 1921 || 13 January 1921 || maybe DD MMMM YYYY                                                             True
+96   Std_1_Conf         D.+19210113.1+00000000..  6710968743111950348   perhaps 13 January 1921 ||  13 January 1921  || perhaps DD MMMM YYYY                                                       True
+97   Std_1_Conf         D.+19210113.2+00000000..  6710968743111950348   apparently 13 January 1921 ||  13 January 1921 || apparently DD MMMM YYYY                                                  True
+98   Std_1_Conf         D.+19210113.3+00000000..  6710968743111950348   likely 13 January 1921  || 13 January 1921  || likely DD MMMM YYYY                                                         True
+99   Std_1_Conf         D.+19210113.4+00000000..  6710968743111950348   possibly 13 January 1921 || 13 January 1921 || possibly DD MMMM YYYY                                                       True
+100  Std_1_Conf         D.+19210113.5+00000000..  6710968743111950348   probably 13 January 1921 || 13 January 1921|| probably DD MMMM YYYY                                                        True
+101  Std_1_Conf         D.+19210113.6+00000000..  6710968743111950348   certainly 13 January 1921 || 13 January 1921 || certainly DD MMMM YYYY                                                     True
+86   Std_1_Conf         D.+19450600.S+00000000..  6724648317028925452   say June 1945 || June 1945 || say MMMM YYYY                                                                                True
+102  Std_1_Conf         D.+19450024.S+00000000..  6724450404935925772   say 24 ??? 1945 || 24 ??? 1945 || say DD YYYY                                                                              True
+103  Std_1_Conf         D.+19450000.S+00000000..  6724437210796392460   say 1945 || 1945 || say YYYY                                                                                               True
+104  Std_1_Conf         D.+00000021.S+00000000..  9222820648952266764   say 21 ??? || 21 ??? || say DD                                                                                             True
+105  Std_1_Conf         D.+00000300.S+00000000..  9222914657196441612   say March || March || say MMMM                                                                                             True
+8    Std_1_Mod          DA+19210113..+00000000..  6710968743112997919   after 13 January 1921 || after 13 January 1921 ||  after DD MMMM YYYY                                                      True
+11   Std_1_Mod          DB+19210113..+00000000..  6710968743111950336   before 13 January 1921 || before 13 January 1921 || before DD MMMM YYYY                                                    True
+6    Std_1_Mod          DF+19210113..+00000000..  6710968743112997915   from 13 January 1921 || from 13 January 1921 || from DD MMMM YYYY                                                          True
+7    Std_1_Mod          DI+19210113..+00000000..  6710968743112997918   since 13 January 1921 || since 13 January 1921 ||  since DD MMMM YYYY                                                      True
+4    Std_1_Mod          DT+19210113..+00000000..  6710968743111950342   to 13 January 1921 || to 13 January 1921 || to DD MMMM YYYY                                                                True
+5    Std_1_Mod          DU+19210113..+00000000..  6710968743111950345   until 13 January 1921 || until 13 January 1921 || until DD MMMM YYYY                                                       True
+3    Std_1_Mod          DY+19210113..+00000000..  6710968743111950339   by 13 January 1921 || by 13 January 1921  || by DD MMMM YYYY                                                               True
+111  Std_1_Mod          DR+19220125..+19210113..  6711538285456471055   between 25 January 1922 and 13 January 1921 || between 25 January 1922 and 13 January 1921 || between reverse timeline     True
+44   Std_1_Mod_p        DI+00000300..+00000000..  9222949291813764126   since March || since March ||  since MMMM                                                                                  True
+59   Std_1_Mod_p        DI+19450100..+00000000..  6724507029785803806   since January 1945 || since January 1945 || since MMMM YYYY                                                                True
+60   Std_1_Mod_p        DI+19400000..+00000000..  6722184861227940894   since 1940 || since 1940 || since YYYY                                                                                     True
+87   Std_1_Mod_p        DI+00000023..+00000000..  9223349514046274590   since 23 ??? || since 23 ??? || since DD                                                                                   True
+88   Std_1_Mod_p        DI+19450023..+00000000..  6724977620762491934   since 23 ??? 1945 || since 23 ??? 1945 || since DD YYYY                                                                    True
+89   Std_1_Mod_p        DI+00000023..+00000000..  9223349514046274590   since 23 ??? || since 23 ??? || since DD                                                                                   True
+106  Std_1_Mod          DI+00000100..+00000000..  9222878923069586462    since January || since January || since MMMM                                                                              True
+64   Std_1_Mod+Conf     DF+19210113.C+00000000..  6710968743112997915   from circa 13 January 1921  || from 13 January 1921  ||  from circa DD MMMM YYYY                                           True
+17   Std_2_Mod          DO+19210113..+19220125..  6710968738434343960   13 January 1921 or 25 January 1922 || 13 January 1921 or 25 January 1922 || or DD MMMM YYYY or DD MMMM YYYY                True
+14   Std_2_Mod          DR+19210113..+19220125..  6710968738434343951   between 13 January 1921 and 25 January 1922 || between 13 January 1921 and 25 January 1922  || btwn DD MMMM YYYY           True
+16   Std_2_Mod          D-+19210113..+19220125..  6710968738434343957   13 January 1921–25 January 1922 || 13 January 1921–25 January 1922  || dash DD MMMM YYYY - DD MMMM YYYY                    True
+15   Std_2_Mod          DS+19210113..+19220125..  6710968738434343954   from 13 January 1921 to 25 January 1922  || from 13 January 1921 to 25 January 1922  || from DD MMMM YYYY to DD MMMM YYYY  True
+110  Std_2_Mod_RevTL    DO+19220125..+19210114..  6711538285456472088   25 January 1922 or 14 January 1921 || 25 January 1922 or 14 January 1921 || or reverse timeline                            True
+112  Std_2_Mod_RevTL    DR+19220125..+19210113..  6711538285456471055   between 25 January 1922 and 13 January 1921 || between 25 January 1922 and 13 January 1921 || between reverse timeline     True
+113  Std_2_Mod_RevTL    DS+19220125..+19210113..  6711538285456471058   from 25 January 1922 to 13 January 1921 || from 25 January 1922 to 13 January 1921 || from reverse timeline                True
+114  Std_2_Mod_RevTL    D-+19220125..+19210113..  6711538285456471061   25 January 1922–13 January 1921 || 25 January 1922–13 January 1921 || dash reverse timeline                                True
+78   Std_2_Mod          DR+19300104..+19300210..  6716030340221249551   between 4 Jan 1930 and 10 Feb 1930 || between 4 Jan 1930 and 10 Feb 1930 || btw DD MMMM YYYY and DD MMMM YYYY              True
+69   Std_2_Mod_p        DR+19210013..+19230015..  6710933554063227919   between 13 ??? 1921 and 15 ??? 1923 || between 13 ??? 1921 and 15 ??? 1923 || between DD YYYY                              True
+35   Std_2_Dash         D-+19210000..+00010000..  6710926405222268949   1921–1 || 1921–1 ||  YYYY dash Y                                                                                           True
+36   Std_2_Dash         D-+19210000..+00020000..  6710926405223317525   1921–2 || 1921–2 || YYYY dash Y                                                                                            True
+37   Std_2_Dash         D-+19210000..+00120000..  6710926405233803285   1921-12 || 1921-12  || YYYY dash YY                                                                                        True
+91   Std_2_Dash         D-+19210000..+01230000..  6710926405350195221   1921–123 || 1921–123  || YYYY dash YYY                                                                                     True
+75   Std_2_Dash         D-+19210000..+19230000..  6710926407237632021   1921–1923 || 1921–1923 || YYYY dash YYYY                                                                                   True
+58   Std_2_Dash         D-+19300600..+00010000..  6716204061035593749   June 1930–1 || June 1930–1 ||MMMM YYYY dash Y                                                                              True
+55   Std_2_Dash         D-+00000300..+00010000..  9222914650504429589   March–1 || March–1 || MMMM dash Y                                                                                          True
+107  Std_2_Dash         D-+00000022..+00010000..  9222821192016068629   22 ???–1 || 22 ???–1 || DD dash 1                                                                                          True
+108  Std_2_Dash         D-+00000623..+00010000..  9223032848004415509   23 June–1 || 23 June–1 || DD MMMM dash 1                                                                                   True
+109  Std_2_Dash         D-+19450023..+00010000..  6724449848488099861   23 ??? 1945–1 || 23 ??? 1945–1 || DD YYYY dash 1                                                                           True
+56   Std_2_Dash         D-+19300600..+19300700..  6716204063058755605   June 1930–July 1930 || June 1930–July 1930 || MMMM YYYY dash MMMM YYYY                                                     True
+53   Std_2_Dash         D-+00000304..+00000406..  9222916856219965461   4 March–6 April  || 4 March–6 April || DD MMMM dash DD MMMM                                                                True
+32   Std_2_Dash         D-+00000100..+00000300..  9222844288452460565   January–March || January–March ||   MMMM dash MMMM                                                                         True
+54   Std_2_Dash         D-+00000104..+00000200..  9222846487475650581   4 January–February || 4 January–February || DD MMMM dash MM                                                                True
+57   Std_2_Dash         D-+19300600..+19300000..  6716204063058296853   June 1930–1930 || June 1930–1930 || MMMM YYYY dash YYYY                                                                    True
+76   Std_2_Mod+Conf     DS+19210113.A+19220125.S  6710968738434343954   from about 13 January 1921 to say 25 January 1922 || from 13 January 1921 to 25 January 1922 || from p1p2 CONF             True
+77   Std_2_Mod+Conf     DS+19210113.A+19220125..  6710968738434343954   from about 13 January 1921 to 25 January 1922 || from 13 January 1921 to 25 January 1922 || from p1 CONF                   True
+90   Std_2_Mod+Conf     DS+19210113..+19220125.S  6710968738434343954   from 13 January 1921 to say 25 January 1922 || from 13 January 1921 to 25 January 1922 || from p2 CONF                     True
+46   Quar_1             R.+19250200..+00000000..  6713318949216321548   June Quarter 1925 || April 1925 ||  QQ YYYY                                                                                True
+47   Quar_1             R.+19250300..+00000000..  6713424502332588044   September Quarter 1925 ||  July 1925  ||  QQ YYYY                                                                          True
+48   Quar_1             R.+19250400..+00000000..  6713530055448854540   December Quarter 1925 || October 1925 ||  QQ YYYY                                                                          True
+79   Quar_1             R.+19250100.S+00000000..  6713213396100055052   say March Quarter 1925 || January 1925 || con QQ YYYY                                                                      True
+80   Quar_1             R.+00000100.S+00000000..  9222844288452263948   say March Quarter || January || conf QQ                                                                                    True
+81   Quar_1             R.+00000100..+00000000..  9222844288452263948   March Quarter || January || QQ                                                                                             True
+45   Quar_1             R.+19250100..+00000000..  6713213396100055052   March Quarter 1925 || 1925 1920 || QQ YYYY                                                                                 True
+12   Quar_2             DS+19210113.C+19210217.S  6710968738433352722   from circa 13 January 1921 to say 17 February 1921 || from 13 January 1921 to 17 February 1921 ||                          True
+63   Quar_2             RS+19200200..+19900000..  6710504194842820626   from June Quarter 1920 to 1990 || from April 1920 to 1990 || Quarter- range QT & YYYY                                      True
+20   C_Quaker           Q.+15981112..+00000000..  6529698308354473996   12th da 11th mo 1598 || 12 January 1599 || Quaker                                                                          True
+21   C_Quaker           QR+15981112..+15991201..  6529698303339267087   between 12th da 11th mo 1598 and 1st da 12th mo 1599 || between 12 January 1599 and 1 February 1600 ||  range Q & Q        True
+22   C_Quaker           Q.+15930212..+00000000..  6526426161750212620   12th da 2nd mo 1593 || 12 April 1588 ||  entered =12da 2mo 1593                                                            True
+23   C_Quaker           Q.+17520101..+00000000..  6615823603913981964   1st da 1st mo 1752 || 1 January 1752 || 1da 1mo 1752 Quaker date post-1751                                                 True
+25   C_Quaker           Q.+17511031..+00000000..  6615664174727954444   31st da 10th mo 1751 || 31 December 1751 || 31da 10mo 1751 Quaker date pre-1752                                            True
+31   C_Quaker           Q.+15880102/.+00000000..  6524133680006299660   2nd da 1st mo 1588/9 || 2 March 1589 || 2da 1mo 1588/9 Quaker double-date                                                  True
+33   C_Quaker           Q.+15881102/.+00000000..  6524626261215543308   2nd da 11th mo 1588/9 || 2 January 1590 || 2da 11mo 1588/9                                                                 True
+73   C_Quaker           Q.+16010300..+00000000..  6530958348679905292   3rd mo 1601 || May 1601 || Quaker- no day                                                                                  True
+19   C_JulGeor          D.+15880101/.+00000000/.  6524062761506308108   1 January 1588/9 || 1 January 1589 || DD                                                                                   True
+43   C_JulGeor          DO+19210113..+19220223/.  6710968738435456024   13 January 1921 or 23 February 1922/3 || 13 January 1921 or 23 February 1923 || DD range & STD                             True
+52   C_JulGeor          D.+20240324/.+00000000/.  6769591954325897228   24 March 2024/5 || 24 March 2025 ||   DD   VALID 1 Jan to 24 Mar only.   1583/4 to present                                 True
+62   C_JulGeor          DS+15880201/.+16000302/.  6524097940864305170   from 1 February 1588/9 to 2 March 1600/1 || from 1 February 1589 to 2 March 1601|| DD range                                True
+68   C_JulGeor          DS+15880201/.+16000302..  6524097940863256594   from 1 February 1588/9 to 2 March 1600 || from 1 February 1591 to 2 March 1600 ||  DD range w/ norm                        True
+
+Today, RMdate, RMSortDate2026-02-24
+D.+20260224..+00000000..
+6770119719907229708
+===========================================DIV50==
+
+
+[18, 'Std_1', '.', 9223372036854775807, ' || || Blank date', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+18          '.'  ==  '.'
+English date from GUI  vs. English date derived from DB RMDate
+18          ''  ==  ''
+Sort date from DB  vs.  sort date derived from DB RMDate
+18         '9223372036854775807'  ==  '9223372036854775807'
+English sort date from RM GUI  vs.  English format from sort date
+18         ''  ==  ''
+
+
+[34, 'Std_1', 'TText date', 9223372036854775807, 'Text date ||  ||  Text date', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+34  ======= 'TText date'  !=  '.'
+English date from GUI  vs. English date derived from DB RMDate
+34 ======== 'Text date'  !=  ''
+Sort date from DB  vs.  sort date derived from DB RMDate
+34         '9223372036854775807'  ==  '9223372036854775807'
+English sort date from RM GUI  vs.  English format from sort date
+34         ''  ==  ''
+
+
+[72, 'Std_1', 'D.+00010000..+00000000..', 5630062501345361932, '1 || 1 ||  Y -1 digit', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+72          'D.+00010000..+00000000..'  ==  'D.+00010000..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+72          '1'  ==  '1'
+Sort date from DB  vs.  sort date derived from DB RMDate
+72         '5630062501345361932'  ==  '5630062501345361932'
+English sort date from RM GUI  vs.  English format from sort date
+72         '1'  ==  '1'
+
+
+[41, 'Std_1', 'D.+00100000..+00000000..', 5635129050926153740, '10 || 10 || YY -2 digit', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+41          'D.+00100000..+00000000..'  ==  'D.+00100000..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+41          '10'  ==  '10'
+Sort date from DB  vs.  sort date derived from DB RMDate
+41         '5635129050926153740'  ==  '5635129050926153740'
+English sort date from RM GUI  vs.  English format from sort date
+41         '10'  ==  '10'
+
+
+[42, 'Std_1', 'D.+00110000..+00000000..', 5635692000879575052, '11 || 11 || YY -2 digit', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+42          'D.+00110000..+00000000..'  ==  'D.+00110000..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+42          '11'  ==  '11'
+Sort date from DB  vs.  sort date derived from DB RMDate
+42         '5635692000879575052'  ==  '5635692000879575052'
+English sort date from RM GUI  vs.  English format from sort date
+42         '11'  ==  '11'
+
+
+[84, 'Std_1', 'D.+01230000..+00000000..', 5698742395662761996, '123 || 123 || YYY -3 digit', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+84          'D.+01230000..+00000000..'  ==  'D.+01230000..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+84          '123'  ==  '123'
+Sort date from DB  vs.  sort date derived from DB RMDate
+84         '5698742395662761996'  ==  '5698742395662761996'
+English sort date from RM GUI  vs.  English format from sort date
+84         '123'  ==  '123'
+
+
+[28, 'Std_1', 'D.+19210000..+00000000..', 6710926411914280972, '1921 || 1921 || YYYY -4 digit', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+28          'D.+19210000..+00000000..'  ==  'D.+19210000..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+28          '1921'  ==  '1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+28         '6710926411914280972'  ==  '6710926411914280972'
+English sort date from RM GUI  vs.  English format from sort date
+28         '1921'  ==  '1921'
+
+
+[71, 'Std_1', 'D.+19210113..+00000000..', 6710968743111950348, '13 January 1921 || 13 January 1921||  DD MMMM YYYY   NORMAL DATE', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+71          'D.+19210113..+00000000..'  ==  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+71          '13 January 1921'  ==  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+71         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+71         '13 January 1921'  ==  '13 January 1921'
+
+
+[27, 'Std_1', 'D.+19210100..+00000000..', 6710961596286369804, 'January 1921 || January 1921 || MMMM YYYY    Jan 1921', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+27          'D.+19210100..+00000000..'  ==  'D.+19210100..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+27          'January 1921'  ==  'January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+27         '6710961596286369804'  ==  '6710961596286369804'
+English sort date from RM GUI  vs.  English format from sort date
+27         'January 1921'  ==  'January 1921'
+
+
+[29, 'Std_1', 'D.+00000113..+00000000..', 9222851435277844492, '13 January || 13 January  ||  DD MMMM', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+29          'D.+00000113..+00000000..'  ==  'D.+00000113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+29          '13 January'  ==  '13 January'
+Sort date from DB  vs.  sort date derived from DB RMDate
+29         '9222851435277844492'  ==  '9222851435277844492'
+English sort date from RM GUI  vs.  English format from sort date
+29         '13 January'  ==  '13 January'
+
+
+[26, 'Std_1', 'D.+19210013..+00000000..', 6710933558739861516, '13 ??? 1921 || 13 ??? 1921 ||  DD YYYY    13 ??? 1921', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+26          'D.+19210013..+00000000..'  ==  'D.+19210013..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+26          '13 ??? 1921'  ==  '13 ??? 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+26         '6710933558739861516'  ==  '6710933558739861516'
+English sort date from RM GUI  vs.  English format from sort date
+26         '13 ??? 1921'  ==  '13 ??? 1921'
+
+
+[92, 'Std_1', 'D.+00000013..+00000000..', 9222816250905755660, '13 ??? || 13 ??? || DD', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+92          'D.+00000013..+00000000..'  ==  'D.+00000013..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+92 ======== '13 ???'  !=  '13 '
+Sort date from DB  vs.  sort date derived from DB RMDate
+92         '9222816250905755660'  ==  '9222816250905755660'
+English sort date from RM GUI  vs.  English format from sort date
+92 ======= '13 ???'  !=  '13 '
+
+
+[30, 'Std_1', 'D.+00000100..+00000000..', 9222844288452263948, 'January || January || MMMM', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+30          'D.+00000100..+00000000..'  ==  'D.+00000100..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+30          'January'  ==  'January'
+Sort date from DB  vs.  sort date derived from DB RMDate
+30         '9222844288452263948'  ==  '9222844288452263948'
+English sort date from RM GUI  vs.  English format from sort date
+30         'January'  ==  'January'
+
+
+[66, 'Std_1', 'D.+99991231..+00000000..', -7187868683162615796, '31 December 9999 || 31 December 9999 || largest date, wrong sort generated $NG', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+66          'D.+99991231..+00000000..'  ==  'D.+99991231..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+66          '31 December 9999'  ==  '31 December 9999'
+Sort date from DB  vs.  sort date derived from DB RMDate
+66 ======= '-7187868683162615796'  !=  '11258875390546935820'
+English sort date from RM GUI  vs.  English format from sort date
+66         '31 December 9999'  ==  '31 December 9999'
+
+
+[67, 'Std_1', 'D.+49991231..+00000000..', 8444125623440375820, '31 December 4999 || 31 December 4999 || largest date with a correct sort date', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+67          'D.+49991231..+00000000..'  ==  'D.+49991231..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+67          '31 December 4999'  ==  '31 December 4999'
+Sort date from DB  vs.  sort date derived from DB RMDate
+67         '8444125623440375820'  ==  '8444125623440375820'
+English sort date from RM GUI  vs.  English format from sort date
+67         '31 December 4999'  ==  '31 December 4999'
+
+
+[49, 'Std_1 BC', 'D.-00100101..+00000000..', 5623905785985630220, '1 January 10 BC || 1 January 10 BC || YY BC', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+49          'D.-00100101..+00000000..'  ==  'D.-00100101..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+49          '1 January 10 BC'  ==  '1 January 10 BC'
+Sort date from DB  vs.  sort date derived from DB RMDate
+49         '5623905785985630220'  ==  '5623905785985630220'
+English sort date from RM GUI  vs.  English format from sort date
+49         '1 January 10 BC'  ==  '1 January 10 BC'
+
+
+[50, 'Std_1 BC', 'D.-00010101..+00000000..', 5628972335566422028, '1 January 1 BC || 1 January 1 BC || Y BC', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+50          'D.-00010101..+00000000..'  ==  'D.-00010101..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+50          '1 January 1 BC'  ==  '1 January 1 BC'
+Sort date from DB  vs.  sort date derived from DB RMDate
+50         '5628972335566422028'  ==  '5628972335566422028'
+English sort date from RM GUI  vs.  English format from sort date
+50         '1 January 1 BC'  ==  '1 January 1 BC'
+
+
+[51, 'Std_1 BC', 'D.-99990101..+00000000..', 598701260144652, '1 January 9999 BC || 1 January 9999 BC || largest abs year 9999', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+51          'D.-99990101..+00000000..'  ==  'D.-99990101..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+51          '1 January 9999 BC'  ==  '1 January 9999 BC'
+Sort date from DB  vs.  sort date derived from DB RMDate
+51         '598701260144652'  ==  '598701260144652'
+English sort date from RM GUI  vs.  English format from sort date
+51         '1 January 9999 BC'  ==  '1 January 9999 BC'
+
+
+[74, 'Std_1_LY', 'D.+19240229..+00000000..', 6712701573437325324, '29 February 1924 || 29 February 1924 || DD MMMM YYYY leap year', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+74          'D.+19240229..+00000000..'  ==  'D.+19240229..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+74          '29 February 1924'  ==  '29 February 1924'
+Sort date from DB  vs.  sort date derived from DB RMDate
+74         '6712701573437325324'  ==  '6712701573437325324'
+English sort date from RM GUI  vs.  English format from sort date
+74         '29 February 1924'  ==  '29 February 1924'
+
+
+[82, 'Std_1_LY', 'D.+20000229..+00000000..', 6755485769897345036, '29 February 2000 || 29 February 2000 || DD MMMM YYYY leap year', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+82          'D.+20000229..+00000000..'  ==  'D.+20000229..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+82          '29 February 2000'  ==  '29 February 2000'
+Sort date from DB  vs.  sort date derived from DB RMDate
+82         '6755485769897345036'  ==  '6755485769897345036'
+English sort date from RM GUI  vs.  English format from sort date
+82         '29 February 2000'  ==  '29 February 2000'
+
+
+[83, 'Std_1_LY', 'T29 February 2100', 9223372036854775807, '29 February 2100 || || 29 February 2100 not a leap year', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+83  ======= 'T29 February 2100'  !=  '.'
+English date from GUI  vs. English date derived from DB RMDate
+83 ======== '29 February 2100'  !=  ''
+Sort date from DB  vs.  sort date derived from DB RMDate
+83         '9223372036854775807'  ==  '9223372036854775807'
+English sort date from RM GUI  vs.  English format from sort date
+83         ''  ==  ''
+
+
+[38, 'Std_1 FAIL differ', 'D.+19190113..+00000000..', 6709842843205107724, '13 January 1919 || 13 January 1919–1 ||  D & SD differ', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+38          'D.+19190113..+00000000..'  ==  'D.+19190113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+38          '13 January 1919'  ==  '13 January 1919'
+Sort date from DB  vs.  sort date derived from DB RMDate
+38         '6709842843205107724'  ==  '6709842843205107724'
+English sort date from RM GUI  vs.  English format from sort date
+38 ======= '13 January 1919–1'  !=  '13 January 1919'
+
+
+[39, 'Std_1 FAIL differ', 'D.+19190113..+00000000..', 6709842843205107724, '13 January 1919 || 13 January 1919–2 ||  D & SD differ', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+39          'D.+19190113..+00000000..'  ==  'D.+19190113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+39          '13 January 1919'  ==  '13 January 1919'
+Sort date from DB  vs.  sort date derived from DB RMDate
+39         '6709842843205107724'  ==  '6709842843205107724'
+English sort date from RM GUI  vs.  English format from sort date
+39 ======= '13 January 1919–2'  !=  '13 January 1919'
+
+
+[40, 'Std_1 FAIL differ', 'D.+19210113..+00000000..', 6710968736429375509, '13 January 1921 ||  13 January 1921–10  ||  D & SD differ', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+40  ======= 'D.+19210113..+00000000..'  !=  'D-+19210113..+00100000..'
+English date from GUI  vs. English date derived from DB RMDate
+40 ======== '13 January 1921'  !=  '13 January 1921–10'
+Sort date from DB  vs.  sort date derived from DB RMDate
+40 ======= '6710968736429375509'  !=  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+40         '13 January 1921–10'  ==  '13 January 1921–10'
+
+
+[9, 'Std_1_Conf', 'D.+19210113.A+00000000..', 6710968743111950348, 'about 13 January 1921 || 13 January 1921 || about DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+9  ======= 'D.+19210113.A+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+9 ======== 'about 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+9         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+9         '13 January 1921'  ==  '13 January 1921'
+
+
+[13, 'Std_1_Conf', 'D.+19210113.S+00000000..', 6710968743111950348, 'say 13 January 1921 || 13 January 1921 ||  say DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+13  ======= 'D.+19210113.S+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+13 ======== 'say 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+13         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+13         '13 January 1921'  ==  '13 January 1921'
+
+
+[93, 'Std_1_Conf', 'D.+19210113.C+00000000..', 6710968743111950348, 'circa 13 January 1921 || 13 January 1921 || circa  DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+93  ======= 'D.+19210113.C+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+93 ======== 'circa 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+93         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+93         '13 January 1921'  ==  '13 January 1921'
+
+
+[10, 'Std_1_Conf', 'D.+19210113.E+00000000..', 6710968743111950348, 'estimated 13 January 1921 || 13 January 1921 ||  estimated DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+10  ======= 'D.+19210113.E+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+10 ======== 'estimated 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+10         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+10         '13 January 1921'  ==  '13 January 1921'
+
+
+[94, 'Std_1_Conf', 'D.+19210113.L+00000000..', 6710968743111950348, 'calculated 13 January 1921 || 13 January 1921 || calculated DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+94  ======= 'D.+19210113.L+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+94 ======== 'calculated 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+94         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+94         '13 January 1921'  ==  '13 January 1921'
+
+
+[95, 'Std_1_Conf', 'D.+19210113.?+00000000..', 6710968743111950348, 'maybe 13 January 1921 || 13 January 1921 || maybe DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+95  ======= 'D.+19210113.?+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+95 ======== 'maybe 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+95         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+95         '13 January 1921'  ==  '13 January 1921'
+
+
+[96, 'Std_1_Conf', 'D.+19210113.1+00000000..', 6710968743111950348, 'perhaps 13 January 1921 ||  13 January 1921  || perhaps DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+96  ======= 'D.+19210113.1+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+96 ======== 'perhaps 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+96         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+96         '13 January 1921'  ==  '13 January 1921'
+
+
+[97, 'Std_1_Conf', 'D.+19210113.2+00000000..', 6710968743111950348, 'apparently 13 January 1921 ||  13 January 1921 || apparently DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+97  ======= 'D.+19210113.2+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+97 ======== 'apparently 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+97         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+97         '13 January 1921'  ==  '13 January 1921'
+
+
+[98, 'Std_1_Conf', 'D.+19210113.3+00000000..', 6710968743111950348, 'likely 13 January 1921  || 13 January 1921  || likely DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+98  ======= 'D.+19210113.3+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+98 ======== 'likely 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+98         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+98         '13 January 1921'  ==  '13 January 1921'
+
+
+[99, 'Std_1_Conf', 'D.+19210113.4+00000000..', 6710968743111950348, 'possibly 13 January 1921 || 13 January 1921 || possibly DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+99  ======= 'D.+19210113.4+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+99 ======== 'possibly 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+99         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+99         '13 January 1921'  ==  '13 January 1921'
+
+
+[100, 'Std_1_Conf', 'D.+19210113.5+00000000..', 6710968743111950348, 'probably 13 January 1921 || 13 January 1921|| probably DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+100  ======= 'D.+19210113.5+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+100 ======== 'probably 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+100         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+100         '13 January 1921'  ==  '13 January 1921'
+
+
+[101, 'Std_1_Conf', 'D.+19210113.6+00000000..', 6710968743111950348, 'certainly 13 January 1921 || 13 January 1921 || certainly DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+101  ======= 'D.+19210113.6+00000000..'  !=  'D.+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+101 ======== 'certainly 13 January 1921'  !=  '13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+101         '6710968743111950348'  ==  '6710968743111950348'
+English sort date from RM GUI  vs.  English format from sort date
+101         '13 January 1921'  ==  '13 January 1921'
+
+
+[86, 'Std_1_Conf', 'D.+19450600.S+00000000..', 6724648317028925452, 'say June 1945 || June 1945 || say MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+86  ======= 'D.+19450600.S+00000000..'  !=  'D.+19450600..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+86 ======== 'say June 1945'  !=  'June 1945'
+Sort date from DB  vs.  sort date derived from DB RMDate
+86         '6724648317028925452'  ==  '6724648317028925452'
+English sort date from RM GUI  vs.  English format from sort date
+86         'June 1945'  ==  'June 1945'
+
+
+[102, 'Std_1_Conf', 'D.+19450024.S+00000000..', 6724450404935925772, 'say 24 ??? 1945 || 24 ??? 1945 || say DD YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+102  ======= 'D.+19450024.S+00000000..'  !=  'D.+19450024..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+102 ======== 'say 24 ??? 1945'  !=  '24 ??? 1945'
+Sort date from DB  vs.  sort date derived from DB RMDate
+102         '6724450404935925772'  ==  '6724450404935925772'
+English sort date from RM GUI  vs.  English format from sort date
+102         '24 ??? 1945'  ==  '24 ??? 1945'
+
+
+[103, 'Std_1_Conf', 'D.+19450000.S+00000000..', 6724437210796392460, 'say 1945 || 1945 || say YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+103  ======= 'D.+19450000.S+00000000..'  !=  'D.+19450000..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+103 ======== 'say 1945'  !=  '1945'
+Sort date from DB  vs.  sort date derived from DB RMDate
+103         '6724437210796392460'  ==  '6724437210796392460'
+English sort date from RM GUI  vs.  English format from sort date
+103         '1945'  ==  '1945'
+
+
+[104, 'Std_1_Conf', 'D.+00000021.S+00000000..', 9222820648952266764, 'say 21 ??? || 21 ??? || say DD', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+104  ======= 'D.+00000021.S+00000000..'  !=  'D.+00000021..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+104 ======== 'say 21 ???'  !=  '21 '
+Sort date from DB  vs.  sort date derived from DB RMDate
+104         '9222820648952266764'  ==  '9222820648952266764'
+English sort date from RM GUI  vs.  English format from sort date
+104 ======= '21 ???'  !=  '21 '
+
+
+[105, 'Std_1_Conf', 'D.+00000300.S+00000000..', 9222914657196441612, 'say March || March || say MMMM', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+105  ======= 'D.+00000300.S+00000000..'  !=  'D.+00000300..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+105 ======== 'say March'  !=  'March'
+Sort date from DB  vs.  sort date derived from DB RMDate
+105         '9222914657196441612'  ==  '9222914657196441612'
+English sort date from RM GUI  vs.  English format from sort date
+105         'March'  ==  'March'
+
+
+[8, 'Std_1_Mod', 'DA+19210113..+00000000..', 6710968743112997919, 'after 13 January 1921 || after 13 January 1921 ||  after DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+8  ======= 'DA+19210113..+00000000..'  !=  'DA+19210113..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+8         '6710968743112997919'  ==  '6710968743112997919'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[11, 'Std_1_Mod', 'DB+19210113..+00000000..', 6710968743111950336, 'before 13 January 1921 || before 13 January 1921 || before DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+11          'DB+19210113..+00000000..'  ==  'DB+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+11          'before 13 January 1921'  ==  'before 13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+11         '6710968743111950336'  ==  '6710968743111950336'
+English sort date from RM GUI  vs.  English format from sort date
+11         'before 13 January 1921'  ==  'before 13 January 1921'
+
+
+[6, 'Std_1_Mod', 'DF+19210113..+00000000..', 6710968743112997915, 'from 13 January 1921 || from 13 January 1921 || from DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+6  ======= 'DF+19210113..+00000000..'  !=  'DF+19210113..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+6         '6710968743112997915'  ==  '6710968743112997915'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[7, 'Std_1_Mod', 'DI+19210113..+00000000..', 6710968743112997918, 'since 13 January 1921 || since 13 January 1921 ||  since DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+7  ======= 'DI+19210113..+00000000..'  !=  'DI+19210113..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+7         '6710968743112997918'  ==  '6710968743112997918'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[4, 'Std_1_Mod', 'DT+19210113..+00000000..', 6710968743111950342, 'to 13 January 1921 || to 13 January 1921 || to DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+4          'DT+19210113..+00000000..'  ==  'DT+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+4          'to 13 January 1921'  ==  'to 13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+4         '6710968743111950342'  ==  '6710968743111950342'
+English sort date from RM GUI  vs.  English format from sort date
+4         'to 13 January 1921'  ==  'to 13 January 1921'
+
+
+[5, 'Std_1_Mod', 'DU+19210113..+00000000..', 6710968743111950345, 'until 13 January 1921 || until 13 January 1921 || until DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+5          'DU+19210113..+00000000..'  ==  'DU+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+5          'until 13 January 1921'  ==  'until 13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+5         '6710968743111950345'  ==  '6710968743111950345'
+English sort date from RM GUI  vs.  English format from sort date
+5         'until 13 January 1921'  ==  'until 13 January 1921'
+
+
+[3, 'Std_1_Mod', 'DY+19210113..+00000000..', 6710968743111950339, 'by 13 January 1921 || by 13 January 1921  || by DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+3          'DY+19210113..+00000000..'  ==  'DY+19210113..+00000000..'
+English date from GUI  vs. English date derived from DB RMDate
+3          'by 13 January 1921'  ==  'by 13 January 1921'
+Sort date from DB  vs.  sort date derived from DB RMDate
+3         '6710968743111950339'  ==  '6710968743111950339'
+English sort date from RM GUI  vs.  English format from sort date
+3         'by 13 January 1921'  ==  'by 13 January 1921'
+
+
+[111, 'Std_1_Mod', 'DR+19220125..+19210113..', 6711538285456471055, 'between 25 January 1922 and 13 January 1921 || between 25 January 1922 and 13 January 1921 || between reverse timeline', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+111         '6711538285456471055'  ==  '6711538285456471055'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[44, 'Std_1_Mod_p', 'DI+00000300..+00000000..', 9222949291813764126, 'since March || since March ||  since MMMM', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+44  ======= 'DI+00000300..+00000000..'  !=  'DI+00000363..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+44 ======= '9222949291813764126'  !=  '9222914657197489182'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[59, 'Std_1_Mod_p', 'DI+19450100..+00000000..', 6724507029785803806, 'since January 1945 || since January 1945 || since MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+59  ======= 'DI+19450100..+00000000..'  !=  'DI+19450163..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+59 ======= '6724507029785803806'  !=  '6724472395169528862'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[60, 'Std_1_Mod_p', 'DI+19400000..+00000000..', 6722184861227940894, 'since 1940 || since 1940 || since YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+60  ======= 'DI+19400000..+00000000..'  !=  'DI+19401563..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+60 ======= '6722184861227940894'  !=  '6721622461030333470'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[87, 'Std_1_Mod_p', 'DI+00000023..+00000000..', 9223349514046274590, 'since 23 ??? || since 23 ??? || since DD', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+87  ======= 'DI+00000023..+00000000..'  !=  'DI+00001523..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+87 ======= '9223349514046274590'  !=  '9222821748464942110'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[88, 'Std_1_Mod_p', 'DI+19450023..+00000000..', 6724977620762491934, 'since 23 ??? 1945 || since 23 ??? 1945 || since DD YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+88  ======= 'DI+19450023..+00000000..'  !=  'DI+19451523..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+88 ======= '6724977620762491934'  !=  '6724449855181159454'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[89, 'Std_1_Mod_p', 'DI+00000023..+00000000..', 9223349514046274590, 'since 23 ??? || since 23 ??? || since DD', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+89  ======= 'DI+00000023..+00000000..'  !=  'DI+00001523..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+89 ======= '9223349514046274590'  !=  '9222821748464942110'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[106, 'Std_1_Mod', 'DI+00000100..+00000000..', 9222878923069586462, ' since January || since January || since MMMM', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+106  ======= 'DI+00000100..+00000000..'  !=  'DI+00000163..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+106 ======= '9222878923069586462'  !=  '9222844288453311518'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[64, 'Std_1_Mod+Conf', 'DF+19210113.C+00000000..', 6710968743112997915, 'from circa 13 January 1921  || from 13 January 1921  ||  from circa DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+64  ======= 'DF+19210113.C+00000000..'  !=  'DF+19210113..+00001563..'
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.Month number out of range
+Sort date from DB  vs.  sort date derived from DB RMDate
+64         '6710968743112997915'  ==  '6710968743112997915'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[17, 'Std_2_Mod', 'DO+19210113..+19220125..', 6710968738434343960, '13 January 1921 or 25 January 1922 || 13 January 1921 or 25 January 1922 || or DD MMMM YYYY or DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+17         '6710968738434343960'  ==  '6710968738434343960'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[14, 'Std_2_Mod', 'DR+19210113..+19220125..', 6710968738434343951, 'between 13 January 1921 and 25 January 1922 || between 13 January 1921 and 25 January 1922  || btwn DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+14         '6710968738434343951'  ==  '6710968738434343951'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[16, 'Std_2_Mod', 'D-+19210113..+19220125..', 6710968738434343957, '13 January 1921–25 January 1922 || 13 January 1921–25 January 1922  || dash DD MMMM YYYY - DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+16         '6710968738434343957'  ==  '6710968738434343957'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[15, 'Std_2_Mod', 'DS+19210113..+19220125..', 6710968738434343954, 'from 13 January 1921 to 25 January 1922  || from 13 January 1921 to 25 January 1922  || from DD MMMM YYYY to DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+15         '6710968738434343954'  ==  '6710968738434343954'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[110, 'Std_2_Mod_RevTL', 'DO+19220125..+19210114..', 6711538285456472088, '25 January 1922 or 14 January 1921 || 25 January 1922 or 14 January 1921 || or reverse timeline', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+110         '6711538285456472088'  ==  '6711538285456472088'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[112, 'Std_2_Mod_RevTL', 'DR+19220125..+19210113..', 6711538285456471055, 'between 25 January 1922 and 13 January 1921 || between 25 January 1922 and 13 January 1921 || between reverse timeline', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+112         '6711538285456471055'  ==  '6711538285456471055'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[113, 'Std_2_Mod_RevTL', 'DS+19220125..+19210113..', 6711538285456471058, 'from 25 January 1922 to 13 January 1921 || from 25 January 1922 to 13 January 1921 || from reverse timeline', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+113         '6711538285456471058'  ==  '6711538285456471058'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[114, 'Std_2_Mod_RevTL', 'D-+19220125..+19210113..', 6711538285456471061, '25 January 1922–13 January 1921 || 25 January 1922–13 January 1921 || dash reverse timeline', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+114         '6711538285456471061'  ==  '6711538285456471061'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[78, 'Std_2_Mod', 'DR+19300104..+19300210..', 6716030340221249551, 'between 4 Jan 1930 and 10 Feb 1930 || between 4 Jan 1930 and 10 Feb 1930 || btw DD MMMM YYYY and DD MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+78         '6716030340221249551'  ==  '6716030340221249551'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[69, 'Std_2_Mod_p', 'DR+19210013..+19230015..', 6710933554063227919, 'between 13 ??? 1921 and 15 ??? 1923 || between 13 ??? 1921 and 15 ??? 1923 || between DD YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+69         '6710933554063227919'  ==  '6710933554063227919'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[35, 'Std_2_Dash', 'D-+19210000..+00010000..', 6710926405222268949, '1921–1 || 1921–1 ||  YYYY dash Y', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+35          'D-+19210000..+00010000..'  ==  'D-+19210000..+00010000..'
+English date from GUI  vs. English date derived from DB RMDate
+35          '1921–1'  ==  '1921–1'
+Sort date from DB  vs.  sort date derived from DB RMDate
+35         '6710926405222268949'  ==  '6710926405222268949'
+English sort date from RM GUI  vs.  English format from sort date
+35         '1921–1'  ==  '1921–1'
+
+
+[36, 'Std_2_Dash', 'D-+19210000..+00020000..', 6710926405223317525, '1921–2 || 1921–2 || YYYY dash Y', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+36          'D-+19210000..+00020000..'  ==  'D-+19210000..+00020000..'
+English date from GUI  vs. English date derived from DB RMDate
+36          '1921–2'  ==  '1921–2'
+Sort date from DB  vs.  sort date derived from DB RMDate
+36         '6710926405223317525'  ==  '6710926405223317525'
+English sort date from RM GUI  vs.  English format from sort date
+36         '1921–2'  ==  '1921–2'
+
+
+[37, 'Std_2_Dash', 'D-+19210000..+00120000..', 6710926405233803285, '1921-12 || 1921-12  || YYYY dash YY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+37          'D-+19210000..+00120000..'  ==  'D-+19210000..+00120000..'
+English date from GUI  vs. English date derived from DB RMDate
+37 ======== '1921-12'  !=  '1921–12'
+Sort date from DB  vs.  sort date derived from DB RMDate
+37         '6710926405233803285'  ==  '6710926405233803285'
+English sort date from RM GUI  vs.  English format from sort date
+37 ======= '1921-12'  !=  '1921–12'
+
+
+[91, 'Std_2_Dash', 'D-+19210000..+01230000..', 6710926405350195221, '1921–123 || 1921–123  || YYYY dash YYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+91          'D-+19210000..+01230000..'  ==  'D-+19210000..+01230000..'
+English date from GUI  vs. English date derived from DB RMDate
+91          '1921–123'  ==  '1921–123'
+Sort date from DB  vs.  sort date derived from DB RMDate
+91         '6710926405350195221'  ==  '6710926405350195221'
+English sort date from RM GUI  vs.  English format from sort date
+91         '1921–123'  ==  '1921–123'
+
+
+[75, 'Std_2_Dash', 'D-+19210000..+19230000..', 6710926407237632021, '1921–1923 || 1921–1923 || YYYY dash YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+75          'D-+19210000..+19230000..'  ==  'D-+19210000..+19230000..'
+English date from GUI  vs. English date derived from DB RMDate
+75          '1921–1923'  ==  '1921–1923'
+Sort date from DB  vs.  sort date derived from DB RMDate
+75         '6710926407237632021'  ==  '6710926407237632021'
+English sort date from RM GUI  vs.  English format from sort date
+75         '1921–1923'  ==  '1921–1923'
+
+
+[58, 'Std_2_Dash', 'D-+19300600..+00010000..', 6716204061035593749, 'June 1930–1 || June 1930–1 ||MMMM YYYY dash Y', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+58          'D-+19300600..+00010000..'  ==  'D-+19300600..+00010000..'
+English date from GUI  vs. English date derived from DB RMDate
+58          'June 1930–1'  ==  'June 1930–1'
+Sort date from DB  vs.  sort date derived from DB RMDate
+58         '6716204061035593749'  ==  '6716204061035593749'
+English sort date from RM GUI  vs.  English format from sort date
+58         'June 1930–1'  ==  'June 1930–1'
+
+
+[55, 'Std_2_Dash', 'D-+00000300..+00010000..', 9222914650504429589, 'March–1 || March–1 || MMMM dash Y', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+55          'D-+00000300..+00010000..'  ==  'D-+00000300..+00010000..'
+English date from GUI  vs. English date derived from DB RMDate
+55          'March–1'  ==  'March–1'
+Sort date from DB  vs.  sort date derived from DB RMDate
+55         '9222914650504429589'  ==  '9222914650504429589'
+English sort date from RM GUI  vs.  English format from sort date
+55         'March–1'  ==  'March–1'
+
+
+[107, 'Std_2_Dash', 'D-+00000022..+00010000..', 9222821192016068629, '22 ???–1 || 22 ???–1 || DD dash 1', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+107          'D-+00000022..+00010000..'  ==  'D-+00000022..+00010000..'
+English date from GUI  vs. English date derived from DB RMDate
+107 ======== '22 ???–1'  !=  '22 –1'
+Sort date from DB  vs.  sort date derived from DB RMDate
+107         '9222821192016068629'  ==  '9222821192016068629'
+English sort date from RM GUI  vs.  English format from sort date
+107 ======= '22 ???–1'  !=  '22 –1'
+
+
+[108, 'Std_2_Dash', 'D-+00000623..+00010000..', 9223032848004415509, '23 June–1 || 23 June–1 || DD MMMM dash 1', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+108          'D-+00000623..+00010000..'  ==  'D-+00000623..+00010000..'
+English date from GUI  vs. English date derived from DB RMDate
+108          '23 June–1'  ==  '23 June–1'
+Sort date from DB  vs.  sort date derived from DB RMDate
+108         '9223032848004415509'  ==  '9223032848004415509'
+English sort date from RM GUI  vs.  English format from sort date
+108         '23 June–1'  ==  '23 June–1'
+
+
+[109, 'Std_2_Dash', 'D-+19450023..+00010000..', 6724449848488099861, '23 ??? 1945–1 || 23 ??? 1945–1 || DD YYYY dash 1', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+109          'D-+19450023..+00010000..'  ==  'D-+19450023..+00010000..'
+English date from GUI  vs. English date derived from DB RMDate
+109          '23 ??? 1945–1'  ==  '23 ??? 1945–1'
+Sort date from DB  vs.  sort date derived from DB RMDate
+109         '6724449848488099861'  ==  '6724449848488099861'
+English sort date from RM GUI  vs.  English format from sort date
+109         '23 ??? 1945–1'  ==  '23 ??? 1945–1'
+
+
+[56, 'Std_2_Dash', 'D-+19300600..+19300700..', 6716204063058755605, 'June 1930–July 1930 || June 1930–July 1930 || MMMM YYYY dash MMMM YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+56         '6716204063058755605'  ==  '6716204063058755605'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[53, 'Std_2_Dash', 'D-+00000304..+00000406..', 9222916856219965461, '4 March–6 April  || 4 March–6 April || DD MMMM dash DD MMMM', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+53         '9222916856219965461'  ==  '9222916856219965461'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[32, 'Std_2_Dash', 'D-+00000100..+00000300..', 9222844288452460565, 'January–March || January–March ||   MMMM dash MMMM', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+32         '9222844288452460565'  ==  '9222844288452460565'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[54, 'Std_2_Dash', 'D-+00000104..+00000200..', 9222846487475650581, '4 January–February || 4 January–February || DD MMMM dash MM', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+54         '9222846487475650581'  ==  '9222846487475650581'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[57, 'Std_2_Dash', 'D-+19300600..+19300000..', 6716204063058296853, 'June 1930–1930 || June 1930–1930 || MMMM YYYY dash YYYY', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+57          'D-+19300600..+19300000..'  ==  'D-+19300600..+19300000..'
+English date from GUI  vs. English date derived from DB RMDate
+57          'June 1930–1930'  ==  'June 1930–1930'
+Sort date from DB  vs.  sort date derived from DB RMDate
+57         '6716204063058296853'  ==  '6716204063058296853'
+English sort date from RM GUI  vs.  English format from sort date
+57         'June 1930–1930'  ==  'June 1930–1930'
+
+
+[76, 'Std_2_Mod+Conf', 'DS+19210113.A+19220125.S', 6710968738434343954, 'from about 13 January 1921 to say 25 January 1922 || from 13 January 1921 to 25 January 1922 || from p1p2 CONF', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+76         '6710968738434343954'  ==  '6710968738434343954'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[77, 'Std_2_Mod+Conf', 'DS+19210113.A+19220125..', 6710968738434343954, 'from about 13 January 1921 to 25 January 1922 || from 13 January 1921 to 25 January 1922 || from p1 CONF', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+77         '6710968738434343954'  ==  '6710968738434343954'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
+
+
+[90, 'Std_2_Mod+Conf', 'DS+19210113..+19220125.S', 6710968738434343954, 'from 13 January 1921 to say 25 January 1922 || from 13 January 1921 to 25 January 1922 || from p2 CONF', True]
+Compare RMDate in DB  vs. RMDate derived from DB SortDate
+
+========================== A test case caused an exception. Continue with test.can only concatenate str (not "int") to str
+English date from GUI  vs. English date derived from DB RMDate
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_RMDate_from_SortDate' where it is not associated with a value
+Sort date from DB  vs.  sort date derived from DB RMDate
+90         '6710968738434343954'  ==  '6710968738434343954'
+English sort date from RM GUI  vs.  English format from sort date
+
+========================== A test case caused an exception. Continue with test.cannot access local variable 'out_english_date_from_DB_SortDate' where it is not associated with a value
