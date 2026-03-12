@@ -1,7 +1,7 @@
-Report generated at      = 2026-02-24 11:45:49
+Report generated at      = 2026-03-12 15:16:40
 Utility name             = RMDate -test
 Python version           = v3.14.0
-Database last changed on = 2026-02-24 10:24:10
+Database last changed on = 2026-02-24 12:07:59
 Database processed       = C:\Users\rotter\dev\Genealogy\Test Data\RMDate and SortDate test data\TEST DATA Dates -format_v11 -dump -reduced -v003 -RW.rmtree
 
 
@@ -114,9 +114,9 @@ Database processed       = C:\Users\rotter\dev\Genealogy\Test Data\RMDate and So
 62   C_JulGeor          DS+15880201/.+16000302/.  6524097940864305170   from 1 February 1588/9 to 2 March 1600/1 || from 1 February 1589 to 2 March 1601|| DD range                                True
 68   C_JulGeor          DS+15880201/.+16000302..  6524097940863256594   from 1 February 1588/9 to 2 March 1600 || from 1 February 1591 to 2 March 1600 ||  DD range w/ norm                        True
 
-Today, RMdate, RMSortDate2026-02-24
-D.+20260224..+00000000..
-6770119719907229708
+Today, RMdate, RMSortDate2026-03-12
+D.+20260312..+00000000..
+6770148307209551884
 ===========================================DIV50==
 
 

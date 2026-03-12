@@ -64,16 +64,16 @@ from datetime import date
 
 # ===================================================DIV60==
 def now_RMDate()-> str:
-    return to_RMDate(str(date.today()))
+    return RMDate_str_TO_ISO_str(str(date.today()))
 
 
 # ===================================================DIV60==
 def now_RMSortDate()-> int:
-    return to_RMSortDate(to_RMDate(str(date.today())))
+    return RMDate_str_TO_RMSortDate_int(RMDate_str_TO_ISO_str(str(date.today())))
 
 
 # ===================================================DIV60==
-def to_RMDate(DateStr : str)-> str:
+def RMDate_str_TO_ISO_str(DateStr : str)-> str:
     # ISO date to RMDate str
 
     # form is Format.LONG, Format.SHORT
@@ -103,7 +103,7 @@ def to_RMDate(DateStr : str)-> str:
 
 
 # ===================================================DIV60==
-def from_RMDate(RMDate : str, form)-> str:
+def RMDate_str_TO_en_str(RMDate : str, form)-> str:
     # RMDate str to English str
 
     # form is Format.LONG, Format.SHORT
@@ -230,7 +230,7 @@ def from_RMDate(RMDate : str, form)-> str:
 
 
 # ===================================================DIV60==
-def to_RMSortDate(RMDate : str)-> int :
+def RMDate_str_TO_RMSortDate_int(RMDate : str)-> int :
     # RMDate is an RM internal date string
 
     date_type = RMDate[0:1]
@@ -320,9 +320,9 @@ def to_RMSortDate(RMDate : str)-> int :
 
 
 # ===================================================DIV60==
-def from_RMSortDate(sd: int) -> str:
+def RMSortDate_int_TO_RMDate_str(sd: int) -> str:
     """
-    Inverse of to_RMSortDate(RMDate) for D-type, non-slash RM dates.
+    Inverse of RMDate_str_TO_RMSortDate_int(RMDate) for D-type, non-slash RM dates.
     Returns a 24-character RM internal date string.
     """
 
@@ -549,6 +549,7 @@ class RMdate_structure:
                     raise Exception("Format not supported")
         raise Exception(
             "Malformed RM Date: StructCode character, no offset available")
+
 
  # ===================================================DIV60==
 class ConfidenceCode(enum.IntEnum):

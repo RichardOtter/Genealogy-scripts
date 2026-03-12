@@ -8,6 +8,7 @@ from datetime import date
 import RMpy.common as RMc
 import datetime
 
+# This test the functions in RMpy.RMDate
 
 # ===================================================DIV60==
 def main():
@@ -118,7 +119,7 @@ def Test(test_item, report_file):
         if test_RMDate_from_DBSortDate:
             try:
                 report_file.write("Compare RMDate in DB  vs. RMDate derived from DB SortDate\n")
-                out_RMDate_from_SortDate= RMpy.RMDate.from_RMSortDate(in_DB_Sortdate)
+                out_RMDate_from_SortDate= RMpy.RMDate.RMSortDate_int_TO_RMDate_str(in_DB_Sortdate)
                 if in_DB_RMdate != out_RMDate_from_SortDate:
                     report_file.write(F"{in_DB_EvemtID}  ======= '{in_DB_RMdate}'  !=  '{out_RMDate_from_SortDate}'\n")
                 else:
@@ -129,7 +130,7 @@ def Test(test_item, report_file):
         if test_english_date_from_DB_SortDate:
             try:
                 report_file.write("English date from GUI  vs. English date derived from DB RMDate\n")
-                out_english_date_from_DB_SortDate= RMpy.RMDate.from_RMDate(out_RMDate_from_SortDate, RMpy.RMDate.Format.LONG)
+                out_english_date_from_DB_SortDate= RMpy.RMDate.RMDate_str_TO_en_str(out_RMDate_from_SortDate, RMpy.RMDate.Format.LONG)
                 if in_GUI_full_date != out_english_date_from_DB_SortDate:
                     report_file.write(F"{in_DB_EvemtID} ======== '{in_GUI_full_date}'  !=  '{out_english_date_from_DB_SortDate}'\n")
                 else:
@@ -141,7 +142,7 @@ def Test(test_item, report_file):
         if test_english_date_from_DB_RMDate:
             try:
                 report_file.write("English format as shown in RM GUI  vs. English format derived from RMDate in DB\n")
-                out_engliah_date_from_DB_RMDate= RMpy.RMDate.from_RMDate(in_DB_RMdate, RMpy.RMDate.Format.LONG)
+                out_engliah_date_from_DB_RMDate= RMpy.RMDate.RMDate_str_TO_en_str(in_DB_RMdate, RMpy.RMDate.Format.LONG)
                 if out_engliah_date_from_DB_RMDate != in_GUI_full_date:
                     report_file.write(F"{in_DB_EvemtID} ======= '{in_GUI_full_date}'  !=  '{out_engliah_date_from_DB_RMDate}'\n")
                 else:
@@ -152,7 +153,7 @@ def Test(test_item, report_file):
         if test_SortDate_from_RMDate:
             try:
                 report_file.write("Sort date from DB  vs.  sort date derived from DB RMDate\n")
-                out_SortDate_from_DB_RMDate = RMpy.RMDate.to_RMSortDate(in_DB_RMdate)
+                out_SortDate_from_DB_RMDate = RMpy.RMDate.RMDate_str_TO_RMSortDate_int(in_DB_RMdate)
                 if out_SortDate_from_DB_RMDate != in_DB_Sortdate:
                     report_file.write(F"{in_DB_EvemtID} ======= '{in_DB_Sortdate}'  !=  '{out_SortDate_from_DB_RMDate}'\n")
                 else:

@@ -802,7 +802,7 @@ Don't change UTCModDate
 
 OwnerID won't indicate if it's hidden.
 go back to union of 2 queries
-instead of ownerID, return 0 for cits from main table and the HiddenSet number 
+instead of ownerID, return 0 for citations from main table and the HiddenSet number 
 from those from the aux table
 
 Do all the mods of the list locally as before. for hidden just use the set
@@ -827,7 +827,4 @@ SELECT clt.SortOrder, clt.LinkID, aclt.HiddenSet,
   WHERE clt.OwnerID = ?
     AND clt.OwnerType = 0
 ORDER BY clt.SortOrder ASC;
-
-
-
 """
