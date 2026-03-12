@@ -9,7 +9,7 @@ def main():
     db_path = Path(r"C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree")
 
     sql = """
-        SELECT PlaceID, Name COLLATE NOCASE
+        SELECT PlaceID, Name
         FROM (
             SELECT PlaceID, Name COLLATE NOCASE
             FROM PlaceTable
