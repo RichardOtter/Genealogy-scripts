@@ -1,6 +1,19 @@
--- database: ../../Otter-Saito.rmtree
+-- database: /Users/rotter/Genealogy/GeneDB/Otter-Saito.rmtree
+
+-- | DNAProvider    |     |
+-- | -------------- | --- |
+-- | 23andMe        | 1   |
+-- | Ancestry       | 2   |
+-- | FamilyTree DNA | 3   |
+-- | Living DNA     | 4   |
+-- | MyHeritage     | 5   |
+-- | GEDmatch       | 6   |
+-- | Unknown        | 998 |
+-- | Other          | 999 |
 
 SELECT RecID, Label1, Label2, SharedCM, DNAProvider
 FROM DNATable
+WHERE DNAProvider <> 1
 GROUP BY ID1, Label2, SharedCM
-HAVING Count(*) >1;
+HAVING Count(*) >1
+ORDER BY ID1, SharedCM DESC;
