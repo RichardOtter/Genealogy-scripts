@@ -6,6 +6,9 @@
 !dev util scripts/*lnk
 !Test external files/testing/*lnk
 
+# The VS code extension RememberOpenFiles wants to create this readme. Ignore it.
+**/.vscrof/_README.md
+
 # ignore browser url files
 *.url
 
