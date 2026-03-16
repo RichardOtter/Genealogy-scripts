@@ -1,9 +1,9 @@
--- database: \Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree
+-- database: C:\Users\rotter\Genealogy/GeneDB/Otter-Saito.rmtree
 
 WITH
  constants AS (SELECT
-    17  AS C_Matcher,  -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
-    2  AS C_DnaService,  -- 2 Anc, 5 MyHer
+    4  AS C_Matcher,  -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
+    5  AS C_DnaService,  -- 2 Anc, 5 MyHer
     1  AS C_Offset,
     1  AS C_MOD ),
  tab AS (
