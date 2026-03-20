@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "MyHeritage DNA Scraper",
+  "version": "1.0",
+  "description": "Scrape 50 DNA matches per page and combine into one JSON file.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.myheritage.com/dna/matches/*"],
+      "js": ["content.js"]
+    }
+  ]
+}

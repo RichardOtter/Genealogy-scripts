@@ -1,5 +1,8 @@
 import sqlite3
 
+#  Add error checking for locked DB
+# assume from from explorer, so pause at end and give summary
+
 
 def main():
     # DB_path = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\DB schema changes\DNA\Renumber_Sort2_in_AuxDNATable\DB\TEST-Renumber_Sort2_in_AuxDNATable.rmtree"
@@ -38,6 +41,9 @@ def main():
     # renumber_sort2("mydatabase.sqlite", combos)
 
     renumber_sort2(DB_path, combos)
+    
+
+    input("\n\n\nHit enter to close window")
 
 # ===================================================DIV60==
 def renumber_sort2(db_path, combos):

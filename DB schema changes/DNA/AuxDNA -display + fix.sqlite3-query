@@ -1,16 +1,16 @@
--- database: C:\Users\rotter\Genealogy/GeneDB/Otter-Saito.rmtree
+-- database: C:/Users/rotter/Genealogy/GeneDB/Otter-Saito.rmtree
 
 WITH
  constants AS (SELECT
-    4  AS C_Matcher,  -- 17 Roman, 4 Rose, 1 RJO, 6 GCS
-    5  AS C_DnaService,  -- 2 Anc, 5 MyHer
+    6  AS C_Matcher,  -- 17 Roman, 4 Rose, 1 RJO, 6 GCS, 1530 TSC, 12 EAI
+    2  AS C_DnaService,  -- 2 Anc, 5 MyHer
     1  AS C_Offset,
     1  AS C_MOD ),
  tab AS (
   SELECT 
   (1 + ROW_NUMBER() OVER( ORDER BY Sort1 DESC, Sort2 ASC, RecID ASC))
     -(SELECT C_Offset FROM constants) AS SeqNum,
-   Label2, Sort1, Sort2, SharedCM, adt.UTCModDate, Note, RecID, AuxDNATableID
+   Label2, Sort1, Sort2, round(SharedCM,1), DATETIME(adt.UTCModDate + 2415018.5), Note, RecID, AuxDNATableID
   FROM DNATable
   INNER JOIN AuxDNATable AS adt ON AuxDNATableID = RecID
   WHERE ID1=(SELECT C_Matcher FROM constants)
