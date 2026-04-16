@@ -8,7 +8,7 @@ from tkinter import ttk, messagebox
 
 DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Misc SQL\DB\TEST-Misc SQL.rmtree"
 
-SQL_QUERY = """\
+SQL_QUERY = """
 SELECT
    ct.CitationID,
    ct.ActualText
@@ -22,27 +22,35 @@ TARGET_COL = "ActualText"
 KEY_COL = "CitationID"
 TABLE_NAME = "CitationTable"
 
-# Regex rules: (pattern, replacement, flags)
-REGEX_RULES = [
 
+# Case-sensitive skip keywords (substring match)
+SKIP_KEYWORDS = [
+    "_AUTOEDIT-RULES",
+]
+
+# Keyword to append when a real edit occurred
+APPEND_KEYWORD = "_AUTOEDIT-RULES-2026-04-16-01\r\n" 
+
+# Real edit regex rules: (pattern, replacement, flags)
+EDIT_RULES = [
     # delete initial stuff
     ("(?s)\A.*(Edit profile|View in tree)(\r\n)+",
       "",
       0),
 
     # divide at Details/Matches
-    (r"\Details\r\nMatches",
-     r"\r\n===========================================DIV50==\r\nDetails\r\nMatches",
+    (r"\r\nDetails\r\nMatches",
+     r"\r\n\r\n===========================================DIV50==\r\nDetails\r\nMatches",
      0),
 
     # divide at Facts
-    (r"Facts(\r\n)+(Add\r\n)?",
-     r"\r\n===========================================DIV50==\r\nFacts\r\n\r\n",
+    (r"\r\nFacts(\r\n)+(Add\r\n)?",
+     r"\r\n\r\n===========================================DIV50==\r\nFacts\r\n\r\n",
      0),
 
     # divide at 'on the map'
     (r"\r\n.*?journey\r\n(.*\r\n)*.*on the map(\.)*\r\n",
-     r"\r\n\r\n\r\n",
+     r"\r\n\r\n\r\n\r\n",
      0),
 
     # divide at saved record
@@ -57,7 +65,7 @@ REGEX_RULES = [
 
     # divide at end part
     (r"(?s)(Additional actions|Family tree\r\nGenealogy).*\z", 
-     r"\r\n===========================================DIV50==\r\n_AUTOEDIT-RULES-2026-04-15-01\r\n",
+     r"\r\n\r\n===========================================DIV50==\r\n",
      0),
 
     # close up blank lines 4>2
@@ -68,14 +76,7 @@ REGEX_RULES = [
     # close up blank lines 3>2
     (r"\r\n\r\n\r\n",
      r"\r\n\r\n",
-     0),
-
-]
-
-
-# Case‑sensitive skip keywords
-SKIP_KEYWORDS = [
-    "_AUTOEDIT-RULES",
+     0)
 ]
 
 # ----------------------------------------
@@ -123,12 +124,36 @@ class RegexEditorApp:
             return False
         return any(keyword in text for keyword in SKIP_KEYWORDS)
 
-    # ---------------- REGEX ----------------
+    # ---------------- REGEX / EDIT LOGIC ----------------
 
     def apply_regexes(self, text):
+        """
+        1. Apply real edit rules.
+        2. If no real change, return original text (no keyword).
+        3. If changed and keyword not present, append keyword block.
+        """
+        if text is None:
+            return text
+
         new_text = text
-        for pattern, repl, flags in REGEX_RULES:
+
+        # Apply real edit rules
+        for pattern, repl, flags in EDIT_RULES:
             new_text = re.sub(pattern, repl, new_text, flags=flags)
+
+        # If no real change, do not append keyword
+        if new_text == text:
+            return text
+
+        # Real change happened; only append keyword if not already present
+        if APPEND_KEYWORD.strip() not in new_text:
+            # A1 behavior: append after everything, preserving all existing CRLFs
+            # APPEND_KEYWORD already includes its own trailing CRLF
+            if not new_text.endswith("\r\n"):
+                # Ensure we don't break CRLF style if text didn't end with CRLF
+                new_text += "\r\n"
+            new_text += APPEND_KEYWORD
+
         return new_text
 
     # ---------------- DIFF: UNIFIED ----------------
@@ -332,13 +357,14 @@ class RegexEditorApp:
             row = self.rows[self.index]
             old_text = row[TARGET_COL] or ""
 
-            # NEW: skip if keyword found (case‑sensitive)
+            # Skip if keyword found (case-sensitive substring)
             if self.should_skip_record(old_text):
                 self.index += 1
                 continue
 
             new_text = self.apply_regexes(old_text)
 
+            # If no change at all, skip this record
             if old_text == new_text:
                 self.index += 1
                 continue
@@ -370,8 +396,10 @@ class RegexEditorApp:
         if self.index >= len(self.rows):
             return
         row = self.rows[self.index]
-        new_text = self.apply_regexes(row[TARGET_COL] or "")
-        self.update_db(row[KEY_COL], new_text)
+        old_text = row[TARGET_COL] or ""
+        new_text = self.apply_regexes(old_text)
+        if new_text != old_text:
+            self.update_db(row[KEY_COL], new_text)
         self.index += 1
         self.show_next_record()
 
@@ -399,4 +427,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

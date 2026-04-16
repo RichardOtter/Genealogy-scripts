@@ -1,0 +1,54 @@
+
+APPEND_KEYWORD = "_AUTOEDIT-RULES-2026-04-16-01\r\n" 
+
+# Case-sensitive skip keywords (substring match)
+SKIP_KEYWORDS = [
+    "_AUTOEDIT-RULES",
+]
+
+EDIT_RULES = [
+    # delete initial stuff
+    ("(?s)\A.*(Edit profile|View in tree)(\r\n)+",
+      "",
+      0),
+
+    # divide at Details/Matches
+    (r"\r\nDetails\r\nMatches",
+     r"\r\n\r\n===========================================DIV50==\r\nDetails\r\nMatches",
+     0),
+
+    # divide at Facts
+    (r"\r\nFacts(\r\n)+(Add\r\n)?",
+     r"\r\n\r\n===========================================DIV50==\r\nFacts\r\n\r\n",
+     0),
+
+    # divide at 'on the map'
+    (r"\r\n.*?journey\r\n(.*\r\n)*.*on the map(\.)*\r\n",
+     r"\r\n\r\n\r\n\r\n",
+     0),
+
+    # divide at saved record
+    (r"\r\n(One|\d*) saved records?\r\n",
+     "\r\n\r\n===========================================DIV50==\r\nSaved source records\r\n\r\n",
+     0),
+
+    # divide at Immediate family
+    (r"\r\nImmediate family(\r\n)+(Add\r\n)?",
+     r"\r\n\r\n===========================================DIV50==\r\nImmediate family\r\n\r\n",
+     0),
+
+    # divide at end part
+    (r"(?s)(Additional actions|Family tree\r\nGenealogy).*\z", 
+     r"\r\n\r\n===========================================DIV50==\r\n",
+     0),
+
+    # close up blank lines 4>2
+    (r"\r\n\r\n\r\n\r\n",
+     r"\r\n\r\n",
+     0),
+
+    # close up blank lines 3>2
+    (r"\r\n\r\n\r\n",
+     r"\r\n\r\n",
+     0)
+]
