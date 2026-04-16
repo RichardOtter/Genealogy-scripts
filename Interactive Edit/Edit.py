@@ -1,5 +1,6 @@
 import sqlite3
 import re
+import difflib
 import tkinter as tk
 from tkinter import ttk, messagebox
 
@@ -21,7 +22,7 @@ TARGET_COL = "ActualText"
 KEY_COL = "CitationID"
 TABLE_NAME = "CitationTable"
 
-# List of regex rules: (pattern, replacement, flags)
+# Regex rules: (pattern, replacement, flags)
 REGEX_RULES = [
     (r"You are not a memberRequest membership", "", 0)
 ]
@@ -34,19 +35,37 @@ class RegexEditorApp:
         self.master = master
         master.title("SQLite Regex Editor")
 
+        # DB + data
         self.conn = sqlite3.connect(DB_PATH)
         self.conn.row_factory = sqlite3.Row
         self.rows = self.load_rows()
         self.index = 0
         self.apply_to_all = False
 
+        # Current record text
+        self.current_old = ""
+        self.current_new = ""
+
+        # GUI
         self.create_widgets()
         self.show_next_record()
+
+    # ---------------- DB ----------------
 
     def load_rows(self):
         cur = self.conn.cursor()
         cur.execute(SQL_QUERY)
         return cur.fetchall()
+
+    def update_db(self, key_value, new_text):
+        cur = self.conn.cursor()
+        cur.execute(
+            f"UPDATE {TABLE_NAME} SET {TARGET_COL} = ? WHERE {KEY_COL} = ?",
+            (new_text, key_value),
+        )
+        self.conn.commit()
+
+    # ---------------- REGEX ----------------
 
     def apply_regexes(self, text):
         new_text = text
@@ -54,45 +73,118 @@ class RegexEditorApp:
             new_text = re.sub(pattern, repl, new_text, flags=flags)
         return new_text
 
+    # ---------------- DIFF ----------------
+
+    def make_unified_diff(self, old, new):
+        old_lines = old.splitlines(keepends=True)
+        new_lines = new.splitlines(keepends=True)
+
+        diff = difflib.unified_diff(
+            old_lines,
+            new_lines,
+            fromfile="before",
+            tofile="after",
+            lineterm=""
+        )
+        return list(diff)
+
+    def render_diff(self, diff_lines):
+        self.before_text.delete("1.0", tk.END)
+
+        for line in diff_lines:
+            if line.startswith("+") and not line.startswith("+++"):
+                tag = "added"
+            elif line.startswith("-") and not line.startswith("---"):
+                tag = "removed"
+            elif line.startswith("@@") or line.startswith("---") or line.startswith("+++"):
+                tag = "header"
+            else:
+                tag = "context"
+
+            self.before_text.insert(tk.END, line + "\n", tag)
+
+        self.after_text.delete("1.0", tk.END)
+        self.after_text.insert("1.0", "(Diff mode enabled)")
+
+    # ---------------- GUI ----------------
+
     def create_widgets(self):
+        # Labels
         label_frame = ttk.Frame(self.master)
         label_frame.pack(fill="x", padx=5, pady=5)
 
-        ttk.Label(label_frame, text="Before").grid(row=0, column=0, sticky="w")
+        ttk.Label(label_frame, text="Before / Diff").grid(row=0, column=0, sticky="w")
         ttk.Label(label_frame, text="After").grid(row=0, column=1, sticky="w")
 
+        # Text frames
         text_frame = ttk.Frame(self.master)
         text_frame.pack(fill="both", expand=True, padx=5, pady=5)
 
-        self.before_text = tk.Text(text_frame, wrap="none")
+        # BEFORE text
+        self.before_text = tk.Text(text_frame, wrap="none", font=("Consolas", 10))
         self.before_text.grid(row=0, column=0, sticky="nsew")
+
         before_scroll_y = ttk.Scrollbar(text_frame, orient="vertical", command=self.before_text.yview)
         before_scroll_y.grid(row=0, column=1, sticky="ns")
         before_scroll_x = ttk.Scrollbar(text_frame, orient="horizontal", command=self.before_text.xview)
         before_scroll_x.grid(row=1, column=0, sticky="ew")
+
         self.before_text.configure(yscrollcommand=before_scroll_y.set, xscrollcommand=before_scroll_x.set)
 
-        self.after_text = tk.Text(text_frame, wrap="none")
+        # AFTER text
+        self.after_text = tk.Text(text_frame, wrap="none", font=("Consolas", 10))
         self.after_text.grid(row=0, column=2, sticky="nsew")
+
         after_scroll_y = ttk.Scrollbar(text_frame, orient="vertical", command=self.after_text.yview)
         after_scroll_y.grid(row=0, column=3, sticky="ns")
         after_scroll_x = ttk.Scrollbar(text_frame, orient="horizontal", command=self.after_text.xview)
         after_scroll_x.grid(row=1, column=2, sticky="ew")
+
         self.after_text.configure(yscrollcommand=after_scroll_y.set, xscrollcommand=after_scroll_x.set)
 
+        # Grid weights
         text_frame.columnconfigure(0, weight=1)
         text_frame.columnconfigure(2, weight=1)
         text_frame.rowconfigure(0, weight=1)
 
+        # Color tags for diff
+        self.before_text.tag_configure("added", foreground="#008000")     # green
+        self.before_text.tag_configure("removed", foreground="#cc0000")   # red
+        self.before_text.tag_configure("header", foreground="#666666")    # grey
+        self.before_text.tag_configure("context", foreground="#000000")   # black
+
+        # Controls
         control_frame = ttk.Frame(self.master)
         control_frame.pack(fill="x", padx=5, pady=5)
 
         self.info_label = ttk.Label(control_frame, text="")
         self.info_label.pack(side="left")
 
+        # Diff checkbox
+        self.show_diff = tk.BooleanVar(value=False)
+        ttk.Checkbutton(
+            control_frame,
+            text="Show diff",
+            variable=self.show_diff,
+            command=self.refresh_view
+        ).pack(side="right", padx=10)
+
         ttk.Button(control_frame, text="Skip", command=self.skip_record).pack(side="right", padx=2)
         ttk.Button(control_frame, text="Apply to all remaining", command=self.apply_all_remaining).pack(side="right", padx=2)
         ttk.Button(control_frame, text="Apply", command=self.apply_record).pack(side="right", padx=2)
+
+    # ---------------- VIEW LOGIC ----------------
+
+    def refresh_view(self):
+        if self.show_diff.get():
+            diff_lines = self.make_unified_diff(self.current_old, self.current_new)
+            self.render_diff(diff_lines)
+        else:
+            self.before_text.delete("1.0", tk.END)
+            self.before_text.insert("1.0", self.current_old)
+
+            self.after_text.delete("1.0", tk.END)
+            self.after_text.insert("1.0", self.current_new)
 
     def show_next_record(self):
         while self.index < len(self.rows):
@@ -109,36 +201,29 @@ class RegexEditorApp:
                 self.index += 1
                 continue
 
-            self.before_text.delete("1.0", tk.END)
-            self.before_text.insert("1.0", old_text)
-
-            self.after_text.delete("1.0", tk.END)
-            self.after_text.insert("1.0", new_text)
+            self.current_old = old_text
+            self.current_new = new_text
 
             self.info_label.config(
                 text=f"Record {self.index + 1} of {len(self.rows)} (CitationID={row[KEY_COL]})"
             )
+
+            self.refresh_view()
             return
 
+        # No more records
         self.before_text.delete("1.0", tk.END)
         self.after_text.delete("1.0", tk.END)
         self.info_label.config(text="No more records to process.")
         messagebox.showinfo("Done", "All applicable records processed.")
 
-    def update_db(self, key_value, new_text):
-        cur = self.conn.cursor()
-        cur.execute(
-            f"UPDATE {TABLE_NAME} SET {TARGET_COL} = ? WHERE {KEY_COL} = ?",
-            (new_text, key_value),
-        )
-        self.conn.commit()
+    # ---------------- BUTTON ACTIONS ----------------
 
     def apply_record(self):
         if self.index >= len(self.rows):
             return
         row = self.rows[self.index]
-        old_text = row[TARGET_COL] or ""
-        new_text = self.apply_regexes(old_text)
+        new_text = self.apply_regexes(row[TARGET_COL] or "")
         self.update_db(row[KEY_COL], new_text)
         self.index += 1
         self.show_next_record()
@@ -160,11 +245,12 @@ class RegexEditorApp:
 
 def main():
     root = tk.Tk()
-    root.geometry("1200x700")
+    root.geometry("1400x800")
     app = RegexEditorApp(root)
     root.mainloop()
 
 
 if __name__ == "__main__":
     main()
+
     
