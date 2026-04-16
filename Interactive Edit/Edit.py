@@ -8,7 +8,7 @@ from tkinter import ttk, messagebox
 
 DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Misc SQL\DB\TEST-Misc SQL.rmtree"
 
-SQL_QUERY = """
+SQL_QUERY = """\
 SELECT
    ct.CitationID,
    ct.ActualText
@@ -24,7 +24,58 @@ TABLE_NAME = "CitationTable"
 
 # Regex rules: (pattern, replacement, flags)
 REGEX_RULES = [
-    (r"You are not a memberRequest membership", "", 0)
+
+    # delete initial stuff
+    ("(?s)\A.*(Edit profile|View in tree)(\r\n)+",
+      "",
+      0),
+
+    # divide at Details/Matches
+    (r"\Details\r\nMatches",
+     r"\r\n===========================================DIV50==\r\nDetails\r\nMatches",
+     0),
+
+    # divide at Facts
+    (r"Facts(\r\n)+(Add\r\n)?",
+     r"\r\n===========================================DIV50==\r\nFacts\r\n\r\n",
+     0),
+
+    # divide at 'on the map'
+    (r"\r\n.*?journey\r\n(.*\r\n)*.*on the map(\.)*\r\n",
+     r"\r\n\r\n\r\n",
+     0),
+
+    # divide at saved record
+    (r"\r\n(One|\d*) saved records?\r\n",
+     "\r\n\r\n===========================================DIV50==\r\nSaved source records\r\n\r\n",
+     0),
+
+    # divide at Immediate family
+    (r"\r\nImmediate family(\r\n)+(Add\r\n)?",
+     r"\r\n\r\n===========================================DIV50==\r\nImmediate family\r\n\r\n",
+     0),
+
+    # divide at end part
+    (r"(?s)(Additional actions|Family tree\r\nGenealogy).*\z", 
+     r"\r\n===========================================DIV50==\r\n_AUTOEDIT-RULES-2026-04-15-01\r\n",
+     0),
+
+    # close up blank lines 4>2
+    (r"\r\n\r\n\r\n\r\n",
+     r"\r\n\r\n",
+     0),
+
+    # close up blank lines 3>2
+    (r"\r\n\r\n\r\n",
+     r"\r\n\r\n",
+     0),
+
+]
+
+
+# Case‑sensitive skip keywords
+SKIP_KEYWORDS = [
+    "_AUTOEDIT-RULES",
 ]
 
 # ----------------------------------------
@@ -64,6 +115,13 @@ class RegexEditorApp:
             (new_text, key_value),
         )
         self.conn.commit()
+
+    # ---------------- SKIP LOGIC ----------------
+
+    def should_skip_record(self, text):
+        if text is None:
+            return False
+        return any(keyword in text for keyword in SKIP_KEYWORDS)
 
     # ---------------- REGEX ----------------
 
@@ -139,6 +197,28 @@ class RegexEditorApp:
             self.before_text.insert(tk.END, left + "\n", tag)
             self.after_text.insert(tk.END, right + "\n", tag)
 
+    # ---------------- SYNCHRONIZED SCROLLING ----------------
+
+    def sync_scroll_left(self, event):
+        self.before_text.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        if self.view_mode.get() == "sidebyside":
+            self.after_text.yview_moveto(self.before_text.yview()[0])
+
+    def sync_scroll_right(self, event):
+        self.after_text.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        if self.view_mode.get() == "sidebyside":
+            self.before_text.yview_moveto(self.after_text.yview()[0])
+
+    def scroll_left_bar(self, *args):
+        self.before_text.yview(*args)
+        if self.view_mode.get() == "sidebyside":
+            self.after_text.yview_moveto(self.before_text.yview()[0])
+
+    def scroll_right_bar(self, *args):
+        self.after_text.yview(*args)
+        if self.view_mode.get() == "sidebyside":
+            self.before_text.yview_moveto(self.after_text.yview()[0])
+
     # ---------------- GUI ----------------
 
     def create_widgets(self):
@@ -157,7 +237,7 @@ class RegexEditorApp:
         self.before_text = tk.Text(text_frame, wrap="none", font=("Consolas", 10))
         self.before_text.grid(row=0, column=0, sticky="nsew")
 
-        before_scroll_y = ttk.Scrollbar(text_frame, orient="vertical", command=self.before_text.yview)
+        before_scroll_y = ttk.Scrollbar(text_frame, orient="vertical")
         before_scroll_y.grid(row=0, column=1, sticky="ns")
         before_scroll_x = ttk.Scrollbar(text_frame, orient="horizontal", command=self.before_text.xview)
         before_scroll_x.grid(row=1, column=0, sticky="ew")
@@ -168,12 +248,25 @@ class RegexEditorApp:
         self.after_text = tk.Text(text_frame, wrap="none", font=("Consolas", 10))
         self.after_text.grid(row=0, column=2, sticky="nsew")
 
-        after_scroll_y = ttk.Scrollbar(text_frame, orient="vertical", command=self.after_text.yview)
+        after_scroll_y = ttk.Scrollbar(text_frame, orient="vertical")
         after_scroll_y.grid(row=0, column=3, sticky="ns")
         after_scroll_x = ttk.Scrollbar(text_frame, orient="horizontal", command=self.after_text.xview)
         after_scroll_x.grid(row=1, column=2, sticky="ew")
 
         self.after_text.configure(yscrollcommand=after_scroll_y.set, xscrollcommand=after_scroll_x.set)
+
+        # Bind scrollbars
+        before_scroll_y.config(command=self.scroll_left_bar)
+        after_scroll_y.config(command=self.scroll_right_bar)
+
+        # Bind mouse wheel scrolling
+        self.before_text.bind("<MouseWheel>", self.sync_scroll_left)
+        self.after_text.bind("<MouseWheel>", self.sync_scroll_right)
+
+        # Trackpad / Linux scroll events
+        for ev in ("<Button-4>", "<Button-5>"):
+            self.before_text.bind(ev, self.sync_scroll_left)
+            self.after_text.bind(ev, self.sync_scroll_right)
 
         # Grid weights
         text_frame.columnconfigure(0, weight=1)
@@ -238,6 +331,12 @@ class RegexEditorApp:
         while self.index < len(self.rows):
             row = self.rows[self.index]
             old_text = row[TARGET_COL] or ""
+
+            # NEW: skip if keyword found (case‑sensitive)
+            if self.should_skip_record(old_text):
+                self.index += 1
+                continue
+
             new_text = self.apply_regexes(old_text)
 
             if old_text == new_text:
@@ -300,5 +399,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
     
