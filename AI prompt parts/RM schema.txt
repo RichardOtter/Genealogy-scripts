@@ -1,8 +1,10 @@
 Complete schema in SQLite for 
 RootsMagic v11
 
-Tables with names starting with Aux are my additions and are not standard.
-All Triggers are non-standard.
+Non standard additions-
+Tables with names starting with Aux
+Tables with names starting with LU_
+All Triggers
 
 
 -- START
