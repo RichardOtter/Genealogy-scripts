@@ -73,7 +73,7 @@ class RegexEditorApp:
             new_text = re.sub(pattern, repl, new_text, flags=flags)
         return new_text
 
-    # ---------------- DIFF ----------------
+    # ---------------- DIFF: UNIFIED ----------------
 
     def make_unified_diff(self, old, new):
         old_lines = old.splitlines(keepends=True)
@@ -88,7 +88,7 @@ class RegexEditorApp:
         )
         return list(diff)
 
-    def render_diff(self, diff_lines):
+    def render_unified_diff(self, diff_lines):
         self.before_text.delete("1.0", tk.END)
 
         for line in diff_lines:
@@ -104,7 +104,40 @@ class RegexEditorApp:
             self.before_text.insert(tk.END, line + "\n", tag)
 
         self.after_text.delete("1.0", tk.END)
-        self.after_text.insert("1.0", "(Diff mode enabled)")
+        self.after_text.insert("1.0", "(Unified diff mode)")
+
+    # ---------------- DIFF: SIDE-BY-SIDE ----------------
+
+    def make_side_by_side_diff(self, old, new):
+        old_lines = old.splitlines()
+        new_lines = new.splitlines()
+
+        sm = difflib.SequenceMatcher(None, old_lines, new_lines)
+        result = []
+
+        for tag, i1, i2, j1, j2 in sm.get_opcodes():
+            if tag == "equal":
+                for a, b in zip(old_lines[i1:i2], new_lines[j1:j2]):
+                    result.append(("  " + a, "  " + b, "context"))
+            elif tag == "replace":
+                for a, b in zip(old_lines[i1:i2], new_lines[j1:j2]):
+                    result.append(("- " + a, "+ " + b, "changed"))
+            elif tag == "delete":
+                for a in old_lines[i1:i2]:
+                    result.append(("- " + a, "", "removed"))
+            elif tag == "insert":
+                for b in new_lines[j1:j2]:
+                    result.append(("", "+ " + b, "added"))
+
+        return result
+
+    def render_side_by_side(self, diff_rows):
+        self.before_text.delete("1.0", tk.END)
+        self.after_text.delete("1.0", tk.END)
+
+        for left, right, tag in diff_rows:
+            self.before_text.insert(tk.END, left + "\n", tag)
+            self.after_text.insert(tk.END, right + "\n", tag)
 
     # ---------------- GUI ----------------
 
@@ -148,10 +181,12 @@ class RegexEditorApp:
         text_frame.rowconfigure(0, weight=1)
 
         # Color tags for diff
-        self.before_text.tag_configure("added", foreground="#008000")     # green
-        self.before_text.tag_configure("removed", foreground="#cc0000")   # red
-        self.before_text.tag_configure("header", foreground="#666666")    # grey
-        self.before_text.tag_configure("context", foreground="#000000")   # black
+        for widget in (self.before_text, self.after_text):
+            widget.tag_configure("added", foreground="#008000")
+            widget.tag_configure("removed", foreground="#cc0000")
+            widget.tag_configure("changed", foreground="#aa5500")
+            widget.tag_configure("header", foreground="#666666")
+            widget.tag_configure("context", foreground="#000000")
 
         # Controls
         control_frame = ttk.Frame(self.master)
@@ -160,14 +195,17 @@ class RegexEditorApp:
         self.info_label = ttk.Label(control_frame, text="")
         self.info_label.pack(side="left")
 
-        # Diff checkbox
-        self.show_diff = tk.BooleanVar(value=False)
-        ttk.Checkbutton(
-            control_frame,
-            text="Show diff",
-            variable=self.show_diff,
-            command=self.refresh_view
-        ).pack(side="right", padx=10)
+        # View mode selector
+        self.view_mode = tk.StringVar(value="raw")
+
+        ttk.Radiobutton(control_frame, text="Raw", value="raw",
+                        variable=self.view_mode, command=self.refresh_view).pack(side="right", padx=5)
+
+        ttk.Radiobutton(control_frame, text="Unified diff", value="unified",
+                        variable=self.view_mode, command=self.refresh_view).pack(side="right", padx=5)
+
+        ttk.Radiobutton(control_frame, text="Side‑by‑side diff", value="sidebyside",
+                        variable=self.view_mode, command=self.refresh_view).pack(side="right", padx=5)
 
         ttk.Button(control_frame, text="Skip", command=self.skip_record).pack(side="right", padx=2)
         ttk.Button(control_frame, text="Apply to all remaining", command=self.apply_all_remaining).pack(side="right", padx=2)
@@ -176,15 +214,25 @@ class RegexEditorApp:
     # ---------------- VIEW LOGIC ----------------
 
     def refresh_view(self):
-        if self.show_diff.get():
-            diff_lines = self.make_unified_diff(self.current_old, self.current_new)
-            self.render_diff(diff_lines)
-        else:
+        if not hasattr(self, "current_old"):
+            return
+
+        mode = self.view_mode.get()
+
+        if mode == "raw":
             self.before_text.delete("1.0", tk.END)
             self.before_text.insert("1.0", self.current_old)
 
             self.after_text.delete("1.0", tk.END)
             self.after_text.insert("1.0", self.current_new)
+
+        elif mode == "unified":
+            diff_lines = self.make_unified_diff(self.current_old, self.current_new)
+            self.render_unified_diff(diff_lines)
+
+        elif mode == "sidebyside":
+            diff_rows = self.make_side_by_side_diff(self.current_old, self.current_new)
+            self.render_side_by_side(diff_rows)
 
     def show_next_record(self):
         while self.index < len(self.rows):
@@ -245,7 +293,7 @@ class RegexEditorApp:
 
 def main():
     root = tk.Tk()
-    root.geometry("1400x800")
+    root.geometry("1600x900")
     app = RegexEditorApp(root)
     root.mainloop()
 
