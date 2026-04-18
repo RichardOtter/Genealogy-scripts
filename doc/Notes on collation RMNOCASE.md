@@ -6,21 +6,21 @@ This is from the official [SQLite documention](https://www.sqlite.org/quirks.htm
 
 ```text
 7. Does Not Do Full Unicode Case Folding By Default
-SQLite does not know about the upper-case/lower-case distinction for all unicode characters.
+SQLite does not know about the upper-case/lower-case distinction for all Unicode characters.
 SQL functions like upper() and lower() only work on ASCII characters.
 There are two reasons for this:
 1  Though stable now, when SQLite was first designed, the rules for unicode case folding were still in flux.
-That means that the behavior might have changed with each new unicode release, disrupting applications and
+That means that the behavior might have changed with each new Unicode release, disrupting applications and
 corrupting indexes in the process.
-2  The tables necessary to do full and proper unicode case folding are larger than the whole SQLite library.
+2  The tables necessary to do full and proper Unicode case folding are larger than the whole SQLite library.
 
-Full unicode case folding is supported in SQLite if it is compiled with the -DSQLITE_ENABLE_ICU option
+Full Unicode case folding is supported in SQLite if it is compiled with the -DSQLITE_ENABLE_ICU option
 and linked against the International Components for Unicode library.
 ```
 
 It appears that RM uses a standard SQLite build, not one that does Unicode case folding. It is also not clear whether the above referenced "International Components for Unicode library" calls an OS native function.
 
-RMNOCASE is the name of a custom collation used by the RM schema to do Unicode case folding. It is not clear how many characters are actuallly supported by RMNOCASE. RM uses RMNOCASE for columns that represent names. Looking at the listings at the end of this doc, you'll see that the name columns in the NameTable and SourceTable are ordered by RMNOCASE. Many other names, such as SourceTable.Name and CitationTable.CitationName also use RMNOCASE. 
+RMNOCASE is the name of a custom collation used by the RM schema to do Unicode case folding. It is not clear how many characters are actually supported by RMNOCASE. RM uses RMNOCASE for columns that represent names. Looking at the listings at the end of this doc, you'll see that the name columns in the NameTable and SourceTable are ordered by RMNOCASE. Many other names, such as SourceTable.Name and CitationTable.CitationName also use RMNOCASE. 
 
 Collations specified in the table declaration are the default collations for any index created using that column and are also the default collations used for the operators =, <, >, <=, >=, !=, IS, and IS NOT.
 
@@ -45,7 +45,7 @@ Indexes contain data that can be easily reconstructed by the SQLite command "rei
 
 ## Workarounds
 
-When doing read-only queries externally, one can often include in the SQL statement a collation sequence that will override the defalut specified in the table declaration. This may mean that exisring indexes won't be used which could impact speed.
+When doing read-only queries externally, one can often include in the SQL statement a collation sequence that will override the defalut specified in the table declaration. This may mean that existing indexes won't be used which could impact speed.
 
 For data modifing SQL, the safest procedure is-\
 -close the database in RM\
@@ -60,6 +60,10 @@ Modify the RM database tables so that the they do not specify RMNOCASE. Once wou
 It is not clear whether the RM app will notice the removal of the RMNOCASE dependency. 
 If NOCASE were substituted for RMNOCASE, at least ASCII name would sort as expected.
 Of course, one would want to create the corresponding SQL to return the schema back to "the factory default".
+This can be easily done by dumping the database, change RMNOCASE => NOCASE in the DDL, and reimporting.
+No problems seems after brief testing in RM.
+
+
 
 Another idea-\
 Reverse engineer the real RMNOCASE collation and write an extension that implements it exactly.
@@ -69,7 +73,7 @@ The "sqlean" project by Anton Zhiyanov at: https://github.com/nalgeon/sqlean
 has a unicode aware collation SQLite database extension, that when loaded, overrides the default NOCASE collation. It could probably be modified to provide a RMNOCASE.
 
 Another idea-\
-Determine whether the RMNOCASE code used inside RM can\\could be extracted from the RootsMagic.exe file and then used as an extension by external apps. It isprobably loaded at runtime as a dll so it make be extracted to a temp folder.
+Determine whether the RMNOCASE code used inside RM can\\could be extracted from the RootsMagic.exe file and then used as an extension by external apps. It is probably loaded at runtime as a dll so it make be extracted to a temp folder.
 
 ### The Fake RMNOCASE: unifuzz64.dll
 
