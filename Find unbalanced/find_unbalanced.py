@@ -1,10 +1,10 @@
-import sqlite3
-import os
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
-DB_PATH = r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Misc SQL\DB\TEST-Misc SQL.rmtree"
-EXT_PATH = r"C:\Users\rotter\Genealogy\GeneDB\SW\SQLite extensions\unifuzz64.dll"
+import sqlite3
+
+# PRODUCTION
+DB_PATH = r"C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree"
 
 BRACKETS = [
     ('[', ']'),
@@ -13,113 +13,84 @@ BRACKETS = [
     ('►', '◄'),
 ]
 
-def count_char(s, ch):
-    return s.count(ch) if s else 0
-
-def is_unbalanced(value):
+def has_unbalanced_brackets(value: str) -> bool:
     if value is None:
         return False
-    for open_b, close_b in BRACKETS:
-        if count_char(value, open_b) != count_char(value, close_b):
-            return True
-    return False
+
+    counters = {pair: 0 for pair in BRACKETS}
+
+    for ch in value:
+        for left, right in BRACKETS:
+            if ch == left:
+                counters[(left, right)] += 1
+            elif ch == right:
+                counters[(left, right)] -= 1
+                if counters[(left, right)] < 0:
+                    return True
+
+    return any(count != 0 for count in counters.values())
+
+def bracket_report(value: str):
+    report = {}
+    for left, right in BRACKETS:
+        left_count = value.count(left)
+        right_count = value.count(right)
+        report[(left, right)] = (left_count, right_count)
+    return report
 
 def main():
-    if not os.path.exists(DB_PATH):
-        raise FileNotFoundError(f"Database not found: {DB_PATH}")
-
-    if not os.path.exists(EXT_PATH):
-        raise FileNotFoundError(f"Extension not found: {EXT_PATH}")
-
     conn = sqlite3.connect(DB_PATH)
-    conn.enable_load_extension(True)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
-    print("Loading RMNOCASE collation extension...")
-    cur.execute(f"SELECT load_extension('{EXT_PATH}')")
-    print("Extension loaded.\n")
-
-    print("Running REINDEX RMNOCASE...")
-    try:
-        cur.execute("REINDEX RMNOCASE")
-        print("REINDEX completed.\n")
-    except sqlite3.Error as e:
-        print(f"REINDEX failed: {e}\n")
-
-    # Get all user tables
-    cur.execute("""
-        SELECT name 
-        FROM sqlite_master 
-        WHERE type='table' 
-          AND name NOT LIKE 'sqlite_%'
-    """)
+    cur.execute(
+        "SELECT name FROM sqlite_master "
+        "WHERE type='table' ORDER BY name COLLATE NOCASE;"
+    )
     tables = [row["name"] for row in cur.fetchall()]
 
-    print(f"Scanning {len(tables)} tables...\n")
-
-    results = []
-
     for table in tables:
-        # Get TEXT columns
-        cur.execute(f'PRAGMA table_info("{table}")')
-        pragma_rows = cur.fetchall()
+        cur.execute(f"PRAGMA table_info('{table}')")
+        cols_info = cur.fetchall()
+        text_columns = [c["name"] for c in cols_info if c["type"].upper() == "TEXT"]
 
-        columns = []
-        for row in pragma_rows:
-            colname = row["name"]
-            coltype = row["type"].upper()
-            if "CHAR" in coltype or "TEXT" in coltype:
-                columns.append(colname)
-
-        if not columns:
+        if not text_columns:
             continue
 
-        # Quote columns exactly as SQLite expects
-        quoted_cols = [f'"{c}" AS "{c}"' for c in columns]
-        col_list = ", ".join(quoted_cols)
+        print(f"\nScanning table: {table}")
 
-        cur.execute(f'SELECT rowid AS "rowid", {col_list} FROM "{table}"')
+        sql = f'SELECT *, rowid FROM "{table}" ORDER BY rowid;'
 
-        for row in cur.fetchall():
-            rowid = row["rowid"]
+        for row in cur.execute(sql):
+            row_keys = row.keys()
 
-            for col in columns:
-                # Ensure column exists in row
-                if col not in row.keys():
-                    continue
+            pk_cols = [c["name"] for c in cols_info if c["pk"] > 0]
 
-                value = row[col]
+            if pk_cols and pk_cols[0] in row_keys:
+                id_col = pk_cols[0]
+            elif "rowid" in row_keys:
+                id_col = "rowid"
+            else:
+                id_col = None
 
-                if is_unbalanced(value):
-                    counts = {
-                        f"{open_b}_count": count_char(value, open_b)
-                        for open_b, _ in BRACKETS
-                    }
-                    counts.update({
-                        f"{close_b}_count": count_char(value, close_b)
-                        for _, close_b in BRACKETS
-                    })
+            identifier = row[id_col] if id_col else None
 
-                    results.append({
-                        "table": table,
-                        "column": col,
-                        "rowid": rowid,
-                        "value": value,
-                        **counts
-                    })
+            for col in text_columns:
+                val = row[col]
+                if isinstance(val, str) and has_unbalanced_brackets(val):
+                    print(
+                        f"  Unbalanced brackets in {table}.{col} "
+                        f"({id_col}={identifier}): {val}"
+                    )
 
-    if not results:
-        print("No unbalanced brackets found.")
-        return
+                    # Bracket report
+                    counts = bracket_report(val)
+                    for (left, right), (lc, rc) in counts.items():
+                        print(f"    {left}{right} count: {lc} left, {rc} right")
 
-    print("Unbalanced bracket issues found:\n")
-    for r in results:
-        print(f"Table: {r['table']}, Column: {r['column']}, RowID: {r['rowid']}")
-        print(f"Value: {r['value']}")
-        print("Counts:", {k: v for k, v in r.items() if k.endswith("_count")})
-        print("-" * 60)
+    conn.close()
 
 if __name__ == "__main__":
     main()
 
+    
