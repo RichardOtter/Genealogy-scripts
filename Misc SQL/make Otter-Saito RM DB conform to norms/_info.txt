@@ -1,0 +1,16 @@
+
+
+
+
+Convert Confidence from S to E.sql
+change all RM dates that use "say" confidence level to "est"
+confidence level to better conform to GEDCOM v5.5
+
+
+Delete all places that start with ~ or [~] or [~|]
+
+Remove parts of names within []
+
+Expand some keywords, like _LROF for SS records/residence
+
+Drop Aux tables.
