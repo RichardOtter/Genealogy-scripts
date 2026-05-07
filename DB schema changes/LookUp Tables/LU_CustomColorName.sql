@@ -1,7 +1,6 @@
-
 DROP VIEW IF EXISTS LU_CustomColorName;
 
-CREATE VIEW IF NOT EXISTS LU_CustomColorName AS
+CREATE VIEW LU_CustomColorName AS
 WITH RECURSIVE
 ColorSets AS (
     SELECT 0 AS ColorSetID
@@ -18,22 +17,67 @@ xmlsrc AS (
     FROM configtable
     WHERE rowid = 1
 ),
-Extracted AS (
+
+/* Extract the entire <ColorCodeN>...</ColorCodeN> block */
+Blocks AS (
     SELECT
         cs.ColorSetID,
-        fn.ColorID,
-        xml_extract(
-            (SELECT xml FROM xmlsrc),
-            'Root/ColorCode' || cs.ColorSetID ||
-            '/FieldName' || fn.ColorID || '/text()'
-        ) AS CustomColorName
+        substr(
+            xml,
+            instr(xml, '<ColorCode' || cs.ColorSetID || '>')
+              + length('<ColorCode' || cs.ColorSetID || '>'),
+            instr(xml, '</ColorCode' || cs.ColorSetID || '>')
+              - (instr(xml, '<ColorCode' || cs.ColorSetID || '>')
+                 + length('<ColorCode' || cs.ColorSetID || '>'))
+        ) AS Block
     FROM ColorSets cs
+    CROSS JOIN xmlsrc
+),
+
+/* Extract <FieldNameN>...</FieldNameN> from inside each block */
+Raw AS (
+    SELECT
+        b.ColorSetID,
+        fn.ColorID,
+        substr(
+            b.Block,
+            instr(b.Block, '<FieldName' || fn.ColorID || '>') 
+              + length('<FieldName' || fn.ColorID || '>'),
+            instr(b.Block, '</FieldName' || fn.ColorID || '>')
+              - (instr(b.Block, '<FieldName' || fn.ColorID || '>')
+                 + length('<FieldName' || fn.ColorID || '>'))
+        ) AS RawName
+    FROM Blocks b
     CROSS JOIN FieldNames fn
+),
+
+/* Decode XML named entities */
+Decoded AS (
+    SELECT
+        ColorSetID,
+        ColorID,
+        REPLACE(
+        REPLACE(
+        REPLACE(
+        REPLACE(
+        REPLACE(RawName,
+            '&amp;', '&'
+        ),
+            '&apos;', ''''
+        ),
+            '&quot;', '"'
+        ),
+            '&lt;', '<'
+        ),
+            '&gt;', '>'
+        ) AS CustomColorName
+    FROM Raw
 )
+
 SELECT
     ColorSetID,
     ColorID,
     CustomColorName
-FROM Extracted
+FROM Decoded
 WHERE CustomColorName IS NOT NULL
 ORDER BY ColorSetID, ColorID;

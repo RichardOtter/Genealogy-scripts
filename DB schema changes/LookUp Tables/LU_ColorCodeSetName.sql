@@ -15,15 +15,35 @@ xmlsrc AS (
 Raw AS (
     SELECT
         cs.ColorSetID,
-        xml_extract(
+        /* Locate the <ColorCodeN> block */
+        substr(
             (SELECT xml FROM xmlsrc),
-            'Root/ColorCode' || cs.ColorSetID || '/Name/text()'
-        ) AS RawName
+            instr((SELECT xml FROM xmlsrc),
+                  '<ColorCode' || cs.ColorSetID || '>') 
+              + length('<ColorCode' || cs.ColorSetID || '>'),
+            instr((SELECT xml FROM xmlsrc),
+                  '</ColorCode' || cs.ColorSetID || '>')
+              - (instr((SELECT xml FROM xmlsrc),
+                       '<ColorCode' || cs.ColorSetID || '>')
+                 + length('<ColorCode' || cs.ColorSetID || '>'))
+        ) AS Block
     FROM ColorSets cs
+),
+NameExtract AS (
+    SELECT
+        ColorSetID,
+        /* Extract <Name>...</Name> from inside the block */
+        substr(
+            Block,
+            instr(Block, '<Name>') + length('<Name>'),
+            instr(Block, '</Name>') - (instr(Block, '<Name>') + length('<Name>'))
+        ) AS RawName
+    FROM Raw
 ),
 Decoded AS (
     SELECT
         ColorSetID,
+        /* Decode XML entities */
         REPLACE(
         REPLACE(
         REPLACE(
@@ -39,7 +59,7 @@ Decoded AS (
         ),
             '&gt;', '>'
         ) AS ColorSetName
-    FROM Raw
+    FROM NameExtract
 )
 SELECT
     ColorSetID,
