@@ -15,7 +15,9 @@ BRACKETS = [
 ]
 
 EXCEPTIONS_LIST = [
-    ('eigene Person:'),
+    'eigene Person:',
+    'Legal Notice',
+    '_TYPOS-IN-ORIGINAL',
 ]
 
 def main():
