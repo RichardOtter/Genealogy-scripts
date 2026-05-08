@@ -1,16 +1,33 @@
+Steps to change the Otter-Saito RM database so that it conforms with
+GEDCOM and standard genealogical data norms
 
 
 
-
-Convert Confidence from S to E.sql
-change all RM dates that use "say" confidence level to "est"
+File name= Convert Confidence from S to E.sql
+Script changes all RM dates that use "say" confidence level to "est"
 confidence level to better conform to GEDCOM v5.5
 
 
-Delete all places that start with ~ or [~] or [~|]
+File name= Delete all places with uncertainty markers.sql
+Deletes all places that start with ~ or [~] or [~|]
+and deletes all uses of those placeTable entries.
 
-Remove parts of names within []
+File name= Remove bracketed text in NameTable.sql
+Remove text within [] in the names table All fields.
 
-Expand some keywords, like _LROF for SS records/residence
+File name= Remove bracketed text in PlaceTable.sql
+removes bracketed text.
+Probably does not cause genealogical data loss.
 
+File name= Drop non-RM-standard tables.sql
 Drop Aux tables.
+Drop Look-Up tables and views
+
+
+TODO
+Expand some keywords, like _LROF for SS records/residence.
+These controlled vocabulary keywords are not self explanatory.
+
+
+
+
