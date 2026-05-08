@@ -1,9 +1,9 @@
-CREATE TABLE LU_DNAProviderName (
+CREATE TABLE IF NOT EXISTS LU_DNAProviderName (
     DNAProviderID INTEGER PRIMARY KEY,
     DNAProviderName TEXT NOT NULL
 );
 
-INSERT INTO LU_DNAProviderName (DNAProviderID, DNAProviderName) VALUES
+INSERT OR IGNORE INTO LU_DNAProviderName (DNAProviderID, DNAProviderName) VALUES
   (0, "►unspecified◄"),
   (1, "23andme"),
   (2, "Ancestry"),

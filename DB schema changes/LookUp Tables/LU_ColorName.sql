@@ -1,9 +1,9 @@
-CREATE TABLE LU_ColorName (
+CREATE TABLE IF NOT EXISTS LU_ColorName (
     ColorID INTEGER PRIMARY KEY,
     ColorName TEXT NOT NULL
 );
 
-INSERT INTO LU_ColorName (ColorID, ColorName) VALUES
+INSERT OR IGNORE INTO LU_ColorName (ColorID, ColorName) VALUES
   (4, "Pink"),
   (15, "Apricot"),
   (16, "Lemon"),
