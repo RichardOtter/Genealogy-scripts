@@ -3,21 +3,21 @@
 
 -- Data tables
 
-DROP TABLE AuxCitationLinkTable;
-DROP TABLE AuxDNATable;
-DROP TABLE AuxMultimediaTable;
+DROP TABLE IF EXISTS AuxCitationLinkTable;
+DROP TABLE IF EXISTS AuxDNATable;
+DROP TABLE IF EXISTS AuxMultimediaTable;
 
 -- Look up tables and views
 
-DROP TABLE LU_ColorName;
-DROP TABLE LU_DNAProviderName;
-DROP TABLE LU_FatherLabel.sql;
-DROP TABLE LU_FKeyTarget.sql;
-DROP TABLE LU_MedConditionName.sql;
-DROP TABLE LU_MotherLabel.sql;
-DROP TABLE LU_NameType;
-DROP TABLE LU_ProofName.sql;
-DROP TABLE LU_SexType.sql;
+DROP TABLE IF EXISTS LU_ColorName;
+DROP TABLE IF EXISTS LU_DNAProviderName;
+DROP TABLE IF EXISTS LU_FatherLabel.sql;
+DROP TABLE IF EXISTS LU_FKeyTarget.sql;
+DROP TABLE IF EXISTS LU_MedConditionName.sql;
+DROP TABLE IF EXISTS LU_MotherLabel.sql;
+DROP TABLE IF EXISTS LU_NameType;
+DROP TABLE IF EXISTS LU_ProofName.sql;
+DROP TABLE IF EXISTS LU_SexType.sql;
 
 DROP VIEW IF EXISTS LU_ColorCodeSetName;
 DROP VIEW IF EXISTS LU_ColorCodeSetName;
