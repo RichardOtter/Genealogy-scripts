@@ -1,0 +1,15 @@
+
+UtilityName:  ExternalFilesInfo
+
+# last release NONE
+Version: 0.0.1
+  
+DistributionFileList:
+  - MoveCitations.py
+  - RM-Python-config.ini
+  - ReadMe.txt
+
+
+DistributionFolderList:
+  - ..\RMpy package\RMpy
+

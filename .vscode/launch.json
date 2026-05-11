@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "PowerShell Launch Current File",
             "type": "PowerShell",
@@ -149,5 +150,15 @@
             "args": ["testing/dev.ini"],
             "stopOnEntry": false
         },
+                {
+            "name": "PYD: Move Citation",
+            "cwd":  "${workspaceFolder}/Move citations between person and name",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "MoveCitations.py",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini",
+            "stopOnEntry": true
+        }
     ]
 }
