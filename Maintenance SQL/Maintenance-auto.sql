@@ -1,5 +1,6 @@
 
 REINDEX RMNOCASE;
+-- REBUILD INDEXES in RM first thing after opening
 
 --===========================================DIV50==
 -- REF from Trim space.txt
@@ -70,9 +71,10 @@ UPDATE CitationTable
 --REF from Fix WebTag names.txt
 
 --===========================================DIV50==
---Ancestry links WebTag names that should have tree name
+--Add names to popular WebTags 
 
--- LOCATION IN TREE - WEBLINK ON PERSON
+--  ANCESTRY TREE - WEBLINK ON PERSON
+
 UPDATE URLTable
   SET Name='ANC_OtterSaito'
   WHERE OwnerType =0
@@ -97,7 +99,9 @@ UPDATE URLTable
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111800644/person%'
     AND Name <> 'ANC_SmithBurke';
 
+
 --  DNA MATCHES - WEBLINK ON PERSON
+
 UPDATE URLTable
   SET Name='ANC_DNA_RichardOtter'
   WHERE OwnerType =0
@@ -134,12 +138,26 @@ UPDATE URLTable
     AND URL LIKE '%compare/855339eb-af29-43ec-bb83-bce76aff38fa/with%'
     AND Name <> 'ANC_DNA_RomanOtter';
 
--- WEBLINK ON CITATION
+
+-- WEBLINK ON SOURCE
+
 UPDATE URLTable
   SET Name='Find a Grave'
   WHERE OwnerType =4
     AND URL LIKE 'https://www.findagrave.com/memorial%'
     AND Name <> 'Find a Grave';
+
+UPDATE URLTable
+  SET Name='Ancestry.com source'
+  WHERE OwnerType =4
+    AND URL LIKE 'https://www.ancestry.com/search/collections%'
+    AND Name <> 'Ancestry.com source';
+
+UPDATE URLTable
+  SET Name='Matricula-online'
+  WHERE OwnerType =4
+    AND URL LIKE 'https://data.matricula-online.eu/%'
+    AND Name <> 'Matricula-online';
 
 
 
@@ -163,7 +181,7 @@ UPDATE EventTable
 
 
 --===========================================DIV50==
---REF from Add Sort date to undated events.txt
+--REF from Fix Sort dates undated events.txt
 
 --===========================================DIV50==
 -- Add Sort date to undated events
@@ -280,10 +298,11 @@ SET SortDate = 8395835622504267788
   AND SortDate <> 8395835622504267788;
 
 --===========================================DIV50==
---REF from Citation sort order.sql
+--REF from Fix Citation sort order.txt
 
 --===========================================DIV50==
 -- Update all SortOrder values in CitationLinkTable
+-- NOTE uses REGEXP
 
 -- Use first 25 chars of SourceName  concat with first 10 chars of CitationName
 UPDATE CitationLinkTable AS clt1

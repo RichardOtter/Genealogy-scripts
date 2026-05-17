@@ -1,75 +1,92 @@
 REINDEX RMNOCASE;
 
 --===========================================DIV50==
---Fix urls that should have tree name
+--Add names to popular WebTags 
 
-SELECT Name, OwnerID
-  FROM URLTable
-  WHERE OwnerType =0 
+--  ANCESTRY TREE - WEBLINK ON PERSON
+
+UPDATE URLTable
+  SET Name='ANC_OtterSaito'
+  WHERE OwnerType =0
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/14741034/person%'
-    AND Name <> 'otter-saito';
+    AND Name <> 'ANC_OtterSaito';
 
 UPDATE URLTable
-  SET Name='otter-saito'
-  WHERE OwnerType =0 
-    AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/14741034/person%'
-    AND Name <> 'otter-saito';
-
-
-SELECT Name, OwnerID
- FROM URLTable
-  WHERE OwnerType =0 
+  SET Name='ANC_LumsdenHorn'
+  WHERE OwnerType =0
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111641456/person%'
-    AND Name <> 'lumsden-horn';
+    AND Name <> 'ANC_LumsdenHHorn';
 
 UPDATE URLTable
-  SET Name='lumsden-horn'
-  WHERE OwnerType =0 
-    AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111641456/person%'
-    AND Name <> 'lumsden-horn';
-
-
-
-SELECT Name, OwnerID
- FROM URLTable
-  WHERE OwnerType =0 
+  SET Name='ANC_FeltonTsujimoto'
+  WHERE OwnerType =0
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111652204/person%'
-    AND Name <> 'felton-tsujimoto';
+    AND Name <> 'ANC_FeltonTsujimoto';
 
 UPDATE URLTable
-  SET Name='felton-tsujimoto'
-  WHERE OwnerType =0 
-    AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111652204/person%'
-    AND Name <> 'felton-tsujimoto';
-
-
-
-SELECT Name, OwnerID
- FROM URLTable
-  WHERE OwnerType =0 
+  SET Name='ANC_SmithBurke'
+  WHERE OwnerType =0
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111800644/person%'
-    AND Name <> 'smith-burke';
+    AND Name <> 'ANC_SmithBurke';
+
+
+--  DNA MATCHES - WEBLINK ON PERSON
 
 UPDATE URLTable
-  SET Name='smith-burke'
-  WHERE OwnerType =0 
-    AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111800644/person%'
-    AND Name <> 'smith-burke';
+  SET Name='ANC_DNA_RichardOtter'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/3472852c-4089-4840-84a0-682ac8631a96/with%'
+    AND Name <> 'ANC_DNA_RichardOtter';
+
+UPDATE URLTable
+  SET Name='ANC_DNA_GloriaSaito'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/bacef9bf-dd00-4bbb-a9cb-b78caaa194bb/with%'
+    AND Name <> 'ANC_DNA_GloriaSaito';
+
+UPDATE URLTable
+  SET Name='ANC_DNA_RosaMaier'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/2728142c-b35d-4a2e-b2a3-6c3e3b80c358/with%'
+    AND Name <> 'ANC_DNA_RosaMaier';
+
+UPDATE URLTable
+  SET Name='ANC_DNA_EthelImai'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/45a402e6-6944-4e5c-bec3-6b8d1b062ace/with%'
+    AND Name <> 'ANC_DNA_EthelImai';
+
+UPDATE URLTable
+  SET Name='ANC_DNA_TamaraChao'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/d62e8649-8142-4b8a-b577-21120c60b69b/with%'
+    AND Name <> 'ANC_DNA_TamaraChao';
+
+UPDATE URLTable
+  SET Name='ANC_DNA_RomanOtter'
+  WHERE OwnerType =0
+    AND URL LIKE '%compare/855339eb-af29-43ec-bb83-bce76aff38fa/with%'
+    AND Name <> 'ANC_DNA_RomanOtter';
 
 
---===========================================DIV50==
-
-
---Find a Grave
-SELECT Name, OwnerID
- FROM URLTable
-  WHERE OwnerType =4
-    AND URL LIKE 'https://www.findagrave.com/memorial%'
-    AND Name <> 'Find a Grave';
-    
+-- WEBLINK ON SOURCE
 
 UPDATE URLTable
   SET Name='Find a Grave'
   WHERE OwnerType =4
     AND URL LIKE 'https://www.findagrave.com/memorial%'
     AND Name <> 'Find a Grave';
+
+UPDATE URLTable
+  SET Name='Ancestry.com source'
+  WHERE OwnerType =4
+    AND URL LIKE 'https://www.ancestry.com/search/collections%'
+    AND Name <> 'Ancestry.com source';
+
+UPDATE URLTable
+  SET Name='Matricula-online'
+  WHERE OwnerType =4
+    AND URL LIKE 'https://data.matricula-online.eu/%'
+    AND Name <> 'Matricula-online';
+
+
