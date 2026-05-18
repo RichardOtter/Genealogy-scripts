@@ -117,8 +117,8 @@ SELECT
   PersonID,
   PersonName,
   EventType,
-  EventDate,
-  RawRMDate
+  EventDate
+  --RawRMDate
 FROM (
   SELECT * FROM Header
   UNION ALL
