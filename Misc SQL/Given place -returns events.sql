@@ -1,7 +1,8 @@
 -- At prompt, enter place name with appropriate LIKE wildcards
 -- Returns Birth, Death, and Marriage events that happened at the entered place
 
--- Replace :place with your pattern, e.g. '%Boston%'
+-- Given place -returns events.sql
+
 WITH
 PrimaryNames AS (
   SELECT OwnerID AS PersonID, Given, Surname
@@ -96,14 +97,13 @@ EventRows AS (
       CASE WHEN pn.Surname IS NOT NULL AND pn.Given IS NOT NULL THEN ', ' ELSE '' END ||
       COALESCE(pn.Given, '') AS PersonName,
     ae.EventType,
-    -- Simple substring-based date extraction and formatting
     CASE
       WHEN ae.RawRMDate LIKE 'D%' AND LENGTH(ae.RawRMDate) >= 11
         THEN substr(ae.RawRMDate,4,4) || '-' || substr(ae.RawRMDate,8,2) || '-' || substr(ae.RawRMDate,10,2)
       ELSE ae.RawRMDate
     END AS EventDate,
     ae.RawRMDate,
-    ae.PlaceName AS sort_place,  -- used only for ordering
+    ae.PlaceName AS sort_place,
     1 AS sort_key
   FROM AllEvents ae
   LEFT JOIN PrimaryNames pn ON pn.PersonID = ae.PersonID
@@ -118,10 +118,19 @@ SELECT
   PersonName,
   EventType,
   EventDate
-  --RawRMDate
 FROM (
   SELECT * FROM Header
   UNION ALL
   SELECT * FROM EventRows
 ) AS combined
-ORDER BY combined.sort_place, combined.sort_key, PersonName;
+ORDER BY
+  combined.sort_place,
+  combined.sort_key,
+  combined.EventType,
+  CASE
+    WHEN combined.RawRMDate LIKE 'D%' AND LENGTH(combined.RawRMDate) >= 11
+      THEN substr(combined.RawRMDate,4,4) || '-' || substr(combined.RawRMDate,8,2) || '-' || substr(combined.RawRMDate,10,2)
+    ELSE combined.RawRMDate
+  END,
+  combined.PersonName;
+

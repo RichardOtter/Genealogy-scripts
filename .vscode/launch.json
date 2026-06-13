@@ -150,7 +150,7 @@
             "args": ["testing/dev.ini"],
             "stopOnEntry": false
         },
-                {
+        {
             "name": "PYD: Move Citation",
             "cwd":  "${workspaceFolder}/Move citations between person and name",
             "type": "debugpy",
@@ -159,6 +159,17 @@
             "console": "integratedTerminal",
             "args": "testing/dev.ini",
             "stopOnEntry": true
+        },
+        {
+            "name": "PYD: DB_util production",
+            "cwd":  "${workspaceFolder}/dev util scripts",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "DB_util.py",
+            "console": "integratedTerminal",
+            "args": "production",
+            "stopOnEntry": true
         }
+
     ]
 }

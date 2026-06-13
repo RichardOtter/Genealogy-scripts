@@ -85,7 +85,7 @@ UPDATE URLTable
   SET Name='ANC_LumsdenHorn'
   WHERE OwnerType =0
     AND URL LIKE 'https://www.ancestry.com/family-tree/person/tree/111641456/person%'
-    AND Name <> 'ANC_LumsdenHHorn';
+    AND Name <> 'ANC_LumsdenHorn';
 
 UPDATE URLTable
   SET Name='ANC_FeltonTsujimoto'

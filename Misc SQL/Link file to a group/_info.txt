@@ -1,0 +1,3 @@
+Script can be used to attach a "died young"image to all people in a group.
+Attaches to Genera/Person and is made primary so that it shows as the
+person's avatar in charts etc.

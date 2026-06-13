@@ -1,18 +1,34 @@
-import os
+# PRODUCTION PATHS stored here
+'''
+# for Waldzell
+FileInPath = Path.home() / r"Genealogy\GeneDB\RM_LinkedFiles\Sources\Grave\DE, Bayern, Main-Spessart\Waldzell"
+FileInName = r"Friedhof Waldzell - Grave List.txt"
+FileOutFldrName = "Generated files"
 
-# DEV paths
-FileInPath = r"."
-FileInName = r"SAMPLE Grave List.txt"
+# for Oberschwarzach
+FileInPath = Path.home() / r"Genealogy\GeneDB\RM_LinkedFiles\Sources\Grave\DE, Bayern, Schweinfurt\Oberschwarzach"
+FileInName = r"Friedhof Oberschwarzach - Grave List.txt"
+FileOutFldrName = "Generated Files"
+
+TODO  create a shared function to accept a path to a folder. confirm it is a folder,
+if folder exists- rename it with a timestamp
+if not try to create folder
+'''
+
+import os
+from pathlib import Path
+
+FileInFldrPath = Path.home() / r"folder" 
+FileInName = r"test input.txt"
 FileOutFldrName = "Generated files"
 
 EntrySeperator = "="*70 + "===DIV80==\n"
 tempFileName = "trashFile"
-pathSep = '\\'
 FileOutExt = ".txt"
-FileOutPath= FileInPath + pathSep + FileOutFldrName
+FileOutPath= Path(FileInFldrPath) / FileOutFldrName
 
-fileIn = open(FileInPath + pathSep + FileInName, 'r', encoding='utf-8')
-prevFileOut = open(FileOutPath + pathSep + tempFileName + FileOutExt, 'w', encoding='utf-8')
+fileIn = open(FileInFldrPath / FileInName, 'r', encoding='utf-8')
+prevFileOut = open(FileOutPath / (tempFileName + FileOutExt), 'w', encoding='utf-8')
 FileOut = prevFileOut
 
 Line = fileIn.readline() 
@@ -29,7 +45,7 @@ while (Line != ""):
         if (Line == EntrySeperator):
             FileOutName = tempFileName
         prevFileOut.close()
-        FileOut = open (FileOutPath + pathSep + FileOutName + FileOutExt, 'w', encoding='utf-8')
+        FileOut = open (FileOutPath / (FileOutName + FileOutExt), 'w', encoding='utf-8')
         prevOutFile = FileOut
         FileOut.write(EntrySeperator)
     FileOut.write(Line)
@@ -38,6 +54,6 @@ while (Line != ""):
 fileIn.close()
 FileOut.close() 
 prevFileOut.close()
-os.remove (FileOutPath + pathSep + tempFileName + FileOutExt)
+os.remove (FileOutPath / (tempFileName + FileOutExt))
 
 input("Press Enter to continue.")
