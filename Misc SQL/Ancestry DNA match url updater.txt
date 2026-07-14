@@ -1,0 +1,111 @@
+
+
+old
+https://www.ancestry.com/discoveryui-matches/compare/3472852c-4089-4840-84a0-682ac8631a96/with/1977984a-27a7-4b1e-b80b-89c60880e981
+
+https://www.ancestry.com/discoveryui-matches/compare/
+3472852c-4089-4840-84a0-682ac8631a96
+/with/
+1977984a-27a7-4b1e-b80b-89c60880e981
+
+
+
+new
+https://www.ancestry.com/dna/matches/3472852C-4089-4840-84A0-682AC8631A96/compare/1977984A-27A7-4B1E-B80B-89C60880E981
+
+https://www.ancestry.com/dna/matches/
+3472852C-4089-4840-84A0-682AC8631A96
+/compare/
+1977984A-27A7-4B1E-B80B-89C60880E981
+
+
+find-
+https://www.ancestry.com/discoveryui-matches/compare/
+(.{36})
+/with/
+(.{36})
+
+replace
+https://www.ancestry.com/dna/matches/
+$1
+/compare/
+$2
+
+
+
+
+find-
+https://www.ancestry.com/discoveryui-matches/compare/(.{36})/with/(.{36})
+
+replace
+https://www.ancestry.com/dna/matches/$1/compare/$2
+
+
+
+
+
+update URLTable
+set URL = regexp_replace( URL, 'https://www.ancestry.com/discoveryui-matches/compare/(.{36})/with/(.{36})', 'https://www.ancestry.com/dna/matches/$1/compare/$2')
+where URL LIKE 'https://www.ancestry.com/discoveryui-matches/compare/%';
+
+
+
+
+update DNATable
+set note = regexp_replace( note, 'https://www.ancestry.com/discoveryui-matches/compare/(.{36})/with/(.{36})', 'https://www.ancestry.com/dna/matches/$1/compare/$2')
+where note LIKE '%https://www.ancestry.com/discoveryui-matches/compare/%';
+
+
+the returnurl clause
+https://www.ancestry.com/dna/matches/855339EB-AF29-43EC-BB83-BCE76AFF38FA/compare/E7FD4ADB-8C93-4F44-A87C-E1551E4381FA?returnUrl=https%3A%2F%2Fwww.ancestry.com%2Fdiscoveryui-matches%2Flist%2F855339EB-AF29-43EC-BB83-BCE76AFF38FA%3FcurrentPage%3D13
+
+
+update DNATable
+set note = regexp_replace( note, '(.+?)\?return[uU]rl=https.*', '$1' )
+where note LIKE '%returnUrl=https%';
+
+
+
+
+note in eventtable
+
+update EventTable
+set note = regexp_replace( note, 'https://www.ancestry.com/discoveryui-matches/compare/(.{36})/with/(.{36})', 'https://www.ancestry.com/dna/matches/$1/compare/$2')
+where note LIKE '%https://www.ancestry.com/discoveryui-matches/compare/%';
+
+
+update EventTable
+set note = regexp_replace( note, '(.+?)\?return[uU]rl=https.*', '$1' )
+where note LIKE '%returnUrl=https%';
+
+
+
+
+
+
+
+
+
+-- Final script
+
+update URLTable
+set URL = regexp_replace( URL, 'https://www.ancestry.com/discoveryui-matches/compare/(.{36})/with/(.{36})', 'https://www.ancestry.com/dna/matches/$1/compare/$2')
+where URL LIKE 'https://www.ancestry.com/discoveryui-matches/compare/%';
+
+update DNATable
+set note = regexp_replace( note, 'https://www.ancestry.com/discoveryui-matches/compare/(.{36})/with/(.{36})', 'https://www.ancestry.com/dna/matches/$1/compare/$2')
+where note LIKE '%https://www.ancestry.com/discoveryui-matches/compare/%';
+
+update DNATable
+set note = regexp_replace( note, '(.+?)\?return[uU]rl=https.*', '$1' )
+where note LIKE '%returnUrl=https%';
+
+update EventTable
+set note = regexp_replace( note, 'https://www.ancestry.com/discoveryui-matches/compare/(.{36})/with/(.{36})', 'https://www.ancestry.com/dna/matches/$1/compare/$2')
+where note LIKE '%https://www.ancestry.com/discoveryui-matches/compare/%';
+
+
+update EventTable
+set note = regexp_replace( note, '(.+?)\?return[uU]rl=https.*', '$1' )
+where note LIKE '%returnUrl=https%';
+
