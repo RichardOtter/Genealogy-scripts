@@ -1,0 +1,209 @@
+SECTION RULES
+Sections are separated by an exact delimiter consisting of 73 "=" characters followed by "DIV80==".
+Any line containing "DIV80==" that does not match the exact delimiter is considered a corrupted delimiter.
+Each section must begin with four required header lines in this exact order: PID, Coord, Place, Stones.
+If the PID line is "===PID: IGNORE_SECTION", the section is skipped entirely.
+
+STONES HEADER RULES
+The Stones value may be 0-V, N, or N-V, where N is an integer greater than or equal to 1.
+The value 0-V is the only valid representation of zero stones.
+Values such as 0, 0-, -V, V, or any malformed form are invalid.
+The -V suffix indicates the grave site is currently vacant.
+The integer portion indicates the number of stones historically present.
+Vacancy semantics for N-V are accepted but not yet validated.
+
+ZERO-STONE RULES (Stones = 0-V)
+No stone blocks may appear in a 0-V section.
+A 0-V section must contain at least one dated-entry set.
+A dated-entry set may contain any combination of the lines ===Date:, ===Photos:, ===Notes:.
+Each line in the set is optional, but at least one must be present.
+Multiple dated-entry sets are allowed.
+
+NUMBERED STONE RULES (Stones = N or N-V)
+The number of numbered stone blocks must match the integer N.
+Stone numbers must be consecutive and strictly decreasing.
+Stone numbers must be integers greater than or equal to 1.
+VACANT stones are allowed and do not require Date or Transcription blocks.
+
+STONE BLOCK STRUCTURE RULES
+Each numbered stone must contain ===Date: immediately after the stone header.
+Each numbered stone must contain ===Transcription: immediately after the Date line.
+Each transcription block must contain an exact begin marker line.
+Each transcription block must contain an exact end marker line.
+There must be at least one non-empty line of text between the begin and end markers.
+
+DATED-ENTRY SET RULES FOR NUMBERED STONES
+Each numbered stone must contain at least one dated-entry set.
+A dated-entry set begins with ===Date:.
+The next line must be ===Photos: with no intervening lines.
+After ===Photos:, any number of text lines are allowed.
+A dated-entry set must contain at least one ===Notes: line somewhere after ===Photos:.
+Text lines after ===Notes: are allowed.
+A dated-entry set continues until the next ===Date: or the next ===Stone:.
+Multiple dated-entry sets are allowed.
+
+POST-STONE METADATA RULES
+After all stone blocks, the section must contain exactly one set of the following lines in this order:
+===Interpretation:
+===Location:
+===Table:
+===Status:
+
+SECTION COLLECTION RULES
+Sections are collected between delimiters.
+A final section without a trailing delimiter is still processed.
+
+OUTPUT RULES
+All validation errors are collected and printed.
+If no errors are found, the validator reports success.
+
+
+
+
+Here is the **formal EBNF grammar** for your cemetery file format.
+This is a complete grammar describing every structural rule your validator enforces.
+
+---
+
+CEMETERY_FILE = { SECTION } ;
+
+SECTION =
+    DELIMITER
+    HEADER
+    SECTION_BODY ;
+
+DELIMITER =
+    "=========================================================================DIV80==" ;
+
+HEADER =
+    PID_LINE
+    COORD_LINE
+    PLACE_LINE
+    STONES_LINE ;
+
+PID_LINE =
+    "===PID:" TEXT
+  | "===PID: IGNORE_SECTION" ;
+
+COORD_LINE =
+    "===Coord:" TEXT ;
+
+PLACE_LINE =
+    "===Place:" TEXT ;
+
+STONES_LINE =
+    "===Stones:" STONES_VALUE ;
+
+STONES_VALUE =
+    "0-V"
+  | INTEGER
+  | INTEGER "-V" ;
+
+INTEGER =
+    DIGIT_NONZERO { DIGIT } ;
+
+DIGIT_NONZERO = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+DIGIT = "0" | DIGIT_NONZERO ;
+
+SECTION_BODY =
+    ZERO_STONE_BODY
+  | NUMBERED_STONE_BODY ;
+
+ZERO_STONE_BODY =
+    { DATED_ENTRY_SET_ZERO }
+    POST_STONE_BLOCK ;
+
+DATED_ENTRY_SET_ZERO =
+    ( "===Date:" | "===Photos:" | "===Notes:" ) { ( "===Date:" | "===Photos:" | "===Notes:" ) } ;
+
+NUMBERED_STONE_BODY =
+    { STONE_BLOCK }
+    POST_STONE_BLOCK ;
+
+STONE_BLOCK =
+    STONE_HEADER
+    STONE_DATE
+    STONE_TRANSCRIPTION
+    TRANSCRIPTION_BLOCK
+    { DATED_ENTRY_SET } ;
+
+STONE_HEADER =
+    "===Stone:" INTEGER
+  | "===Stone: VACANT" ;
+
+STONE_DATE =
+    "===Date:" TEXT ;
+
+STONE_TRANSCRIPTION =
+    "===Transcription:" ;
+
+TRANSCRIPTION_BLOCK =
+    TRANSCRIPTION_BEGIN
+    TRANSCRIPTION_TEXT
+    TRANSCRIPTION_END ;
+
+TRANSCRIPTION_BEGIN =
+    "---------------------------------------------begin---DIV60--" ;
+
+TRANSCRIPTION_END =
+    "---------------------------------------------end-----DIV60--" ;
+
+TRANSCRIPTION_TEXT =
+    NONEMPTY_TEXT_LINE { TEXT_LINE } ;
+
+NONEMPTY_TEXT_LINE =
+    TEXT_LINE_NONEMPTY ;
+
+TEXT_LINE_NONEMPTY =
+    TEXT_LINE but not empty ;
+
+TEXT_LINE =
+    any line not matching structural keywords ;
+
+DATED_ENTRY_SET =
+    DATED_ENTRY_START
+    DATED_ENTRY_PHOTOS
+    { TEXT_LINE }
+    DATED_ENTRY_NOTES
+    { TEXT_LINE } ;
+
+DATED_ENTRY_START =
+    "===Date:" TEXT ;
+
+DATED_ENTRY_PHOTOS =
+    "===Photos:" TEXT ;
+
+DATED_ENTRY_NOTES =
+    "===Notes:" TEXT ;
+
+POST_STONE_BLOCK =
+    INTERPRETATION_LINE
+    LOCATION_LINE
+    TABLE_LINE
+    STATUS_LINE ;
+
+INTERPRETATION_LINE =
+    "===Interpretation:" TEXT ;
+
+LOCATION_LINE =
+    "===Location:" TEXT ;
+
+TABLE_LINE =
+    "===Table:" TEXT ;
+
+STATUS_LINE =
+    "===Status:" TEXT ;
+
+TEXT =
+    any characters after the colon ;
+
+---
+
+If you want, I can also generate:
+
+- a machine‑readable ANTLR grammar  
+- a railroad diagram  
+- a grammar‑driven parser skeleton  
+- a grammar‑driven validator generator  
+
+Just tell me the direction you want to go.

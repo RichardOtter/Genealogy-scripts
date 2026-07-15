@@ -1,0 +1,371 @@
+A good test suite for a validator like yours has one job: **prove the grammar is correct by breaking it in every possible way** and confirming the validator catches each violation. You want coverage, not volume — each test isolates one rule so you always know what failed.
+
+Below is a **clean, text‑only test suite** organized by rule category. Each test includes:
+
+- **Name**  
+- **Purpose**  
+- **Minimal sample section** (only enough lines to trigger the rule)  
+- **Expected validator result**
+
+All samples use placeholder text where content doesn’t matter.
+
+This suite is complete enough that, yes, you could rebuild the validator from scratch using only the rules + these tests.
+
+---
+
+# TEST SUITE (TEXT ONLY)
+
+============================================================
+SECTION 1 — DELIMITER RULES
+============================================================
+
+TEST 1.1 — Valid delimiter  
+Purpose: Ensure correct delimiter is accepted.  
+Sample:  
+=========================================================================DIV80==  
+===PID: A  
+===Coord: X  
+===Place: Y  
+===Stones: 0-V  
+===Date:  
+Expected: PASS
+
+TEST 1.2 — Corrupted delimiter  
+Purpose: Detect malformed delimiter.  
+Sample:  
+======================================================================DIV80==  
+Expected: FAIL (corrupted delimiter)
+
+TEST 1.3 — Missing delimiter  
+Purpose: Ensure sections must begin with delimiter.  
+Sample:  
+===PID: A  
+Expected: FAIL
+
+============================================================
+SECTION 2 — HEADER RULES
+============================================================
+
+TEST 2.1 — Missing PID  
+Sample:  
+=========================================================================DIV80==  
+===Coord: X  
+===Place: Y  
+===Stones: 0-V  
+Expected: FAIL
+
+TEST 2.2 — Wrong header order  
+Sample:  
+=========================================================================DIV80==  
+===PID: A  
+===Place: Y  
+===Coord: X  
+===Stones: 0-V  
+Expected: FAIL
+
+TEST 2.3 — IGNORE_SECTION  
+Sample:  
+=========================================================================DIV80==  
+===PID: IGNORE_SECTION  
+===Coord: X  
+===Place: Y  
+===Stones: 0-V  
+Expected: PASS (section skipped)
+
+============================================================
+SECTION 3 — STONES HEADER RULES
+============================================================
+
+TEST 3.1 — Valid Stones: N  
+Sample:  
+===Stones: 3  
+Expected: PASS
+
+TEST 3.2 — Valid Stones: N-V  
+Sample:  
+===Stones: 3-V  
+Expected: PASS
+
+TEST 3.3 — Valid Stones: 0-V  
+Sample:  
+===Stones: 0-V  
+Expected: PASS
+
+TEST 3.4 — Invalid Stones: 0  
+Sample:  
+===Stones: 0  
+Expected: FAIL
+
+TEST 3.5 — Invalid Stones: -V  
+Sample:  
+===Stones: -V  
+Expected: FAIL
+
+TEST 3.6 — Invalid Stones: 00-V  
+Sample:  
+===Stones: 00-V  
+Expected: FAIL
+
+============================================================
+SECTION 4 — ZERO-STONE SECTION RULES (0-V)
+============================================================
+
+TEST 4.1 — 0-V with no dated-entry sets  
+Sample:  
+===Stones: 0-V  
+Expected: FAIL
+
+TEST 4.2 — 0-V with one dated-entry set  
+Sample:  
+===Stones: 0-V  
+===Date:  
+Expected: PASS
+
+TEST 4.3 — 0-V with Photos only  
+Sample:  
+===Stones: 0-V  
+===Photos:  
+Expected: PASS
+
+TEST 4.4 — 0-V with Notes only  
+Sample:  
+===Stones: 0-V  
+===Notes:  
+Expected: PASS
+
+TEST 4.5 — 0-V with multiple sets  
+Sample:  
+===Stones: 0-V  
+===Date:  
+===Photos:  
+===Notes:  
+===Date:  
+Expected: PASS
+
+TEST 4.6 — 0-V with stone block present  
+Sample:  
+===Stones: 0-V  
+===Stone: 1  
+Expected: FAIL
+
+============================================================
+SECTION 5 — NUMBERED STONE RULES
+============================================================
+
+TEST 5.1 — Correct number of stones  
+Sample:  
+===Stones: 2  
+===Stone: 2  
+===Date:  
+===Transcription:  
+---------------------------------------------begin---DIV60--  
+text  
+---------------------------------------------end-----DIV60--  
+===Date:  
+===Photos:  
+===Notes:  
+===Stone: 1  
+===Date:  
+===Transcription:  
+---------------------------------------------begin---DIV60--  
+text  
+---------------------------------------------end-----DIV60--  
+===Date:  
+===Photos:  
+===Notes:  
+===Interpretation:  
+===Location:  
+===Table:  
+===Status:  
+Expected: PASS
+
+TEST 5.2 — Wrong number of stones  
+Sample:  
+===Stones: 2  
+===Stone: 1  
+Expected: FAIL
+
+TEST 5.3 — Non-consecutive numbering  
+Sample:  
+===Stones: 3  
+===Stone: 3  
+===Stone: 1  
+Expected: FAIL
+
+TEST 5.4 — Stone number 0  
+Sample:  
+===Stone: 0  
+Expected: FAIL
+
+TEST 5.5 — VACANT stone allowed  
+Sample:  
+===Stones: 1  
+===Stone: VACANT  
+===Interpretation:  
+===Location:  
+===Table:  
+===Status:  
+Expected: PASS
+
+============================================================
+SECTION 6 — TRANSCRIPTION BLOCK RULES
+============================================================
+
+TEST 6.1 — Missing begin marker  
+Sample:  
+===Transcription:  
+text  
+---------------------------------------------end-----DIV60--  
+Expected: FAIL
+
+TEST 6.2 — Missing end marker  
+Sample:  
+===Transcription:  
+---------------------------------------------begin---DIV60--  
+text  
+Expected: FAIL
+
+TEST 6.3 — Empty transcription  
+Sample:  
+===Transcription:  
+---------------------------------------------begin---DIV60--  
+---------------------------------------------end-----DIV60--  
+Expected: FAIL
+
+TEST 6.4 — Whitespace-only transcription  
+Sample:  
+===Transcription:  
+---------------------------------------------begin---DIV60--  
+     
+---------------------------------------------end-----DIV60--  
+Expected: FAIL
+
+============================================================
+SECTION 7 — DATED-ENTRY SET RULES (NUMBERED STONES)
+============================================================
+
+TEST 7.1 — Missing dated-entry set  
+Sample:  
+===Stone: 1  
+===Date:  
+===Transcription:  
+---------------------------------------------begin---DIV60--  
+text  
+---------------------------------------------end-----DIV60--  
+Expected: FAIL
+
+TEST 7.2 — Valid set: Date → Photos → Notes  
+Sample:  
+===Date:  
+===Photos:  
+===Notes:  
+Expected: PASS
+
+TEST 7.3 — Text between Photos and Notes allowed  
+Sample:  
+===Date:  
+===Photos:  
+text A  
+text B  
+===Notes:  
+Expected: PASS
+
+TEST 7.4 — Text after Notes allowed  
+Sample:  
+===Date:  
+===Photos:  
+===Notes:  
+text C  
+text D  
+Expected: PASS
+
+TEST 7.5 — No lines allowed between Date and Photos  
+Sample:  
+===Date:  
+text  
+===Photos:  
+===Notes:  
+Expected: FAIL
+
+TEST 7.6 — Multiple dated-entry sets  
+Sample:  
+===Date:  
+===Photos:  
+===Notes:  
+===Date:  
+===Photos:  
+===Notes:  
+Expected: PASS
+
+============================================================
+SECTION 8 — POST-STONE METADATA BLOCK
+============================================================
+
+TEST 8.1 — Missing Interpretation  
+Sample:  
+===Location:  
+===Table:  
+===Status:  
+Expected: FAIL
+
+TEST 8.2 — Wrong order  
+Sample:  
+===Location:  
+===Interpretation:  
+===Table:  
+===Status:  
+Expected: FAIL
+
+TEST 8.3 — All present and correct  
+Sample:  
+===Interpretation:  
+===Location:  
+===Table:  
+===Status:  
+Expected: PASS
+
+============================================================
+SECTION 9 — FULL VALID SECTION
+============================================================
+
+TEST 9.1 — Complete valid section  
+Sample:  
+=========================================================================DIV80==  
+===PID: A  
+===Coord: X  
+===Place: Y  
+===Stones: 2  
+===Stone: 2  
+===Date:  
+===Transcription:  
+---------------------------------------------begin---DIV60--  
+text  
+---------------------------------------------end-----DIV60--  
+===Date:  
+===Photos:  
+===Notes:  
+===Stone: 1  
+===Date:  
+===Transcription:  
+---------------------------------------------begin---DIV60--  
+text  
+---------------------------------------------end-----DIV60--  
+===Date:  
+===Photos:  
+===Notes:  
+===Interpretation:  
+===Location:  
+===Table:  
+===Status:  
+Expected: PASS
+
+---
+
+If you want, I can also generate:
+
+- an **automated test runner**  
+- a **coverage matrix** showing which rules each test hits  
+- a **negative test generator** that produces random malformed sections  
+- a **positive test generator** that produces random valid sections
+
+Just tell me what direction you want next.
