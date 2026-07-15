@@ -11,28 +11,56 @@ def validate_section(lines, section_number, start_line_number, errors):
     lines = list of (line_number, text)
     """
 
-    # --- Find ===Stones: line ---
-    stones_line = None
-    stones_line_number = None
-
-    for ln, text in lines:
-        if text.startswith("===Stones:"):
-            stones_line = text
-            stones_line_number = ln
-            break
-
-    if stones_line is None:
-        errors.append(f"[Section {section_number} @ line {start_line_number}] Missing ===Stones:")
+    # --- Structural header validation ---
+    if len(lines) < 4:
+        errors.append(f"[Section {section_number} @ line {start_line_number}] Section too short to contain required headers")
         return
 
-    # --- Parse integer part and optional -V ---
-    m = re.match(r"^===Stones:\s*(\d+)(?:-V)?$", stones_line)
+    pid_line     = lines[0][1]
+    coord_line   = lines[1][1]
+    place_line   = lines[2][1]
+    stones_line  = lines[3][1]
+
+    # Ignore-section rule
+    if pid_line.startswith("===PID: IGNORE_SECTION"):
+        return
+
+    # Rule 1: PID line
+    if not pid_line.startswith("===PID:"):
+        errors.append(f"[Section {section_number} @ line {lines[0][0]}] Missing or malformed PID line")
+        return
+
+    # Rule 2: Coord line
+    if not coord_line.startswith("===Coord:"):
+        errors.append(f"[Section {section_number} @ line {lines[1][0]}] Missing or malformed Coord line")
+        return
+
+    # Rule 3: Place line
+    if not place_line.startswith("===Place:"):
+        errors.append(f"[Section {section_number} @ line {lines[2][0]}] Missing or malformed Place line")
+        return
+
+    # Rule 4: Stones line
+    if not stones_line.startswith("===Stones:"):
+        errors.append(f"[Section {section_number} @ line {lines[3][0]}] Missing or malformed Stones line")
+        return
+
+    # Stones value must be integer >=1 or integer-V or 0-V
+    m = re.match(r"^===Stones:\s*(?:0-V|[1-9]\d*(?:-V)?)$", stones_line)
     if not m:
-        errors.append(f"[Section {section_number} @ line {stones_line_number}] Invalid Stones line: {stones_line}")
+        errors.append(
+            f"[Section {section_number} @ line {lines[3][0]}] Stones value must be integer or integer-V, with 0-V as the only zero-stone form: {stones_line}"
+        )
         return
 
-    expected_numbered = int(m.group(1))
-    has_vacant_flag = stones_line.endswith("-V")
+    # Extract stones_value and vacant_flag
+    stones_raw = stones_line.split(":", 1)[1].strip()
+    vacant_flag = stones_raw.endswith("-V")
+
+    if stones_raw == "0-V":
+        stones_value = 0
+    else:
+        stones_value = int(stones_raw.replace("-V", ""))
 
     # --- Collect stone blocks ---
     stone_blocks = []
@@ -41,7 +69,7 @@ def validate_section(lines, section_number, start_line_number, errors):
     for ln, text in lines:
         if text.startswith("===Stone:"):
             stone_blocks.append((ln, text))
-            m2 = re.match(r"^===Stone:\s*(\d+)$", text)
+            m2 = re.match(r"^===Stone:\s*([1-9]\d*)$", text)
             if m2:
                 numbered_stones.append((ln, int(m2.group(1))))
             elif text.strip() == "===Stone: VACANT":
@@ -49,66 +77,169 @@ def validate_section(lines, section_number, start_line_number, errors):
             else:
                 errors.append(f"[Section {section_number} @ line {ln}] Invalid Stone line: {text}")
 
-    # --- Validate count of numbered stones ---
-    actual_numbered = len(numbered_stones)
+    stone_count = len(stone_blocks)
+    numbered_count = len(numbered_stones)
 
-    if actual_numbered != expected_numbered:
-        errors.append(
-            f"[Section {section_number} @ line {stones_line_number}] Numbered stone count mismatch: expected {expected_numbered}, found {actual_numbered}"
-        )
+    # --- Stones = 0-V case ---
+    if stones_value == 0:
+        if stone_count != 0:
+            errors.append(f"[Section {section_number} @ line {start_line_number}] Stones=0-V section cannot contain stone blocks")
 
-    # --- Special rule for 0-V ---
-    if expected_numbered == 0 and has_vacant_flag:
-        vacants = [1 for ln, text in stone_blocks if text.strip() == "===Stone: VACANT"]
-        if len(vacants) != 1:
+        # Must contain one or more dated-entry sets (Date/Photos/Notes, each optional)
+        found_sets = False
+        i = 0
+        while i < len(lines):
+            ln, text = lines[i]
+            if text.startswith("===Date:") or text.startswith("===Photos:") or text.startswith("===Notes:"):
+                found_sets = True
+                while i < len(lines) and (
+                    lines[i][1].startswith("===Date:") or
+                    lines[i][1].startswith("===Photos:") or
+                    lines[i][1].startswith("===Notes:")
+                ):
+                    i += 1
+                continue
+            i += 1
+
+        if not found_sets:
             errors.append(
-                f"[Section {section_number} @ line {stones_line_number}] 0-V section must contain exactly one VACANT stone block"
-            )
-        if actual_numbered != 0:
-            errors.append(
-                f"[Section {section_number} @ line {stones_line_number}] 0-V section cannot contain numbered stones"
+                f"[Section {section_number} @ line {start_line_number}] Stones=0-V section must contain at least one dated-entry set (Date/Photos/Notes)"
             )
         return
 
-    # --- Validate descending order ---
-    # Positions = number of stone blocks (numbered + VACANT)
-    expected_position = len(stone_blocks)
-    remaining_numbered = expected_numbered
+    # --- Stones >=1 case ---
+    expected_numbered = stones_value
+    if numbered_count != expected_numbered:
+        errors.append(
+            f"[Section {section_number} @ line {lines[3][0]}] Numbered stone count mismatch: expected {expected_numbered}, found {numbered_count}"
+        )
 
+    # Validate stone numbering consecutive and decreasing
+    nums = [n for ln, n in numbered_stones]
+    for i in range(1, len(nums)):
+        if nums[i] != nums[i-1] - 1:
+            errors.append(
+                f"[Section {section_number} @ line {numbered_stones[i][0]}] Stone numbers must decrease consecutively: {nums}"
+            )
+            break
+
+    if nums and nums[0] != expected_numbered:
+        errors.append(
+            f"[Section {section_number} @ line {lines[3][0]}] Stones value {expected_numbered} does not match largest stone number {nums[0]}"
+        )
+
+    # Validate each numbered stone has Date + Transcription + transcription block + dated-entry sets
     for ln, text in stone_blocks:
-
-        # VACANT stone
-        if text.strip() == "===Stone: VACANT":
-            expected_position -= 1
+        mstone = re.match(r"^===Stone:\s*([1-9]\d*)$", text)
+        if not mstone:
             continue
 
-        # Numbered stone
-        m3 = re.match(r"^===Stone:\s*(\d+)$", text)
-        if m3:
-            num = int(m3.group(1))
+        idx = None
+        for i, (lno, t) in enumerate(lines):
+            if lno == ln:
+                idx = i
+                break
 
-            if num != expected_position:
-                errors.append(
-                    f"[Section {section_number} @ line {ln}] Stone number out of order: expected {expected_position}, found {num}"
-                )
-
-            expected_position -= 1
-            remaining_numbered -= 1
+        if idx is None or idx + 2 >= len(lines):
+            errors.append(f"[Section {section_number} @ line {ln}] Stone block incomplete; missing Date/Transcription")
             continue
 
-        errors.append(
-            f"[Section {section_number} @ line {ln}] Invalid Stone line: {text}"
-        )
+        date_line = lines[idx+1][1]
+        trans_line = lines[idx+2][1]
 
-    # --- Final checks ---
-    if remaining_numbered != 0:
-        errors.append(
-            f"[Section {section_number} @ line {start_line_number}] Numbered stones incomplete: expected to consume {expected_numbered}, remaining {remaining_numbered}"
-        )
+        if not date_line.startswith("===Date:"):
+            errors.append(
+                f"[Section {section_number} @ line {lines[idx+1][0]}] Stone must have ===Date: immediately after ===Stone:"
+            )
 
-    if expected_position != 0:
+        if not trans_line.startswith("===Transcription:"):
+            errors.append(
+                f"[Section {section_number} @ line {lines[idx+2][0]}] Stone must have ===Transcription: immediately after ===Date:"
+            )
+
+        # Validate transcription block markers
+        begin_idx = idx+3
+        if begin_idx >= len(lines):
+            errors.append(
+                f"[Section {section_number} @ line {lines[idx+2][0]}] Transcription block missing begin marker"
+            )
+            continue
+
+        begin_line_no, begin_text = lines[begin_idx]
+        if begin_text != "---------------------------------------------begin---DIV60--":
+            errors.append(
+                f"[Section {section_number} @ line {begin_line_no}] Transcription block must start with exact begin marker"
+            )
+            continue
+
+        end_idx = None
+        for j in range(begin_idx+1, len(lines)):
+            if lines[j][1] == "---------------------------------------------end-----DIV60--":
+                end_idx = j
+                break
+
+        if end_idx is None:
+            errors.append(
+                f"[Section {section_number} @ line {begin_line_no}] Transcription block missing end marker"
+            )
+            continue
+
+        if end_idx == begin_idx+1:
+            errors.append(
+                f"[Section {section_number} @ line {begin_line_no}] Transcription block must contain at least one line of text"
+            )
+            continue
+
+        text_lines = [lines[k][1].strip() for k in range(begin_idx+1, end_idx)]
+        if all(t == "" for t in text_lines):
+            errors.append(
+                f"[Section {section_number} @ line {begin_line_no}] Transcription block cannot be empty or whitespace-only"
+            )
+            continue
+
+        # Validate at least one dated-entry set after transcription
+        found_set = False
+        j = end_idx + 1
+
+        while j < len(lines):
+            if lines[j][1].startswith("===Stone:"):
+                break
+
+            # Look for ===Date: with immediate ===Photos:
+            if lines[j][1].startswith("===Date:"):
+                if j + 1 < len(lines) and lines[j+1][1].startswith("===Photos:"):
+                    # Now search for ===Notes: after Photos until next Date or Stone
+                    k = j + 2
+                    while k < len(lines):
+                        if lines[k][1].startswith("===Stone:"):
+                            break
+                        if lines[k][1].startswith("===Date:"):
+                            break
+                        if lines[k][1].startswith("===Notes:"):
+                            found_set = True
+                            break
+                        k += 1
+                    if found_set:
+                        break
+            j += 1
+
+        if not found_set:
+            errors.append(
+                f"[Section {section_number} @ line {ln}] Numbered stone must contain at least one dated-entry set (===Date:, ===Photos:, ===Notes:)"
+            )
+
+    # After all stones, require Interpretation/Location/Table/Status
+    required = ["===Interpretation:", "===Location:", "===Table:", "===Status:"]
+    req_idx = 0
+    for j in range(len(lines)):
+        if lines[j][1].startswith(required[req_idx]):
+            req_idx += 1
+            if req_idx == len(required):
+                break
+
+    if req_idx != len(required):
         errors.append(
-            f"[Section {section_number} @ line {start_line_number}] Stone positions incomplete: expected to reach 0, ended at {expected_position}"
+            f"[Section {section_number} @ line {start_line_number}] Missing required post-stone block: Interpretation/Location/Table/Status"
         )
 
 
@@ -118,40 +249,33 @@ def validate_file(path):
     with open(path, "r", encoding="utf-8") as f:
         lines = [(i+1, line.rstrip("\n")) for i, line in enumerate(f)]
 
-    # --- Split sections using EXACT delimiter ---
     sections = []
     current = []
 
     for ln, text in lines:
 
-        # --- Detect corrupted delimiters explicitly ---
+        # Corrupted delimiter detection
         if text.startswith("=") and "DIV80==" in text and text != SECTION_DELIMITER:
             errors.append(f"[Line {ln}] Corrupted delimiter: {text}")
 
-        # --- Valid delimiter ---
+        # Valid delimiter
         if text == SECTION_DELIMITER:
             if current:
                 sections.append(current)
             current = []
-            continue  # do NOT include delimiter in any section
+            continue
 
         current.append((ln, text))
 
     if current:
         sections.append(current)
 
-    # --- Validate each section ---
+    # Validate each section
     for idx, sec in enumerate(sections, start=1):
-
-        # NEW FEATURE: ignore section if PID says so
-        first_line_text = sec[0][1]
-        if first_line_text.startswith("===PID: IGNORE_SECTION"):
-            continue
-
         start_ln = sec[0][0]
         validate_section(sec, idx, start_ln, errors)
 
-    # --- Output ---
+    # Output
     if errors:
         print("Validation errors:")
         for e in errors:

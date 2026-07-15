@@ -1,1 +1,0 @@
-py cemetery_file_validator.py "..\TEST-Grave List.txt" >out.txt
