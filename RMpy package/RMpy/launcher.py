@@ -1,22 +1,22 @@
+from os import chdir
+import RMpy.common as RMc  # type: ignore
+import traceback
+import subprocess
+import configparser
+import sqlite3
+from datetime import datetime
 import sys
 from pathlib import Path
-sys.path.append( r'.' )
+sys.path.append(r'.')
 
-from datetime import datetime
-import sqlite3
-import configparser
-import subprocess
-import traceback
-
-import RMpy.common as RMc  # type: ignore
-
-from os import chdir
 
 # ===================================================DIV60==
+
 def launcher(utility_info):
 
     db_connection = None
     report_display_app = None
+    report_has_errors = False
 
     # ===========================================DIV50==
     # Errors go to console window
@@ -25,11 +25,11 @@ def launcher(utility_info):
         # set the current directory so relative paths work
         chdir(utility_info["script_path"])
 
-        # Configuration file location- 
+        # Configuration file location-
         # either specified by quoted command line argument or default
         # encoded as UTF-8 (no BOM).
         # see   https://docs.python.org/3/library/configparser.html
-        if len(sys.argv) >2: 
+        if len(sys.argv) > 2:
             raise RMc.RM_Py_Exception(
                 "\n\nERROR: Only one parameter allowed.\n"
                 "       Enclose the configuration file path parameter with \n"
@@ -89,7 +89,8 @@ def launcher(utility_info):
             report_display_app_str = config['FILE_PATHS']['REPORT_FILE_DISPLAY_APP']
             if "\n" in report_display_app_str:
                 # multiline parameter. Second line contains argument
-                report_display_app_str_list = report_display_app_str.split("\n")
+                report_display_app_str_list = report_display_app_str.split(
+                    "\n")
                 report_display_app = Path(report_display_app_str_list[0])
                 report_display_app_arg = report_display_app_str_list[1]
         except:
@@ -105,8 +106,10 @@ def launcher(utility_info):
         try:
             database_path = Path(config['FILE_PATHS']['DB_PATH'])
         except:
+            report_has_errors = True
             raise RMc.RM_Py_Exception('ERROR: DB_PATH must be specified.')
         if not database_path.exists():
+            report_has_errors = True
             raise RMc.RM_Py_Exception(
                 F'ERROR: Database path not found:\n'
                 F' "{database_path}"\n')
@@ -116,9 +119,11 @@ def launcher(utility_info):
             try:
                 rmnocase_path = Path(config['FILE_PATHS']['RMNOCASE_PATH'])
             except:
+                report_has_errors = True
                 raise RMc.RM_Py_Exception(
                     'ERROR: RMNOCASE_PATH must be specified.')
             if not rmnocase_path.exists():
+                report_has_errors = True
                 raise RMc.RM_Py_Exception(
                     f'ERROR: Path for RMNOCASE extension (unifuzz64.dll)\n'
                     f'not found: {rmnocase_path}\n\n')
@@ -126,6 +131,7 @@ def launcher(utility_info):
         if utility_info["RMNOCASE_optional"]:
             rmnocase_path = Path(config['FILE_PATHS']['RMNOCASE_PATH'])
             if not rmnocase_path.exists():
+                report_has_errors = True
                 raise RMc.RM_Py_Exception(
                     f'ERROR: Path for RMNOCASE extension (unifuzz64.dll)\n'
                     f'not found: {rmnocase_path}\n\n')
@@ -135,9 +141,11 @@ def launcher(utility_info):
             try:
                 regexp_path = config['FILE_PATHS']['REGEXP_PATH']
             except:
+                report_has_errors = True
                 raise RMc.RM_Py_Exception(
                     'ERROR: REGEXP_PATH must be specified.')
             if not rmnocase_path.exists():
+                report_has_errors = True
                 raise RMc.RM_Py_Exception(
                     f'ERROR: Path for REGEXP extension not found:'
                     f' {rmnocase_path}\n\n')
@@ -145,6 +153,7 @@ def launcher(utility_info):
         if utility_info["RegExp_optional"]:
             regexp_path = config['FILE_PATHS']['REGEXP_PATH']
             if not rmnocase_path.exists():
+                report_has_errors = True
                 raise RMc.RM_Py_Exception(
                     f'ERROR: Path for REGEXP extension not found:'
                     f' {rmnocase_path}\n\n')
@@ -153,32 +162,33 @@ def launcher(utility_info):
         file_modification_time = datetime.fromtimestamp(
             database_path.stat().st_mtime)
 
-
-        if rmnocase_path is not None  and regexp_path is None:
-            db_connection = RMc.create_db_connection(database_path, [rmnocase_path])
+        if rmnocase_path is not None and regexp_path is None:
+            db_connection = RMc.create_db_connection(
+                database_path, [rmnocase_path])
         elif regexp_path is not None and rmnocase_path is None:
-            db_connection = RMc.create_db_connection(database_path, [regexp_path])
+            db_connection = RMc.create_db_connection(
+                database_path, [regexp_path])
         elif regexp_path is not None and rmnocase_path is not None:
-            db_connection = RMc.create_db_connection(database_path, [rmnocase_path, regexp_path])
+            db_connection = RMc.create_db_connection(
+                database_path, [rmnocase_path, regexp_path])
         else:
             db_connection = RMc.create_db_connection(database_path, None)
 
         # write header to report file
         format = "%Y-%m-%d %H:%M:%S"
         report_file.write(
-                F"Report generated at      = {RMc.time_stamp_now()}\n"
-                F"Utility name             = {utility_info["utility_name"]}\n"
-                F"Utility version          = v{utility_info["utility_version"]}\n"
-                F"Python version           = v{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}\n"
-                F"SQLite library version   = v{RMc.get_SQLite_library_version(db_connection)}\n"
-                F"Database last changed on = {file_modification_time.strftime(format)}\n"
-                F"Database processed       = {database_path.resolve()}\n"
-                F"\n\n\n")
-
+            F"Report generated at      = {RMc.time_stamp_now()}\n"
+            F"Utility name             = {utility_info["utility_name"]}\n"
+            F"Utility version          = v{utility_info["utility_version"]}\n"
+            F"Python version           = v{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}\n"
+            F"SQLite library version   = v{RMc.get_SQLite_library_version(db_connection)}\n"
+            F"Database last changed on = {file_modification_time.strftime(format)}\n"
+            F"Database processed       = {database_path.resolve()}\n"
+            F"\n\n\n")
 
         # Call the function pointer to run the functional part of the app
-        utility_info["run_features_function"](config, db_connection, report_file)
-
+        utility_info["run_features_function"](
+            config, db_connection, report_file)
 
         if utility_info["allow_db_changes"]:
             db_connection.commit()
@@ -189,23 +199,26 @@ def launcher(utility_info):
     except (sqlite3.OperationalError, sqlite3.ProgrammingError) as e:
         if str(e) == "database is locked":
             divider = "="*50 + "===DIV60=="
-            div_line= divider + "\n"
+            div_line = divider + "\n"
             report_file.seek(0, 0)
-            report_file.write( F"{div_line}{div_line}{div_line}"
-                F"Database is locked.\nRootsMagic is preventing the group updates\n"
-                F"Close RootsMagic and rerun this app.\n"
-                F"{div_line}{div_line}{div_line}\n\n\n\n")
+            report_file.write(F"{div_line}{div_line}{div_line}"
+                              F"Database is locked.\nRootsMagic is preventing the updates\n"
+                              F"Close RootsMagic and rerun this app.\n"
+                              F"{div_line}{div_line}{div_line}\n\n\n\n")
         else:
             report_file.write(
                 F"ERROR: SQL execution returned an error \n\n{e}")
+        report_has_errors = True
         return 1
     except RMc.RM_Py_Exception as e:
         report_file.write(str(e))
+        report_has_errors = True
         return 1
     except Exception as e:
         traceback.print_exception(e, file=report_file)
         report_file.write(
             "\n\n" "ERROR: Application failed. Please email report file to author. ")
+        report_has_errors = True
         return 1
 
     finally:
@@ -213,13 +226,16 @@ def launcher(utility_info):
             db_connection.close()
         report_file.close()
         if report_display_app is not None:
-            # display the report file
-            if report_display_app_arg == None:
-                subprocess.Popen([report_display_app, report_path])
-            else:
-                subprocess.Popen([report_display_app, report_display_app_arg, report_path])
+            should_display = (report_has_errors or not utility_info.get(
+                "ReportFile_no_display", False))
+            if should_display:
+                # display the report file
+                if report_display_app_arg == None:
+                    subprocess.Popen([report_display_app, report_path])
+                else:
+                    subprocess.Popen(
+                        [report_display_app, report_display_app_arg, report_path])
     return 0
 
 
 # ===================================================DIV60==
-

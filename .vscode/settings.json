@@ -13,7 +13,7 @@
         "windll"
     ],
     "python.analysis.extraPaths": [
-        "./RM-RMpy module"
+        "./RMpy package"
     ],
     "cSpell.enabled": true,
     "editor.foldingStrategy": "auto",

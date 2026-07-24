@@ -6,18 +6,20 @@
     "configurations": [
 
         {
-            "name": "PowerShell Launch Current File",
-            "type": "PowerShell",
-            "request": "launch",
-            "script": "${file}",
-            "cwd": "${cwd}"
-        },
-        {
             "name": "PYD: Current File, No args",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
+            "stopOnEntry": false
+        },
+        {
+            "name": "PYD: Current File, arg= '1'",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": "1",
             "stopOnEntry": false
         },
         {
@@ -161,6 +163,7 @@
             "stopOnEntry": true
         },
         {
+            // the file copying util for use in dev enviornment
             "name": "PYD: DB_util production",
             "cwd":  "${workspaceFolder}/dev util scripts",
             "type": "debugpy",
@@ -169,7 +172,16 @@
             "console": "integratedTerminal",
             "args": "production",
             "stopOnEntry": true
-        }
+        },
+        {
+            // for use with Powershell
+            "name": "PowerShell Launch Current File",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${file}",
+            "cwd": "${cwd}"
+        },
+
 
     ]
 }

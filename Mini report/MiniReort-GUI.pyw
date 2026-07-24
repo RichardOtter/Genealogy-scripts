@@ -1,87 +1,95 @@
 #!/usr/bin/env python3
-import sqlite3
-import re
-from datetime import datetime
-import tkinter as tk
+import sys
+from pathlib import Path
+sys.path.append(
+    str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
+
+import configparser
 from tkinter import messagebox
-import os
-
-# ------------------------------------------------------------
-# Hard‑coded RM database path
-# ------------------------------------------------------------
-DBPath = r"C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree"
-
-# ------------------------------------------------------------
-# Config file for saving auto-close state and delay
-# ------------------------------------------------------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CFG_FILE = os.path.join(BASE_DIR, "minireport.cfg")
+import tkinter as tk
+from datetime import datetime
+import RMpy.launcher
+import RMpy.RMDate
 
 
-def load_config():
-    auto_close = 0
+# ------------------------------------------------------------
+# GUI state
+# ------------------------------------------------------------
+G_GUI_STATE = {}
+
+def main():
+    utility_info = {}
+    utility_info["utility_name"] = "MiniReport"
+    utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
+    utility_info["config_file_name"] = "RM-Python-config.ini"
+    utility_info["script_path"] = Path(__file__).parent.resolve()
+    utility_info["run_features_function"] = build_gui
+    utility_info["allow_db_changes"] = False
+    utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
+    utility_info["RegExp_required"] = False
+    utility_info["RegExp_optional"] = False
+    utility_info["ReportFile_no_display"] = True
+
+    RMpy.launcher.launcher(utility_info)
+
+
+def build_gui(config, db_connection, report_file):
+    G_GUI_STATE.clear()
+
+    root = tk.Tk()
+    root.title("MiniReport")
+    root.db_connection = db_connection
+
+    auto_close, delay_ms_value = load_config(config)
+
+    G_GUI_STATE["root"] = root
+    G_GUI_STATE["delay_ms"] = delay_ms_value
+    G_GUI_STATE["auto_close"] = auto_close
+
+    tk.Label(root, text="Enter PersonID:").pack(padx=10, pady=5)
+
+    entry = tk.Entry(root, width=20)
+    entry.pack(padx=10, pady=5)
+    entry.focus_set()
+    entry.bind("<Return>", lambda event: run_report(root.db_connection))
+    G_GUI_STATE["entry"] = entry
+
+    tk.Button(root, text="Generate Report",
+              command=lambda: run_report(root.db_connection)).pack(padx=10, pady=10)
+
+    output_box = tk.Text(root, width=50, height=4,
+                         state="disabled", bg="#f0f0f0")
+    output_box.pack(padx=10, pady=10)
+    G_GUI_STATE["output_box"] = output_box
+
+    root.update_idletasks()
+    center_window(root)
+
+    root.mainloop()
+
+
+def load_config(config):
+    auto_close = 1
     delay_ms = 3000
 
-    if not os.path.exists(CFG_FILE):
-        return auto_close, delay_ms
+    try:
+        auto_close_value = config['OPTIONS']['AUTO_CLOSE']
+        auto_close = 1 if str(auto_close_value).strip().lower() in {'1', 'true', 'yes', 'on'} else 0
+    except (KeyError, configparser.Error, ValueError):
+        auto_close = 1
 
     try:
-        with open(CFG_FILE, "r") as f:
-            for line in f:
-                if line.startswith("auto_close="):
-                    auto_close = int(line.split("=")[1].strip())
-                elif line.startswith("delay_ms="):
-                    delay_ms = int(line.split("=")[1].strip())
-    except (OSError, ValueError):
-        pass
+        delay_ms = int(config['OPTIONS']['AUTO_CLOSE_DELAY_MS'])
+    except (KeyError, configparser.Error, ValueError):
+        delay_ms = 3000
 
     return auto_close, delay_ms
 
 
-def save_config(auto_close_value, delay_ms_value):
-    try:
-        with open(CFG_FILE, "w") as f:
-            f.write(f"auto_close={auto_close_value}\n")
-            f.write(f"delay_ms={delay_ms_value}\n")
-    except OSError:
-        pass
-
 # ------------------------------------------------------------
 # Utility functions
 # ------------------------------------------------------------
-
-
-def format_rm_date(raw):
-    if not raw:
-        return ""
-
-    m = re.search(r"(\d{8})", raw)
-    if not m:
-        return ""
-
-    ymd = m.group(1)
-    year = int(ymd[0:4])
-    month = int(ymd[4:6])
-    day = int(ymd[6:8])
-
-    if year == 0:
-        return ""
-
-    if month == 0:
-        return f"{year}"
-
-    if day == 0:
-        try:
-            dt = datetime(year, month, 1)
-            return dt.strftime("%b %Y")
-        except ValueError:
-            return f"{year}"
-
-    try:
-        dt = datetime(year, month, day)
-        return dt.strftime("%d %b %Y")
-    except ValueError:
-        return f"{year}"
 
 
 def get_primary_name(conn, person_id):
@@ -207,6 +215,15 @@ def generate_report(conn, person_id):
 
     return f"{line1}\n{line2}\n"
 
+
+def format_rm_date(raw):
+    if not raw:
+        return ""
+    try:
+        return RMpy.RMDate.RMDate_str_TO_en_str(raw, RMpy.RMDate.Format.SHORT)
+    except Exception:
+        return ""
+
 # ------------------------------------------------------------
 # GUI
 # ------------------------------------------------------------
@@ -224,12 +241,20 @@ def center_window(win):
 
 
 def copy_to_clipboard(text):
+    if not G_GUI_STATE.get("root"):
+        return
+    root = G_GUI_STATE["root"]
     root.clipboard_clear()
     root.clipboard_append(text)
     root.update()
 
 
-def run_report():
+def run_report(conn=None):
+    entry = G_GUI_STATE.get("entry")
+    output_box = G_GUI_STATE.get("output_box")
+    if entry is None or output_box is None:
+        return
+
     pid_text = entry.get().strip()
     if not pid_text.isdigit():
         messagebox.showerror("Error", "PersonID must be numeric.")
@@ -237,10 +262,15 @@ def run_report():
 
     person_id = int(pid_text)
 
+    if conn is None:
+        conn = getattr(root, "db_connection", None)
+    if conn is None:
+        messagebox.showerror(
+            "Database Error", "No database connection available.")
+        return
+
     try:
-        conn = sqlite3.connect(DBPath)
         report = generate_report(conn, person_id)
-        conn.close()
     except Exception as e:
         messagebox.showerror("Database Error", str(e))
         return
@@ -252,35 +282,12 @@ def run_report():
     output_box.insert(tk.END, report)
     output_box.config(state="disabled")
 
-    save_config(auto_close_var.get(), delay_ms)
+    if G_GUI_STATE.get("auto_close", 1) == 1:
+        root = G_GUI_STATE.get("root")
+        if root is not None:
+            root.after(G_GUI_STATE.get("delay_ms", 3000), root.destroy)
 
-    if auto_close_var.get() == 1:
-        root.after(delay_ms, root.destroy)
 
 
-root = tk.Tk()
-root.title("MiniReport")
-
-auto_close, delay_ms = load_config()
-auto_close_var = tk.IntVar(value=auto_close)
-
-tk.Label(root, text="Enter PersonID:").pack(padx=10, pady=5)
-
-entry = tk.Entry(root, width=20)
-entry.pack(padx=10, pady=5)
-entry.focus_set()  # ✔ cursor starts here
-entry.bind("<Return>", lambda event: run_report())
-
-tk.Checkbutton(root, text="Auto-close",
-               variable=auto_close_var).pack(padx=10, pady=5)
-
-tk.Button(root, text="Generate Report",
-          command=run_report).pack(padx=10, pady=10)
-
-output_box = tk.Text(root, width=50, height=4, state="disabled", bg="#f0f0f0")
-output_box.pack(padx=10, pady=10)
-
-root.update_idletasks()
-center_window(root)
-
-root.mainloop()
+if __name__ == "__main__":
+    main()
