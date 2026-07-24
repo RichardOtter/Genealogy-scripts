@@ -1,3 +1,4 @@
+import configparser
 import os
 import sys
 from pathlib import Path
@@ -60,6 +61,15 @@ def q_str(in_str):
 
 
 # ===================================================DIV60==
+def get_bool_option(config, section_name, option_name, default=False):
+
+    try:
+        return config[section_name].getboolean(option_name)
+    except (configparser.Error, KeyError, ValueError):
+        return default
+
+
+# ===================================================DIV60==
 def launched_from_explorer():
     # Check how many processes are attached to the console
     arr = (ctypes.c_uint * 10)()
@@ -74,7 +84,7 @@ def launched_from_explorer():
 
 # ===================================================DIV60==
 def pause_with_message(message=None):
-# Don't pause when running from a terminal or when input output is redirected
+    # Don't pause when running from a terminal or when input output is redirected
     if (message != None):
         print(str(message))
     if launched_from_explorer():
@@ -83,7 +93,7 @@ def pause_with_message(message=None):
 
 
 # ===================================================DIV60==
-def get_current_directory(script_path: Path) ->Path:
+def get_current_directory(script_path: Path) -> Path:
 
     # Determine if application is a script file or frozen exe and get its directory
     # see   https://pyinstaller.org/en/stable/runtime-information.html
@@ -101,4 +111,3 @@ class RM_Py_Exception(Exception):
 
 
 # ===================================================DIV60==
-

@@ -76,7 +76,7 @@ def ensure_folder_with_timestamp(path: str) -> str:
     # Create the folder
     os.mkdir(path)
 
-    # Validate writability
+    # Validate folder is writable.
     _validate_writable(path)
 
     return path

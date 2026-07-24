@@ -18,6 +18,7 @@ DBPath = r"C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CFG_FILE = os.path.join(BASE_DIR, "minireport.cfg")
 
+
 def load_config():
     auto_close = 0
     delay_ms = 3000
@@ -37,6 +38,7 @@ def load_config():
 
     return auto_close, delay_ms
 
+
 def save_config(auto_close_value, delay_ms_value):
     try:
         with open(CFG_FILE, "w") as f:
@@ -48,6 +50,7 @@ def save_config(auto_close_value, delay_ms_value):
 # ------------------------------------------------------------
 # Utility functions
 # ------------------------------------------------------------
+
 
 def format_rm_date(raw):
     if not raw:
@@ -81,6 +84,7 @@ def format_rm_date(raw):
     except ValueError:
         return f"{year}"
 
+
 def get_primary_name(conn, person_id):
     cur = conn.execute("""
         SELECT Given, Surname
@@ -93,6 +97,7 @@ def get_primary_name(conn, person_id):
     if row:
         return row[0] or "", row[1] or ""
     return "", ""
+
 
 def get_birth_death(conn, person_id):
     cur = conn.execute("""
@@ -110,6 +115,7 @@ def get_birth_death(conn, person_id):
         elif etype == 2:
             death = format_rm_date(date or "")
     return birth, death
+
 
 def get_parents(conn, person_id):
     cur = conn.execute("""
@@ -135,14 +141,17 @@ def get_parents(conn, person_id):
         return row[0], row[1]
     return None, None
 
+
 def get_sex_word(conn, person_id):
-    cur = conn.execute("SELECT Sex FROM PersonTable WHERE PersonID = ?", (person_id,))
+    cur = conn.execute(
+        "SELECT Sex FROM PersonTable WHERE PersonID = ?", (person_id,))
     row = cur.fetchone()
     if not row:
         return "child"
 
     sex_id = row[0]
-    cur = conn.execute("SELECT SexType FROM LU_SexType WHERE SexID = ?", (sex_id,))
+    cur = conn.execute(
+        "SELECT SexType FROM LU_SexType WHERE SexID = ?", (sex_id,))
     row = cur.fetchone()
     if not row or not row[0]:
         return "child"
@@ -157,6 +166,7 @@ def get_sex_word(conn, person_id):
 # ------------------------------------------------------------
 # Report generator
 # ------------------------------------------------------------
+
 
 def generate_report(conn, person_id):
     given, surname = get_primary_name(conn, person_id)
@@ -202,6 +212,7 @@ def generate_report(conn, person_id):
 # GUI
 # ------------------------------------------------------------
 
+
 def center_window(win):
     win.update_idletasks()
     w = win.winfo_width()
@@ -211,6 +222,7 @@ def center_window(win):
     x = (sw - w) // 2
     y = (sh - h) // 2
     win.geometry(f"{w}x{h}+{x}+{y}")
+
 
 def run_report():
     pid_text = entry.get().strip()
@@ -240,6 +252,7 @@ def run_report():
     if auto_close_var.get() == 1:
         root.after(delay_ms, root.destroy)
 
+
 root = tk.Tk()
 root.title("MiniReport")
 
@@ -253,9 +266,11 @@ entry.pack(padx=10, pady=5)
 entry.focus_set()  # ✔ cursor starts here
 entry.bind("<Return>", lambda event: run_report())
 
-tk.Checkbutton(root, text="Auto-close", variable=auto_close_var).pack(padx=10, pady=5)
+tk.Checkbutton(root, text="Auto-close",
+               variable=auto_close_var).pack(padx=10, pady=5)
 
-tk.Button(root, text="Generate Report", command=run_report).pack(padx=10, pady=10)
+tk.Button(root, text="Generate Report",
+          command=run_report).pack(padx=10, pady=10)
 
 output_box = tk.Text(root, width=50, height=4, state="disabled", bg="#f0f0f0")
 output_box.pack(padx=10, pady=10)

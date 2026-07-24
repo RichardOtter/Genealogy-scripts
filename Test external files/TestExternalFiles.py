@@ -1,14 +1,15 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
+sys.path.append(
+    str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
+
+import xml.etree.ElementTree as ET
+import hashlib
 
 import RMpy.common as RMc       # noqa #type: ignore
 import RMpy.launcher            # noqa #type: ignore
 from RMpy.common import q_str   # noqa #type: ignore
 import RMpy.gitignore  # type: ignore
-
-import xml.etree.ElementTree as ET
-import hashlib
 
 
 # Requirements:
@@ -56,16 +57,16 @@ def main():
 
     # Configuration
     utility_info = {}
-    utility_info["utility_name"]     = "TestExternalFiles" 
-    utility_info["utility_version"]  = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
+    utility_info["utility_name"] = "TestExternalFiles"
+    utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
     utility_info["config_file_name"] = "RM-Python-config.ini"
-    utility_info["script_path"]      = Path(__file__).parent.resolve()
-    utility_info["run_features_function"]  = run_selected_features
-    utility_info["allow_db_changes"]       = False
-    utility_info["RMNOCASE_required"]      = False
-    utility_info["RMNOCASE_optional"]      = False
-    utility_info["RegExp_required"]        = False
-    utility_info["RegExp_optional"]        = False
+    utility_info["script_path"] = Path(__file__).parent.resolve()
+    utility_info["run_features_function"] = run_selected_features
+    utility_info["allow_db_changes"] = False
+    utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
+    utility_info["RegExp_required"] = False
+    utility_info["RegExp_optional"] = False
 
     RMpy.launcher.launcher(utility_info)
 
@@ -83,56 +84,48 @@ def run_selected_features(config, db_connection, report_file):
 
     # test option values conversion to boolean
     # if missing, treated as false
-    try:
-        config['OPTIONS'].getboolean('CHECK_FILES')
-        config['OPTIONS'].getboolean('UNREF_FILES')
-        config['OPTIONS'].getboolean('NO_TAG_FILES')
-        config['OPTIONS'].getboolean('FOLDER_LIST')
-        config['OPTIONS'].getboolean('DUP_FILENAMES')
-        config['OPTIONS'].getboolean('DUP_FILEPATHS')
-        config['OPTIONS'].getboolean('NOT_MEDIA_FLDR')
-        config['OPTIONS'].getboolean('HASH_FILE')
-        config['OPTIONS'].getboolean('NOT_MEDIA_FLDR')
-        config['OPTIONS'].getboolean('SHOW_ORIG_PATH')
-        config['OPTIONS'].getboolean('CASE_INSENSITIVE')
-        
-        config['OPTIONS'].getboolean('TESTING_USE_LOCAL_RM_XML')
+    RMc.get_bool_option(config, 'OPTIONS', 'CHECK_FILES')
+    RMc.get_bool_option(config, 'OPTIONS', 'UNREF_FILES')
+    RMc.get_bool_option(config, 'OPTIONS', 'NO_TAG_FILES')
+    RMc.get_bool_option(config, 'OPTIONS', 'FOLDER_LIST')
+    RMc.get_bool_option(config, 'OPTIONS', 'DUP_FILENAMES')
+    RMc.get_bool_option(config, 'OPTIONS', 'DUP_FILEPATHS')
+    RMc.get_bool_option(config, 'OPTIONS', 'NOT_MEDIA_FLDR')
+    RMc.get_bool_option(config, 'OPTIONS', 'HASH_FILE')
+    RMc.get_bool_option(config, 'OPTIONS', 'SHOW_ORIG_PATH')
+    RMc.get_bool_option(config, 'OPTIONS', 'CASE_INSENSITIVE')
+    RMc.get_bool_option(config, 'OPTIONS', 'TESTING_USE_LOCAL_RM_XML')
 
-        if config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER'):
-            # app is in test mode.
-            # Set the path to the RM media folder preference setting
-            # overriding what might be in the production RM xml config file
-            G_media_directory_path = parent_dir / 'media'
-
-    except:
-        raise RMc.RM_Py_Exception(
-            "One of the OPTIONS values could not be interpreted as either on or off.\n")
-
+    if RMc.get_bool_option(config, 'OPTIONS', 'TESTING_MODE_USE_TEST_MEDIA_FOLDER'):
+        # app is in test mode.
+        # Set the path to the RM media folder preference setting
+        # overriding what might be in the production RM xml config file
+        G_media_directory_path = parent_dir / 'media'
 
     # Run all of the requested options.
-    if config['OPTIONS'].getboolean('CHECK_FILES'):
+    if RMc.get_bool_option(config, 'OPTIONS', 'CHECK_FILES'):
         missing_files_feature(config, db_connection, report_file)
 
-    if config['OPTIONS'].getboolean('UNREF_FILES'):
+    if RMc.get_bool_option(config, 'OPTIONS', 'UNREF_FILES'):
         list_unreferenced_files_feature(
             config, db_connection, report_file)
 
-    if config['OPTIONS'].getboolean('NO_TAG_FILES'):
+    if RMc.get_bool_option(config, 'OPTIONS', 'NO_TAG_FILES'):
         files_with_no_tags_feature(config, db_connection, report_file)
 
-    if config['OPTIONS'].getboolean('FOLDER_LIST'):
+    if RMc.get_bool_option(config, 'OPTIONS', 'FOLDER_LIST'):
         list_folders_feature(config, db_connection, report_file)
 
-    if config['OPTIONS'].getboolean('DUP_FILENAMES'):
+    if RMc.get_bool_option(config, 'OPTIONS', 'DUP_FILENAMES'):
         duplicate_file_names_feature(db_connection, report_file)
 
-    if config['OPTIONS'].getboolean('DUP_FILEPATHS'):
+    if RMc.get_bool_option(config, 'OPTIONS', 'DUP_FILEPATHS'):
         duplicate_file_paths_feature(db_connection, report_file)
 
-    if config['OPTIONS'].getboolean('NOT_MEDIA_FLDR'):
+    if RMc.get_bool_option(config, 'OPTIONS', 'NOT_MEDIA_FLDR'):
         files_not_in_media_folder_feature(config, db_connection, report_file)
 
-    if config['OPTIONS'].getboolean('HASH_FILE'):
+    if RMc.get_bool_option(config, 'OPTIONS', 'HASH_FILE'):
         file_hash_feature(config, db_connection, report_file)
 
     section("FINAL", "", report_file)
@@ -148,14 +141,10 @@ def missing_files_feature(config, db_connection, report_file):
     section("START", feature_name, report_file)
 
     # get options
-    try:
-        show_original_path = config['OPTIONS'].getboolean('SHOW_ORIG_PATH')
-    except:
-        show_original_path = False
-    try:
-        case_insensitive = config['OPTIONS'].getboolean('CASE_INSENSITIVE')
-    except:
-        case_insensitive = False
+    show_original_path = RMc.get_bool_option(
+        config, 'OPTIONS', 'SHOW_ORIG_PATH')
+    case_insensitive = RMc.get_bool_option(
+        config, 'OPTIONS', 'CASE_INSENSITIVE')
 
     if case_insensitive:
         report_file.write("Case-insensitive search\n")
@@ -175,24 +164,24 @@ def missing_files_feature(config, db_connection, report_file):
 
         # First consider just the dir path (separate column in database)
         if dir_path.is_file():
-                missing_items += 1
+            missing_items += 1
+            report_file.write(
+                f"\n" "Directory path points to a file, not a folder:\n"
+                f"{RMc.q_str(dir_path)}\nfor file: {RMc.q_str(file_name)}\n")
+            if show_original_path:
                 report_file.write(
-                    f"\n" "Directory path points to a file, not a folder:\n"
-                    f"{RMc.q_str(dir_path)}\nfor file: {RMc.q_str(file_name)}\n")
-                if show_original_path:
-                    report_file.write(
-                        f"{label_original_path} {RMc.q_str(dir_path_original)}\n")
+                    f"{label_original_path} {RMc.q_str(dir_path_original)}\n")
 
-                continue
+            continue
         if not dir_path.is_dir():
-                missing_items += 1
+            missing_items += 1
+            report_file.write(
+                f"\n" "Directory path cannot be found:\n"
+                f"{RMc.q_str(dir_path)}\nfor file: {RMc.q_str(file_name)}\n")
+            if show_original_path:
                 report_file.write(
-                    f"\n" "Directory path cannot be found:\n"
-                    f"{RMc.q_str(dir_path)}\nfor file: {RMc.q_str(file_name)}\n")
-                if show_original_path:
-                    report_file.write(
-                        f"{label_original_path} {RMc.q_str(dir_path_original)}\n")
-                continue
+                    f"{label_original_path} {RMc.q_str(dir_path_original)}\n")
+            continue
         if file_path.is_file():
             if not case_insensitive and str(file_path) != str(file_path.resolve()):
                 missing_items += 1
@@ -241,7 +230,8 @@ def list_unreferenced_files_feature(config, db_connection, report_file):
 
     # get options
     try:
-        ext_files_folder_path = Path(config['FILE_PATHS']['SEARCH_ROOT_FLDR_PATH'])
+        ext_files_folder_path = Path(
+            config['FILE_PATHS']['SEARCH_ROOT_FLDR_PATH'])
     except:
         raise RMc.RM_Py_Exception(
             "ERROR: SEARCH_ROOT_FLDR_PATH must be specified for the selected option.\n")
@@ -273,7 +263,8 @@ def list_unreferenced_files_feature(config, db_connection, report_file):
     filesystem_folder_file_list = folder_contents_minus_ignored(
         ext_files_folder_path, config, report_file)
 
-    unref_files = list(set(filesystem_folder_file_list).difference(db_file_list))
+    unref_files = list(
+        set(filesystem_folder_file_list).difference(db_file_list))
 
     if len(unref_files) > 0:
         # print the files
@@ -282,7 +273,8 @@ def list_unreferenced_files_feature(config, db_connection, report_file):
         # don't print full path from root folder
         cutoff = len(str(ext_files_folder_path))
         for i in range(len(unref_files)):
-            report_file.write(RMc.q_str("." + str(unref_files[i])[cutoff:]) + "\n")
+            report_file.write(
+                RMc.q_str("." + str(unref_files[i])[cutoff:]) + "\n")
 
         report_file.write("\nFiles in processed folder not referenced by the database: "
                           + str(len(unref_files)) + "\n")
@@ -312,7 +304,7 @@ def files_with_no_tags_feature(config, db_connection, report_file):
 
     section("START", feature_name, report_file)
     # get options
-    show_orig_path = config['OPTIONS'].getboolean('SHOW_ORIG_PATH')
+    show_orig_path = RMc.get_bool_option(config, 'OPTIONS', 'SHOW_ORIG_PATH')
 
     cur = get_db_no_tag_file_list(db_connection)
 
@@ -342,7 +334,7 @@ def list_folders_feature(config, db_connection, report_file):
 
     section("START", feature_name, report_file)
     # get options
-    show_orig_path = config['OPTIONS'].getboolean('SHOW_ORIG_PATH')
+    show_orig_path = RMc.get_bool_option(config, 'OPTIONS', 'SHOW_ORIG_PATH')
 
     # First check database for empty paths or filenames
     # easier to handle them now than later
@@ -434,53 +426,60 @@ def file_hash_feature(config, db_connection, report_file):
         raise RMc.RM_Py_Exception(
             "ERROR: HASH_FILE_FLDR_PATH must be specified for this option.\n")
 
-    hash_file_path = hash_file_folder / Path("MediaFiles_HASH_" + RMc.time_stamp_now("file") + ".txt")
+    try:
+        hash_file_folder.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        raise RMc.RM_Py_Exception(
+            f"ERROR: Cannot create hash folder:{RMc.q_str(hash_file_folder)} \n\n") from exc
+
+    hash_file_path = hash_file_folder / \
+        Path("MediaFiles_HASH_" + RMc.time_stamp_now("file") + ".txt")
 
     try:
-        hash_file = open(hash_file_path,  mode='w', encoding='utf-8')
-    except:
-        raise RMc.RM_Py_Exception(
-            f"ERROR: Cannot create the hash file:{RMc.q_str(hash_file_path)} \n\n")
-
-    report_file.write(
-        f"MD5 hash of files saved in file:\n"
-        f"{hash_file_path} \n\n")
-    cur = get_db_file_list(db_connection)
-
-    for row in cur:
-        if len(str(row[0])) == 0 or len(str(row[1])) == 0:
-            continue
-        dir_path = expand_relative_dir_path(row[0])
-        file_path = dir_path / row[1]
-        if not dir_path.exists():
-            found_some_missing_files = True
+        with open(hash_file_path, mode='w', encoding='utf-8') as hash_file:
             report_file.write(
-                f"Directory path not found: \n{dir_path} \n"
-                f" for file: {RMc.q_str(row[1])} \n")
+                f"MD5 hash of files saved in file:\n"
+                f"{hash_file_path} \n\n")
+            cur = get_db_file_list(db_connection)
 
-        else:
-            if file_path.exists():
-                if not file_path.is_file():
+            for row in cur:
+                if len(str(row[0])) == 0 or len(str(row[1])) == 0:
+                    continue
+                dir_path = expand_relative_dir_path(row[0])
+                file_path = dir_path / row[1]
+                if not dir_path.exists():
                     found_some_missing_files = True
                     report_file.write(
-                        f"File path is not a file: \n{file_path} \n")
-                # take hash
-                BUF_SIZE = 65536  # reads in 64kb chunks
+                        f"Directory path not found: \n{dir_path} \n"
+                        f" for file: {RMc.q_str(row[1])} \n")
 
-                md5 = hashlib.md5()
-                # or sha1 = hashlib.sha1()
+                else:
+                    if file_path.exists():
+                        if not file_path.is_file():
+                            found_some_missing_files = True
+                            report_file.write(
+                                f"File path is not a file: \n{file_path} \n")
+                        # take hash
+                        BUF_SIZE = 65536  # reads in 64kb chunks
 
-                with open(file_path, 'rb') as f:
-                    while True:
-                        data = f.read(BUF_SIZE)
-                        if not data:
-                            break
-                        md5.update(data)
-                hash_file.write(f"{file_path!s} \n"
-                                f"{md5.hexdigest()} \n\n")
-            else:
-                found_some_missing_files = True
-                report_file.write(f"File path not found: \n{file_path} \n")
+                        md5 = hashlib.md5()
+                        # or sha1 = hashlib.sha1()
+
+                        with open(file_path, 'rb') as f:
+                            while True:
+                                data = f.read(BUF_SIZE)
+                                if not data:
+                                    break
+                                md5.update(data)
+                        hash_file.write(f"{file_path!s} \n"
+                                        f"{md5.hexdigest()} \n\n")
+                    else:
+                        found_some_missing_files = True
+                        report_file.write(
+                            f"File path not found: \n{file_path} \n")
+    except OSError as exc:
+        raise RMc.RM_Py_Exception(
+            f"ERROR: Cannot create the hash file:{RMc.q_str(hash_file_path)} \n\n") from exc
 
     if not found_some_missing_files:
         report_file.write("\n    All files were processed.\n")
@@ -498,7 +497,8 @@ def files_not_in_media_folder_feature(config, db_connection, report_file):
 
     section("START", feature_name, report_file)
     # get options
-    show_original_path = config['OPTIONS'].getboolean('SHOW_ORIG_PATH')
+    show_original_path = RMc.get_bool_option(
+        config, 'OPTIONS', 'SHOW_ORIG_PATH')
 
     # First check database for empty paths or filenames
     report_empty_paths(db_connection, report_file)
@@ -565,8 +565,8 @@ def report_empty_paths(db_connection, report_file):
     SqlStmt = """
     SELECT  MediaPath, MediaFile, Caption, Description
     FROM MultimediaTable
-    WHERE MediaPath == ''
-       OR MediaFile == ''COLLATE NOCASE
+    WHERE MediaPath = ''
+       OR MediaFile = '' COLLATE NOCASE
     """
     cur = db_connection.cursor()
     cur.execute(SqlStmt)
@@ -659,9 +659,12 @@ def expand_relative_dir_path(in_path_str: str) -> Path:
     global G_media_directory_path
     # use this global as sort of a static constant. Want it initialed once.
 
-    path = str(in_path_str)
+    path = str(in_path_str or "")
     # input parameter path should always be of type str, output will be Path
     # note when using Path / operator, second operand should not be absolute
+
+    if not path:
+        return Path("")
 
     if path[0] == "?":
         if G_media_directory_path is None:
@@ -687,19 +690,25 @@ def expand_relative_dir_path(in_path_str: str) -> Path:
 
 
 # ===================================================DIV60==
-def get_media_directory() ->Path:
+def get_media_directory() -> Path:
 
     # TODO make this work for future releases of RM
     # Maybe get a dir listing of rm folders
 
     #  Relies on the RM installed xml file containing application preferences
     #  File location set by RootsMagic installer
-    RM_Config_FilePath_13 = Path(r"AppData\Roaming\RootsMagic\Version 13\RootsMagicUser.xml")
-    RM_Config_FilePath_12 = Path(r"AppData\Roaming\RootsMagic\Version 12\RootsMagicUser.xml")
-    RM_Config_FilePath_11 = Path(r"AppData\Roaming\RootsMagic\Version 11\RootsMagicUser.xml")
-    RM_Config_FilePath_10 = Path(r"AppData\Roaming\RootsMagic\Version 10\RootsMagicUser.xml")
-    RM_Config_FilePath_9 =  Path(r"~ppData\Roaming\RootsMagic\Version 9\RootsMagicUser.xml")
-    RM_Config_FilePath_8 =  Path(r"~ppData\Roaming\RootsMagic\Version 8\RootsMagicUser.xml")
+    RM_Config_FilePath_13 = Path(
+        r"AppData\Roaming\RootsMagic\Version 13\RootsMagicUser.xml")
+    RM_Config_FilePath_12 = Path(
+        r"AppData\Roaming\RootsMagic\Version 12\RootsMagicUser.xml")
+    RM_Config_FilePath_11 = Path(
+        r"AppData\Roaming\RootsMagic\Version 11\RootsMagicUser.xml")
+    RM_Config_FilePath_10 = Path(
+        r"AppData\Roaming\RootsMagic\Version 10\RootsMagicUser.xml")
+    RM_Config_FilePath_9 = Path(
+        r"AppData\Roaming\RootsMagic\Version 9\RootsMagicUser.xml")
+    RM_Config_FilePath_8 = Path(
+        r"AppData\Roaming\RootsMagic\Version 8\RootsMagicUser.xml")
 
     media_folder_path = "RM8 or later not installed"
 
@@ -743,22 +752,20 @@ def folder_contents_minus_ignored(dir_path, config, report_file):
     media_file_list = []
 
     # TODO implement
-    try:
-        case_insensitive = config['OPTIONS'].getboolean('CASE_INSENSITIVE')
-    except:
-        case_insensitive = False
+    case_insensitive = RMc.get_bool_option(
+        config, 'OPTIONS', 'CASE_INSENSITIVE')
 
     # set default
     method = "use_old_method"
 
     try:
-        if config['OPTIONS'].getboolean('IGNORED_ITEMS_FILE'):
+        if RMc.get_bool_option(config, 'OPTIONS', 'IGNORED_ITEMS_FILE'):
             method = "use_gitignore_method"
-    except:
+    except Exception as exc:
         raise RMc.RM_Py_Exception(
-            "OPTIONS  -  IGNORED_ITEMS_FILE could be be interpreted as either on or off")
+            "OPTIONS  -  IGNORED_ITEMS_FILE could be be interpreted as either on or off") from exc
 
-    if  method == "use_gitignore_method":
+    if method == "use_gitignore_method":
         ignore_file_name = "TestExternalFiles_ignore.txt"
         ignore_file_path = dir_path / ignore_file_name
         if not ignore_file_path.exists():
@@ -771,12 +778,11 @@ def folder_contents_minus_ignored(dir_path, config, report_file):
             if not matches(str(path)) and path.is_file():
                 media_file_list.append(path)
 
-
     elif method == "use_old_method":
 
         ignored_folder_names = []
         ignored_file_names = []
-    
+
         try:
             ignored_folder_names = config['IGNORED_OBJECTS'].get(
                 'FOLDERS').split('\n')
@@ -787,19 +793,19 @@ def folder_contents_minus_ignored(dir_path, config, report_file):
                 'FILENAMES').split('\n')
         except:
             report_file.write("No ignored files specified.\n\n")
-    
+
         media_file_list = []
-    
+
         for (dir_name, dir_names, file_names) in Path.walk(dir_path, top_down=True):
-        
+
             for igFldrName in ignored_folder_names:
                 if igFldrName in dir_names:
                     dir_names.remove(igFldrName)
-    
+
             for igFileName in ignored_file_names:
                 if igFileName in file_names:
                     file_names.remove(igFileName)
-    
+
             for filename in file_names:
                 media_file_list.append(Path(dir_name) / filename)
 
