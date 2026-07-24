@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sqlite3
-import pyperclip
 import re
 from datetime import datetime
 import tkinter as tk
@@ -206,7 +205,7 @@ def generate_report(conn, person_id):
     else:
         line2 = ""
 
-    return f"{line1}\n{line2}"
+    return f"{line1}\n{line2}\n"
 
 # ------------------------------------------------------------
 # GUI
@@ -222,6 +221,12 @@ def center_window(win):
     x = (sw - w) // 2
     y = (sh - h) // 2
     win.geometry(f"{w}x{h}+{x}+{y}")
+
+
+def copy_to_clipboard(text):
+    root.clipboard_clear()
+    root.clipboard_append(text)
+    root.update()
 
 
 def run_report():
@@ -240,7 +245,7 @@ def run_report():
         messagebox.showerror("Database Error", str(e))
         return
 
-    pyperclip.copy(report)
+    copy_to_clipboard(report)
 
     output_box.config(state="normal")
     output_box.delete("1.0", tk.END)
