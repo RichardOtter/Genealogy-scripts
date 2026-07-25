@@ -4,7 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "PYD: Current File, No args",
             "type": "debugpy",
@@ -21,6 +20,15 @@
             "console": "integratedTerminal",
             "args": "1",
             "stopOnEntry": false
+        },
+        {
+            "name": "PYD: Build Release",
+            "cwd":  "${workspaceFolder}/dev util scripts",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "BuildRelease.py",
+            "console": "integratedTerminal",
+            "stopOnEntry": true
         },
         {
             "name": "PYD: Change source for citation dev",

@@ -25,7 +25,7 @@ def main():
 
     try:
         time_stamp = time_stamp_now("file")
-        dev_util_fldr_path= REPO_ROOT_PATH / "dev util scripts"
+        dev_util_fldr_path = REPO_ROOT_PATH / "dev util scripts"
         top_level_config_path = (dev_util_fldr_path / TOP_LEVEL_CONFIG_NAME)
 
         if (not Path(top_level_config_path).exists()):
@@ -79,7 +79,7 @@ def main():
         #  copy the files and folders that will be distributed in the zip
 
         # copy files to the distribution folder
-        src_project_dir = Path(REPO_ROOT_PATH) /  project
+        src_project_dir = Path(REPO_ROOT_PATH) / project
         for file in distribution_file_list:
             shutil.copy(src_project_dir / file,
                         distribution_dir_path / project)
@@ -92,6 +92,17 @@ def main():
             delete_pycache_folders(dest_dir_name)
 
         py_file_to_edit = distribution_dir_path / project / (util_name + ".py")
+        if not py_file_to_edit.exists():
+            pyw_file_to_edit = distribution_dir_path / \
+                project / (util_name + ".pyw")
+            if pyw_file_to_edit.exists():
+                py_file_to_edit = pyw_file_to_edit
+            else:
+                raise FileNotFoundError(
+                    f"Could not find entry point file for {util_name}: "
+                    f"{py_file_to_edit.name} or {pyw_file_to_edit.name}"
+                )
+
         with open(py_file_to_edit, "r") as sources:
             lines = sources.readlines()
         with open(py_file_to_edit, "w") as sources:
@@ -177,7 +188,7 @@ def launched_from_explorer():
 
 # ===================================================DIV60==
 def pause_with_message(message=None):
-# Don't pause when running from a terminal or when input output is redirected
+    # Don't pause when running from a terminal or when input output is redirected
     if (message != None):
         print(str(message))
     if launched_from_explorer():
