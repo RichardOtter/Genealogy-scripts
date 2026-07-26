@@ -27,6 +27,21 @@
 # value text N
 # =----=
 
+# test cases
+# No tree
+# https://www.ancestry.com/dna/matches/3472852C-4089-4840-84A0-682AC8631A96/compare/D6576E06-DE8F-45C2-B887-9EBD30825EBC
+
+# linked public
+# https://www.ancestry.com/dna/matches/3472852C-4089-4840-84A0-682AC8631A96/compare/3200BCF2-58C7-4F3B-8FE9-40EBFD0A9ED7
+
+# linked private
+# https://www.ancestry.com/dna/matches/3472852C-4089-4840-84A0-682AC8631A96/compare/8E03D0AE-0C9B-422B-97CB-291DD76249CE
+
+# unlinked public
+# https://www.ancestry.com/dna/matches/3472852C-4089-4840-84A0-682AC8631A96/compare/E31D479D-3527-4FFE-8F73-6A6EE02ED5C3
+
+# unlinked private ??
+
 # CONFIGURATION NEEDED: set the TTname to be the test owner's name for RM's Label 2
 # Define the name of the tester that Ancestry lists as "You"
 [=:TTname:Richard Otter]
@@ -35,7 +50,7 @@
 # (the name of the variable is actually the user message displayed
 #    the odd name and spacing gives a good message display)
 <[?:Unweighted shared DNA] |
- [=:      STOP                       CLICK CANCEL BUTTON --- Pop-up was not before auto type run:]>
+ [=:STOP                            CLICK CANCEL BUTTON --- Pop-up was not before auto type run]>
 
 # Determine attached trees
 
