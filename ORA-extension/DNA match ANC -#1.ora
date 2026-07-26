@@ -1,0 +1,160 @@
+#### Service: Ancestry
+#### Collection: DNA Match
+#### Collection ID: dna-match
+#### Auto Type Template#: 1
+#### Reminder
+# Use to create a NEW entry.
+# Cursor starts in Person 2 field.
+# Prompt for number_of_people_in_unlinked_tree:
+# Enter number of people in the unlinked tree or 0 if no tree.
+# enter number and PRIVATE if private.
+# Must display pop-up window and dismiss it before start.
+#### Code
+[=:template_ver:2026-07-25-1]
+
+# Define the name of the tester that Ancestry lists as "You"
+# NEEDS EDITING FOR EACH USER
+[=:TTname:Richard Otter]
+
+
+# Test whether pop-up has been displayed
+<[?:Unweighted shared DNA]
+|
+[=:STOP === STOP == Pop-up was not opened.==========]>
+
+
+# Get values for attached trees
+# if [?:Has Linked Tree!=Yes] done, else
+# if find "hasn't built a searchable tree" use 0 done
+# if find  "has an unlinked private tree" use PRIVATE done
+# try to lind unlinked tree info
+
+# set the number_of_people_in_linked_tree
+[=:number_of_people_in_linked_tree:[DOM:query:a.iconTreeFamily:1:extract:(\d+)]
+]
+[=:number_of_people_in_unlinked_tree:-1]
+# set the number_of_people_in_unlinked_tree
+[=:tree_label_text:[DOM:query:span.textsml.mb-16.bold.d-block:1]]
+<[?:tree_label_text=no trees]
+    [=:number_of_people_in_unlinked_tree:0]
+>
+
+
+# get user input if no linked tree, either a number or 0, or PRIVATE
+#<[?:Has Linked Tree!=Yes]
+#[=:number_of_people_in_unlinked_tree]>
+<[?:Has Linked Tree!=Yes]
+<[?:number_of_people_in_unlinked_tree!=0]
+    [=:number_of_people_in_unlinked_tree]
+>
+>
+
+
+
+
+{PERCHAR=10}
+{FAST}
+{10}{RIGHT}{30}
+# Find and select the person for ID2 '[Pseudo person], [_DNA lev 0=initial]'
+,\[_DNA lev 0{2000}
+{ALT+O}{1000}
+{10}{TAB}[Match Name]
+{10}{TAB}[centiMorgans]
+{10}{TAB}0
+{10}{TAB}[Longest segment:split:cM:1]
+{10}{TAB}[Segments]
+{10}{TAB}[Page.Access Date]
+{10}{TAB}
+
+# DNA Note field
+# enter parseable free form text
+
+{10}{RIGHT}
+{10}
+URL=----={ENTER}
+[URL]{ENTER}
+=----={ENTER}
+
+Accessed=--=[Page.Access Date]{ENTER}
+{ENTER}
+Page Title=--=[Page.Title]{ENTER}
+{ENTER}
+
+Test name=--=
+<[?:Test Name=You][TTname]>
+<[?:Test Name!=You][Test Name]>{ENTER}
+
+Match name=--=[Match Name]{ENTER}
+{ENTER}
+Shared DNA (cM)=--=[centiMorgans] cM{ENTER}
+Longest shared segment=--=[Longest Segment]{ENTER}
+Shared segments=--=[Segments]{ENTER}
+Unweighted shared DNA (cM)=--=[Unweighted shared DNA]{ENTER}
+{ENTER}
+Predicted Relationship=--=[Predicted Relationship]{ENTER}
+Tree Placement Relationship=--=[Estimated Relationship]{ENTER}
+Match on Maternal/Paternal =[Side]{ENTER}
+{ENTER}
+Ancestry group memberships=--=[Groups]{ENTER}
+{ENTER}
+<Group 1=--=[Group 1]{ENTER}>
+<Group 2=--=[Group 2]{ENTER}>
+<Group 3=--=[Group 3]{ENTER}>
+<Group 4=--=[Group 4]{ENTER}>
+<Group 5=--=[Group 5]{ENTER}>
+<Group 6=--=[Group 6]{ENTER}>
+<Group 7=--=[Group 7]{ENTER}>
+<Group 8=--=[Group 8]{ENTER}>
+<Group 9=--=[Group 9]{ENTER}>
+<Group 10=--=[Group 10]{ENTER}>
+{ENTER}
+
+Match Note=----={ENTER}
+[Match Note]{ENTER}
+=----={ENTER}
+
+# Attached Tree logic for output text
+
+<[?:Has Linked Tree=Yes]
+Has Linked Tree with 
+ [number_of_people_in_linked_tree] people.>
+
+<[?:Has Linked Tree!=Yes]
+[?:number_of_people_in_unlinked_tree!=0]
+Has at least one unlinked tree with
+ [number_of_people_in_unlinked_tree] people.>
+
+<[?:Has Linked Tree!=Yes]
+ [?:number_of_people_in_unlinked_tree=0]
+Does not have a tree on Ancestry.>{ENTER}{ENTER}
+
+# Print the notes added to Ancestry match
+
+# Include the template version number
+ORA template v[template_ver]{ENTER}
+
+# Include template/outline for manually entered research notes.
+{ENTER}
+===========================================DIV50=={ENTER}
+_NOTES{ENTER}
+{ENTER}
+_TREE: {ENTER}
+_SHARED-MATCHES: {ENTER}
+_TREE-PLACEMENT:{ENTER}
+{ENTER}
+===========================================DIV50=={ENTER}
+_CORRESPONDENCE{ENTER}
+---------------------------------DIV40--{ENTER}
+===========================================DIV50=={ENTER}
+{ENTER}
+
+# Close the Note editor and the entry form
+{1000}
+{ALT+O}{1000}
+{ALT+O}
+
+# END
+
+
+
+# Autotype #2

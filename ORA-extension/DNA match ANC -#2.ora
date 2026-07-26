@@ -1,0 +1,117 @@
+
+#### Service: Ancestry
+#### Collection: DNA Match
+#### Collection ID: dna-match
+#### Auto Type Template#: 2
+#### Reminder
+# Use to UPDATE an existing entry.
+# Cursor starts in Label 2 field.
+# Prompt for number_of_people_in_unlinked_tree:
+# Enter number of people in the unlinked tree or 0 if no tree.
+# Must display pop-up window and dismiss it before start.
+#### Code
+[=:template_ver:2025-03-20-1]
+# 
+# Cursor starts in Label 2. 
+# The script does not change Person 2 or Label 2
+#
+
+# Test whether pop-up has been displayed
+<[?:Unweighted shared DNA]
+|
+[=:STOP === STOP == Pop-up was not opened.==========]>
+
+# Define the name of the tester who Ancestry lists as "You"
+[=:TTname:Richard Otter]
+
+# Prompt if no linked tree
+[=:number_of_people_in_linked_tree:[DOM:queryInner:#linkedTreePersonCountDiv::split:People:1]]
+<[?:Has Linked Tree!=Yes]
+[=:number_of_people_in_unlinked_tree]>
+
+# Enter data in the form
+{PERCHAR=10}
+{FAST}
+{10}{TAB}[centiMorgans]
+{10}{TAB}0
+{10}{TAB}[longest]
+{10}{TAB}[Segments]
+{10}{TAB}[Page.Access Date]
+{10}{TAB}
+
+# enter data in DNA Note fields
+# since this is update, add some blank lines to separate new & old
+{10}{RIGHT}
+{500}
+{ENTER*7}
+{UP*7}
+
+# Now enter the note field data
+URL=----={ENTER}
+[URL]{ENTER}
+=----={ENTER}
+
+Accessed=--=[Page.Access Date]{ENTER}
+{ENTER}
+Page Title=--=[Page.Title]{ENTER}
+{ENTER}
+
+Test name=--=
+<[?:Test Name=You][TTname]>
+<[?:Test Name!=You][Test Name]>{ENTER}
+
+Match name=--=[Match Name]{ENTER}
+{ENTER}
+Shared DNA (cM)=--=[centiMorgans] cM{ENTER}
+Longest shared segment=--=[Longest segment]{ENTER}
+\# shared segments=--=[Segments]{ENTER}
+Unweighted shared DNA (cM)=--=[Unweighted shared DNA]{ENTER}
+{ENTER}
+Estimated Relationship=--=[Estimated Relationship]{ENTER}
+Match on Maternal/Paternal =[Side]{ENTER}
+{ENTER}
+Ancestry group memberships=--=[Groups]{ENTER}
+
+{ENTER}
+User entered match note=----={ENTER}
+<[Match Note]{ENTER}>
+=----={ENTER}
+{ENTER}
+
+# Attached Tree logic
+
+<[?:Has Linked Tree=Yes]
+Has Linked Tree with
+ [number_of_people_in_linked_tree] people.>
+<[?:Has Linked Tree!=Yes][?:number_of_people_in_unlinked_tree!=0]
+
+Has at least one unlinked tree with
+ [number_of_people_in_unlinked_tree] people.>
+
+<[?:Has Linked Tree!=Yes]
+[?:number_of_people_in_unlinked_tree=0]
+Does not have a tree on Ancestry.>{ENTER}{ENTER}
+
+# Include the template version number
+
+# Include template/outline for manually entered research notes.
+ORA template v[template_ver]{ENTER}
+{ENTER}
+===========================================DIV50=={ENTER}
+_NOTES{ENTER}
+{ENTER}
+Tree: {ENTER}
+Shared matches: {ENTER}
+Placement:{ENTER}
+{ENTER}
+===========================================DIV50=={ENTER}
+_CORRESPONDENCE{ENTER}
+-----------------------DIV30--{ENTER}
+-----------------------DIV30--{ENTER}
+===========================================DIV50=={ENTER}
+{ENTER}
+
+# Close the Note editor and the entry form
+# the < button is not accessible
+
+# END
