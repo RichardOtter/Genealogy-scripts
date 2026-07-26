@@ -5,10 +5,12 @@
 #### Reminder
 # Use to create a NEW entry.
 # Cursor starts in Person 2 field.
-# Prompt for number_in_unlinked_tree:
-# Enter number of people in the unlinked tree or 0 if no tree.
-# enter number and PRIVATE if private.
 # Must display pop-up window and dismiss it before start.
+# Prompt for user_number_in_linked_tree:
+# enter number in the private tree.
+# Prompt for  number_of_people_in_unlinked_tree:
+# enter number in the unlinked tree.
+
 #### Code
 ## No external dependencies
 [=:template_ver:2026-07-26-1]
