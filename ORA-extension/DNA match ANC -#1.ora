@@ -5,52 +5,107 @@
 #### Reminder
 # Use to create a NEW entry.
 # Cursor starts in Person 2 field.
-# Prompt for number_of_people_in_unlinked_tree:
+# Prompt for number_in_unlinked_tree:
 # Enter number of people in the unlinked tree or 0 if no tree.
 # enter number and PRIVATE if private.
 # Must display pop-up window and dismiss it before start.
 #### Code
-[=:template_ver:2026-07-25-1]
+## No external dependencies
+[=:template_ver:2026-07-26-1]
 
+# Purpose:
+# https://www.ora-extension.com/en/text-templates.htm
+# Extract data from an Ancestry DNA match page and enter it into the RootsMagic
+# DNA match edit window. This window has fixed fields that hold minimal information
+# but also includes a note field that can hold any text. Most data is entered into
+# the note filed in a parsable way: key=value.
+# For single line values,
+# key=--=value
+# For multi line values (or when value should start at col 0)
+# key=----=
+# value text 1
+# value text N
+# =----=
+
+# CONFIGURATION NEEDED: set the TTname to be the test owner's name for RM's Label 2
 # Define the name of the tester that Ancestry lists as "You"
-# NEEDS EDITING FOR EACH USER
 [=:TTname:Richard Otter]
 
+# Test whether the pop-up required to populate some fields has been displayed
+# (the name of the variable is actually the user message displayed
+#    the odd name and spacing gives a good message display)
+<[?:Unweighted shared DNA] |
+ [=:      STOP                       CLICK CANCEL BUTTON --- Pop-up was not before auto type run:]>
 
-# Test whether pop-up has been displayed
-<[?:Unweighted shared DNA]
-|
-[=:STOP === STOP == Pop-up was not opened.==========]>
+# Determine attached trees
 
+# What is the nature of tree attachment for this the match?
+# The tree_label may be "No trees", "Unlinked Tree", or the linked tree name.
+# An attached tree may be public or private
 
-# Get values for attached trees
-# if [?:Has Linked Tree!=Yes] done, else
-# if find "hasn't built a searchable tree" use 0 done
-# if find  "has an unlinked private tree" use PRIVATE done
-# try to lind unlinked tree info
+# get the tree_label
+[=:tree_label:[DOM:query:span.textsml.mb-16.bold.d-block:1]]
 
-# set the number_of_people_in_linked_tree
-[=:number_of_people_in_linked_tree:[DOM:query:a.iconTreeFamily:1:extract:(\d+)]
-]
-[=:number_of_people_in_unlinked_tree:-1]
-# set the number_of_people_in_unlinked_tree
-[=:tree_label_text:[DOM:query:span.textsml.mb-16.bold.d-block:1]]
-<[?:tree_label_text=no trees]
-    [=:number_of_people_in_unlinked_tree:0]
->
+#== case: no tree attached
+<[?:tree_label=No trees]
+[=:attached_tree_text: +++No attached tree.+++]
+[=:attached_tree_count: ]>
 
 
-# get user input if no linked tree, either a number or 0, or PRIVATE
-#<[?:Has Linked Tree!=Yes]
-#[=:number_of_people_in_unlinked_tree]>
-<[?:Has Linked Tree!=Yes]
-<[?:number_of_people_in_unlinked_tree!=0]
-    [=:number_of_people_in_unlinked_tree]
->
->
+#== case: linked tree (pub or private)
+# initialize number_in_linked_tree
+# use -1 because can't test positive for empty ??
+[=:number_in_linked_tree:-1]
+
+# Get the number_in_linked_tree.
+# Use temp var to not override
+[=:temp_number_in_linked_tree:[DOM:query:a.iconTreeFamily:1:extract:(\d+)]]
+<[?:temp_number_in_linked_tree][=:number_in_linked_tree:[temp_number_in_linked_tree]]>
+
+# Deal with private linked tree first
+# get user input if linked tree and number still initial value
+# input a number
+<[?:tree_label!=No trees]
+<[?:tree_label!=Unlinked Tree]
+<[?:number_in_linked_tree=-1]
+[=:user_number_in_linked_tree]>>>
+
+<[?:tree_label!=No trees]
+<[?:tree_label!=Unlinked Tree]
+<[?:number_in_linked_tree=-1]
+[=:attached_tree_text:People in PRIVATE linked tree:]
+[=:attached_tree_count:[user_number_in_linked_tree]]>>>
+
+# now, deal with public linked tree
+<[?:tree_label!=No trees]
+<[?:tree_label!=Unlinked Tree]
+<[?:number_in_linked_tree!=-1]
+[=:attached_tree_text:People in public linked tree:]
+[=:attached_tree_count:[number_in_linked_tree]]>>>
 
 
+#== case: unlinked tree
+# initialize number_in_unlinked_tree
+# use -1 because can't test positive for empty ??
+[=:number_in_unlinked_tree:-1]
+# Get the number_in_unlinked_tree from DOM
+# this is not working, so number_in_unlinked_tree is left as -1
 
+# get user input if unlinked tree and number still initial value
+# input one of: number | PRIVATE | number PRIVATE
+<[?:tree_label!=No trees]
+<[?:tree_label=Unlinked Tree]
+<[?:number_in_unlinked_tree=-1]
+[=:number_in_unlinked_tree]>>>
+
+# after getting number_in_unlinked_tree from DOM or user input
+<[?:tree_label!=No trees]
+<[?:tree_label=Unlinked Tree]
+[=:attached_tree_text:People in unlinked tree:]
+[=:attached_tree_count:[number_in_unlinked_tree]]>>
+
+
+## Auto type the text
 
 {PERCHAR=10}
 {FAST}
@@ -86,17 +141,21 @@ Test name=--=
 
 Match name=--=[Match Name]{ENTER}
 {ENTER}
+
 Shared DNA (cM)=--=[centiMorgans] cM{ENTER}
 Longest shared segment=--=[Longest Segment]{ENTER}
 Shared segments=--=[Segments]{ENTER}
 Unweighted shared DNA (cM)=--=[Unweighted shared DNA]{ENTER}
 {ENTER}
+
 Predicted Relationship=--=[Predicted Relationship]{ENTER}
 Tree Placement Relationship=--=[Estimated Relationship]{ENTER}
 Match on Maternal/Paternal =[Side]{ENTER}
 {ENTER}
+
 Ancestry group memberships=--=[Groups]{ENTER}
 {ENTER}
+
 <Group 1=--=[Group 1]{ENTER}>
 <Group 2=--=[Group 2]{ENTER}>
 <Group 3=--=[Group 3]{ENTER}>
@@ -109,26 +168,16 @@ Ancestry group memberships=--=[Groups]{ENTER}
 <Group 10=--=[Group 10]{ENTER}>
 {ENTER}
 
+# Print the notes added to Ancestry match
+# not in current ora
 Match Note=----={ENTER}
 [Match Note]{ENTER}
 =----={ENTER}
 
-# Attached Tree logic for output text
 
-<[?:Has Linked Tree=Yes]
-Has Linked Tree with 
- [number_of_people_in_linked_tree] people.>
-
-<[?:Has Linked Tree!=Yes]
-[?:number_of_people_in_unlinked_tree!=0]
-Has at least one unlinked tree with
- [number_of_people_in_unlinked_tree] people.>
-
-<[?:Has Linked Tree!=Yes]
- [?:number_of_people_in_unlinked_tree=0]
-Does not have a tree on Ancestry.>{ENTER}{ENTER}
-
-# Print the notes added to Ancestry match
+# Print the predetermined attached tree info
+Attached Tree: [attached_tree_text] [attached_tree_count]{ENTER}
+{ENTER}
 
 # Include the template version number
 ORA template v[template_ver]{ENTER}
@@ -155,6 +204,3 @@ _CORRESPONDENCE{ENTER}
 
 # END
 
-
-
-# Autotype #2
