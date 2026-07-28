@@ -1,0 +1,112 @@
+#### Service: MyHeritage
+#### Collection: DNA Match
+#### Collection ID: dna-match
+#### Auto Type Template#: 1
+#### Reminder
+# Use to create a NEW entry.
+# Cursor starts in Person 2 field.
+#### Code
+## No external dependencies
+[=:template_ver:2026-07-28-1]
+
+# Purpose:
+# https://www.ora-extension.com/en/text-templates.htm
+# Extract data from an MyHeritage DNA match page and enter it into the RootsMagic
+# DNA match edit window. This window has fixed fields that hold minimal information
+# but also includes a note field that can hold any text. Most data is entered into
+# the note filed in a parsable way: key=value.
+# For single line values,
+# key=--=value
+# For multi line values (or when value should start at col 0)
+# key=----=
+# value text 1
+# value text N
+# =----=
+
+
+# get tree info
+[=:TreeInfo:
+[DOM:queryInner:div.two_sides_card > div > div > div\:nth-child(2) > div.match_profile_details_wrapper > div.match_profile_details > div.matched_family_tree_details_wrapper > div:1]]
+
+# get DNA manager info
+[=:DnaManage:
+[DOM:queryInner:div.match_profile_details > div.profile_details > div > div.profile_details_container > div\:nth-child(3) > div > div.kit_managed_by:1]]
+
+{PERCHAR=10}
+{FAST}
+{10}{RIGHT}{30}
+# Find and select the person for ID2 '[Pseudo person], [_DNA lev 0=initial]'
+,\[_DNA lev 0{2000}
+{ALT+O}{1000}
+{10}{TAB}[Match Name]
+{10}{TAB}[centiMorgans]
+{10}{TAB}
+{10}{TAB}[Largest Segment]
+{10}{TAB}[Segments]
+{10}{TAB}[Page.Access Date]
+{10}{TAB}
+
+# enter data in DNA Note fields
+{10}{RIGHT}
+{10}
+URL=----={ENTER}
+[URL]{ENTER}
+=----={ENTER}
+
+Accessed=--=[Page.Access Date]{ENTER}
+{ENTER}
+Page Title=--=[Page.Title]{ENTER}
+{ENTER}
+
+Test name=--=[Test Name]{ENTER}
+Match name=--=[Match Name]{ENTER}
+Match from:=--=[Match From]{ENTER}
+Match age: =--=[Match Age]{ENTER}
+{ENTER}
+Shared DNA (cM)=--=[centiMorgans] cM{ENTER}
+Longest shared segment=--=[Largest Segment]{ENTER}
+\# shared segments=--=[Segments]{ENTER}
+{ENTER}
+Estimated Relationship=--=[Estimated Relationship]{ENTER}
+{ENTER}
+
+<[DnaManage]{ENTER}
+{ENTER}>
+
+# Attached Tree logic
+
+<[?:Has Linked Tree=Yes]
+Has Linked Tree with=--=
+ [TreeInfo:extract:tree with ([\d,]+) people] people.{ENTER}>
+ <Managed by=--= [TreeInfo:extract:managed by (.*$)].{ENTER}>
+
+<[?:Has Linked Tree!=Yes]
+Does not have a tree on MyHeritage.{ENTER}{ENTER}>
+
+
+# Include the template version number
+
+{ENTER}
+ORA template v[template_ver]{ENTER}
+
+# Include template/outline for manually entered research notes.
+{ENTER}
+===========================================DIV50=={ENTER}
+_NOTES{ENTER}
+{ENTER}
+Tree: {ENTER}
+Shared matches: {ENTER}
+Placement:{ENTER}
+{ENTER}
+===========================================DIV50=={ENTER}
+_CORRESPONDENCE{ENTER}
+-----------------------DIV30--{ENTER}
+===========================================DIV50=={ENTER}
+{ENTER}
+
+# Close the Note editor and the entry form
+{1000}
+{ALT+O}{1000}
+{ALT+O}
+
+# END
