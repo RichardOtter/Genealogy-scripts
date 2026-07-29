@@ -1,0 +1,63 @@
+#### Service: Find A Grave
+#### Collection: Memorials
+#### Collection ID: 0
+#### Text Template#: var.FG_details_section
+#### Code
+## Used by Auto Type Templates 1 & 2
+
+[==:var_ver:2024-09-04-1]
+===========================================DIV50=={ENTER}
+Find a Grave record{ENTER}
+{ENTER}
+===========================================DIV50=={ENTER}
+Page information{ENTER}
+URL=--=[URL]{ENTER}
+Memorial/Record ID=--=[Record ID]{ENTER}
+{ENTER}
+Person information{ENTER}
+Name=--=[Name]{ENTER}
+GivenName=--=[GivenName]{ENTER}
+Surname=--=[Surname]{ENTER}
+MaidenName=--=[MaidenName]{ENTER}
+{ENTER}
+Birth Date=--=[Birth Date]{ENTER}
+Birth Place=--=[Birth Place]{ENTER}
+Death Date=--=[Death Date]{ENTER}
+Death Place=--=[Death Place]{ENTER}
+{ENTER}
+Burial information{ENTER}
+Cemetery Name=--=[Cemetery Name]{ENTER}
+Burial Place=--=[Burial Place]{ENTER}
+Plot=--=[Plot]{ENTER}
+LatLong=--=[LatLong]{ENTER}
+{ENTER}
+Biography=----={ENTER}[DOM:queryInner:.biotext-wrapper:1:replace:\n\n:{ENTER}]{ENTER}
+=----={ENTER}
+{ENTER}
+Grave marker information{ENTER}
+Inscription=----={ENTER}[Inscription:replace:<br>:{ENTER}]{ENTER}
+=----={ENTER}
+Gravesite details=----={ENTER}[Gravesite details:replace:<br>:{ENTER}]{ENTER}
+=----={ENTER}
+{ENTER}
+Contributor information{ENTER}
+Originally created by=--=[DOM:queryValue:#originallyCreatedBy:1:replace:originally created by\: ([^(]+).*:$1]{ENTER}
+Maintainer Name=--=[Source.Maintainer Name]{ENTER}
+Maintainer ID=--=[Source.Maintainer ID]{ENTER}
+Date Added=--=[Source.Date Added]{ENTER}
+{ENTER}
+Family information{ENTER}
+Parents=--=[Parents]{ENTER}
+Siblings=--=[Siblings]{ENTER}
+Spouses=--=[Spouses]{ENTER}
+{ENTER}
+Main Photo information{ENTER}
+Image URL=--=[Image URL]{ENTER}
+Photographer Name=--=[Source.Photographer Name]{ENTER}
+Photographer ID=--=[Source.Photographer ID]{ENTER}
+{ENTER}
+{ENTER}
+Source.Citation=----={ENTER}[Source.Citation]{ENTER}
+=----={ENTER}
+{ENTER}
+===========================================DIV50=={ENTER}

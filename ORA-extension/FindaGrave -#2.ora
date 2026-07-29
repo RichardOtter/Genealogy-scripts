@@ -1,0 +1,32 @@
+#### Service: Find A Grave
+#### Collection: Memorials
+#### Collection ID: 0
+#### Auto Type Template#: 2
+#### Reminder
+# RJO Custom FG  RJO created FG memorials
+# Transcription=D, CD=Gravestone transcription
+#### Code
+## requires text template "var.FG_details_section"
+[=:template_ver:2025-02-18-1]
+{PERCHAR=10}
+{FAST}
+{10}{TAB}[Name]
+{10}{TAB}[Birth Date]
+{10}{TAB}Gravestone transcription
+{10}{TAB}[Burial Place]
+{10}{TAB}[Cemetery Name]
+{10}{TAB}[Record ID]
+{10}{TAB}D
+{10}{TAB}
+{SLOW}
+[Source.Citation]
+{10}{TAB}
+[Page.Access Date]
+{10}{TAB}
+{RIGHT}
+{10}
+{FAST}
+[var.FG_details_section]
+{ENTER}
+ORA template v[template_ver], var v[var_ver]
+{ENTER}

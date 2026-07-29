@@ -1,0 +1,29 @@
+#### Service: Find A Grave
+#### Collection: Memorials
+#### Collection ID: 0
+#### Auto Type Template#: 1
+#### Reminder
+# RJO Custom FG
+#### Code
+## requires text template "var.FG_details_section"
+[=:template_ver:2025-02-18-1]
+{PERCHAR=10}
+{FAST}
+{10}{TAB}[Name]
+{10}{TAB}[Birth Date]
+{10}{TAB*2}[Burial Place]
+{10}{TAB}[Cemetery Name]
+{10}{TAB}[Record ID]
+{10}{TAB*2}
+{SLOW}
+[Source.Citation]
+{10}{TAB}
+[Page.Access Date]
+{30}{TAB}
+{30}{RIGHT}
+{20}
+{FAST}
+[var.FG_details_section]
+{ENTER}
+ORA template v[template_ver], var v[var_ver]
+{ENTER}
