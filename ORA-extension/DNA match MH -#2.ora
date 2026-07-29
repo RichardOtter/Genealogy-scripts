@@ -3,26 +3,15 @@
 #### Collection ID: dna-match
 #### Auto Type Template#: 1
 #### Reminder
-# Use to UPDATE an existing entry.
+# UPDATE an existing entry.
 # Cursor starts in Person 2 field.
 #### Code
 ## No external dependencies
 [=:template_ver:2026-07-28-1]
 
-# Purpose:
-# https://www.ora-extension.com/en/text-templates.htm
-# Extract data from an MyHeritage DNA match page and enter it into the RootsMagic
-# DNA match edit window. This window has fixed fields that hold minimal information
-# but also includes a note field that can hold any text. Most data is entered into
-# the note filed in a parsable way: key=value.
-# For single line values,
-# key=--=value
-# For multi line values (or when value should start at col 0)
-# key=----=
-# value text 1
-# value text N
-# =----=
-
+# 
+# The script does not change Person 2 or Label 2
+# In the notes, New copy is at start of notes, 7 blank lines, then old data.
 
 # get tree info
 [=:TreeInfo:

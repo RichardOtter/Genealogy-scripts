@@ -6,51 +6,14 @@
 # Use to create a NEW entry.
 # Cursor starts in Person 2 field.
 # Must display pop-up window and dismiss it before start.
-# Prompt for user_number_in_linked_tree:
-# enter number in the private tree.
-# Prompt for  number_of_people_in_unlinked_tree:
-# enter number in the unlinked tree.
+# At prompt for user_number_in_linked_tree:
+#    enter number in the private tree.
+# At prompt for  number_of_people_in_unlinked_tree:
+#    enter number in the unlinked tree.
 
 #### Code
 ## No external dependencies
 [=:template_ver:2026-07-26-1]
-
-# Purpose:
-# https://www.ora-extension.com/en/text-templates.htm
-# Extract data from an Ancestry DNA match page and enter it into the RootsMagic
-# DNA match edit window. This window has fixed fields that hold minimal information
-# but also includes a note field that can hold any text. Most data is entered into
-# the note filed in a parsable way: key=value.
-# For single line values,
-# key=--=value
-# For multi line values (or when value should start at col 0)
-# key=----=
-# value text 1
-# value text N
-# =----=
-
-# test cases
-# No tree
-# https://www.ancestry.com/dna/matches/3472852C-4089-4840-84A0-682AC8631A96/compare/D6576E06-DE8F-45C2-B887-9EBD30825EBC
-
-# linked public    has number
-# https://www.ancestry.com/dna/matches/3472852C-4089-4840-84A0-682AC8631A96/compare/3200BCF2-58C7-4F3B-8FE9-40EBFD0A9ED7
-
-# linked private    has number 586
-# https://www.ancestry.com/dna/matches/2728142C-B35D-4A2E-B2A3-6C3E3B80C358/compare/56D72E9F-7326-4F29-8227-BDF05FDF3326
-
-# unlinked public    has number 173
-# https://www.ancestry.com/dna/matches/2728142C-B35D-4A2E-B2A3-6C3E3B80C358/compare/FA4C10D6-3DCF-407F-AAC3-FFB51D1C5A20
-
-# unlinked private  no number
-# https://www.ancestry.com/dna/matches/2728142C-B35D-4A2E-B2A3-6C3E3B80C358/compare/43B69D48-E645-4756-8F05-341CC4F715D3
-
-# two unlinked public   has numbers 2 & 5
-# https://www.ancestry.com/dna/matches/45A402E6-6944-4E5C-BEC3-6B8D1B062ACE/compare/252F41B7-BCE9-454F-B6E8-8334D811BC78
-
-# three unlinked public trees  17, 18, 501
-# https://www.ancestry.com/dna/matches/45A402E6-6944-4E5C-BEC3-6B8D1B062ACE/compare/F725C8F9-15AD-4041-AA37-AA0D0C6A1515
-
 
 # CONFIGURATION NEEDED: set the TTname to be the test owner's name for RM's Label 2
 # Define the name of the tester that Ancestry lists as "You"
@@ -132,7 +95,8 @@
 
 ## Auto type the text
 
-{PERCHAR=10}
+ # Enter data in the form
+ {PERCHAR=10}
 {FAST}
 {10}{RIGHT}{30}
 # Find and select the person for ID2 '[Pseudo person], [_DNA lev 0=initial]'
@@ -147,10 +111,10 @@
 {10}{TAB}
 
 # DNA Note field
-# enter parseable free form text
 
 {10}{RIGHT}
 {10}
+# Now enter the note field data
 URL=----={ENTER}
 [URL]{ENTER}
 =----={ENTER}

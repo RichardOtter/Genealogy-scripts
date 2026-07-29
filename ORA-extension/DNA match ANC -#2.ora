@@ -5,46 +5,117 @@
 #### Auto Type Template#: 2
 #### Reminder
 # Use to UPDATE an existing entry.
-# Cursor starts in Label 2 field.
-# Prompt for number_of_people_in_unlinked_tree:
-# Enter number of people in the unlinked tree or 0 if no tree.
+# Cursor starts in Person 2 field.
 # Must display pop-up window and dismiss it before start.
+# At prompt for user_number_in_linked_tree:
+#    enter number in the private tree.
+# At prompt for  number_of_people_in_unlinked_tree:
+#    enter number in the unlinked tree.
+
 #### Code
-[=:template_ver:2025-03-20-1]
+## No external dependencies
+[=:template_ver:2026-07-26-1]
 # 
-# Cursor starts in Label 2. 
 # The script does not change Person 2 or Label 2
-#
+# In the notes, New copy is at start of notes, 7 blank lines, then old data.
 
-# Test whether pop-up has been displayed
-<[?:Unweighted shared DNA]
-|
-[=:STOP === STOP == Pop-up was not opened.==========]>
-
-# Define the name of the tester who Ancestry lists as "You"
+# CONFIGURATION NEEDED: set the TTname to be the test owner's name for RM's Label 2
+# Define the name of the tester that Ancestry lists as "You"
 [=:TTname:Richard Otter]
 
-# Prompt if no linked tree
-[=:number_of_people_in_linked_tree:[DOM:queryInner:#linkedTreePersonCountDiv::split:People:1]]
-<[?:Has Linked Tree!=Yes]
-[=:number_of_people_in_unlinked_tree]>
+# Test whether the pop-up required to populate some fields has been displayed
+# (the name of the variable is actually the user message displayed
+#    the odd name and spacing gives a good message display)
+<[?:Unweighted shared DNA] |
+ [=:STOP                            CLICK CANCEL BUTTON --- Pop-up was not before auto type run]>
+
+# Determine attached trees
+
+# What is the nature of tree attachment for this the match?
+# The tree_label may be "No trees", "Unlinked Tree", or the linked tree name.
+# An attached tree may be public or private
+
+# get the tree_label
+[=:tree_label:[DOM:query:span.textsml.mb-16.bold.d-block:1]]
+
+#== case: no tree attached
+<[?:tree_label=No trees]
+[=:attached_tree_text: +++No attached tree.+++]
+[=:attached_tree_count: ]>
+
+
+#== case: linked tree (pub or private)
+# initialize number_in_linked_tree
+# use -1 because can't test positive for empty ??
+[=:number_in_linked_tree:-1]
+
+# Get the number_in_linked_tree.
+# Use temp var to not override
+[=:temp_number_in_linked_tree:[DOM:query:a.iconTreeFamily:1:extract:(\d+)]]
+<[?:temp_number_in_linked_tree][=:number_in_linked_tree:[temp_number_in_linked_tree]]>
+
+# Deal with private linked tree first
+# get user input if linked tree and number still initial value
+# input a number
+<[?:tree_label!=No trees]
+<[?:tree_label!=Unlinked Tree]
+<[?:number_in_linked_tree=-1]
+[=:user_number_in_linked_tree]>>>
+
+<[?:tree_label!=No trees]
+<[?:tree_label!=Unlinked Tree]
+<[?:number_in_linked_tree=-1]
+[=:attached_tree_text:People in PRIVATE linked tree:]
+[=:attached_tree_count:[user_number_in_linked_tree]]>>>
+
+# now, deal with public linked tree
+<[?:tree_label!=No trees]
+<[?:tree_label!=Unlinked Tree]
+<[?:number_in_linked_tree!=-1]
+[=:attached_tree_text:People in public linked tree:]
+[=:attached_tree_count:[number_in_linked_tree]]>>>
+
+
+#== case: unlinked tree
+# initialize number_in_unlinked_tree
+# use -1 because can't test positive for empty ??
+[=:number_in_unlinked_tree:-1]
+# Get the number_in_unlinked_tree from DOM
+# this is not working, so number_in_unlinked_tree is left as -1
+
+# get user input if unlinked tree and number still initial value
+# input one of: number | PRIVATE | number PRIVATE
+<[?:tree_label!=No trees]
+<[?:tree_label=Unlinked Tree]
+<[?:number_in_unlinked_tree=-1]
+[=:number_in_unlinked_tree]>>>
+
+# after getting number_in_unlinked_tree from DOM or user input
+<[?:tree_label!=No trees]
+<[?:tree_label=Unlinked Tree]
+[=:attached_tree_text:People in unlinked tree:]
+[=:attached_tree_count:[number_in_unlinked_tree]]>>
+
+
+## Auto type the text
 
 # Enter data in the form
 {PERCHAR=10}
 {FAST}
 {10}{TAB}[centiMorgans]
 {10}{TAB}0
-{10}{TAB}[longest]
+{10}{TAB}[Longest segment:split:cM:1]
 {10}{TAB}[Segments]
 {10}{TAB}[Page.Access Date]
 {10}{TAB}
 
-# enter data in DNA Note fields
-# since this is update, add some blank lines to separate new & old
+# DNA Note field
+# since this is update, add 7 blank lines to separate new & old
 {10}{RIGHT}
 {500}
 {ENTER*7}
 {UP*7}
+
 
 # Now enter the note field data
 URL=----={ENTER}
@@ -62,56 +133,66 @@ Test name=--=
 
 Match name=--=[Match Name]{ENTER}
 {ENTER}
+
 Shared DNA (cM)=--=[centiMorgans] cM{ENTER}
-Longest shared segment=--=[Longest segment]{ENTER}
-\# shared segments=--=[Segments]{ENTER}
+Longest shared segment=--=[Longest Segment]{ENTER}
+Shared segments=--=[Segments]{ENTER}
 Unweighted shared DNA (cM)=--=[Unweighted shared DNA]{ENTER}
 {ENTER}
-Estimated Relationship=--=[Estimated Relationship]{ENTER}
+
+Predicted Relationship=--=[Predicted Relationship]{ENTER}
+Tree Placement Relationship=--=[Estimated Relationship]{ENTER}
 Match on Maternal/Paternal =[Side]{ENTER}
 {ENTER}
+
 Ancestry group memberships=--=[Groups]{ENTER}
-
 {ENTER}
-User entered match note=----={ENTER}
-<[Match Note]{ENTER}>
+
+<Group 1=--=[Group 1]{ENTER}>
+<Group 2=--=[Group 2]{ENTER}>
+<Group 3=--=[Group 3]{ENTER}>
+<Group 4=--=[Group 4]{ENTER}>
+<Group 5=--=[Group 5]{ENTER}>
+<Group 6=--=[Group 6]{ENTER}>
+<Group 7=--=[Group 7]{ENTER}>
+<Group 8=--=[Group 8]{ENTER}>
+<Group 9=--=[Group 9]{ENTER}>
+<Group 10=--=[Group 10]{ENTER}>
+{ENTER}
+
+# Print the notes added to Ancestry match
+# not in current ora
+Match Note=----={ENTER}
+[Match Note]{ENTER}
 =----={ENTER}
+
+
+# Print the predetermined attached tree info
+Attached Tree: [attached_tree_text] [attached_tree_count]{ENTER}
 {ENTER}
-
-# Attached Tree logic
-
-<[?:Has Linked Tree=Yes]
-Has Linked Tree with
- [number_of_people_in_linked_tree] people.>
-<[?:Has Linked Tree!=Yes][?:number_of_people_in_unlinked_tree!=0]
-
-Has at least one unlinked tree with
- [number_of_people_in_unlinked_tree] people.>
-
-<[?:Has Linked Tree!=Yes]
-[?:number_of_people_in_unlinked_tree=0]
-Does not have a tree on Ancestry.>{ENTER}{ENTER}
 
 # Include the template version number
+ORA template v[template_ver]{ENTER}
 
 # Include template/outline for manually entered research notes.
-ORA template v[template_ver]{ENTER}
 {ENTER}
 ===========================================DIV50=={ENTER}
 _NOTES{ENTER}
 {ENTER}
-Tree: {ENTER}
-Shared matches: {ENTER}
-Placement:{ENTER}
+_TREE: {ENTER}
+_SHARED-MATCHES: {ENTER}
+_TREE-PLACEMENT:{ENTER}
 {ENTER}
 ===========================================DIV50=={ENTER}
 _CORRESPONDENCE{ENTER}
------------------------DIV30--{ENTER}
------------------------DIV30--{ENTER}
+---------------------------------DIV40--{ENTER}
 ===========================================DIV50=={ENTER}
 {ENTER}
 
 # Close the Note editor and the entry form
-# the < button is not accessible
+{1000}
+{ALT+O}{1000}
+{ALT+O}
 
 # END
+

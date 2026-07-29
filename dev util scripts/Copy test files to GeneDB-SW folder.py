@@ -1,30 +1,27 @@
 #!/usr/bin/env python3
-"""Create link files to a predefined set of files in a destination folder.
+"""Copy a predefined set of files and folders into a destination folder.
 
-This utility is intended for creating quick test links into a single folder.
-Each entry in LINK_DEFINITIONS can point to a source file and give it a
-custom destination name.
-
-Examples:
-    python "Copy links to Gene_DBSW folder for testing.py"
-    python "Copy links to Gene_DBSW folder for testing.py" --dest "C:/temp/Gene_DBSW_links" --overwrite
+This utility is intended for creating a real-copy test set in a single folder.
+Each entry in COPY_DEFINITIONS can point to a source file or folder and give it
+an explicit destination name.
 """
 
 from __future__ import annotations
 
-import os
+import shutil
 import sys
 from pathlib import Path
 
 
-# Edit this list to change which files are linked and what they are called.
-# Paths are hard-coded below and do not require command-line arguments.
-SOURCE_FOLDER = Path(
-    r"C:\Users\rotter\dev\Genealogy\Genealogy-scripts Releases\in test phase\Release RM_Utilities_Suite_v1.0.3 ALPHA 2026-07-23_222655\RM_Utilities_Suite_v1.0.3 ALPHA"
-)
+# Edit this list to change which items are copied and what they are called.
+TEST_BUILDS_FLDR = Path( r"C:\Users\rotter\dev\Genealogy\Genealogy-scripts Releases\in test phase")
+
+TEST_BUILD = r"Release RM_Utilities_Suite_v1.0.3 ALPHA 2026-07-24_172143\RM_Utilities_Suite_v1.0.3 ALPHA"
+SOURCE_FOLDER = TEST_BUILDS_FLDR / TEST_BUILD
+
 DESTINATION_DIR = Path(r"C:\Users\rotter\Genealogy\GeneDB\SW")
 
-LINK_DEFINITIONS = [
+COPY_DEFINITIONS = [
     {
         "source": SOURCE_FOLDER / "Run SQL" / "RMpy",
         "name": "RMpy",
@@ -56,49 +53,46 @@ LINK_DEFINITIONS = [
     {
         "source": SOURCE_FOLDER / "Change source for citation" / "ChangeSrcForCitation.py",
         "name": "99  ChangeSrcForCitation.py",
+    },
+    {
+        "source": SOURCE_FOLDER / "Mini report" / "MiniReport.pyw",
+        "name": "99  MiniReport.pyw",
     }
+
 ]
 
 
-def create_link(source: Path, destination: Path, link_type: str, overwrite: bool) -> None:
+def copy_item(source: Path, destination: Path) -> None:
     if not source.exists():
-        raise FileNotFoundError(f"Source file not found: {source}")
+        raise FileNotFoundError(f"Source not found: {source}")
 
     destination.parent.mkdir(parents=True, exist_ok=True)
 
     if destination.exists() or destination.is_symlink():
-        if not overwrite:
-            raise FileExistsError(f"Destination already exists: {destination}")
         if destination.is_dir() and not destination.is_symlink():
-            raise IsADirectoryError(
-                f"Destination is a directory: {destination}")
-        destination.unlink()
+            shutil.rmtree(destination)
+        else:
+            destination.unlink()
 
-    if link_type == "symlink":
-        try:
-            os.symlink(source, destination)
-        except (OSError, NotImplementedError):
-            # Fall back to a hard link if symlink creation is unavailable.
-            os.link(source, destination)
-    elif link_type == "hardlink":
-        os.link(source, destination)
+    if source.is_dir():
+        shutil.copytree(source, destination)
     else:
-        raise ValueError(f"Unsupported link type: {link_type}")
+        shutil.copy2(source, destination)
 
 
 def main() -> int:
     destination_dir = DESTINATION_DIR.expanduser().resolve()
+    destination_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"Destination folder: {destination_dir}")
-    print("Link type: symlink")
 
-    for entry in LINK_DEFINITIONS:
+    for entry in COPY_DEFINITIONS:
         source_path = entry["source"].expanduser().resolve()
         destination_path = destination_dir / entry["name"]
 
         print(f"- {source_path} -> {destination_path}")
-        create_link(source_path, destination_path, "symlink", True)
-        print("  created")
+        copy_item(source_path, destination_path)
+        print("  copied")
 
     return 0
 
