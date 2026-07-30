@@ -95,8 +95,8 @@
 
 ## Auto type the text
 
- # Enter data in the form
- {PERCHAR=10}
+# Enter data in the form
+{PERCHAR=10}
 {FAST}
 {10}{RIGHT}{30}
 # Find and select the person for ID2 '[Pseudo person], [_DNA lev 0=initial]'
