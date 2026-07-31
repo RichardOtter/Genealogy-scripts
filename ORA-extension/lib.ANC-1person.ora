@@ -1,0 +1,42 @@
+# lib.ANC-1person
+# Cursor starts in the Citation Name field
+# usage
+# [lib.ANC-1person]
+
+# Clear existing citation name so that it will auto-regenerate
+{CTRL+A}{DEL}{TAB}
+
+# Event date  NEEDS WORK
+[Name]{TAB}
+<[Birth Year]
+|[Birth Date]
+|<abt [Estimated Birth Year:replace:abt ::l]>
+>{TAB}
+
+# clear any existing text in Person #2 name field
+{DEL}{TAB}
+
+# Many possible Event date types
+<{1:}
+|[Baptism Date]
+|[Arrival Date]
+|[DeathDate]
+|[Birth Year]
+|[Birth Date]
+|[Death Date]
+|<abt [Estimated Birth Year:replace:abt ::l]>
+>{TAB}
+
+[Record ID]{TAB}
+
+# skip over Citation detail field.
+{TAB}
+
+# refresh the ANC citation field
+{DEL}[Source.Citation]{TAB}
+
+[Page.Access Date]{TAB}
+
+# Enter the Note editor
+{RIGHT}
+

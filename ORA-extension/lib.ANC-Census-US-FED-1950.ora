@@ -1,0 +1,41 @@
+# lib.ANC-Census-US-FED-1950
+# Cursor starts in the Citation Name field
+
+# usage
+# [lib.ANC-Census-US-FED-1950]
+
+# clear existing citation name so that it will auto-regenerate
+{CTRL+A}{DEL}{TAB}
+
+[Name]{TAB}
+[Birth Date]{TAB}
+
+# Skip Date-on-sheet field
+{TAB}
+
+_CP [Residence]{TAB}
+
+# Skip Locality field
+{TAB}
+# Skip County field
+{TAB}
+
+[Street Name]{TAB}
+[House Number]{TAB}
+
+[Source.Enumeration District]{TAB}
+
+[Sheet Number], line {TAB}
+[Dwelling Number]{TAB}
+[Source.Roll]{TAB}
+[Record ID]{TAB}
+
+# skip FS record ID
+{TAB}
+# skip Citation detail
+{TAB}
+
+[Page.Access Date]{TAB}
+
+# Enter the Note editor
+{RIGHT}

@@ -13,7 +13,7 @@
 
 #### Code
 ## No external dependencies
-[=:template_ver:2026-07-26-1]
+[=:template_ver:2026-07-30-1]
 
 # CONFIGURATION NEEDED: set the TTname to be the test owner's name for RM's Label 2
 # Define the name of the tester that Ancestry lists as "You"
@@ -160,7 +160,7 @@ Ancestry group memberships=--=[Groups]{ENTER}
 # Print the notes added to Ancestry match
 # not in current ora
 Match Note=----={ENTER}
-[Match Note]{ENTER}
+[Match Note]
 =----={ENTER}
 
 

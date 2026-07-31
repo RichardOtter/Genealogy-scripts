@@ -1,0 +1,23 @@
+Ancestry test cases
+
+ No tree
+ https://www.ancestry.com/dna/matches/3472852C-4089-4840-84A0-682AC8631A96/compare/D6576E06-DE8F-45C2-B887-9EBD30825EBC
+ 
+ linked public    has number
+ https://www.ancestry.com/dna/matches/3472852C-4089-4840-84A0-682AC8631A96/compare/3200BCF2-58C7-4F3B-8FE9-40EBFD0A9ED7
+ 
+ linked private    has number 586
+ https://www.ancestry.com/dna/matches/2728142C-B35D-4A2E-B2A3-6C3E3B80C358/compare/56D72E9F-7326-4F29-8227-BDF05FDF3326
+ 
+ unlinked public    has number 173
+ https://www.ancestry.com/dna/matches/2728142C-B35D-4A2E-B2A3-6C3E3B80C358/compare/FA4C10D6-3DCF-407F-AAC3-FFB51D1C5A20
+ 
+ unlinked private  no number
+ https://www.ancestry.com/dna/matches/2728142C-B35D-4A2E-B2A3-6C3E3B80C358/compare/43B69D48-E645-4756-8F05-341CC4F715D3
+ 
+ two unlinked public   has numbers 2 & 5
+ https://www.ancestry.com/dna/matches/45A402E6-6944-4E5C-BEC3-6B8D1B062ACE/compare/252F41B7-BCE9-454F-B6E8-8334D811BC78
+ 
+ three unlinked public trees  17, 18, 501
+ https://www.ancestry.com/dna/matches/45A402E6-6944-4E5C-BEC3-6B8D1B062ACE/compare/F725C8F9-15AD-4041-AA37-AA0D0C6A1515
+

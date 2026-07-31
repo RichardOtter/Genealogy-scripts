@@ -1,0 +1,24 @@
+# lib.ANC-Census-Summary
+# Fact data entry, cursor starts in Date field
+
+# usage
+# [lib.ANC-Census-Summary:YYYY]
+# use argument YYYY for year of census
+
+{SLOW}
+{1}{TAB}
+[Residence]{ENTER}
+[House number] [Street name][Street]{ENTER}
+{1} US Federal Census _SUMMARY{TAB}
+{TAB}
+{TAB}
+{TAB}
+{TAB}
+
+# Enter the note
+{RIGHT}{200}
+{FAST}
+[URL]{ENTER}
+{ENTER}
+[lib.Census-household-table]{ENTER}
+{ENTER}

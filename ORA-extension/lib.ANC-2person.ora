@@ -1,0 +1,33 @@
+# lib.ANC-2person
+# Cursor starts in the Citation Name field
+# usage
+# [lib.ANC-2person]
+
+# Clear existing citation name so that it will auto-regenerate
+{CTRL+A}{DEL}{TAB}
+
+[Name]{TAB}
+<[Birth Year]
+|[Birth Date]
+|<abt [Estimated Birth Year:replace:abt ::l]>
+>{TAB}
+<[Spouse]|[Spouse Name]|[Spouse's Name]>{TAB}
+
+# Event date  NEEDS WORK
+<[Marriage Date]
+|[Marriage Year]
+|[Marriage License Date]
+>{TAB}
+
+[Record ID]{TAB}
+
+# skip over Citation detail field.
+{TAB}
+
+# refresh the ANC citation field
+{DEL}[Source.Citation]{TAB}
+
+[Page.Access Date]{TAB}
+
+# Enter the Note editor
+{RIGHT}

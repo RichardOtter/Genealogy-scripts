@@ -14,7 +14,7 @@
 
 #### Code
 ## No external dependencies
-[=:template_ver:2026-07-26-1]
+[=:template_ver:2026-07-30-1]
 # 
 # The script does not change Person 2 or Label 2
 # In the notes, New copy is at start of notes, 7 blank lines, then old data.
@@ -163,7 +163,7 @@ Ancestry group memberships=--=[Groups]{ENTER}
 # Print the notes added to Ancestry match
 # not in current ora
 Match Note=----={ENTER}
-[Match Note]{ENTER}
+[Match Note]
 =----={ENTER}
 
 
