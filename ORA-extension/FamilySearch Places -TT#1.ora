@@ -1,0 +1,15 @@
+#### Service: FamilySearch
+#### Collection: Places
+#### Collection ID: places
+#### Text Template: 1
+#### Heading
+# Latitude,Longitude
+
+#### Code
+## No external dependencies
+# Text template
+# extracts Latitude and Longitude from all place pages, language independent
+# the result is parsable by RootsMagic
+
+[DOM:attribute:gmp-advanced-marker:1:position]
+

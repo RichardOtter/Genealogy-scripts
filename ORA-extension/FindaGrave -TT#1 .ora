@@ -1,7 +1,10 @@
 #### Service: Find A Grave
 #### Collection: Memorials
 #### Collection ID: 0
-#### Text Template#: var.FG_details_section
+#### Text Template: 1
+#### Heading
+# var.FG_details_section
+
 #### Code
 ## Used by Auto Type Templates 1 & 2
 

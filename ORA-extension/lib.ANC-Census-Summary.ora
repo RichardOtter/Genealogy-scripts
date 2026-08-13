@@ -1,9 +1,11 @@
-# lib.ANC-Census-Summary
-# Fact data entry, cursor starts in Date field
+#### Template Library
+#### Name: lib.ANC-Census-Summary
 
+#### Code
 # usage
 # [lib.ANC-Census-Summary:YYYY]
 # use argument YYYY for year of census
+# Fact data entry
 
 {SLOW}
 {1}{TAB}
