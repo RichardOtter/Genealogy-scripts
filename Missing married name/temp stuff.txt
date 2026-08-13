@@ -1,0 +1,11 @@
+
+SELECT *
+FROM PersonTable as pt
+INNER JOIN FamilyTable as ft ON pt.PersonID = ft.MotherID
+INNER JOIN NameTable AS nt ON nt.NameID = ft.MotherID
+INNER JOIN EventTable AS et ON et.OwnerID = ft.FamilyID
+WHERE EventType = 300
+--AND nt.NameType=5
+AND et.OwnerType=1
+AND MotherID = 6;
+

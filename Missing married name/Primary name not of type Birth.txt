@@ -1,0 +1,23 @@
+-- NameTable.OwnerID = PersonID
+-- NameTable.IsPrimary = 1
+-- NameTable.NameTypeID joins to LU_NameType.NameTypeID
+-- LU_NameType.NameType = 'Birth'
+
+WITH BirthType AS (
+    SELECT NameTypeID AS BirthTypeID
+    FROM LU_NameType
+    WHERE NameType = 'Birth'
+),
+
+PrimaryNames AS (
+    SELECT n.OwnerID AS PersonID,
+           n.NameType AS PrimaryNameTypeID
+    FROM NameTable n
+    WHERE n.IsPrimary = 1
+)
+
+SELECT pn.PersonID
+FROM PrimaryNames pn
+LEFT JOIN BirthType bt ON pn.PrimaryNameTypeID = bt.BirthTypeID
+WHERE bt.BirthTypeID IS NULL
+ORDER BY pn.PersonID;

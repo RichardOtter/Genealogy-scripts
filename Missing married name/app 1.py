@@ -1,10 +1,10 @@
 import sqlite3
 from datetime import datetime, timedelta
 
-DB_PATH = "your_rootsmagic11_file.rmgc"  # Replace with your actual file path
+DB_PATH = r"DB\TEST-Married women witout married name.rmtree"
 
 # FactType codes (adjust if needed)
-FACTTYPE_MARRIAGE = 3  # Marriage event
+FACTTYPE_MARRIAGE = 300  # Marriage event
 
 
 def main():
@@ -40,9 +40,9 @@ def get_women_without_name_near_marriage(conn):
     for person_id in women:
         # Get marriage facts
         cursor.execute("""
-            SELECT FactDate
-            FROM FactTable
-            WHERE OwnerID = ? AND FactType = ?
+            SELECT Date
+            FROM EventTable
+            WHERE OwnerID = ? AND EventType = ?
         """, (person_id, FACTTYPE_MARRIAGE))
         marriage_dates = [parse_date(row[0]) for row in cursor.fetchall() if parse_date(row[0])]
 
@@ -51,9 +51,10 @@ def get_women_without_name_near_marriage(conn):
 
         # Get name entries
         cursor.execute("""
-            SELECT NameDate
+            SELECT Date
             FROM NameTable
             WHERE OwnerID = ?
+                AND NameType = 5
         """, (person_id,))
         name_dates = [parse_date(row[0]) for row in cursor.fetchall() if parse_date(row[0])]
 

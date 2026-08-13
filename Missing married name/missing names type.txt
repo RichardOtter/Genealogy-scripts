@@ -1,0 +1,60 @@
+-- NameTable.OwnerID (not PersonID)
+-- NameTable.NameTypeID
+-- LU_NameType.NameTypeID
+-- Women = anyone appearing as MotherID in FamilyTable
+-- Must have Birth name and Married name
+-- Return only failures
+
+WITH
+-- Identify NameType IDs from lookup table
+BirthType AS (
+    SELECT NameTypeID AS BirthTypeID
+    FROM LU_NameType
+    WHERE NameType = 'Birth'
+),
+MarriedType AS (
+    SELECT NameTypeID AS MarriedTypeID
+    FROM LU_NameType
+    WHERE NameType = 'Married'
+),
+
+-- All women who appear as spouses (MotherID)
+Women AS (
+    SELECT DISTINCT MotherID AS PersonID
+    FROM FamilyTable
+    WHERE MotherID IS NOT NULL AND MotherID > 0
+),
+
+-- Birth names
+BirthNames AS (
+    SELECT n.OwnerID
+    FROM NameTable n
+    JOIN BirthType bt ON n.NameType = bt.BirthTypeID
+),
+
+-- Married names
+MarriedNames AS (
+    SELECT n.OwnerID
+    FROM NameTable n
+    JOIN MarriedType mt ON n.NameType = mt.MarriedTypeID
+),
+
+-- Combine and test
+CheckNames AS (
+    SELECT
+        w.PersonID,
+        CASE WHEN bn.OwnerID IS NULL THEN 1 ELSE 0 END AS MissingBirthName,
+        CASE WHEN mn.OwnerID IS NULL THEN 1 ELSE 0 END AS MissingMarriedName
+    FROM Women w
+    LEFT JOIN BirthNames bn ON bn.OwnerID = w.PersonID
+    LEFT JOIN MarriedNames mn ON mn.OwnerID = w.PersonID
+)
+
+-- Return only failures
+SELECT *
+FROM CheckNames
+WHERE MissingBirthName = 1
+   OR MissingMarriedName = 1
+ORDER BY PersonID;
+
+
