@@ -1,7 +1,7 @@
 # RM v11.0.4
 
 NOTE
-Status: mostly just changed title to say ver 10 schema. 
+Status: mostly just changed title to say ver 11 schema.
 Not much in the data has yet been changed.
 
 Information used in common by the individual table files
@@ -10,11 +10,14 @@ If a table has a column that has the same properties as a column used in another
 column will be labeled _STD (standard) and described once in this file.
 
 Lookup tables are usually in a database schema to describe the meaning column contents.
-For example, the sex column in PersonTable can have a value of 0,1 or 2. What do the 
+For example, the sex column in PersonTable can have a value of 0,1 or 2. What do the
 numbers mean? Check the Sex lookup table.
 
 Similarly, lookup tables used by more than one table are described here. The columns that use
  them are also labeled _STD
+ Lookup values used only once are labeled_LOOKUP and are described within that tables description file.
+
+ DDL for creating lookup tables is in the folder "missing look-up tables".
 
  TODO indicates work to be done.
 
@@ -29,8 +32,8 @@ Similarly, lookup tables used by more than one table are described here. The col
 | _PK           | Primary key                                                                           |
 | _FK           | foreign key                                                                           |
 | _PFK          | polymorphic foreign key                                                               |
-| _PFK-TYPE     | polymorphic foreign key type (where does PFK point)                                   |
-| _STD          | standard colum described here                                                         |
+| _STD    | polymorphic foreign key type (where does PFK point)                                   |
+| _STD          | standard column described here                                                        |
 | _TEXT-SL      | text field designed for a single line string                                          |
 | _TEXT-ML      | text field designed for multiple lines of text. Uses CR LF line end for Win and MacOS |
 | _RMNC         | column is used in an index collated with proprietary collation RMNOCAASE              |
@@ -39,59 +42,56 @@ Similarly, lookup tables used by more than one table are described here. The col
 | _NOT-IMP      | Not Implemented. No obvious use as of current release.                                |
 | ### DONE 1    | marker indicating work is completed for that file to standard level "1"               |
 
-
 ## Notes
 
 Polymorphic Associations. Using this design for polymorphism-
 
- * can't use relational database referential integrity mechanisms.
+* can't use relational database referential integrity mechanisms.
 
 Could use-\
 unique indexes to enforce IsPrimary\
 Triggers to do update of de-normalized data (BDate, DDate, Reverse (place), NameMP cols
 
-
 ## Standard Columns  _STD
 
-
-### Note			TEXT
+### Note   TEXT
 
 also named:  Comments, ActualText, Results
 
-Multi line text. Both Windows and MacOS databases use CR LF for end of line. Both use UTF-8 encoding. The RM GUI 
+Multi line text. Both Windows and MacOS databases use CR LF for end of line. Both use UTF-8 encoding. The RM GUI
 uses a special Note Editor for these fields.
 
-### Sentence		TEXT
+### Sentence  TEXT
 
 also named:  Sentence1, Sentence2, Footnote, ShortFootnote, Bibliography
 
-Generally takes one line of text in the form of a template using the RM sentence template language, 
-but there is no prohibition against multiple lines. 
+Generally takes one line of text in the form of a template using the RM sentence template language,
+but there is no prohibition against multiple lines.
 The RM GUI does not use the note editor for sentence template editing.
-Both Windows and MacOS databases use CR LF for end of line. Both use UTF-8 encoding. 
+Both Windows and MacOS databases use CR LF for end of line. Both use UTF-8 encoding.
 
-
-### Date		TEXT
+### Date  TEXT
 
 see:
 [RM Date format](https://github.com/ricko2001/RootsMagic_Database_Design/blob/main/RM%20Dates.md)
 
-### SortDate	BIGINT (= INTEGER)
+### SortDate BIGINT (= INTEGER)
 
 see:
 [Sort Date investigations](https://github.com/ricko2001/RootsMagic_Database_Design/blob/main/RM%20Sort%20dates.md)
 
 ### Latitude     INTEGER
+
 ### Longitude    INTEGER
 
 values stored as a signed integer with a scale factor
 for example- Oakland, CA
 stored value   scale    actual
-378044389   * 10e-7  = 37.8044389
--1222697194 * 10e-7  = -122.2697194
+378044389   *10e-7  = 37.8044389
+-1222697194* 10e-7  = -122.2697194
 W and S are negative
 
-### UTCModDate	FLOAT
+### UTCModDate FLOAT
 
 Modified Julian date  
 
@@ -109,13 +109,11 @@ standard UTF-8 text and could be in a TEXT column.
 
 In a new v9.1.3 database, old style XML format still used for Built-in Source Templates.
 
-
-
-
 ## Lookup tables
 
-### OwnerID
-is a Polymorphic Foreign Key Type, OwnerType tells where it points.
+### OwnerType
+
+OwnerID is a Polymorphic Foreign Key Type, OwnerType tells where it points.
 
 | OwnerType | Links to        | Table.row                             |
 | --------- | --------------- | ------------------------------------- |
@@ -162,18 +160,17 @@ PlaceTable.PlaceType distinguishes the 3 types of places.
 
 ## References
 
-https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form
+<https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form>
 
-https://www.sqlite.org/datatype3.html
+<https://www.sqlite.org/datatype3.html>
 Should RM tables be declared STRICT ?  What would happen? Are there speed or storage advantages?
 
-https://stackoverflow.com/questions/7337882/what-is-the-difference-between-sqlite-integer-data-types-like-int-integer-bigi
+<https://stackoverflow.com/questions/7337882/what-is-the-difference-between-sqlite-integer-data-types-like-int-integer-bigi>
 BIGINT is just a synonym for INTEGER. It cannot be used in all statements.
 It is in no way bigger than INTEGER, it doesn't reserve more space.
 
-https://hashrocket.com/blog/posts/modeling-polymorphic-associations-in-a-relational-database
+<https://hashrocket.com/blog/posts/modeling-polymorphic-associations-in-a-relational-database>
 Modeling Polymorphic Associations in a Relational Database
-
 
 ## Table DDL
 
@@ -360,8 +357,9 @@ CREATE TABLE TaskTable (TaskID INTEGER PRIMARY KEY, TaskType INTEGER, RefNumber 
 
 CREATE TABLE WitnessTable (WitnessID INTEGER PRIMARY KEY, EventID INTEGER, PersonID INTEGER, WitnessOrder INTEGER, Role INTEGER, Sentence TEXT, Note TEXT, Given TEXT COLLATE RMNOCASE, Surname TEXT COLLATE RMNOCASE, Prefix TEXT COLLATE RMNOCASE, Suffix TEXT COLLATE RMNOCASE, UTCModDate FLOAT );
 
-	Line 133: CREATE INDEX idxSourceName ON SourceTable (Name COLLATE RMNOCASE) ;
+ Line 133: CREATE INDEX idxSourceName ON SourceTable (Name COLLATE RMNOCASE) ;
 ```
+
 and isolated-
 
 ```
@@ -391,13 +389,12 @@ CREATE TABLE TaskTable (Name TEXT COLLATE RMNOCASE
 
 CREATE TABLE WitnessTable (Given TEXT COLLATE RMNOCASE, Surname TEXT COLLATE RMNOCASE, Prefix TEXT COLLATE RMNOCASE, Suffix TEXT COLLATE RMNOCASE
 
-	Line 133: CREATE INDEX idxSourceName ON SourceTable (Name COLLATE RMNOCASE) ;
+ Line 133: CREATE INDEX idxSourceName ON SourceTable (Name COLLATE RMNOCASE) ;
 ```
 
 This table is directly from:\
 Pat Jones:\
-https://sqlitetoolsforrootsmagic.com/understanding-the-rootsmagic-8-database-ownership/
-
+<https://sqlitetoolsforrootsmagic.com/understanding-the-rootsmagic-8-database-ownership/>
 
 | Owner Type Value | Owner Type                                        | URL | Place | Pl Detail | Media | Task | Address | Citation | Name | Child | Event |
 | :--------------- | :------------------------------------------------ | :-- | :---- | :-------- | :---- | :--- | :------ | :------- | :--- | :---- | :---- |
@@ -417,21 +414,22 @@ https://sqlitetoolsforrootsmagic.com/understanding-the-rootsmagic-8-database-own
 
 ```
 Table sumary
-Object			Can own these:
-				0 1 2 3 4 5 6 7 8 14 15 18  19
-URL				0     3 4 5 6     14
-Place			    2
-PlaceDetail		    2     5
-Media			0 1 2 3 4 5 6 7   14       19
-Task			0 1 2     5   7   14 15
-Address			0 1   3     6
-Citation		0 1 2 3     6     7
-Name			0
-Child			  1
-Eent			0 1
+Object   Can own these:
+    0 1 2 3 4 5 6 7 8 14 15 18  19
+URL    0     3 4 5 6     14
+Place       2
+PlaceDetail      2     5
+Media   0 1 2 3 4 5 6 7   14       19
+Task   0 1 2     5   7   14 15
+Address   0 1   3     6
+Citation  0 1 2 3     6     7
+Name   0
+Child     1
+Eent   0 1
 ```
 
 ## Boilerplate
+
 reused text
 
 ►◄

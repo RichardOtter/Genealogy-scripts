@@ -31,6 +31,16 @@
             "stopOnEntry": true
         },
         {
+            "name": "PYD: PlaceTable Editor",
+            "cwd":  "${workspaceFolder}/PlaceTable Editor",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "PlaceTableEditor.pyw",
+            "console": "integratedTerminal",
+            "args": "testing/dev.ini",
+            "stopOnEntry": true
+        },
+        {
             "name": "PYD: Change source for citation dev",
             "cwd":  "${workspaceFolder}/Change source for citation",
             "type": "debugpy",
