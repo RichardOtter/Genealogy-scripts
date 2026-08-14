@@ -2,9 +2,13 @@
 #### Collection: DNA Match
 #### Collection ID: dna-match
 #### Auto Type Template: 1
+#### DNA Match entry
+#### Init: Cursor in Label 2
+
 #### Reminder
-# Create a NEW entry.
+# Creates a NEW DNA match entry.
 # Cursor starts in Person 2 field.
+
 #### Code
 ## No external dependencies
 [=:template_ver:2026-07-28-1]

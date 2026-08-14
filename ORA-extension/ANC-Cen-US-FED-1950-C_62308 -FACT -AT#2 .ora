@@ -1,0 +1,16 @@
+#### ANC-Cen-US-FED-1950-C_62308 -FACT -AT#2.ora
+
+#### Service: Ancestry
+#### Collection: 1950 US Federal Census
+#### Collection ID: 62308
+#### Auto Type Template: 2
+#### Fact entry
+#### Init: Cursor in Date
+
+#### Reminder
+# Census Fact, cursor starts in Date
+
+#### Code
+## Uses Template Library- lib.ANC-Census-Summary
+
+[lib.ANC-Census-Summary:1950]

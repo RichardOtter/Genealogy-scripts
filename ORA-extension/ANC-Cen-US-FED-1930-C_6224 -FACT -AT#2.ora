@@ -1,0 +1,16 @@
+#### ANC-Cen-US-FED-1930-C_6264 -FACT -AT#2.ora
+
+#### Service: Ancestry
+#### Collection: 1930 US Federal Census
+#### Collection ID: 6264
+#### Auto Type Template: 2
+#### Fact entry
+#### Init: Cursor in Date
+
+#### Reminder
+# Census Fact, cursor starts in Date
+
+#### Code
+## Uses Template Library- lib.ANC-Census-Summary
+
+[lib.ANC-Census-Summary:1930]

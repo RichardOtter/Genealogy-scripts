@@ -3,9 +3,9 @@
 
 #### Code
 # usage
+# Fact data entry, cursor starts in Date field
 # [lib.ANC-Census-Summary:YYYY]
 # use argument YYYY for year of census
-# Fact data entry
 
 {SLOW}
 {1}{TAB}

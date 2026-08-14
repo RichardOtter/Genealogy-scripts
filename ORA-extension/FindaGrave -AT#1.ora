@@ -2,8 +2,12 @@
 #### Collection: Memorials
 #### Collection ID: 0
 #### Auto Type Template: 1
+#### Source citation entry
+#### Init: Cursor in Citation Name
+
 #### Reminder
 # RJO Custom FG
+
 #### Code
 ## requires text template "var.FG_details_section"
 [=:template_ver:2025-02-18-1]

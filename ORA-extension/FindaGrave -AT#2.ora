@@ -2,9 +2,13 @@
 #### Collection: Memorials
 #### Collection ID: 0
 #### Auto Type Template: 2
+#### Source citation entry
+#### Init: Cursor in Citation Name
+
 #### Reminder
 # RJO Custom FG  RJO created FG memorials
 # Transcription=D, CD=Gravestone transcription
+
 #### Code
 ## requires text template "var.FG_details_section"
 [=:template_ver:2025-02-18-1]

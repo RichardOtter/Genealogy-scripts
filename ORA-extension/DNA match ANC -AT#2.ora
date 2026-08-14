@@ -3,8 +3,11 @@
 #### Collection: DNA Match
 #### Collection ID: dna-match
 #### Auto Type Template: 2
+#### DNA Match entry
+#### Init: Cursor in Label 2
+
 #### Reminder
-# Use to UPDATE an existing entry.
+# Use to UPDATE an existing DNA match entry.
 # Cursor starts in Person 2 field.
 # Must display pop-up window and dismiss it before start.
 # At prompt for user_number_in_linked_tree:
