@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "PYD: Current File, No args",
             "type": "debugpy",
@@ -19,6 +20,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "args": "1",
+            "stopOnEntry": false
+        },
+        {
+            "name": "PYD: Current File, arg=DB test --apply",
+            "type": "debugpy",
+            "cwd":  "${workspaceFolder}/Merge duplicate family records",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": ["DB/TEST-Merge duplicate family records.rmtree", "--apply"],
             "stopOnEntry": false
         },
         {
