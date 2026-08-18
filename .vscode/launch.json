@@ -1,10 +1,7 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "PYD: Current File, No args",
             "type": "debugpy",
@@ -14,156 +11,32 @@
             "stopOnEntry": false
         },
         {
-            "name": "PYD: Current File, arg= '1'",
+            // works for any RM utility that follows the RMpy.launcher + testing/dev.ini convention:
+            // open its .py/.pyw file as the active editor tab, then run this config.
+            "name": "PYD: Current File, using dev.ini",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal",
-            "args": "1",
-            "stopOnEntry": false
-        },
-        {
-            "name": "PYD: Current File, arg=DB test --apply",
-            "type": "debugpy",
-            "cwd":  "${workspaceFolder}/Merge duplicate family records",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "args": ["DB/TEST-Merge duplicate family records.rmtree", "--apply"],
-            "stopOnEntry": false
-        },
-        {
-            "name": "PYD: Build Release",
-            "cwd":  "${workspaceFolder}/dev util scripts",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "BuildRelease.py",
-            "console": "integratedTerminal",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: PlaceTable Editor",
-            "cwd":  "${workspaceFolder}/PlaceTable Editor",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "PlaceTableEditor.pyw",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: Change source for citation dev",
-            "cwd":  "${workspaceFolder}/Change source for citation",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "ChangeSrcForCitation.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: Change source template dev",
-            "cwd":  "${workspaceFolder}/Change source template",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "ChangeSourceTemplate.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: Color from group dev",
-            "cwd":  "${workspaceFolder}/Color from group",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "ColorFromGroup.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: Convert fact.py dev",
-            "cwd":  "${workspaceFolder}/Convert fact",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "ConvertFact.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: Group from SQL dev",
-            "cwd":  "${workspaceFolder}/Group from SQL",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "GroupFromSQL.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: List citations for PersonID dev",
-            "cwd":  "${workspaceFolder}/List citations for PersonID",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "ListCitationsForPersonID.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: Lump sources dev",
-            "cwd":  "${workspaceFolder}/Lump sources",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "LumpSources.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: Modify citation list dev",
-            "cwd":  "${workspaceFolder}/Modify citation list",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "ModifyCitationList.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: Run SQL dev",
-            "cwd":  "${workspaceFolder}/Run SQL",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "RunSQL.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
-            "stopOnEntry": true
-        },
-        {
-            "name": "PYD: TestExternalFiles dev",
-            "cwd":  "${workspaceFolder}/Test external files",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "TestExternalFiles.py",
+            "cwd": "${fileDirname}",
             "console": "integratedTerminal",
             "args": "testing/dev.ini",
             "stopOnEntry": true
         },
         {
             "name": "PYD: Test external files test env",
-            "cwd":  "C:/Users/Test/RM_test_root",
+            "cwd": "C:/Users/Test/RM_test_root",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/Test external files/TestExternalFiles.py",
             "console": "integratedTerminal",
-            "args": ["${workspaceFolder}/Test external files/testing/test.ini"],
+            "args": [
+                "${workspaceFolder}/Test external files/testing/test.ini"
+            ],
             "stopOnEntry": true
         },
         {
             "name": "Renumber Sort2",
-            "cwd":  "${workspaceFolder}/DB schema changes/DNA/Renumber_Sort2_in_AuxDNATable",
+            "cwd": "${workspaceFolder}/DB schema changes/DNA/Renumber_Sort2_in_AuxDNATable",
             "type": "debugpy",
             "request": "launch",
             "program": "renumber_sort2.py",
@@ -172,29 +45,18 @@
             "stopOnEntry": true
         },
         {
-            "name": "PYD: ExternalFilesInfo",
-            "cwd":  "${workspaceFolder}/DB schema changes/Multimedia",
+            "name": "PYD: Build Release",
+            "cwd": "${workspaceFolder}/dev util scripts",
             "type": "debugpy",
             "request": "launch",
-            "program": "ExternalFilesInfo.py",
+            "program": "BuildRelease.py",
             "console": "integratedTerminal",
-            "args": ["testing/dev.ini"],
-            "stopOnEntry": false
-        },
-        {
-            "name": "PYD: Move Citation",
-            "cwd":  "${workspaceFolder}/Move citations between person and name",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "MoveCitations.py",
-            "console": "integratedTerminal",
-            "args": "testing/dev.ini",
             "stopOnEntry": true
         },
         {
             // the file copying util for use in dev enviornment
-            "name": "PYD: DB_util production",
-            "cwd":  "${workspaceFolder}/dev util scripts",
+            "name": "PYD: DB_util arg=production",
+            "cwd": "${workspaceFolder}/dev util scripts",
             "type": "debugpy",
             "request": "launch",
             "program": "DB_util.py",
@@ -209,8 +71,6 @@
             "request": "launch",
             "script": "${file}",
             "cwd": "${cwd}"
-        },
-
-
+        }
     ]
 }

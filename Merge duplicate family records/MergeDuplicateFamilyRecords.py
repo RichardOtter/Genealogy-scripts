@@ -2,73 +2,92 @@
 
 The lowest FamilyID in each duplicate parent pair is retained.  Links to the
 other rows are redirected before those rows are deleted.  Run on a closed copy
-of the RootsMagic database.  The default is a report-only dry run.
+of the RootsMagic database.
 """
 
-import argparse
-import shutil
-import sqlite3
-from datetime import datetime
+import sys
 from pathlib import Path
+sys.path.append(
+    str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
+
+import RMpy.launcher            # noqa #type: ignore
+import RMpy.common as RMc       # noqa #type: ignore
+
+# Requirements:
+#   RootsMagic database file
+#   RM-Python-config.ini
+
+# Tested with:
+#   RootsMagic database file v11
+#   Python for Windows v3.13
+
+# Config file fields used
+#    FILE_PATHS  DB_PATH
+#    FILE_PATHS  REPORT_FILE_PATH
+#    FILE_PATHS  REPORT_FILE_DISPLAY_APP
 
 
+# The polymorphic owner identifier
 FAMILY_OWNER_TYPE = 1
 
 
+# ===================================================DIV60==
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('database', type=Path,
-                        help='Path to the closed .rmtree database')
-    parser.add_argument(
-        '--apply', action='store_true', help='Create a backup and perform the merge'
+
+    # Configuration
+    utility_info = {}
+    utility_info["utility_name"] = "MergeDuplicateFamilyRecords"
+    utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
+    utility_info["config_file_name"] = "RM-Python-config.ini"
+    utility_info["script_path"] = Path(__file__).parent
+    utility_info["run_features_function"] = merge_records
+    utility_info["allow_db_changes"] = True
+    utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
+    utility_info["RegExp_required"] = False
+    utility_info["RegExp_optional"] = False
+
+    RMpy.launcher.launcher(utility_info)
+
+
+# ===================================================DIV60==
+def merge_records(config, db_connection, report_file):
+
+    groups = duplicate_family_groups(db_connection)
+    if not groups:
+        report_file.write('No duplicate FamilyTable parent pairs found.\n')
+        return
+
+    report_groups(report_file, groups)
+
+    removed_ids = duplicate_family_ids(groups)
+    changed = []
+    for _father_id, _mother_id, keep_id, family_ids, _record_count in groups:
+        for family_id in family_ids.split(','):
+            old_family_id = int(family_id)
+            if old_family_id != keep_id:
+                changed.extend(
+                    family_reference_updates(
+                        db_connection, old_family_id, keep_id)
+                )
+
+    unresolved = remaining_references(db_connection, removed_ids)
+    if unresolved:
+        raise RMc.RM_Py_Exception(
+            F"ERROR: References remain after redirect: {unresolved}")
+
+    placeholders = ', '.join('?' for _ in removed_ids)
+    db_connection.execute(
+        f"DELETE FROM FamilyTable WHERE FamilyID IN ({placeholders})", removed_ids
     )
-    arguments = parser.parse_args()
 
-    if not arguments.database.is_file():
-        raise SystemExit(f"Database not found: {arguments.database}")
-
-    connection = sqlite3.connect(arguments.database)
-    try:
-        groups = duplicate_family_groups(connection)
-        if not groups:
-            print('No duplicate FamilyTable parent pairs found.')
-            return
-
-        report_groups(groups)
-        if not arguments.apply:
-            print(
-                '\nDry run only. Re-run with --apply to create a backup and merge these records.')
-            return
-
-        backup_path = create_backup(arguments.database)
-        removed_ids = duplicate_family_ids(groups)
-        changed = []
-        with connection:
-            for _father_id, _mother_id, keep_id, family_ids, _record_count in groups:
-                for family_id in family_ids.split(','):
-                    old_family_id = int(family_id)
-                    if old_family_id != keep_id:
-                        changed.extend(
-                            family_reference_updates(
-                                connection, old_family_id, keep_id)
-                        )
-
-            unresolved = remaining_references(connection, removed_ids)
-            if unresolved:
-                raise RuntimeError(
-                    f"References remain after redirect: {unresolved}")
-
-            placeholders = ', '.join('?' for _ in removed_ids)
-            connection.execute(
-                f"DELETE FROM FamilyTable WHERE FamilyID IN ({placeholders})", removed_ids
-            )
-
-        print(f"Backup created: {backup_path}")
-        print(f"Deleted {len(removed_ids)} duplicate FamilyTable rows.")
-        for table_name, column_name, row_count in changed:
-            print(f"Redirected {row_count} row(s): {table_name}.{column_name}")
-    finally:
-        connection.close()
+    report_file.write(
+        F"\nDeleted {len(removed_ids)} duplicate FamilyTable rows.\n")
+    for action, table_name, column_name, row_count in changed:
+        report_file.write(
+            F"{action} {row_count} row(s): "
+            F"{table_name}.{column_name}\n")
+    return
 
 
 def quote_identifier(identifier):
@@ -120,6 +139,45 @@ def count_rows(connection, table_name, where_clause, parameters):
     return connection.execute(statement, parameters).fetchone()[0]
 
 
+def child_reference_updates(connection, old_family_id, keep_family_id):
+    if 'ChildTable' not in database_tables(connection):
+        return []
+
+    child_rows = connection.execute(
+        "SELECT RecID, ChildID FROM ChildTable WHERE FamilyID = ?",
+        (old_family_id,),
+    ).fetchall()
+    redirected = 0
+    removed = 0
+
+    for old_rec_id, child_id in child_rows:
+        retained_row = connection.execute(
+            "SELECT RecID FROM ChildTable "
+            "WHERE FamilyID = ? AND ChildID = ? LIMIT 1",
+            (keep_family_id, child_id),
+        ).fetchone()
+        if retained_row is None:
+            connection.execute(
+                "UPDATE ChildTable SET FamilyID = ? WHERE RecID = ?",
+                (keep_family_id, old_rec_id),
+            )
+            redirected += 1
+        else:
+            connection.execute(
+                "DELETE FROM ChildTable WHERE RecID = ?",
+                (old_rec_id,),
+            )
+            removed += 1
+
+    changed = []
+    if redirected:
+        changed.append(('Redirected', 'ChildTable', 'FamilyID', redirected))
+    if removed:
+        changed.append(
+            ('Removed duplicate', 'ChildTable', 'FamilyID', removed))
+    return changed
+
+
 def family_reference_updates(connection, old_family_id, keep_family_id):
     """Redirect every known and schema-discoverable family reference."""
     updates = []
@@ -136,6 +194,8 @@ def family_reference_updates(connection, old_family_id, keep_family_id):
     # ParentID stores a person's selected parent family.
     if 'PersonTable' in tables and 'ParentID' in table_columns(connection, 'PersonTable'):
         updates.append(('PersonTable', 'ParentID', None))
+    if 'PersonTable' in tables and 'SpouseID' in table_columns(connection, 'PersonTable'):
+        updates.append(('PersonTable', 'SpouseID', None))
 
     # OwnerID is a polymorphic key.  OwnerType 1 is FamilyTable.FamilyID.
     for table_name in tables:
@@ -150,8 +210,13 @@ def family_reference_updates(connection, old_family_id, keep_family_id):
             updates.append((table_name, 'rmID', 'LinkType'))
 
     changed = []
+    changed.extend(
+        child_reference_updates(connection, old_family_id, keep_family_id)
+    )
     seen = set()
     for table_name, id_column, type_column in updates:
+        if table_name == 'ChildTable':
+            continue
         update_key = (table_name, id_column, type_column)
         if update_key in seen:
             continue
@@ -171,7 +236,7 @@ def family_reference_updates(connection, old_family_id, keep_family_id):
                 f"SET {quote_identifier(id_column)} = ? WHERE {where_clause}"
             )
             connection.execute(statement, [keep_family_id, *parameters])
-            changed.append((table_name, id_column, row_count))
+            changed.append(('Redirected', table_name, id_column, row_count))
     return changed
 
 
@@ -193,6 +258,8 @@ def remaining_references(connection, removed_family_ids):
             checks.append(('FamilyID', None))
         if table_name == 'PersonTable' and 'ParentID' in columns:
             checks.append(('ParentID', None))
+        if table_name == 'PersonTable' and 'SpouseID' in columns:
+            checks.append(('SpouseID', None))
         if {'OwnerType', 'OwnerID'} <= columns:
             checks.append(('OwnerID', 'OwnerType'))
         if {'LinkType', 'rmID'} <= columns:
@@ -211,20 +278,11 @@ def remaining_references(connection, removed_family_ids):
     return references
 
 
-def create_backup(database_path):
-    timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
-    backup_path = database_path.with_name(
-        f"{database_path.stem}-before-family-merge-{timestamp}{database_path.suffix}"
-    )
-    shutil.copy2(database_path, backup_path)
-    return backup_path
-
-
-def report_groups(groups):
+def report_groups(report_file, groups):
     for father_id, mother_id, keep_id, family_ids, record_count in groups:
-        print(
+        report_file.write(
             f"FatherID={father_id}, MotherID={mother_id}: "
-            f"keep FamilyID {keep_id}; merge [{family_ids}] ({record_count} rows)"
+            f"keep FamilyID {keep_id}; merge [{family_ids}] ({record_count} rows)\n"
         )
 
 
