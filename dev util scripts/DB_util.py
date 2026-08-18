@@ -5,13 +5,16 @@ import time
 import msvcrt
 import stat
 import argparse
+import glob
+import tempfile
+import zipfile
 
 
 def main():
     # Handle double-click (no args)
     if len(sys.argv) == 1:
         print("ERROR: Missing required argument.")
-        print("Usage: python dbtool.py [production|test|reset]")
+        print("Usage: python dbtool.py [production|test|local_test|reset]")
         print()
         input("Press Enter to exit...")
         sys.exit(1)
@@ -21,8 +24,8 @@ def main():
     )
     parser.add_argument(
         "mode",
-        choices=["production", "test", "reset"],
-        help="Mode: 'production', 'test', or 'reset'"
+        choices=["production", "test", "local_test", "reset"],
+        help="Mode: 'production', 'test', 'local_test', or 'reset'"
     )
     args = parser.parse_args()
 
@@ -33,7 +36,8 @@ def main():
     DB_BU_EXTEN = "rmtreeBU"
 
     PRODUCTION_DB_PATH = r"C:\Users\rotter\Genealogy\GeneDB\Otter-Saito.rmtree"
-    TEST_DB_PATH       = r"C:\Users\rotter\dev\Genealogy\Test Data\General test\TestData-RMpython -v11 -REDUCED.rmtree"
+    STD_TEST_DB_PATH = r"C:\Users\rotter\dev\Genealogy\Test Data\General test\TestData-RMpython -v11 -REDUCED.rmtree"
+    LOCAL_TEST_DB_PATH = r".\Local_Test_Database*.rmbackup"
 
     DEV_DB_PATH = "."
 
@@ -46,7 +50,8 @@ def main():
     DEV_DB_BACKUP = f"BACKUP_TEST-{curr_dir_name}"
 
     dev_db_file = os.path.join(DEV_DB_PATH, f"{DEV_DB_NAME}.{DB_EXTEN}")
-    dev_db_backup_file = os.path.join(DEV_DB_PATH, f"{DEV_DB_BACKUP}.{DB_BU_EXTEN}")
+    dev_db_backup_file = os.path.join(
+        DEV_DB_PATH, f"{DEV_DB_BACKUP}.{DB_BU_EXTEN}")
 
     # ---------------------------------------------------------
     # RESET MODE
@@ -91,7 +96,6 @@ def main():
         print("\033[32mReset completed successfully.\033[0m")
         print('\n\n')
 
-
         timeout_with_break(5)
         return
 
@@ -101,8 +105,17 @@ def main():
     if args.mode == "production":
         source_file = PRODUCTION_DB_PATH
         print("Syncing from PRODUCTION database")
+    elif args.mode == "local_test":
+        local_test_files = glob.glob(LOCAL_TEST_DB_PATH)
+        if len(local_test_files) != 1:
+            fail(
+                "Expected exactly one local test backup matching "
+                f"{LOCAL_TEST_DB_PATH}; found {len(local_test_files)}."
+            )
+        source_file = extract_local_test_database(local_test_files[0])
+        print("Syncing from LOCAL TEST database")
     else:
-        source_file = TEST_DB_PATH
+        source_file = STD_TEST_DB_PATH
         print("Syncing from TEST database")
 
     if not os.path.exists(full(source_file)):
@@ -121,7 +134,7 @@ def main():
         "Copying source DB to dev DB failed."
     )
 
-    if  source_file == TEST_DB_PATH:
+    if source_file == STD_TEST_DB_PATH:
         # make sure that the database is not ReadOnly
         clear_readonly(dev_db_file)
 
@@ -131,6 +144,9 @@ def main():
         dev_db_backup_file,
         "Creating local backup copy failed."
     )
+
+    if args.mode == "local_test":
+        os.remove(source_file)
 
     print('\n\n\n')
     print("\033[32m DB copy completed successfully.\033[0m")
@@ -152,9 +168,11 @@ def fail(msg):
     input("Press Enter to exit...")
     sys.exit(1)
 
+
 def full(path):
     """Return fully resolved absolute path."""
     return os.path.abspath(path)
+
 
 def safe_delete(path, allow_readonly=False):
     """
@@ -174,10 +192,12 @@ def safe_delete(path, allow_readonly=False):
         try:
             os.remove(resolved)
         except Exception as e:
-            fail(f"DELETE FAILED (locked, read-only, or in use): {resolved}\n{e}")
+            fail(
+                f"DELETE FAILED (locked, read-only, or in use): {resolved}\n{e}")
 
         if os.path.exists(resolved):
             fail(f"DELETE FAILED (still exists): {resolved}")
+
 
 def safe_copy(src, dst, errmsg):
     """Copy a file and verify success."""
@@ -194,6 +214,37 @@ def safe_copy(src, dst, errmsg):
 
     if os.path.getsize(dst_resolved) == 0:
         fail(f"{errmsg} (destination file is zero bytes)\nDest: {dst_resolved}")
+
+
+def extract_local_test_database(archive_path):
+    """Extract the single .rmtree database from a local test archive."""
+    try:
+        with zipfile.ZipFile(archive_path) as archive:
+            database_members = [
+                member for member in archive.infolist()
+                if not member.is_dir()
+                and member.filename.lower().endswith(".rmtree")
+            ]
+
+            if len(database_members) != 1:
+                fail(
+                    "Expected exactly one .rmtree file in local test archive "
+                    f"{full(archive_path)}; found {len(database_members)}."
+                )
+
+            file_descriptor, extracted_path = tempfile.mkstemp(
+                suffix=".rmtree",
+                prefix="DB_util_",
+                dir=os.getcwd()
+            )
+            with os.fdopen(file_descriptor, "wb") as extracted_file:
+                with archive.open(database_members[0]) as database_file:
+                    shutil.copyfileobj(database_file, extracted_file)
+            return extracted_path
+    except zipfile.BadZipFile as e:
+        fail(
+            f"Local test source is not a valid ZIP archive: {full(archive_path)}\n{e}")
+
 
 def timeout_with_break(seconds):
     """Emulate CMD 'timeout /t N' where any keypress interrupts the wait."""
@@ -218,6 +269,7 @@ def clear_readonly(path):
             os.chmod(path, stat.S_IWRITE)
     except Exception as e:
         raise RuntimeError(f"Failed to clear read-only attribute: {path}\n{e}")
+
 
 if __name__ == "__main__":
     main()
