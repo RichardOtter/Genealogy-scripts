@@ -8,7 +8,6 @@
 # Clear existing citation name so that it will auto-regenerate
 {CTRL+A}{DEL}{TAB}
 
-# Event date  NEEDS WORK
 [Name]{TAB}
 <[Birth Year]
 |[Birth Date]
@@ -18,6 +17,7 @@
 # clear any existing text in Person #2 name field
 {DEL}{TAB}
 
+# Event date  NEEDS WORK
 # Many possible Event date types
 <{1:}
 |[Baptism Date]

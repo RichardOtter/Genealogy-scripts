@@ -1,0 +1,466 @@
+===========================================DIV50==
+5247    California Birth Index 1905-1995
+
+Record ID	5247::21651620
+URL	https://www.ancestry.com/discoveryui-content/view/21651620:5247
+Name	Paige Janelleleigh Smtih
+Birth Date	 4 July 1991
+Gender	Female
+Mother's Maiden Name	Beard
+Birth County	Los Angeles
+Source.Title	California Birth Index, 1905-1995
+Source.Birthdate	 4 July 1991
+Source.Birth County	Los Angeles
+Source.Citation	Birthdate: 4 Jul 1991; Birth County: Los Angeles
+
+===========================================DIV50==
+61117   Hesse, Germany, Births, 1851-1901
+
+Record ID	61117::1076371
+URL	https://www.ancestry.com/discoveryui-content/view/1076371:61117
+Image Page URL	/imageviewer/collections/61117/images/neukirchen_3425_1879-00014
+Name	Barbara Otter
+Gender	weiblich (Female)
+Birth Date	 05 Mai 1879 (5 May 1879)
+Birth Place	Neukirchen, Hessen (Hesse), Deutschland (Germany)
+Civil Registration Office	Neukirchen
+Father	Adam Otter
+Mother	Anna Margaretha Otter
+Certificate Number	13
+Source.Title	Hesse, Germany, Births, 1851-1901
+Source.Part1	Hessisches Hauptstaatsarchiv
+Source.Part2	Wiesbaden, Deutschland
+Source.Bestand	907
+Source.Laufende Nummer	3425
+Source.Citation	Hessisches Hauptstaatsarchiv; Wiesbaden, Deutschland; Bestand: 907; Laufende Nummer: 3425
+
+===========================================DIV50==
+60396   Federal District, Mexico, Civil Registration Births, 1861-1931
+
+Record ID	60396::2596236
+URL	https://www.ancestry.com/discoveryui-content/view/2596236:60396
+Image Page URL	/imageviewer/collections/60396/images/004976011_00768
+Name	Maria Martha de las Fuentes y Callero
+Gender	Mujer (Female)
+Birth Date	 4 February 1930
+Birth Registration Place	México, Distrito Federal (Federal District), México (Mexico)
+Registration Date	 22 February 1930
+Father	José de las Fuentes
+Mother	Alicia Callero
+Page number	27
+Source.Title	Federal District, Mexico, Civil Registration Births, 1861-1931
+Source.Part1	Archivo de Registro Civil de Distrito Federal (Civil Registry Archives)
+Source.Part2	Federal District, Mexico
+Source.Citation	Archivo de Registro Civil de Distrito Federal (Civil Registry Archives); Federal District, Mexico
+
+
+===========================================DIV50==
+8782    England & Wales, Civil Registration Birth Index, 1916-2007
+
+Record ID	8782::50245220
+URL	https://www.ancestry.com/discoveryui-content/view/50245220:8782
+Image Page URL	/imageviewer/collections/8782/images/ons_b19741az-0256
+Name	David Colin Cho
+Registration Date	Q1 1974
+Registration Quarter	Jan-Feb-Mar
+Registration District	Newmarket
+Inferred County	Cambridgeshire
+Mother's Maiden Name	Dore
+Volume Number	4b
+Page number	4076
+Source.Title	England & Wales, Civil Registration Birth Index, 1916-2007
+Source.Part1	General Register Office
+Source.Part2	United Kingdom
+Source.Reference	Volume 4b, Page 4076
+Source.Citation	General Register Office; United Kingdom; Reference: Volume 4b, Page 4076
+
+===========================================DIV50==
+61048    US, Presbyterian Church Records, 1701-1907
+
+Record ID	61048::1768072
+URL	https://www.ancestry.com/discoveryui-content/view/1768072:61048
+Image Page URL	/imageviewer/collections/61048/images/47105_420302988_2608-00303
+Name	Daniel Straitiff
+Baptism Age	10
+Record Type	Baptism
+Birth Date	 13 December 1957
+Baptism Date	 1967
+Baptism Place	Pittsburgh, Pennsylvania, USA
+Church	John Knox Presbyterian Church
+Father	Richard Straitiff
+Mother	Lois Straitiff
+Source.Title	U.S., Presbyterian Church Records, 1701-1970
+Source.Part1	Presbyterian Historical Society
+Source.Part2	Philadelphia, PA, USA
+Source.Part3	US, Presbyterian Church Records, 1701-1907
+Source.Accession Number	10-0816 65i
+Source.Citation	Presbyterian Historical Society; Philadelphia, PA, USA; US, Presbyterian Church Records, 1701-1907; Accession Number: 10-0816 65i
+
+===========================================DIV50==
+1664    U.S., Consular Reports of Births, 1910-1949
+
+Record ID	1664::26723
+URL	https://www.ancestry.com/discoveryui-content/view/26723:1664
+Image Page URL	/imageviewer/collections/1664/images/32179_644066_0008-00965
+Name	Edward Traill Horn
+Gender	Male
+Birth Date	 9 August 1914
+Birth Place	Kumamoto, Japan
+Father	Edward Traill Horn
+Mother	Laura Rossiter Horn
+Source.Title	U.S., Consular Reports of Births, 1910-1949
+Source.Part1	National Archives and Records Administration
+Source.Part2	Washington, D.C.
+Source.Part3	Decimal Files, compiled 1910 - 1949
+Source.Record Group	59, General Records of the Department of State, 1763 - 2002
+Source.Series ARC ID	2555709
+Source.Series MLR Number	A1 3001
+Source.Series Volume Number	332
+Source.File Unit Title	131/751-1050, 1919-1919
+Source.File Unit ARC ID	4694157
+Source.File Number	131/977
+Source.Citation	National Archives and Records Administration; Washington, D.C.; Decimal Files, compiled 1910 - 1949; Record Group: 59, General Records of the Department of State, 1763 - 2002; Series ARC ID: 2555709; Series MLR Number: A1 3001; Series Volume Number: 332; File Unit Title: 131/751-1050, 1919-1919; File Unit ARC ID: 4694157; File Number: 131/977
+
+
+===========================================DIV50==
+61774   Arkansas, U.S., Birth Certificates, 1914-1925
+
+Record ID	61774::1024143
+URL	https://www.ancestry.com/discoveryui-content/view/1024143:61774
+Image Page URL	/imageviewer/collections/61774/images/61774_01_00550-01516
+Name	Frankie Lee Ivy
+Gender	Male
+Race	White
+Birth Date	 15 January 1910
+Birth Place	Alexander, Saline, Arkansas, USA
+Father	Henry Thomas Ivy
+Mother	Nora Clemones
+Source.Title	Arkansas, U.S., Birth Certificates, 1914-1925
+Source.Part1	Arkansas Department of Health, Vital Records Section
+Source.Part2	Little Rock, AR, USA
+Source.Part3	Birth Certificates
+Source.Year	 1910
+Source.Citation	Arkansas Department of Health, Vital Records Section; Little Rock, AR, USA; Birth Certificates; Year: 1910
+
+===========================================DIV50==
+5247    California Birth Index, 1905-1995
+
+Record ID	5247::1512019
+URL	https://www.ancestry.com/discoveryui-content/view/1512019:5247
+Name	Akiko Sagara
+Birth Date	 10 July 1928
+Gender	Female
+Mother's Maiden Name	Furuya
+Birth County	Sacramento
+Source.Title	California Birth Index, 1905-1995
+Source.Birthdate	 10 July 1928
+Source.Birth County	Sacramento
+Source.Citation	Birthdate: 10 Jul 1928; Birth County: Sacramento
+
+===========================================DIV50==
+1672    Delaware, U.S., Birth Records, 1800-1932
+
+Record ID	1672::12051
+URL	https://www.ancestry.com/discoveryui-content/view/12051:1672
+Image Page URL	/imageviewer/collections/1672/images/31297_212262-00854
+Name	Harry L Grant
+Gender	Male
+Birth Date	 11 October 1900
+Birth Place	Kent, Delaware, USA
+Mother	Alice W Grant
+Father	Oscar L Grant
+Source.Title	Delaware, U.S., Birth Records, 1800-1932
+Source.Part1	Delaware Public Archives
+Source.Part2	Dover, Delaware
+Source.Collection Number	Birth Certificates - Delayed - 6
+Source.Roll Number	95
+Source.Citation	Delaware Public Archives; Dover, Delaware; Collection Number: Birth Certificates - Delayed - 6; Roll Number: 95
+
+===========================================DIV50==
+61692   Hawaii, U.S., Birth Certificates and Indexes, 1841-1949
+
+Record ID	61692::127533
+URL	https://www.ancestry.com/discoveryui-content/view/127533:61692
+Image Page URL	/imageviewer/collections/61692/images/48933_i601925-00156
+Name	Flora Kum Soon Rho
+Gender	Female
+Birth Date	 12 November 1917
+Birth Place	Honolulu, Oahu
+Father	Ro HI Chang
+Mother	Chi Young Chang
+Certificate Number	15649
+Legitimate	Yes
+Source.Title	Hawaii, U.S., Birth Certificates and Indexes, 1841-1949
+Source.Part1	Office of Hawaiian Affairs
+Source.Part2	Honolulu, HI
+Source.Part3	Birth, Marriage, and Death Records
+Source.Citation	Office of Hawaiian Affairs; Honolulu, HI; Birth, Marriage, and Death Records
+
+===========================================DIV50==
+2545    Cook County, Illinois, U.S., Birth Certificates Index, 1871-1922
+
+Record ID	2545::1529505
+URL	https://www.ancestry.com/discoveryui-content/view/1529505:2545
+Name	Mildred Schurger
+Birth Date	 29 May 1891
+Birth Place	Chicago, Cook, Illinois
+Ethnicity	American
+Gender	Female
+Race	White
+Father	Louis Schurger
+Mother	Jennie Mich
+FHL Film	1287736
+Source.Title	Cook County, Illinois, U.S., Birth Certificates Index, 1871-1922
+
+===========================================DIV50==
+60280   Indiana, U.S., Select Births and Christenings, 1773-1933
+
+Record ID	60280::45582
+URL	https://www.ancestry.com/discoveryui-content/view/45582:60280
+Name	Clara Glaser
+Gender	Female
+Birth Date	 26 October 1889
+Birth Place	Batesville, Franklin, Indiana
+Father	Michel Glaser
+Mother	Cecilia Ertel
+FHL Film	549353
+Source.Title	Indiana, U.S., Select Births and Christenings, 1773-1933
+
+===========================================DIV50==
+4745    Indiana, U.S., WPA Birth Index, 1880-1920
+
+Record ID	4745::595035
+URL	https://www.ancestry.com/discoveryui-content/view/595035:4745
+Name	Maurine Morris
+Gender	Female
+Birth Date	 21 January 1918
+Birth Place	Vigo, Indiana, USA
+Father	Ivan Morris
+Mother	Anna Huster
+Book	H-12
+Page	121
+Source.Title	Indiana, U.S., WPA Birth Index, 1880-1920
+Source.Part1	Works Progress Administration
+Source.Part2	Indiana
+Source.Part3	Vigo County, Indiana, Index to Birth Records
+Source.Year Range	1882-1920
+Source.Volume	Volume I-Iv
+Source.Surname Range	A-C
+Source.Part4	D-G
+Source.Part5	H-L
+Source.Part6	M-R
+Source.Citation	Works Progress Administration; Indiana; Vigo County, Indiana, Index to Birth Records; Year Range: 1882-1920; Volume: Volume I-Iv; Surname Range: A-C; D-G; H-L; M-R
+
+===========================================DIV50==
+60871   Indiana, U.S., Birth Certificates, 1907-1944
+
+Record ID	60871::5776840
+URL	https://www.ancestry.com/discoveryui-content/view/5776840:60871
+Image Page URL	/imageviewer/collections/60871/images/40474_357791-01907
+Name	Albert John Back
+Gender	Male
+Birth Date	 19 May 1927
+Birth Place	Highland, Franklin, Indiana, USA
+Father	Charles A. Back
+Mother	Clara A. Scherger
+Certificate Number	21902
+Roll number	40474_357791
+Volume Range	41 - 45
+Source.Title	Indiana, U.S., Birth Certificates, 1907-1944
+Source.Part1	Indiana Archives and Records Administration
+Source.Part2	Indianapolis, Indiana
+Source.Part3	Births
+Source.Year	 1927
+Source.Roll	009
+Source.Citation	Indiana Archives and Records Administration; Indianapolis, Indiana; Births; Year: 1927; Roll: 009
+
+===========================================DIV50==
+8788    Kentucky, U.S., Birth Index, 1911-1999
+
+Record ID	8788::170711
+URL	https://www.ancestry.com/discoveryui-content/view/170711:8788
+Name	Annie Parker
+Date of Birth	 27 February 1934
+Birth Place	Madison, Kentucky, USA
+Mother's Name	Elisabeth Ashcraft
+Volume Number	016
+Certificate Number	07756
+Volume Year	 1934
+Source.Title	Kentucky, U.S., Birth Index, 1911-1999
+
+===========================================DIV50==
+63106   Louisiana, U.S., State Birth Records, 1832-1924
+
+Record ID	63106::186426
+URL	https://www.ancestry.com/discoveryui-content/view/186426:63106
+Image Page URL	/imageviewer/collections/63106/images/63106_95c28704_0017-00502
+Name	John David Schwab
+Gender	Male
+Birth Date	 17 August 1915
+Birth Place	Baton Rouge, E B Rouge, Louisiana, USA
+Legitimacy	Yes
+Certificate Number	26501-27000
+Father	John Schwab
+Mother	Ever Schwab
+Description	Vol 016.00, 26501-27000
+Source.Title	Louisiana, U.S., State Birth Records, 1832-1924
+Source.Part1	Louisiana State Archives
+Source.Part2	Baton Rouge, Louisiana
+Source.Part3	State Birth Records, 1911-1922
+Source.Citation	Louisiana State Archives; Baton Rouge, Louisiana; State Birth Records, 1911-1922
+
+===========================================DIV50==
+6587    New Orleans, Louisiana, U.S., Birth Records Index, 1790-1915
+
+Record ID	6587::357362
+URL	https://www.ancestry.com/discoveryui-content/view/357362:6587
+Name	Alfred Bernal
+Birth Date	 23 March 1914
+Birth Place	Orleans, Louisiana, USA
+Father	Raoul Bernal
+Mother	Caroline Pichon
+Source.Title	New Orleans, Louisiana, U.S., Birth Records Index, 1790-1915
+Source.Part1	New Orleans, Louisiana Birth Records Index, 1790-1899
+Source.Citation	New Orleans, Louisiana Birth Records Index, 1790-1899
+
+===========================================DIV50==
+3928    Massachusetts, U.S., Birth Index, 1860-1970
+
+Record ID	3928::3418329
+URL	https://www.ancestry.com/discoveryui-content/view/3418329:3928
+Image Page URL	/imageviewer/collections/3928/images/41263_2421406273_0346-00083
+Name	Marie Emelie Louise Julien
+Birth Date	 1944
+Birth Place	Danvers, Massachusetts, USA
+Volume Number	56
+Page number	508
+Index Volume Number	145
+Reference Number	F63.m362 V.145
+Source.Title	Massachusetts, U.S., Birth Index, 1860-1970
+
+===========================================DIV50==
+9196    Web: Minnesota, U.S., Birth Index, 1900-1934
+
+Record ID	9196::836275
+URL	https://www.ancestry.com/discoveryui-content/view/836275:9196
+Name	Lloyd Nicholas Nelson
+Birth Date	 26 August 1917
+Birth Place	Ramsey, Minnesota, USA
+Mother Maiden Name	Stokoe
+Certificate Number	1917-52389
+URL#1	https://www.mnhs.org/search/people
+Source.Title	Web: Minnesota, U.S., Birth Index, 1900-1934
+Source.Part1	Minnesota Historical Society
+Source.Part2	St Paul, Minnesota
+Source.Part3	Minnesota Birth Certificates Index
+Source.URL	https://www.mnhs.org/search/people
+Source.Citation	Minnesota Historical Society; St Paul, Minnesota; Minnesota Birth Certificates Index; URL: https://www.mnhs.org/search/people
+
+===========================================DIV50==
+2550    Minnesota, U.S., Births and Christenings Index, 1840-1980
+
+Record ID	2550::282964
+URL	https://www.ancestry.com/discoveryui-content/view/282964:2550
+Name	Catharine Ertz
+Gender	Female
+Birth Date	 30 October 1876
+Birth Place	Carver, Minnesota
+Father	Mathias Ertz
+Mother	Mary Ertz
+FHL Film	1434893
+Source.Title	Minnesota, U.S., Births and Christenings Index, 1840-1980
+
+===========================================DIV50==
+8742    Minnesota, U.S., Birth Index, 1935-2004
+
+Record ID	8742::4218753
+URL	https://www.ancestry.com/discoveryui-content/view/4218753:8742
+Name	Chandler Marie Keating
+Birth Date	 4 January 1993
+Birth Place	Freeborn, Minnesota, USA
+Birth Registration Date	 1993
+Father	Raymond George Keating
+Mother	Angela Hubert Keating
+File Number	1993-Mn-004945
+Source.Title	Minnesota, U.S., Birth Index, 1935-2004
+Source.Part1	Minnesota Department of Health
+Source.Part2	Saint Paul, MN, USA
+Source.Part3	Minnesota, Birth Index, 1935-2004
+Source.Citation	Minnesota Department of Health; Saint Paul, MN, USA; Minnesota, Birth Index, 1935-2004
+
+===========================================DIV50==
+1170    Missouri, U.S., Birth Registers, 1847-2004
+
+Record ID	1170::13602769
+URL	https://www.ancestry.com/discoveryui-content/view/13602769:1170
+Name	Mary Ellen Beahn
+Birth Date	 1 September 1939
+Birth Place	Missouri, USA
+Source.Title	Missouri, U.S., Birth Registers, 1847-2004
+Source.Part1	Missouri State Archives
+Source.Part2	Jefferson City, MO, USA
+Source.Part3	Birth Index, 1920-1999
+Source.Citation	Missouri State Archives; Jefferson City, MO, USA; Birth Index, 1920-1999
+
+===========================================DIV50==
+2451    Pennsylvania and New Jersey, U.S., Church and Town Records, 1669-2013
+
+Record ID	2451::2020280496
+URL	https://www.ancestry.com/discoveryui-content/view/2020280496:2451
+Name	Eleanor Hoch Zimmerman
+Baptism Age	0
+Event Type	Baptism
+Birth Date	 8 February 1922
+Baptism Date	 30 April 1922
+Baptism Place	Shiremantown, Cumberland, Pennsylvania, USA
+Denomination	Lutheran
+Organization Name	St John Evangelical Lutheran (Friedens or Peace)
+Father	Walter Zimmerman
+Mother	Daysie Zimmerman
+Source.Title	Pennsylvania and New Jersey, U.S., Church and Town Records, 1669-2013
+Source.Part1	Historical Society of Pennsylvania
+Source.Part2	Philadelphia, Pennsylvania
+Source.Part3	Historic Pennsylvania Church and Town Records
+Source.Citation	Historical Society of Pennsylvania; Philadelphia, Pennsylvania; Historic Pennsylvania Church and Town Records
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+===========================================DIV50==
+
+
+
+
+
+===========================================DIV50==
+For Birth Date-
+
+Birth Date          can also have Registration Date, Baptism Date
+Date of Birth
+Registration Date
+

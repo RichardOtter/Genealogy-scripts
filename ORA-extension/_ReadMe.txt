@@ -1,6 +1,7 @@
 MH=MyHeritage.com
 ANC=Ancestry.com
 
+===========================================DIV50==
 
 ===========================================DIV50==
 DNA Match Table entry
@@ -76,14 +77,72 @@ lib.ANC-1person.ora
 lib.ANC-2person.ora
 
 ===========================================DIV50==
+MANY ANCESTRY COLLECTIONS
 
+lib.ANC-1person.ora
+for collections involving 1 main person- birth, death,
 
+lib.ANC-2person.ora
+for collections involving 2 main person2- marriage, divorce
 
+lib.ANC-1person.ora
+There are many collections where this is ot working properly
+The entered data includes Na,e birth date, and event date.
+The event date should be simple and consistent, but it isn't.
 
+e.g.
+California Birth Index 1905-1995
+id=5247
+The Autotype
+header:
+<blank>
+code:
+[lib.ANC-1person]
+
+The fields in the record-
+Record ID	5247::21651620
+URL	https://www.ancestry.com/discoveryui-content/view/21651620:5247
+Name	Paige Janelleleigh Smtih
+Birth Date	 4 July 1991
+Gender	Female
+Mother's Maiden Name	Beard
+Birth County	Los Angeles
+Source.Title	California Birth Index, 1905-1995
+Source.Birthdate	 4 July 1991
+Source.Birth County	Los Angeles
+Source.Citation	Birthdate: 4 Jul 1991; Birth County: Los Angeles
+
+the event date is auto typed by-
+<{1:}
+|[Baptism Date]
+|[Arrival Date]
+|[DeathDate]
+|[Birth Year]
+|[Birth Date]
+|[Death Date]
+|<abt [Estimated Birth Year:replace:abt ::l]>
+>{TAB}
+
+This uses Advanced list‑selector form. 
+Seems to be optional and adds confusion.
+
+the last option
+<abt [Estimated Birth Year:replace:abt ::l]>
+cleans up the date in some cases.
+
+Make a list of fields in a separate file
 
 
 
 ORA Help links
+
+Text Template & Conditionals:
+https://www.ora-extension.com/en/text-templates.htm
+Conditionals:         < > & < |  |  >
+Special References:   [?:varName]  [?:varName==TestVal]  etc.
+
+AutoType:
+https://www.ora-extension.com/en/auto-type.htm
 
 Transforms:
 https://www.ora-extension.com/en/text-templates.htm
@@ -95,3 +154,7 @@ The Citation entry form must be tall enough so
 that all fields are visible in window, otherwise the autotype
 will fail by closing the window before the Research note is filled in.
 Probably an RM issue with tabbing to a non visible field. 
+
+
+
+
