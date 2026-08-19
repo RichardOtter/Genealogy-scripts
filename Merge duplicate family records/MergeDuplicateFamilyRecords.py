@@ -19,17 +19,15 @@ import RMpy.common as RMc       # noqa #type: ignore
 
 # Tested with:
 #   RootsMagic database file v11
-#   Python for Windows v3.13
+#   Python for Windows v3.14
 
 # Config file fields used
 #    FILE_PATHS  DB_PATH
 #    FILE_PATHS  REPORT_FILE_PATH
 #    FILE_PATHS  REPORT_FILE_DISPLAY_APP
 
-
 # The polymorphic owner identifier
 FAMILY_OWNER_TYPE = 1
-
 
 # ===================================================DIV60==
 def main():

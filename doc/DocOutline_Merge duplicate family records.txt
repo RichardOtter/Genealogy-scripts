@@ -1,0 +1,80 @@
+=========================================================================DIV80==
+Merge duplicate records in the FamilyTable
+MergeDuplicateFamilyRecords.py
+INCLUDE: LIB_INTRO
+=========================================================================DIV80==
+Purpose
+
+This is a simple maintenance / repair utility to deal with duplicated 
+family records.
+
+There appears to be a bug in FamilySearch tools when adding people where in
+certain circumstances, duplicate family records are created.
+This is visible in RM when a person is shown to have the same spouse more
+than once. 
+
+The utility will delete one of the spousal connections, moving all attached
+citations, media, children etc to the remaining family record.
+CHild links will not be duplicated in the merge.
+
+If no duplicated family records are found, that result is displayed in the
+report file and no changes were made. Thus, this utility can be run as a
+diagnostic tool to detect problems.
+
+=========================================================================DIV80==
+INCLUDE: LIB_BACKUPS_SMALL_CHANGES
+=========================================================================DIV80==
+INCLUDE: LIB_COMPATIBILITY
+=========================================================================DIV80==
+INCLUDE: LIB_OVERVIEW
+=========================================================================DIV80==
+INCLUDE: LIB_STEPS_0_SMALL_CHANGES
+INCLUDE: LIB_STEPS_1
+==========-
+Copy these items from the downloaded zip file to the working folder-
+      MergeDuplicateFamilyRecords.py   (file)
+      RM-Python-config.ini             (file)
+      RMpy                             (folder)
+
+INCLUDE: LIB_STEPS_2
+=========-
+Open the TEST.rmtree database file in RootsMagic.
+Having the file open in RM allows one to copy citation and source names, needed
+by the utility, directly from the RM window.
+
+=========-
+Double click the "MergeDuplicateFamilyRecords.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window will open and close and notepad will then display the
+report file showing the results of the processing.
+
+=========-
+Confirm the desired changes have been accomplished in RootsMagic.
+
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
+
+
+=========================================================================DIV80==
+Notes
+
+INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
+INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
+INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX_PYTHON
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX_TROUBLE
+=========================================================================DIV80==
+TODO
+
+*  ?? what would you find useful?
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_FEEDBACK
+=========================================================================DIV80==
+INCLUDE: LIB_DISTRIBUTION
+=========================================================================DIV80==
