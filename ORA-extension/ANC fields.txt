@@ -424,14 +424,93 @@ Source.Part3	Historic Pennsylvania Church and Town Records
 Source.Citation	Historical Society of Pennsylvania; Philadelphia, Pennsylvania; Historic Pennsylvania Church and Town Records
 
 ===========================================DIV50==
+8783    North Carolina, U.S., Birth Indexes, 1800-2000
+
+Record ID	8783::1656839
+URL	https://www.ancestry.com/discoveryui-content/view/1656839:8783
+Image Page URL	/imageviewer/collections/8783/images/NCVR_B_C029_66005-0367
+Name	Cynthia Maxine Johnson
+Event Type	Birth
+Birth Date	 20 March 1965
+Birth Place	Manchester, Cumberland, North Carolina, USA
+Father	John W Johnson
+Volume	213
+Page	293
+Source.Title	North Carolina, U.S., Birth Indexes, 1800-2000
+Source.Part1	North Carolina State Archives
+Source.Part2	Raleigh, North Carolina
+Source.Part3	Register of Deeds
+Source.Roll	NCVR_B_C029_66005
+Source.Citation	North Carolina State Archives; Raleigh, North Carolina; Register of Deeds; Roll: NCVR_B_C029_66005
 
 ===========================================DIV50==
+70591   Web: Mecklenburg County, North Carolina, U.S., Birth Index, 1865-2012
+
+Record ID	70591::6356309
+URL	https://www.ancestry.com/discoveryui-content/view/6356309:70591
+Name	Maria Mcintyre Withrow
+Gender	Female
+Birth Date	 26 February 1993
+Birth Place	Mecklenburg, North Carolina, USA
+Father	Jerry W Withrow
+Mother	Marcella A McIntyre
+URL#1	https://meckrod.manatron.com/Birth/SearchEntry.aspx
+Source.Title	Web: Mecklenburg County, North Carolina, U.S., Birth Index, 1865-2012
 
 ===========================================DIV50==
+62094   Nebraska, U.S., Birth Ledgers, 1904-1911, Birth Index, 1912-2004
+
+Record ID	62094::301798074
+URL	https://www.ancestry.com/discoveryui-content/view/301798074:62094
+Name	Erin Tracey Brewer
+Gender	Female
+Birth Date	 23 October 1957
+Birth Place	Adams, Nebraska, USA
+Parent 1 Name	George H Brewer
+Certificate Number	24772
+Birth Certificate Type	Normal
+Source.Title	Nebraska, U.S., Birth Ledgers, 1904-1911, Birth Index, 1912-2004
+Source.Part1	Nebraska Department of Health and Human Services
+Source.Part2	Lincoln, NE, USA
+Source.Part3	Nebraska Birth Index, 1912-2004
+Source.Citation	Nebraska Department of Health and Human Services; Lincoln, NE, USA; Nebraska Birth Index, 1912-2004
 
 ===========================================DIV50==
+61833   New Hampshire, U.S., Birth Records, 1631-1924
+
+Record ID	61833::655586
+URL	https://www.ancestry.com/discoveryui-content/view/655586:61833
+Image Page URL	/imageviewer/collections/61833/images/61833_01_0401-00026
+Name	Louise Elizabeth Davy
+Gender	Female
+Race	White
+Birth Date	 30 June 1915
+Birth Place	Dover, New Hampshire, USA
+Father	John W Davy
+Mother	Elizabeth Davy
+Box Number	401
+Source.Title	New Hampshire, U.S., Birth Records, 1631-1924
+Source.Part1	New Hampshire Department of State
+Source.Part2	Concord, New Hampshire, USA
+Source.Part3	Birth Certificates, 1631-1924
+Source.Credit	The Original Document May Be Seen At the New Hampshire Department of State
+Source.Citation	New Hampshire Department of State; Concord, New Hampshire, USA; Birth Certificates, 1631-1924; Credit: The Original Document May Be Seen At the New Hampshire Department of State
 
 ===========================================DIV50==
+61667   New York State, Birth Index, 1881-1942
+
+Record ID	61667::3674749
+URL	https://www.ancestry.com/discoveryui-content/view/3674749:61667
+Image Page URL	/imageviewer/collections/61667/images/48877_556571-00644
+Name	Anna M Herrmann
+Birth Date	 6 February 1930
+Birth Place	Hempstead, New York, USA
+Certificate Number	11386
+Source.Title	New York State, Birth Index, 1881-1942
+Source.Part1	New York State Department of Health
+Source.Part2	Albany, NY, USA
+Source.Part3	New York State Birth Index
+Source.Citation	New York State Department of Health; Albany, NY, USA; New York State Birth Index
 
 ===========================================DIV50==
 

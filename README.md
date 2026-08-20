@@ -100,7 +100,13 @@ require Python development to run.
 
 ## NOT RELEASED
 
-## Non Python
+## Python
+
+Merge duplicate family records
+A utility for maintenance / repair of family records introduced in error by RM
+usually during withe FamilySearch or Ancestry import of people.
+
+## Non-Python
 
 ### Maintenance SQL
 

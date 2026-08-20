@@ -505,32 +505,54 @@ File format is an option in the "Save file" dialog box in NotePad.
 =========================================================================DIV80==
 APPENDIX  Python install
 
-Install Python from either:
-from the Microsoft Store (preferred)
-or
-from the Python.org web site
+Install Python using the "winget" command line package manager.
 
-From Microsoft Store
-From the Windows Start menu, open the Microsoft Store app.
-In the search field at the top of the Store home page, 
-enter "Python Install Manager".
-You should then see the Python Install Manager / Python Software Foundation page.
-Click the "Get" button and follow the instructions.
+It is also possible to install from the Microsoft Store or from the 
+Python.org web site, but I only recommend the winget method.
+
+Installation using winget.
+
+1 Open a command line terminal. 
+A quick method is to right click the Windows menu icon in the file manager task 
+bar and select the Terminal command.
+Or, using just the keyboard, press the Windows key and then tap X and select 
+the Terminal command from the displayed menu.
+
+2 Type the following command in the window and hit Enter:
+
+    winget install --id Python.PythonInstallManager --source winget
+
+After it finishes and displays "Successfully installed", type the following
+command and hit Enter:
+
+    py install 3
+
+The output for this command should be similar to-
+-------
+The signature for https://www.python.org/ftp/python/index-windows.json was 
+successfully verified.
+Installing Python 3.14.7.
+Extracting: ...............................................................✅
+
+Global shortcuts directory is not on PATH. Add it for easy access to global Python aliases.
+Directory to add: C:\Users\rotter\AppData\Local\Python\bin
+-------
+Ignore the last 2 lines. You won't need that functionality.
 
 
-Python.org web site download and install
-https://www.python.org/downloads/
+Uninstall
+Use the Settings app in the Windows menu.
+Go to Apps=>Installed apps
+and find "Python Install Manager" and "Python 3.n.n"
+and select Uninstall from the three dot menu to the right of the names.
 
-Click on the button near the top of page: "Download Python install manager"
-Click it and save the installer.
-Go to the download location and run the installer using the default options.
+or use winget
+winget uninstall --id Python.PythonInstallManager
+winget uninstall --id Python.Python.3.nn
 
-Note: by default, the Python installer places the software in the user's
-home folder in the standard location.
 
-A Python installation requires about 100 Mbytes.
-It is easily and cleanly removed using the standard Windows method found in
-Windows=>Settings=>Installed apps
+For additional information, see the Python on Windows docs at-
+https://docs.python.org/3.14/using/windows.html
 
 =========================================================================DIV80==
 APPENDIX  Troubleshooting
