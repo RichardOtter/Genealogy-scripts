@@ -170,11 +170,6 @@ If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
 
 =========-
-Open the TEST.rmtree database file in RootsMagic.
-Having the file open in RM allows one to copy citation and source names, needed
-by the utility, directly from the RM window.
-
-=========-
 Double click the "MergeDuplicateFamilyRecords.py" file in the working folder
 to start the utility.
 
@@ -315,7 +310,7 @@ APPENDIX  Python install
 Install Python using the "winget" command line package manager.
 
 It is also possible to install from the Microsoft Store or from the 
-Python.org web site, but I only recommend the winget method.
+Python.org web site but only the winget method is described here.
 
 Installation using winget.
 

@@ -192,7 +192,7 @@ APPENDIX  Python install
 Install Python using the "winget" command line package manager.
 
 It is also possible to install from the Microsoft Store or from the 
-Python.org web site, but I only recommend the winget method.
+Python.org web site but only the winget method is described here.
 
 Installation using winget.
 
