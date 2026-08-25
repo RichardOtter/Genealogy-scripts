@@ -33,6 +33,7 @@ def main():
 
 # ===================================================DIV60==
 def run_places_editor(config, db_connection, report_file):
+
     table_name = "PlaceTable"
 
     RMpy.common.reindex_RMNOCASE(db_connection)
@@ -331,7 +332,7 @@ def run_places_editor(config, db_connection, report_file):
                 f"\nPlaceTable record changed: {key_column} = {key_value}\n")
             for column, old_value, new_value in changes:
                 report_file.write(
-                    f"  {column}: before={old_value!r}\n\nafter={new_value!r}\n")
+                    f"{column}: ======\r\nbefore={old_value!r}\r\nafter={new_value!r}\r\n")
             report_file.flush()
             messagebox.showinfo("Saved", f"Record {key_value} was saved.")
         except Exception as error:

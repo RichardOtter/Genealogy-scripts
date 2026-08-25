@@ -1,0 +1,36 @@
+CREATE TABLE IF NOT EXISTS AuxPlaceTable (
+    PlaceID INTEGER PRIMARY KEY,
+    Orig_PlaceType INTEGER,
+    Orig_Name TEXT,
+    Orig_Abbrev TEXT,
+    Orig_Normalized TEXT,
+    Orig_Latitude INTEGER,
+    Orig_Longitude INTEGER,
+    Orig_LatLongExact INTEGER,
+    Orig_MasterID INTEGER,
+    Orig_Note TEXT,
+    Orig_Reverse TEXT,
+    Orig_fsID INTEGER,
+    Orig_anID INTEGER,
+    Orig_UTCModDate FLOAT,
+    FS_NameFull_en TEXT,
+    FS_NameShort_en TEXT,
+    FS_NameFull_de TEXT,
+    FS_NameShort_de TEXT,
+    FS_Abbrev TEXT,
+    FS_Latitude INTEGER,
+    FS_Longitude INTEGER,
+    FS_YearStart INTEGER,
+    FS_YearEnd INTEGER,
+    FS_PlaceType TEXT,
+    FS_PlaceStatus TEXT,
+    FS_ParentID TEXT,
+    FS_ReturnedID TEXT,
+    FS_LastUpdated FLOAT,
+    FS_Status TEXT,
+    FS_Error TEXT,
+    FOREIGN KEY (PlaceID) REFERENCES PlaceTable(PlaceID) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_AuxPlaceTable_fsID
+    ON AuxPlaceTable (Orig_fsID);
