@@ -1,0 +1,73 @@
+DROP TABLE if exists AuxPlaceTable;
+
+CREATE TABLE IF NOT EXISTS AuxPlaceTable (
+    PlaceID INTEGER PRIMARY KEY,
+    Orig_PlaceType INTEGER,
+    Orig_Name TEXT,
+    Orig_Abbrev TEXT,
+    Orig_Normalized TEXT,
+    Orig_Latitude INTEGER,
+    Orig_Longitude INTEGER,
+    Orig_LatLongExact INTEGER,
+    Orig_MasterID INTEGER,
+    Orig_Note TEXT,
+    Orig_Reverse TEXT,
+    Orig_fsID INTEGER,
+    Orig_anID INTEGER,
+    Orig_UTCModDate FLOAT,
+    FS_NameFull_en TEXT,
+    FS_NameShort_en TEXT,
+    FS_NameFull_de TEXT,
+    FS_NameShort_de TEXT,
+    FS_Abbrev TEXT,
+    FS_Latitude INTEGER,
+    FS_Longitude INTEGER,
+    FS_YearStart INTEGER,
+    FS_YearEnd INTEGER,
+    FS_PlaceType TEXT,
+    FS_PlaceStatus TEXT,
+    FS_ParentID TEXT,
+    FS_ReturnedID TEXT,
+    FS_LastUpdated FLOAT,
+    FS_Status TEXT,
+    FS_Error TEXT,
+    FOREIGN KEY (PlaceID) REFERENCES PlaceTable(PlaceID) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_AuxPlaceTable_fsID
+    ON AuxPlaceTable (Orig_fsID);
+
+BEGIN TRANSACTION;
+
+INSERT OR IGNORE INTO AuxPlaceTable (
+    PlaceID, Orig_PlaceType, Orig_Name, Orig_Abbrev, Orig_Normalized,
+    Orig_Latitude, Orig_Longitude, Orig_LatLongExact, Orig_MasterID,
+    Orig_Note, Orig_Reverse, Orig_fsID, Orig_anID, Orig_UTCModDate
+)
+SELECT PlaceID, PlaceType, Name, Abbrev, Normalized,
+       Latitude, Longitude, LatLongExact, MasterID,
+       Note, Reverse, fsID, anID, UTCModDate
+FROM PlaceTable;
+
+COMMIT;
+
+
+
+
+--------------------------------
+-- Update and revert place names
+-- needs RMNOCASE
+-- Needs REINDEX
+
+UPDATE PlaceTable
+SET Name = '+' || Name
+WHERE (Note IS NULL OR instr(Note, 'FSPID=') = 0)
+  AND (Name IS NULL OR substr(Name, 1, 1) <> '+')
+  AND (Note IS NULL OR substr(Note, 1, 5) <> '_SKIP')
+  AND PlaceType = 0
+  AND (Name IS NULL OR instr(Name, '~') = 0);
+
+
+UPDATE PlaceTable
+SET Name = substr(Name, 2)
+WHERE Name COLLATE NOCASE LIKE '+%';
