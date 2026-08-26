@@ -13,6 +13,10 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
     Orig_fsID INTEGER,
     Orig_anID INTEGER,
     Orig_UTCModDate FLOAT,
+    Language TEXT,
+    Uncertain TEXT,
+    FSPID INTEGER,
+    NonFSPlace TEXT,
     FS_NameFull_en TEXT,
     FS_NameShort_en TEXT,
     FS_NameFull_de TEXT,
@@ -31,6 +35,3 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
     FS_Error TEXT,
     FOREIGN KEY (PlaceID) REFERENCES PlaceTable(PlaceID) ON DELETE CASCADE
 );
-
-CREATE INDEX IF NOT EXISTS idx_AuxPlaceTable_fsID
-    ON AuxPlaceTable (Orig_fsID);

@@ -15,6 +15,10 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
     Orig_fsID INTEGER,
     Orig_anID INTEGER,
     Orig_UTCModDate FLOAT,
+    Language TEXT,
+    Uncertain TEXT,
+    FSPID INTEGER,
+    NonFSPlace TEXT,
     FS_NameFull_en TEXT,
     FS_NameShort_en TEXT,
     FS_NameFull_de TEXT,
@@ -57,7 +61,8 @@ COMMIT;
 --------------------------------
 -- Update and revert place names
 -- needs RMNOCASE
--- Needs REINDEX
+
+REINDEX RMNOCASE;
 
 UPDATE PlaceTable
 SET Name = '+' || Name
@@ -68,6 +73,9 @@ WHERE (Note IS NULL OR instr(Note, 'FSPID=') = 0)
   AND (Name IS NULL OR instr(Name, '~') = 0);
 
 
+
+REINDEX RMNOCASE;
+
 UPDATE PlaceTable
 SET Name = substr(Name, 2)
-WHERE Name COLLATE NOCASE LIKE '+%';
+WHERE Name LIKE '+%';
