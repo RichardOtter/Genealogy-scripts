@@ -2,8 +2,9 @@
 
 Every TEXT column named "Note" (case-insensitive) in every table is scanned.
 Line endings are rewritten to the style selected by EOL_STYLE in
-RM-Python-config.ini ("LF" for \\n or "CRLF" for \\r\\n).  Set
-MAKE_CHANGES = true to apply the changes; the default is a report-only dry run.
+RM-Python-config.ini ("LF" for \n or "CRLF" for \r\n). Set
+ENSURE_FINAL_EOL = true to add one final line ending to each non-empty note.
+Set MAKE_CHANGES = true to apply the changes; the default is a report-only dry run.
 """
 
 import sys
@@ -28,6 +29,7 @@ import RMpy.common as RMc       # noqa #type: ignore
 #    FILE_PATHS  REPORT_FILE_DISPLAY_APP
 #
 #    OPTIONS     EOL_STYLE
+#    OPTIONS     ENSURE_FINAL_EOL
 #    OPTIONS     MAKE_CHANGES
 
 
@@ -52,7 +54,6 @@ def main():
 
 # ===================================================DIV60==
 def run_selected_features(config, db_connection, report_file):
-
     try:
         eol_style = config['OPTIONS'].get('EOL_STYLE').strip().upper()
     except:
@@ -65,16 +66,21 @@ def run_selected_features(config, db_connection, report_file):
 
     try:
         make_changes = config['OPTIONS'].getboolean('MAKE_CHANGES')
-    except:
+        ensure_final_eol = config['OPTIONS'].getboolean(
+            'ENSURE_FINAL_EOL', fallback=False)
+    except ValueError:
         raise RMc.RM_Py_Exception(
-            'ERROR: section: [OPTIONS], key: MAKE_CHANGES could not be parsed as boolean.\n')
+            'ERROR: MAKE_CHANGES and ENSURE_FINAL_EOL must be boolean values.\n')
 
-    report_file.write(F"Target line ending: {eol_style}\n\n")
+    report_file.write(
+        F"Target line ending: {eol_style}\n"
+        F"Ensure final line ending: {ensure_final_eol}\n\n")
 
     total_rows_changed = 0
     for table_name, column_name in note_columns(db_connection):
         rows_changed = normalize_column(
-            db_connection, table_name, column_name, new_eol, make_changes, report_file)
+            db_connection, table_name, column_name, new_eol,
+            ensure_final_eol, make_changes, report_file)
         total_rows_changed += rows_changed
 
     report_file.write(
@@ -84,7 +90,6 @@ def run_selected_features(config, db_connection, report_file):
         report_file.write(
             '\nDry run only. Set MAKE_CHANGES = true in the configuration'
             ' file to apply these changes.\n')
-    return
 
 
 # ===================================================DIV60==
@@ -105,8 +110,8 @@ def note_columns(connection):
 
 
 # ===================================================DIV60==
-def normalize_column(connection, table_name, column_name, new_eol, make_changes, report_file):
-
+def normalize_column(connection, table_name, column_name, new_eol,
+                     ensure_final_eol, make_changes, report_file):
     quoted_table = quote_identifier(table_name)
     quoted_column = quote_identifier(column_name)
     key_column = primary_key_column(connection, table_name)
@@ -119,7 +124,8 @@ def normalize_column(connection, table_name, column_name, new_eol, make_changes,
     updates = [
         (row_id, normalized_text)
         for row_id, note_text in connection.execute(statement)
-        for normalized_text in [normalize_line_endings(note_text, new_eol)]
+        for normalized_text in [normalize_line_endings(
+            note_text, new_eol, ensure_final_eol)]
         if normalized_text != note_text
     ]
 
@@ -138,10 +144,13 @@ def normalize_column(connection, table_name, column_name, new_eol, make_changes,
 
 
 # ===================================================DIV60==
-def normalize_line_endings(text, new_eol):
+def normalize_line_endings(text, new_eol, ensure_final_eol=False):
     # Collapse any mix of \r\n, bare \r, or \n to a single style.
     unified = text.replace('\r\n', '\n').replace('\r', '\n')
-    return unified.replace('\n', new_eol)
+    normalized = unified.replace('\n', new_eol)
+    if ensure_final_eol and normalized and not normalized.endswith(new_eol):
+        return normalized + new_eol
+    return normalized
 
 
 # ===================================================DIV60==
