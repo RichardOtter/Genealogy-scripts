@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
     FS_PlaceType TEXT,
     FS_PlaceStatus TEXT,
     FS_ParentID TEXT,
-    FS_ReturnedID REAL,
+    FSMatchScore INTEGER,
     FS_LastUpdated FLOAT,
     FS_Status TEXT,
     FS_Error TEXT,
