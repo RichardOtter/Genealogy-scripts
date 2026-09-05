@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
     Orig_UTCModDate FLOAT,
     Language TEXT,
     Uncertain TEXT,
+    FSPDesID INTEGER,
     FSPID INTEGER,
     NonFSPlace TEXT,
     FS_NameFull_en TEXT,
@@ -29,9 +30,38 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
     FS_PlaceType TEXT,
     FS_PlaceStatus TEXT,
     FS_ParentID TEXT,
-    FS_ReturnedID TEXT,
+    FS_ReturnedID REAL,
     FS_LastUpdated FLOAT,
     FS_Status TEXT,
     FS_Error TEXT,
     FOREIGN KEY (PlaceID) REFERENCES PlaceTable(PlaceID) ON DELETE CASCADE
 );
+
+-- Language TEXT,
+--   en or de  the lanugyaes are separate this shows which oto use ??
+-- Uncertain TEXT,
+--      flag if name has ~/_PROBABLY, ?/_UNCLEAR, _REGION, or _VICINITY
+-- FSPDesID INTEGER,
+--      FS Place description ID  The ID on web page
+-- FSPID INTEGER,
+--      FS Place ID
+-- NonFSPlace TEXT,
+--      forgot ???
+-- FS_NameFull TEXT,
+-- FS_NameShort TEXT,
+-- FS_Abbrev TEXT,
+
+-- FS_Latitude INTEGER,
+-- FS_Longitude INTEGER,
+-- FS_YearStart INTEGER,
+-- FS_YearEnd INTEGER,
+
+-- FS_PlaceType TEXT,
+-- FS_PlaceStatus TEXT,
+
+-- FS_ParentID TEXT,
+
+-- FS_ReturnedID REAL, -- accepted lookup score
+-- FS_LastUpdated FLOAT,
+-- FS_Status TEXT,
+-- FS_Error TEXT,
