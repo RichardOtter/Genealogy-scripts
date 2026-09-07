@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 
 DEFAULT_CONFIG = "RM-Python-config.ini"
-DEFAULT_API_URL = "https://apibeta.familysearch.org/platform/places"
+DEFAULT_API_URL = "https://api.familysearch.org/platform/places"
 TEMPORAL_PATTERN = re.compile(r"^([+-]?\d{1,6})?(?:/([+-]?\d{1,6})?)?$")
 BRACKETED_TEXT_PATTERN = re.compile(r"\[[^\]]*\]")
 
@@ -33,6 +33,10 @@ def main():
     parser.add_argument(
         "--all", action="store_true",
         help="Update every eligible row."
+    )
+    parser.add_argument(
+        "--skip-ready", action="store_true",
+        help="Skip rows whose FS_Status is already ready."
     )
     args = parser.parse_args()
 
@@ -65,13 +69,18 @@ def main():
             "Initialize AuxPlace tables.sql first."
         )
     query = """
-                SELECT PlaceID, Orig_Name, FSPDesID
+        SELECT PlaceID, Orig_Name, Orig_Normalized, FSPDesID
         FROM AuxPlaceTable
         WHERE Orig_PlaceType = 0
-                    AND NULLIF(TRIM(Uncertain), '') IS NULL
+            AND NULLIF(TRIM(Uncertain), '') IS NULL
         ORDER BY PlaceID
     """
     parameters = ()
+    if args.skip_ready:
+        query = query.replace(
+            "ORDER BY PlaceID",
+            "AND COALESCE(FS_Status, '') <> 'ready' ORDER BY PlaceID",
+        )
     if args.place_id is not None:
         query = query.replace("ORDER BY PlaceID",
                               "AND PlaceID = ? ORDER BY PlaceID")
@@ -100,28 +109,32 @@ def main():
     try:
         total_rows = len(rows)
         print(f"Processing {total_rows} place(s):\n", end="", flush=True)
-        for completed, (place_id, original_name, fs_description_id) in enumerate(
-                rows, start=1):
+        for completed, (place_id, original_name, normalized_name,
+                        fs_description_id) in enumerate(rows, start=1):
             try:
+                comparison_name = preferred_place_name(
+                    normalized_name, original_name)
                 search_place, score = fetch_name_match(
-                    name_for_search(original_name),
+                    name_for_search(comparison_name),
                     api_url, language, timeout, token)
                 found_name = display_value(search_place or {}, "fullName")
                 if search_place is None:
                     update_status(connection, place_id, "not_found", None)
                     report_file.write(
-                        f"PlaceID={place_id}; Original={original_name!r}; "
+                        f"\nPlaceID={place_id}\nOriginal={comparison_name!r}\n"
                         "Found=None; Score=None\n"
                     )
                     not_found += 1
                 else:
                     gemeinde_issue = False
+                    county_issue = False
                     bracket_format = bool(
                         BRACKETED_TEXT_PATTERN.search(original_name or ""))
                     retry_name = None
+                    county_retry_name = None
                     if score != 100:
                         retry_name = truncated_duplicate_level_name(
-                            original_name)
+                            comparison_name)
                         if retry_name:
                             retry_place, retry_score = fetch_name_match(
                                 retry_name, api_url, language, timeout, token)
@@ -132,12 +145,28 @@ def main():
                                     search_place, "fullName")
                                 fs_description_id = search_place.get("id")
                                 gemeinde_issue = True
+                        if score != 100:
+                            county_retry_name = name_without_county(
+                                comparison_name)
+                            if county_retry_name:
+                                county_place, county_score = fetch_name_match(
+                                    county_retry_name, api_url, language,
+                                    timeout, token)
+                                if (county_place is not None
+                                        and county_score == 100):
+                                    search_place = county_place
+                                    score = county_score
+                                    found_name = display_value(
+                                        search_place, "fullName")
+                                    fs_description_id = search_place.get("id")
+                                    county_issue = True
                     if score != 100:
                         update_status(connection, place_id, "low_score", None)
                         report_file.write(
-                            f"PlaceID={place_id}; Original={original_name!r}; "
-                            f"Found={found_name!r}; Score={score}; "
-                            f"Retry={retry_name!r}\n"
+                            f"\nPlaceID={place_id}\nOriginal={comparison_name!r}"
+                            f"\n  Found={found_name!r}; "
+                            f"\n  Score={score}; Retry={retry_name!r}; "
+                            f"CountyRetry={county_retry_name!r}\n"
                         )
                         low_score += 1
                         if delay:
@@ -160,6 +189,7 @@ def main():
                                      ";".join(filter(None, [
                                          "_BRACKET-TEXT" if bracket_format else None,
                                          "_GEMEINDE-ISSUE" if gemeinde_issue else None,
+                                         "_COUNTY" if county_issue else None,
                                      ])),
                                      "ready", None)
                         cache_type(
@@ -207,6 +237,12 @@ def temporal_years(place):
     return start, end
 
 
+def preferred_place_name(normalized_name, original_name):
+    if normalized_name and normalized_name.strip():
+        return normalized_name
+    return original_name
+
+
 def name_for_search(place_name):
     cleaned = BRACKETED_TEXT_PATTERN.sub("", place_name or "")
     cleaned = re.sub(r",\s*(?:,\s*)+", ",", cleaned)
@@ -220,6 +256,17 @@ def truncated_duplicate_level_name(place_name):
     levels = [level.strip() for level in cleaned.split(",")]
     if len(levels) >= 2 and levels[0].casefold() == levels[1].casefold():
         return ", ".join(levels[1:])
+    return None
+
+
+def name_without_county(place_name):
+    cleaned = name_for_search(place_name)
+    levels = [level.strip() for level in cleaned.split(",")]
+    if levels and re.search(r"\bCounty\b", levels[0], re.IGNORECASE):
+        levels[0] = re.sub(r"\bCounty\b", "", levels[0],
+                           flags=re.IGNORECASE)
+        levels[0] = re.sub(r"\s+", " ", levels[0]).strip(" ,")
+        return ", ".join(level for level in levels if level)
     return None
 
 

@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
     Orig_UTCModDate FLOAT,
     Language TEXT,
     Uncertain TEXT,
+    NonFSPlace TEXT,
     FSPDesID INTEGER,
     FSPID INTEGER,
-    NonFSPlace TEXT,
     FS_NameFull_en TEXT,
     FS_NameShort_en TEXT,
     FS_NameFull_de TEXT,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
     FS_PlaceType TEXT,
     FS_PlaceStatus TEXT,
     FS_ParentID TEXT,
-    FS_ReturnedID REAL,
+    FSMatchScore INTEGER,
     FS_LastUpdated FLOAT,
     FS_Status TEXT,
     FS_Error TEXT,
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
 
 -- FS_ParentID TEXT,
 
--- FS_ReturnedID REAL, -- accepted lookup score
+-- FSMatchScore INTEGER, -- accepted lookup score
 -- FS_LastUpdated FLOAT,
 -- FS_Status TEXT,
 -- FS_Error TEXT,

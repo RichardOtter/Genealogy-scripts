@@ -1,6 +1,0 @@
-CREATE TABLE IF NOT EXISTS AuxFSPlaceTypeTable (
-    FS_PlaceTypeID INTEGER PRIMARY KEY,
-    EnglishName TEXT NOT NULL,
-    TypeURL TEXT NOT NULL UNIQUE,
-    LastUpdated FLOAT
-);
