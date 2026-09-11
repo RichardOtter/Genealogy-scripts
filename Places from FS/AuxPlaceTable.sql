@@ -37,31 +37,4 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
     FOREIGN KEY (PlaceID) REFERENCES PlaceTable(PlaceID) ON DELETE CASCADE
 );
 
--- Language TEXT,
---   en or de  the lanugyaes are separate this shows which oto use ??
--- Uncertain TEXT,
---      flag if name has ~/_PROBABLY, ?/_UNCLEAR, _REGION, or _VICINITY
--- FSPDesID INTEGER,
---      FS Place description ID  The ID on web page
--- FSPID INTEGER,
---      FS Place ID
--- NonFSPlace TEXT,
---      forgot ???
--- FS_NameFull TEXT,
--- FS_NameShort TEXT,
--- FS_Abbrev TEXT,
 
--- FS_Latitude INTEGER,
--- FS_Longitude INTEGER,
--- FS_YearStart INTEGER,
--- FS_YearEnd INTEGER,
-
--- FS_PlaceType TEXT,
--- FS_PlaceStatus TEXT,
-
--- FS_ParentID TEXT,
-
--- FSMatchScore INTEGER, -- accepted lookup score
--- FS_LastUpdated FLOAT,
--- FS_Status TEXT,
--- FS_Error TEXT,

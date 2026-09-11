@@ -16,7 +16,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 DEFAULT_CONFIG = "RM-Python-config.ini"
 DEFAULT_API_URL = "https://api.familysearch.org/platform/places"
 TEMPORAL_PATTERN = re.compile(r"^([+-]?\d{1,6})?(?:/([+-]?\d{1,6})?)?$")
-BRACKETED_TEXT_PATTERN = re.compile(r"\[[^\]]*\]")
 
 
 def main():
@@ -60,16 +59,16 @@ def main():
         """
         SELECT 1
         FROM sqlite_master
-        WHERE type = 'table' AND name = 'AuxFSPlaceTypeTable'
+        WHERE type = 'table' AND name = 'LU_FSPlaceTypes'
         """
     ).fetchone()
     if type_table_exists is None:
         raise RuntimeError(
-            "AuxFSPlaceTypeTable is missing. Run "
+            "LU_FSPlaceTypes is missing. Run "
             "Initialize AuxPlace tables.sql first."
         )
     query = """
-        SELECT PlaceID, Orig_Name, Orig_Normalized, FSPDesID
+        SELECT PlaceID, Orig_Name, Orig_Normalized, FSPDesID, NonFSPlace
         FROM AuxPlaceTable
         WHERE Orig_PlaceType = 0
             AND NULLIF(TRIM(Uncertain), '') IS NULL
@@ -110,8 +109,11 @@ def main():
         total_rows = len(rows)
         print(f"Processing {total_rows} place(s):\n", end="", flush=True)
         for completed, (place_id, original_name, normalized_name,
-                        fs_description_id) in enumerate(rows, start=1):
+                        fs_description_id, non_fs_place) in enumerate(
+                            rows, start=1):
             try:
+                non_fs_flags = set(filter(
+                    None, (non_fs_place or "").split(";")))
                 comparison_name = preferred_place_name(
                     normalized_name, original_name)
                 search_place, score = fetch_name_match(
@@ -126,41 +128,42 @@ def main():
                     )
                     not_found += 1
                 else:
-                    gemeinde_issue = False
-                    county_issue = False
-                    bracket_format = bool(
-                        BRACKETED_TEXT_PATTERN.search(original_name or ""))
                     retry_name = None
                     county_retry_name = None
-                    if score != 100:
+                    score_value = scaled_score(score)
+                    if (score_value != 1000
+                            and "_GEMEINDE-ISSUE" in non_fs_flags):
                         retry_name = truncated_duplicate_level_name(
                             comparison_name)
                         if retry_name:
                             retry_place, retry_score = fetch_name_match(
                                 retry_name, api_url, language, timeout, token)
-                            if retry_place is not None and retry_score == 100:
+                            retry_score_value = scaled_score(retry_score)
+                            if retry_place is not None and retry_score_value == 1000:
                                 search_place = retry_place
                                 score = retry_score
+                                score_value = retry_score_value
                                 found_name = display_value(
                                     search_place, "fullName")
                                 fs_description_id = search_place.get("id")
-                                gemeinde_issue = True
-                        if score != 100:
-                            county_retry_name = name_without_county(
-                                comparison_name)
-                            if county_retry_name:
-                                county_place, county_score = fetch_name_match(
-                                    county_retry_name, api_url, language,
-                                    timeout, token)
-                                if (county_place is not None
-                                        and county_score == 100):
-                                    search_place = county_place
-                                    score = county_score
-                                    found_name = display_value(
-                                        search_place, "fullName")
-                                    fs_description_id = search_place.get("id")
-                                    county_issue = True
-                    if score != 100:
+                    if (score_value != 1000
+                            and "_COUNTY" in non_fs_flags):
+                        county_retry_name = name_without_county(
+                            comparison_name)
+                        if county_retry_name:
+                            county_place, county_score = fetch_name_match(
+                                county_retry_name, api_url, language,
+                                timeout, token)
+                            county_score_value = scaled_score(county_score)
+                            if (county_place is not None
+                                    and county_score_value == 1000):
+                                search_place = county_place
+                                score = county_score
+                                score_value = county_score_value
+                                found_name = display_value(
+                                    search_place, "fullName")
+                                fs_description_id = search_place.get("id")
+                    if score_value != 1000:
                         update_status(connection, place_id, "low_score", None)
                         report_file.write(
                             f"\nPlaceID={place_id}\nOriginal={comparison_name!r}"
@@ -185,12 +188,7 @@ def main():
                         not_found += 1
                     else:
                         update_place(connection, place_id,
-                                     description_id, place, score,
-                                     ";".join(filter(None, [
-                                         "_BRACKET-TEXT" if bracket_format else None,
-                                         "_GEMEINDE-ISSUE" if gemeinde_issue else None,
-                                         "_COUNTY" if county_issue else None,
-                                     ])),
+                                     description_id, place, score_value,
                                      "ready", None)
                         cache_type(
                             connection, value_from(place, "type"), api_url,
@@ -225,6 +223,12 @@ def rm_coordinate(value):
     return int(round(float(value) * 10_000_000))
 
 
+def scaled_score(value):
+    if value is None:
+        return None
+    return int(float(value) * 10)
+
+
 def temporal_years(place):
     formal = (place.get("temporalDescription", {}) or {}).get("formal")
     if not formal:
@@ -244,7 +248,7 @@ def preferred_place_name(normalized_name, original_name):
 
 
 def name_for_search(place_name):
-    cleaned = BRACKETED_TEXT_PATTERN.sub("", place_name or "")
+    cleaned = place_name or ""
     cleaned = re.sub(r",\s*(?:,\s*)+", ",", cleaned)
     cleaned = re.sub(r"\s+", " ", cleaned)
     cleaned = re.sub(r",\s*", ", ", cleaned)
@@ -330,7 +334,7 @@ def cache_type(connection, type_url, api_url, timeout, token):
     if type_id is None:
         return
     exists = connection.execute(
-        "SELECT 1 FROM AuxFSPlaceTypeTable WHERE FS_PlaceTypeID = ?",
+        "SELECT 1 FROM LU_FSPlaceTypes WHERE FS_PlaceTypeID = ?",
         (type_id,),
     ).fetchone()
     if exists:
@@ -344,7 +348,7 @@ def cache_type(connection, type_url, api_url, timeout, token):
     if label:
         connection.execute(
             """
-            INSERT OR REPLACE INTO AuxFSPlaceTypeTable
+            INSERT OR REPLACE INTO LU_FSPlaceTypes
                 (FS_PlaceTypeID, EnglishName, TypeURL, LastUpdated)
             VALUES (?, ?, ?, julianday('now') - 2415018.5)
             """,
@@ -364,8 +368,7 @@ def display_value(place, key):
     return display.get(key) if isinstance(display, dict) else None
 
 
-def update_place(connection, place_id, fs_id, place, score, format_flag,
-                 status, error):
+def update_place(connection, place_id, fs_id, place, score, status, error):
     names = place.get("names", []) if place else []
     year_start, year_end = temporal_years(place or {})
     place_status = value_from(place or {}, "status", "placeStatus")
@@ -378,8 +381,7 @@ def update_place(connection, place_id, fs_id, place, score, format_flag,
             FS_NameFull_de = ?, FS_NameShort_de = ?, FS_Abbrev = ?,
             FS_Latitude = ?, FS_Longitude = ?, FS_YearStart = ?,
             FS_YearEnd = ?, FS_PlaceType = ?, FS_PlaceStatus = ?,
-            FS_ParentID = ?, FSPDesID = ?, FSPID = ?, NonFSPlace = ?,
-            FSMatchScore = ?,
+            FS_ParentID = ?, FSPDesID = ?, FSPID = ?, FSMatchScore = ?,
             FS_LastUpdated = julianday('now') - 2415018.5,
             FS_Status = ?, FS_Error = ?
         WHERE PlaceID = ?
@@ -401,8 +403,7 @@ def update_place(connection, place_id, fs_id, place, score, format_flag,
             value_from(place.get("jurisdiction", {}) or {}, "resourceId"),
             fs_id,
             primary_id_from_place(place) if place else None,
-            format_flag,
-            int(score),
+            score,
             status,
             error,
             place_id,

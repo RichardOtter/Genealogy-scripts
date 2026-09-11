@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS AuxPlaceTable (
 CREATE INDEX IF NOT EXISTS idx_AuxPlaceTable_fsID
     ON AuxPlaceTable (Orig_fsID);
 
-CREATE TABLE IF NOT EXISTS AuxFSPlaceTypeTable (
+CREATE TABLE IF NOT EXISTS LU_FSPlaceTypes (
     FS_PlaceTypeID INTEGER PRIMARY KEY,
     EnglishName TEXT NOT NULL,
     TypeURL TEXT NOT NULL UNIQUE,
@@ -53,6 +53,36 @@ CREATE TABLE IF NOT EXISTS AuxFSPlaceTypeTable (
 
 -- Populate the place snapshot only when it is empty. FSPDesID is the
 -- FamilySearch place-description ID extracted from PlaceTable.Note.
+WITH PlaceSnapshot AS (
+    SELECT
+        PlaceID, PlaceType, Name, Abbrev, Normalized,
+        Latitude, Longitude, LatLongExact, MasterID,
+        Note, Reverse, fsID, anID, UTCModDate,
+        REPLACE(Note, CHAR(13), '') AS CleanNote
+    FROM PlaceTable
+), FSPDesIDMarker AS (
+    SELECT
+        *,
+        INSTR(UPPER(CleanNote), 'FSPID=') AS MarkerPosition
+    FROM PlaceSnapshot
+), FSPDesIDText AS (
+    SELECT
+        *,
+        CASE
+            WHEN MarkerPosition > 0 THEN TRIM(
+                SUBSTR(
+                    CleanNote,
+                    MarkerPosition + 6,
+                    INSTR(
+                        SUBSTR(CleanNote || CHAR(10), MarkerPosition + 6),
+                        CHAR(10)
+                    ) - 1
+                ),
+                ' ' || CHAR(9)
+            )
+        END AS FSPDesIDValue
+    FROM FSPDesIDMarker
+)
 INSERT INTO AuxPlaceTable (
     PlaceID, Orig_PlaceType, Orig_Name, Orig_Abbrev, Orig_Normalized,
     Orig_Latitude, Orig_Longitude, Orig_LatLongExact, Orig_MasterID,
@@ -63,35 +93,8 @@ SELECT
     PlaceID, PlaceType, Name, Abbrev, Normalized,
     Latitude, Longitude, LatLongExact, MasterID,
     Note, Reverse, fsID, anID, UTCModDate,
-    CASE
-        WHEN INSTR(UPPER(Note), 'FSPID=') > 0 THEN
-            CAST(TRIM(
-                SUBSTR(
-                    REPLACE(Note, CHAR(13), ''),
-                    INSTR(UPPER(REPLACE(Note, CHAR(13), '')), 'FSPID=') + 6,
-                    CASE
-                        WHEN INSTR(
-                            SUBSTR(
-                                REPLACE(Note, CHAR(13), ''),
-                                INSTR(UPPER(REPLACE(Note, CHAR(13), '')), 'FSPID=') + 6
-                            ),
-                            CHAR(10)
-                        ) = 0
-                        THEN LENGTH(Note)
-                        ELSE INSTR(
-                            SUBSTR(
-                                REPLACE(Note, CHAR(13), ''),
-                                INSTR(UPPER(REPLACE(Note, CHAR(13), '')), 'FSPID=') + 6
-                            ),
-                            CHAR(10)
-                        ) - 1
-                    END
-                ),
-                ' ' || CHAR(9) || CHAR(10) || CHAR(13)
-            ) AS INTEGER)
-        ELSE NULL
-    END
-FROM PlaceTable
+    CAST(FSPDesIDValue AS INTEGER)
+FROM FSPDesIDText
 WHERE NOT EXISTS (SELECT 1 FROM AuxPlaceTable);
 
 COMMIT;
