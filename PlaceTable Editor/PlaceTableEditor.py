@@ -65,13 +65,62 @@ def run_places_editor(config, db_connection, report_file):
         messagebox.showerror(
             "Database error", "The PlaceTable does not contain a Name field.")
         return
-    column_sql = ", ".join(f'"{column.replace(chr(34), chr(34) * 2)}"'
-                           for column in columns)
-    try:
-        rows = db_connection.execute(
-            f"SELECT {column_sql} FROM {table_name} "
-            f"ORDER BY \"{columns[0].replace(chr(34), chr(34) * 2)}\""
+
+    def quote_ident(name):
+        return name.replace(chr(34), chr(34) * 2)
+
+    def table_exists(name):
+        return db_connection.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
+            (name,)).fetchone() is not None
+
+    aux_table_name = "AuxPlaceTable"
+    lu_table_name = "LU_FSPlaceTypes"
+    place_key_column = columns[0]
+
+    has_aux_table = table_exists(aux_table_name)
+    aux_columns = []
+    if has_aux_table:
+        aux_columns = [
+            row[1] for row in
+            db_connection.execute(
+                f"PRAGMA table_info({aux_table_name})").fetchall()
+            if row[1] != "PlaceID"]
+
+    has_lu_table = ("FS_PlaceType" in aux_columns
+                    and table_exists(lu_table_name))
+    lu_columns = []
+    if has_lu_table:
+        lu_columns = [
+            row[1] for row in
+            db_connection.execute(
+                f"PRAGMA table_info({lu_table_name})").fetchall()
+            if row[1] != "TypeURL"]
+
+    all_columns = columns + aux_columns + lu_columns
+
+    select_parts = [f'p."{quote_ident(column)}"' for column in columns]
+    join_sql = ""
+    if has_aux_table:
+        select_parts += [
+            f'a."{quote_ident(column)}"' for column in aux_columns]
+        join_sql += (f' LEFT JOIN "{aux_table_name}" a '
+                     f'ON a."PlaceID" = p."{quote_ident(place_key_column)}"')
+    if has_lu_table:
+        select_parts += [
+            f'lu."{quote_ident(column)}"' for column in lu_columns]
+        join_sql += (f' LEFT JOIN "{lu_table_name}" lu '
+                     f'ON lu."TypeURL" = a."FS_PlaceType"')
+    column_sql = ", ".join(select_parts)
+
+    def fetch_rows():
+        return db_connection.execute(
+            f'SELECT {column_sql} FROM "{table_name}" p{join_sql} '
+            f'ORDER BY p."{quote_ident(place_key_column)}"'
         ).fetchall()
+
+    try:
+        rows = fetch_rows()
     except Exception as error:
         messagebox.showerror("Database error", str(error))
         return
@@ -155,11 +204,18 @@ def run_places_editor(config, db_connection, report_file):
     canvas.bind("<Configure>", resize_fields)
 
     note_column = columns[note_column_index]
-    display_columns = [column for column in columns if column != note_column]
+    display_columns = [
+        column for column in all_columns if column != note_column]
     display_columns.append(note_column)
 
     for row_number, column in enumerate(display_columns):
-        ttk.Label(fields_frame, text=column).grid(
+        if column in aux_columns:
+            label_text = f"Aux: {column}"
+        elif column in lu_columns:
+            label_text = f"FSType: {column}"
+        else:
+            label_text = column
+        ttk.Label(fields_frame, text=label_text).grid(
             row=row_number, column=0, sticky="nw", padx=(0, 8), pady=3)
         if column.lower() in {"note", "notes"}:
             note_frame = ttk.Frame(fields_frame)
@@ -227,7 +283,7 @@ def run_places_editor(config, db_connection, report_file):
             status_label.configure(text="0 records")
             return
         row = filtered_rows[current_index]
-        for column, value in zip(columns, row):
+        for column, value in zip(all_columns, row):
             set_field(fields[column], value)
         status_label.configure(
             text=f"Record {current_index + 1} of {len(filtered_rows)}")
@@ -299,15 +355,19 @@ def run_places_editor(config, db_connection, report_file):
         current_row = filtered_rows[current_index]
         key_column = columns[0]
         key_value = current_row[0]
+
+        def field_value(column):
+            field = fields[column]
+            if isinstance(field, tk.Text):
+                return field.get("1.0", tk.END).rstrip("\n")
+            return field.get()
+
         values = []
         for column in columns[1:]:
-            field = fields[column]
             if column == utc_mod_date_column:
                 values.append(current_row[columns.index(column)])
-            elif isinstance(field, tk.Text):
-                values.append(field.get("1.0", tk.END).rstrip("\n"))
             else:
-                values.append(field.get())
+                values.append(field_value(column))
 
         changes = [
             (column, old_value, new_value)
@@ -315,7 +375,26 @@ def run_places_editor(config, db_connection, report_file):
                 columns[1:], current_row[1:], values)
             if ("" if old_value is None else str(old_value)) != new_value
         ]
-        if not changes:
+
+        aux_start = len(columns)
+        aux_old_values = current_row[aux_start:aux_start + len(aux_columns)]
+        aux_changes = [
+            (column, old_value, field_value(column))
+            for column, old_value in zip(aux_columns, aux_old_values)
+            if ("" if old_value is None else str(old_value))
+            != field_value(column)
+        ]
+
+        lu_start = aux_start + len(aux_columns)
+        lu_old_values = current_row[lu_start:lu_start + len(lu_columns)]
+        lu_changes = [
+            (column, old_value, field_value(column))
+            for column, old_value in zip(lu_columns, lu_old_values)
+            if ("" if old_value is None else str(old_value))
+            != field_value(column)
+        ]
+
+        if not changes and not aux_changes and not lu_changes:
             messagebox.showinfo("No changes", "The record was not changed.")
             return
 
@@ -323,16 +402,64 @@ def run_places_editor(config, db_connection, report_file):
         set_clause = ", ".join(
             f'"{column.replace(chr(34), chr(34) * 2)}" = ?'
             for column in columns[1:])
+
+        lu_id_index = (lu_columns.index("FS_PlaceTypeID")
+                       if "FS_PlaceTypeID" in lu_columns else None)
+        lu_key_value = (lu_old_values[lu_id_index]
+                        if lu_id_index is not None else None)
+        if lu_changes and lu_key_value is None:
+            messagebox.showerror(
+                "No matching FS place type",
+                "This record has no matching LU_FSPlaceTypes row to update.")
+            return
+
         try:
-            db_connection.execute(
-                f'UPDATE "{table_name}" SET {set_clause} '
-                f'WHERE "{quoted_key}" = ?', values + [key_value])
+            if changes:
+                db_connection.execute(
+                    f'UPDATE "{table_name}" SET {set_clause} '
+                    f'WHERE "{quoted_key}" = ?', values + [key_value])
+            if aux_changes:
+                db_connection.execute(
+                    f'INSERT OR IGNORE INTO "{aux_table_name}" ("PlaceID") '
+                    f'VALUES (?)', (key_value,))
+                aux_set_clause = ", ".join(
+                    f'"{column.replace(chr(34), chr(34) * 2)}" = ?'
+                    for column, _, _ in aux_changes)
+                db_connection.execute(
+                    f'UPDATE "{aux_table_name}" SET {aux_set_clause} '
+                    f'WHERE "PlaceID" = ?',
+                    [new_value for _, _, new_value in aux_changes]
+                    + [key_value])
+            if lu_changes:
+                lu_set_clause = ", ".join(
+                    f'"{column.replace(chr(34), chr(34) * 2)}" = ?'
+                    for column, _, _ in lu_changes)
+                db_connection.execute(
+                    f'UPDATE "{lu_table_name}" SET {lu_set_clause} '
+                    f'WHERE "FS_PlaceTypeID" = ?',
+                    [new_value for _, _, new_value in lu_changes]
+                    + [lu_key_value])
             db_connection.commit()
-            report_file.write(
-                f"\nPlaceTable record changed: {key_column} = {key_value}\n")
-            for column, old_value, new_value in changes:
+
+            if changes:
                 report_file.write(
-                    f"{column}: ======\r\nbefore={old_value!r}\r\nafter={new_value!r}\r\n")
+                    f"\nPlaceTable record changed: {key_column} = {key_value}\n")
+                for column, old_value, new_value in changes:
+                    report_file.write(
+                        f"{column}: ======\r\nbefore={old_value!r}\r\nafter={new_value!r}\r\n")
+            if aux_changes:
+                report_file.write(
+                    f"\nAuxPlaceTable record changed: PlaceID = {key_value}\n")
+                for column, old_value, new_value in aux_changes:
+                    report_file.write(
+                        f"{column}: ======\r\nbefore={old_value!r}\r\nafter={new_value!r}\r\n")
+            if lu_changes:
+                report_file.write(
+                    "\nLU_FSPlaceTypes record changed: "
+                    f"FS_PlaceTypeID = {lu_key_value}\n")
+                for column, old_value, new_value in lu_changes:
+                    report_file.write(
+                        f"{column}: ======\r\nbefore={old_value!r}\r\nafter={new_value!r}\r\n")
             report_file.flush()
             messagebox.showinfo("Saved", f"Record {key_value} was saved.")
         except Exception as error:
@@ -340,9 +467,7 @@ def run_places_editor(config, db_connection, report_file):
             messagebox.showerror("Database error", str(error))
             return
 
-        rows = db_connection.execute(
-            f"SELECT {column_sql} FROM {table_name} "
-            f'ORDER BY "{quoted_key}"').fetchall()
+        rows = fetch_rows()
         apply_filter()
 
     def update_utc_mod_date():
@@ -375,9 +500,7 @@ def run_places_editor(config, db_connection, report_file):
             messagebox.showerror("Database error", str(error))
             return
 
-        rows = db_connection.execute(
-            f"SELECT {column_sql} FROM {table_name} "
-            f'ORDER BY "{quoted_key}"').fetchall()
+        rows = fetch_rows()
         apply_filter()
 
     ttk.Button(filter_frame, text="Apply",
