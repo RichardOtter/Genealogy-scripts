@@ -24,7 +24,7 @@ TESTS = [
     # DELIMITER TESTS
     # --------------------------------------------------------
     ("Valid delimiter",
-     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Date:\n",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Stone: VACANT\n===Date:\n",
      True),
 
     ("Corrupted delimiter",
@@ -76,8 +76,22 @@ TESTS = [
      True),
 
     ("Valid Stones 0-V",
-     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Date:\n",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Stone: VACANT\n===Date:\n",
      True),
+
+    ("Valid Stones 0-V with VACANT stone",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n"
+     "===Stone: VACANT\n===Date:\n",
+     True),
+
+    ("Valid Stones 0-V with _NOT-A-PLOT stone",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n"
+     "===Stone: _NOT-A-PLOT\n===Date:\n",
+     True),
+
+    ("Invalid Stones 0-V without VACANT stone",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Date:\n",
+     False),
 
     ("Invalid Stones 0",
      "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0\n",
@@ -95,15 +109,15 @@ TESTS = [
      False),
 
     ("0-V with Date",
-     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Date:\n",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Stone: VACANT\n===Date:\n",
      True),
 
     ("0-V with Photos",
-     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Photos:\n",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Stone: VACANT\n===Photos:\n",
      True),
 
     ("0-V with Notes",
-     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Notes:\n",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Stone: VACANT\n===Notes:\n",
      True),
 
     ("0-V with stone block present",
@@ -133,6 +147,22 @@ TESTS = [
      "===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n"
      "===Date:\n===Photos:\n===Notes:\n"
      "===Stone: VACANT\n"
+     "===Interpretation:\n===Location:\n===Table:\n===Status:\n",
+     True),
+
+    ("Uppercase STONE header rejected",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n"
+     "===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n"
+     "===Date:\n===Photos:\n===Notes:\n"
+     "===STONE: VACANT\n"
+     "===Interpretation:\n===Location:\n===Table:\n===Status:\n",
+     False),
+
+    ("Stone _NOT-A-PLOT allowed",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n"
+     "===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n"
+     "===Date:\n===Photos:\n===Notes:\n"
+     "===Stone: _NOT-A-PLOT\n"
      "===Interpretation:\n===Location:\n===Table:\n===Status:\n",
      True),
 

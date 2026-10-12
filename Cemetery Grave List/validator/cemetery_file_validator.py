@@ -6,6 +6,9 @@ import re
 # EXACT delimiter: 73 "=" + "DIV80=="
 SECTION_DELIMITER = "=" * 73 + "DIV80=="
 
+def is_stone_line(text):
+    return text.casefold().startswith("===stone:")
+
 def validate_section(lines, section_number, start_line_number, errors):
     """
     lines = list of (line_number, text)
@@ -67,12 +70,12 @@ def validate_section(lines, section_number, start_line_number, errors):
     numbered_stones = []
 
     for ln, text in lines:
-        if text.startswith("===Stone:"):
+        if is_stone_line(text):
             stone_blocks.append((ln, text))
             m2 = re.match(r"^===Stone:\s*([1-9]\d*)$", text)
             if m2:
                 numbered_stones.append((ln, int(m2.group(1))))
-            elif text.strip() == "===Stone: VACANT":
+            elif text.strip() in {"===Stone: VACANT", "===Stone: _NOT-A-PLOT"}:
                 pass
             else:
                 errors.append(f"[Section {section_number} @ line {ln}] Invalid Stone line: {text}")
@@ -82,8 +85,15 @@ def validate_section(lines, section_number, start_line_number, errors):
 
     # --- Stones = 0-V case ---
     if stones_value == 0:
-        if stone_count != 0:
-            errors.append(f"[Section {section_number} @ line {start_line_number}] Stones=0-V section cannot contain stone blocks")
+        vacant_markers = {"===Stone: VACANT", "===Stone: _NOT-A-PLOT"}
+        if stone_count != 1 or not any(
+            text.strip() in vacant_markers for _, text in stone_blocks
+        ):
+            errors.append(
+                f"[Section {section_number} @ line {start_line_number}] "
+                "Stones=0-V section must contain exactly one "
+                "===Stone: VACANT or ===Stone: _NOT-A-PLOT line"
+            )
 
         # Must contain one or more dated-entry sets (Date/Photos/Notes, each optional)
         found_sets = False
@@ -202,7 +212,7 @@ def validate_section(lines, section_number, start_line_number, errors):
         j = end_idx + 1
 
         while j < len(lines):
-            if lines[j][1].startswith("===Stone:"):
+            if is_stone_line(lines[j][1]):
                 break
 
             # Look for ===Date: with immediate ===Photos:
@@ -211,7 +221,7 @@ def validate_section(lines, section_number, start_line_number, errors):
                     # Now search for ===Notes: after Photos until next Date or Stone
                     k = j + 2
                     while k < len(lines):
-                        if lines[k][1].startswith("===Stone:"):
+                        if is_stone_line(lines[k][1]):
                             break
                         if lines[k][1].startswith("===Date:"):
                             break
