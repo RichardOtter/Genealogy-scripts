@@ -1,7 +1,9 @@
 SECTION RULES
 Sections are separated by an exact delimiter consisting of 73 "=" characters followed by "DIV80==".
 Any line containing "DIV80==" that does not match the exact delimiter is considered a corrupted delimiter.
-Each section must begin with four required header lines in this exact order: PID, Coord, Place, Stones.
+Each section must begin with five required header lines in this exact order: PID, Coord, Place, Inscription-name, Stones.
+The Inscription-name line must be exactly named ===Inscription-name: and must appear between the Place and Stones lines.
+The inscription name must be on the same line after ===Inscription-name:; an empty value produces a warning.
 If the PID line is "===PID: IGNORE_SECTION", the section is skipped entirely.
 
 STONES HEADER RULES
@@ -13,7 +15,8 @@ The integer portion indicates the number of stones historically present.
 Vacancy semantics for N-V are accepted but not yet validated.
 
 ZERO-STONE RULES (Stones = 0-V)
-No stone blocks may appear in a 0-V section.
+A 0-V section must contain exactly one special stone line: ===Stone: VACANT or ===Stone: _NOT-A-PLOT.
+Numbered stone blocks may not appear in a 0-V section.
 A 0-V section must contain at least one dated-entry set.
 A dated-entry set may contain any combination of the lines ===Date:, ===Photos:, ===Notes:.
 Each line in the set is optional, but at least one must be present.
@@ -36,7 +39,7 @@ DATED-ENTRY SET RULES FOR NUMBERED STONES
 Each numbered stone must contain at least one dated-entry set.
 A dated-entry set begins with ===Date:.
 The next line must be ===Photos: with no intervening lines.
-After ===Photos:, any number of text lines are allowed.
+Any non-empty image path after ===Photos: must start with file://./.
 A dated-entry set must contain at least one ===Notes: line somewhere after ===Photos:.
 Text lines after ===Notes: are allowed.
 A dated-entry set continues until the next ===Date: or the next ===Stone:.
@@ -79,6 +82,7 @@ HEADER =
     PID_LINE
     COORD_LINE
     PLACE_LINE
+    INSCRIPTION_NAME_LINE
     STONES_LINE ;
 
 PID_LINE =
@@ -90,6 +94,9 @@ COORD_LINE =
 
 PLACE_LINE =
     "===Place:" TEXT ;
+
+INSCRIPTION_NAME_LINE =
+    "===Inscription-name:" TEXT ;
 
 STONES_LINE =
     "===Stones:" STONES_VALUE ;
@@ -110,8 +117,13 @@ SECTION_BODY =
   | NUMBERED_STONE_BODY ;
 
 ZERO_STONE_BODY =
+    ZERO_STONE_MARKER
     { DATED_ENTRY_SET_ZERO }
     POST_STONE_BLOCK ;
+
+ZERO_STONE_MARKER =
+    "===Stone: VACANT"
+  | "===Stone: _NOT-A-PLOT" ;
 
 DATED_ENTRY_SET_ZERO =
     ( "===Date:" | "===Photos:" | "===Notes:" ) { ( "===Date:" | "===Photos:" | "===Notes:" ) } ;
@@ -129,7 +141,8 @@ STONE_BLOCK =
 
 STONE_HEADER =
     "===Stone:" INTEGER
-  | "===Stone: VACANT" ;
+  | "===Stone: VACANT"
+  | "===Stone: _NOT-A-PLOT" ;
 
 STONE_DATE =
     "===Date:" TEXT ;
@@ -171,7 +184,10 @@ DATED_ENTRY_START =
     "===Date:" TEXT ;
 
 DATED_ENTRY_PHOTOS =
-    "===Photos:" TEXT ;
+    "===Photos:" [ IMAGE_PATH ] { IMAGE_PATH } ;
+
+IMAGE_PATH =
+    "file://./" TEXT ;
 
 DATED_ENTRY_NOTES =
     "===Notes:" TEXT ;

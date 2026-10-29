@@ -9,24 +9,46 @@ SECTION_DELIMITER = "=" * 73 + "DIV80=="
 def is_stone_line(text):
     return text.casefold().startswith("===stone:")
 
-def validate_section(lines, section_number, start_line_number, errors):
+def validate_photo_paths(lines, section_number, errors):
+    for index, (line_number, text) in enumerate(lines):
+        if not text.startswith("===Photos:"):
+            continue
+
+        photo_text = text.split(":", 1)[1].strip()
+        if photo_text and not photo_text.startswith("file://./"):
+            errors.append(
+                f"[Section {section_number} @ line {line_number}] "
+                f"Image path must start with file://./: {text}"
+            )
+
+        next_index = index + 1
+        while next_index < len(lines) and not lines[next_index][1].startswith("==="):
+            photo_line_number, photo_text = lines[next_index]
+            if photo_text.strip() and not photo_text.startswith("file://./"):
+                errors.append(
+                    f"[Section {section_number} @ line {photo_line_number}] "
+                    f"Image path must start with file://./: {photo_text}"
+                )
+            next_index += 1
+
+def validate_section(lines, section_number, start_line_number, errors, warnings):
     """
     lines = list of (line_number, text)
     """
 
+    if lines and lines[0][1].startswith("===PID: IGNORE_SECTION"):
+        return
+
     # --- Structural header validation ---
-    if len(lines) < 4:
+    if len(lines) < 5:
         errors.append(f"[Section {section_number} @ line {start_line_number}] Section too short to contain required headers")
         return
 
     pid_line     = lines[0][1]
     coord_line   = lines[1][1]
     place_line   = lines[2][1]
-    stones_line  = lines[3][1]
-
-    # Ignore-section rule
-    if pid_line.startswith("===PID: IGNORE_SECTION"):
-        return
+    inscription_line = lines[3][1]
+    stones_line  = lines[4][1]
 
     # Rule 1: PID line
     if not pid_line.startswith("===PID:"):
@@ -43,10 +65,26 @@ def validate_section(lines, section_number, start_line_number, errors):
         errors.append(f"[Section {section_number} @ line {lines[2][0]}] Missing or malformed Place line")
         return
 
-    # Rule 4: Stones line
-    if not stones_line.startswith("===Stones:"):
-        errors.append(f"[Section {section_number} @ line {lines[3][0]}] Missing or malformed Stones line")
+    # Rule 4: Inscription-name line
+    if not inscription_line.startswith("===Inscription-name:"):
+        errors.append(
+            f"[Section {section_number} @ line {lines[3][0]}] "
+            "Missing or malformed Inscription-name line"
+        )
         return
+
+    if not inscription_line.split(":", 1)[1].strip():
+        warnings.append(
+            f"[Section {section_number} @ line {lines[3][0]}] "
+            "===Inscription-name: has no name on the same line"
+        )
+
+    # Rule 5: Stones line
+    if not stones_line.startswith("===Stones:"):
+        errors.append(f"[Section {section_number} @ line {lines[4][0]}] Missing or malformed Stones line")
+        return
+
+    validate_photo_paths(lines, section_number, errors)
 
     # Stones value must be integer >=1 or integer-V or 0-V
     m = re.match(r"^===Stones:\s*(?:0-V|[1-9]\d*(?:-V)?)$", stones_line)
@@ -255,6 +293,7 @@ def validate_section(lines, section_number, start_line_number, errors):
 
 def validate_file(path):
     errors = []
+    warnings = []
 
     with open(path, "r", encoding="utf-8") as f:
         lines = [(i+1, line.rstrip("\n")) for i, line in enumerate(f)]
@@ -283,7 +322,7 @@ def validate_file(path):
     # Validate each section
     for idx, sec in enumerate(sections, start=1):
         start_ln = sec[0][0]
-        validate_section(sec, idx, start_ln, errors)
+        validate_section(sec, idx, start_ln, errors, warnings)
 
     # Output
     if errors:
@@ -292,6 +331,11 @@ def validate_file(path):
             print(e)
     else:
         print("No validation errors found.")
+
+    if warnings:
+        print("Validation warnings:")
+        for warning in warnings:
+            print(warning)
 
 
 if __name__ == "__main__":

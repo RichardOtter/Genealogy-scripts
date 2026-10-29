@@ -20,9 +20,12 @@ def main():
     database_path = Path(config["FILE_PATHS"]["DB_PATH"])
     if not database_path.is_absolute():
         database_path = CONFIG_PATH.parent / database_path
+    rmnocase_path = Path(config["FILE_PATHS"]["RMNOCASE_PATH"])
 
     connection = sqlite3.connect(database_path)
     try:
+        connection.enable_load_extension(True)
+        connection.load_extension(str(rmnocase_path))
         connection.execute("PRAGMA foreign_keys = ON")
         for script_name in SQL_SCRIPTS:
             script_path = SCRIPT_DIRECTORY / script_name

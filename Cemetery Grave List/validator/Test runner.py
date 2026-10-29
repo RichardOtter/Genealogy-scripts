@@ -1,8 +1,17 @@
 import subprocess
 import tempfile
 import os
+import re
 
-def run_validator(validator_path, text):
+def run_validator(validator_path, text, add_default_inscription=True):
+    if add_default_inscription:
+        text = re.sub(
+            r"(===Place:[^\n]*\n)(===Stones:[^\n]*)",
+            r"\1===Inscription-name: Test Name\n\2",
+            text,
+            count=1,
+        )
+
     with tempfile.NamedTemporaryFile("w", delete=False, encoding="utf-8") as tmp:
         tmp.write(text)
         tmp_path = tmp.name
@@ -48,6 +57,10 @@ TESTS = [
 
     ("IGNORE_SECTION",
      "=========================================================================DIV80==\n===PID: IGNORE_SECTION\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Date:\n",
+     True),
+
+    ("Short IGNORE_SECTION",
+     "=========================================================================DIV80==\n===PID: IGNORE_SECTION\n",
      True),
 
     # --------------------------------------------------------
@@ -189,11 +202,27 @@ TESTS = [
      True),
 
     ("Text between Photos and Notes allowed",
-     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n===Date:\n===Photos:\ntext A\ntext B\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n===Date:\n===Photos:\nfile://./text A.jpg\nfile://./text B.jpg\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",
      True),
+
+    ("Invalid image path",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n===Date:\n===Photos:\nC:\\images\\grave.jpg\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",
+     False),
 
     ("No lines allowed between Date and Photos",
      "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\ntext\n===Photos:\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",
+     False),
+
+    ("Inscription name present",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Inscription-name: Johann Doe\n===Stones: 0-V\n===Stone: VACANT\n===Date:\n",
+     True),
+
+    ("Inscription name empty warns",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Inscription-name:\n===Stones: 0-V\n===Stone: VACANT\n===Date:\n",
+     True),
+
+    ("Inscription name missing",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 0-V\n===Stone: VACANT\n===Date:\n",
      False),
 ]
 
@@ -203,7 +232,11 @@ def run_all_tests(validator_path):
     passed = 0
 
     for name, sample, expected_pass in TESTS:
-        output = run_validator(validator_path, sample)
+        output = run_validator(
+            validator_path,
+            sample,
+            add_default_inscription=name != "Inscription name missing",
+        )
         ok = ("No validation errors found" in output)
         result = (ok == expected_pass)
         status = "PASS" if result else "FAIL"
