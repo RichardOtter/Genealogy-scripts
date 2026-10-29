@@ -5,6 +5,8 @@ Each section must begin with five required header lines in this exact order: PID
 The Inscription-name line must be exactly named ===Inscription-name: and must appear between the Place and Stones lines.
 The inscription name must be on the same line after ===Inscription-name:; an empty value produces a warning.
 If the PID line is "===PID: IGNORE_SECTION", the section is skipped entirely.
+Ignored sections are skipped even when they do not contain the remaining header lines.
+Header names are case-sensitive; for example, ===Inscription-name: and ===Stone: are valid, but uppercase variants are not.
 
 STONES HEADER RULES
 The Stones value may be 0-V, N, or N-V, where N is an integer greater than or equal to 1.
@@ -27,6 +29,7 @@ The number of numbered stone blocks must match the integer N.
 Stone numbers must be consecutive and strictly decreasing.
 Stone numbers must be integers greater than or equal to 1.
 VACANT stones are allowed and do not require Date or Transcription blocks.
+The special ===Stone: _NOT-A-PLOT marker is also allowed and does not require Date or Transcription blocks.
 
 STONE BLOCK STRUCTURE RULES
 Each numbered stone must contain ===Date: immediately after the stone header.
@@ -40,6 +43,9 @@ Each numbered stone must contain at least one dated-entry set.
 A dated-entry set begins with ===Date:.
 The next line must be ===Photos: with no intervening lines.
 Any non-empty image path after ===Photos: must start with file://./.
+Each file://./ image path is resolved relative to the cemetery input file and must point to an existing file.
+Only the first whitespace-delimited token on a photo line is treated as the image path; trailing descriptive annotations are allowed.
+Percent-encoded URL characters, such as %20 for a space, are decoded before the file is checked.
 A dated-entry set must contain at least one ===Notes: line somewhere after ===Photos:.
 Text lines after ===Notes: are allowed.
 A dated-entry set continues until the next ===Date: or the next ===Stone:.
@@ -58,7 +64,8 @@ A final section without a trailing delimiter is still processed.
 
 OUTPUT RULES
 All validation errors are collected and printed.
-If no errors are found, the validator reports success.
+Warnings, such as an empty inscription name, are collected and printed separately.
+If no errors are found, the validator reports success even when warnings are present.
 
 
 
@@ -187,7 +194,13 @@ DATED_ENTRY_PHOTOS =
     "===Photos:" [ IMAGE_PATH ] { IMAGE_PATH } ;
 
 IMAGE_PATH =
-    "file://./" TEXT ;
+    "file://./" URL_PATH [ PHOTO_ANNOTATION ] ;
+
+URL_PATH =
+    one or more non-whitespace URL characters ;
+
+PHOTO_ANNOTATION =
+    TEXT ;
 
 DATED_ENTRY_NOTES =
     "===Notes:" TEXT ;

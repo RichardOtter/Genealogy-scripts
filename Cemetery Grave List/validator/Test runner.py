@@ -2,6 +2,8 @@ import subprocess
 import tempfile
 import os
 import re
+from pathlib import Path
+from urllib.parse import unquote
 
 def run_validator(validator_path, text, add_default_inscription=True):
     if add_default_inscription:
@@ -17,6 +19,10 @@ def run_validator(validator_path, text, add_default_inscription=True):
         tmp_path = tmp.name
 
     try:
+        for photo_path in re.findall(r"file://\./([^\r\n]+)", text):
+            photo_path = photo_path.strip().split()[0]
+            if photo_path != "missing-image.jpg":
+                (Path(tmp_path).parent / unquote(photo_path)).touch()
         result = subprocess.run(
             ["python", validator_path, tmp_path],
             capture_output=True,
@@ -24,6 +30,11 @@ def run_validator(validator_path, text, add_default_inscription=True):
         )
         return result.stdout.strip()
     finally:
+        for photo_path in re.findall(r"file://\./([^\r\n]+)", text):
+            photo_path = photo_path.strip().split()[0]
+            image_path = Path(tmp_path).parent / unquote(photo_path)
+            if image_path.exists():
+                image_path.unlink()
         os.remove(tmp_path)
 
 
@@ -202,12 +213,20 @@ TESTS = [
      True),
 
     ("Text between Photos and Notes allowed",
-     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n===Date:\n===Photos:\nfile://./text A.jpg\nfile://./text B.jpg\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n===Date:\n===Photos:\nfile://./text-A.jpg center\nfile://./text-B.jpg detail\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",
      True),
 
     ("Invalid image path",
      "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n===Date:\n===Photos:\nC:\\images\\grave.jpg\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",
      False),
+
+    ("Missing image file",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n===Date:\n===Photos:\nfile://./missing-image.jpg\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",
+     False),
+
+    ("Encoded image path",
+     "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\n===Transcription:\n---------------------------------------------begin---DIV60--\ntext\n---------------------------------------------end-----DIV60--\n===Date:\n===Photos:\nfile://./image%20with%20spaces.jpg\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",
+     True),
 
     ("No lines allowed between Date and Photos",
      "=========================================================================DIV80==\n===PID: A\n===Coord: X\n===Place: Y\n===Stones: 1\n===Stone: 1\n===Date:\ntext\n===Photos:\n===Notes:\n===Interpretation:\n===Location:\n===Table:\n===Status:\n",

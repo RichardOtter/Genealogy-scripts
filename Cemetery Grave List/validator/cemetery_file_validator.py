@@ -2,6 +2,8 @@ import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
 import re
+from pathlib import Path
+from urllib.parse import unquote
 
 # EXACT delimiter: 73 "=" + "DIV80=="
 SECTION_DELIMITER = "=" * 73 + "DIV80=="
@@ -9,29 +11,45 @@ SECTION_DELIMITER = "=" * 73 + "DIV80=="
 def is_stone_line(text):
     return text.casefold().startswith("===stone:")
 
-def validate_photo_paths(lines, section_number, errors):
+def validate_photo_path(
+    photo_text, line_number, section_number, errors, base_directory
+):
+    photo_path = photo_text.split()[0]
+    if not photo_path.startswith("file://./"):
+        errors.append(
+            f"[Section {section_number} @ line {line_number}] "
+            f"Image path must start with file://./: {photo_text}"
+        )
+        return
+
+    relative_path = unquote(photo_path.removeprefix("file://./"))
+    resolved_path = base_directory / relative_path
+    if not resolved_path.is_file():
+        errors.append(
+            f"[Section {section_number} @ line {line_number}] "
+            f"Image file does not exist: {photo_path}"
+        )
+
+def validate_photo_paths(lines, section_number, errors, base_directory):
     for index, (line_number, text) in enumerate(lines):
         if not text.startswith("===Photos:"):
             continue
 
         photo_text = text.split(":", 1)[1].strip()
-        if photo_text and not photo_text.startswith("file://./"):
-            errors.append(
-                f"[Section {section_number} @ line {line_number}] "
-                f"Image path must start with file://./: {text}"
-            )
+        if photo_text:
+            validate_photo_path(photo_text, line_number, section_number, errors, base_directory)
 
         next_index = index + 1
         while next_index < len(lines) and not lines[next_index][1].startswith("==="):
             photo_line_number, photo_text = lines[next_index]
-            if photo_text.strip() and not photo_text.startswith("file://./"):
-                errors.append(
-                    f"[Section {section_number} @ line {photo_line_number}] "
-                    f"Image path must start with file://./: {photo_text}"
-                )
+            photo_text = photo_text.strip()
+            if photo_text:
+                validate_photo_path(photo_text, photo_line_number, section_number, errors, base_directory)
             next_index += 1
 
-def validate_section(lines, section_number, start_line_number, errors, warnings):
+def validate_section(
+    lines, section_number, start_line_number, errors, warnings, base_directory
+):
     """
     lines = list of (line_number, text)
     """
@@ -84,7 +102,7 @@ def validate_section(lines, section_number, start_line_number, errors, warnings)
         errors.append(f"[Section {section_number} @ line {lines[4][0]}] Missing or malformed Stones line")
         return
 
-    validate_photo_paths(lines, section_number, errors)
+    validate_photo_paths(lines, section_number, errors, base_directory)
 
     # Stones value must be integer >=1 or integer-V or 0-V
     m = re.match(r"^===Stones:\s*(?:0-V|[1-9]\d*(?:-V)?)$", stones_line)
@@ -322,7 +340,7 @@ def validate_file(path):
     # Validate each section
     for idx, sec in enumerate(sections, start=1):
         start_ln = sec[0][0]
-        validate_section(sec, idx, start_ln, errors, warnings)
+        validate_section(sec, idx, start_ln, errors, warnings, Path(path).resolve().parent)
 
     # Output
     if errors:
