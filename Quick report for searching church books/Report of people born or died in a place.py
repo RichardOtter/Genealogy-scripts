@@ -50,7 +50,9 @@ def main():
     print(" ".join(heading.ljust(widths[index]) for index, heading in enumerate(headings)))
     print(" ".join("-" * width for width in widths))
     for row in rows:
-        print(" ".join(str(value).ljust(widths[index]) for index, value in enumerate(row)))
+        print(" ".join(str(value).ljust(widths[index]) for index, value in enumerate(row[:5])))
+        print(f"    child of {row[5]} and {row[6]}")
+        print()
 
 
 EVENTS_SQL = """
@@ -59,6 +61,11 @@ PrimaryNames AS (
     SELECT OwnerID AS PersonID, Given, Surname
     FROM NameTable
     WHERE IsPrimary = 1
+),
+PrimaryParents AS (
+    SELECT p.PersonID, f.FatherID, f.MotherID
+    FROM PersonTable AS p
+    LEFT JOIN FamilyTable AS f ON f.FamilyID = p.ParentID
 ),
 Events AS (
     SELECT
@@ -125,9 +132,26 @@ SELECT
     e.Date AS RawDate,
     e.EventType,
     e.PlaceName,
+    CASE WHEN father.PersonID IS NULL
+         THEN 'Unknown'
+         ELSE COALESCE(father.Surname, '') ||
+              CASE WHEN father.Surname IS NOT NULL AND father.Given IS NOT NULL
+                   THEN ', ' ELSE '' END ||
+              COALESCE(father.Given, '')
+    END AS FatherName,
+    CASE WHEN mother.PersonID IS NULL
+         THEN 'Unknown'
+         ELSE COALESCE(mother.Surname, '') ||
+              CASE WHEN mother.Surname IS NOT NULL AND mother.Given IS NOT NULL
+                   THEN ', ' ELSE '' END ||
+              COALESCE(mother.Given, '')
+    END AS MotherName,
     e.SortDate
 FROM Events AS e
 LEFT JOIN PrimaryNames AS n ON n.PersonID = e.PersonID
+LEFT JOIN PrimaryParents AS pp ON pp.PersonID = e.PersonID
+LEFT JOIN PrimaryNames AS father ON father.PersonID = pp.FatherID
+LEFT JOIN PrimaryNames AS mother ON mother.PersonID = pp.MotherID
 ORDER BY e.SortDate ASC, e.PlaceName COLLATE NOCASE ASC, PersonName ASC;
 """
 
@@ -150,8 +174,25 @@ def get_report_rows(connection, event_type, place):
     parameters = (event_type, event_type, place, event_type, place, event_type, place)
     rows = connection.execute(EVENTS_SQL, parameters).fetchall()
     return [
-        (person_id, name, format_rm_date(raw_date), event_name, place_name)
-        for person_id, name, raw_date, event_name, place_name, _sort_date in rows
+        (
+            person_id,
+            name,
+            format_rm_date(raw_date),
+            event_name,
+            place_name,
+            father_name,
+            mother_name,
+        )
+        for (
+            person_id,
+            name,
+            raw_date,
+            event_name,
+            place_name,
+            father_name,
+            mother_name,
+            _sort_date,
+        ) in rows
     ]
 
 
