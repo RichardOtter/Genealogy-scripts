@@ -42,16 +42,11 @@ def main():
         print("No matching events found.")
         return
 
-    headings = ("PersonID", "PersonName", "EventDate", "EventType", "PlaceName")
-    widths = [
-        max(len(heading), *(len(str(row[index])) for row in rows))
-        for index, heading in enumerate(headings)
-    ]
-    print(" ".join(heading.ljust(widths[index]) for index, heading in enumerate(headings)))
-    print(" ".join("-" * width for width in widths))
     for row in rows:
-        print(" ".join(str(value).ljust(widths[index]) for index, value in enumerate(row[:5])))
-        print(f"    child of {row[5]} and {row[6]}")
+        person_id, name, event_date, event_type, place_name, father_name, mother_name, fsftid = row
+        print(f"RMID= {person_id}   FSFTID= {fsftid}   ")
+        print(f"{name}   {event_date} {event_type} {place_name}")
+        print(f"    child of {father_name} and {mother_name}")
         print()
 
 
@@ -146,12 +141,14 @@ SELECT
                    THEN ', ' ELSE '' END ||
               COALESCE(mother.Given, '')
     END AS MotherName,
+    COALESCE(fs.fsID, '') AS FamilySearchID,
     e.SortDate
 FROM Events AS e
 LEFT JOIN PrimaryNames AS n ON n.PersonID = e.PersonID
 LEFT JOIN PrimaryParents AS pp ON pp.PersonID = e.PersonID
 LEFT JOIN PrimaryNames AS father ON father.PersonID = pp.FatherID
 LEFT JOIN PrimaryNames AS mother ON mother.PersonID = pp.MotherID
+LEFT JOIN FamilySearchTable AS fs ON fs.rmID = e.PersonID
 ORDER BY e.SortDate ASC, e.PlaceName COLLATE NOCASE ASC, PersonName ASC;
 """
 
@@ -182,6 +179,7 @@ def get_report_rows(connection, event_type, place):
             place_name,
             father_name,
             mother_name,
+            fsftid,
         )
         for (
             person_id,
@@ -191,6 +189,7 @@ def get_report_rows(connection, event_type, place):
             place_name,
             father_name,
             mother_name,
+            fsftid,
             _sort_date,
         ) in rows
     ]
