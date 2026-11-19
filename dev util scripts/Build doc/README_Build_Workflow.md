@@ -20,10 +20,10 @@ Edit DocOutline_{project}.txt
 
 ### 1. **Build ReadMe files.py** (Modified)
 
-Builds ReadMe files from templates in `Doc/Doc-templates/` and snippets in `Doc/DocLibrary_snippets.txt`
+Builds ReadMe files from templates in `Doc/doc-sources/` and snippets in `Doc/docs-reusable-content.txt`
 
 **What it does:**
-- Reads: `Doc/Doc-templates/DocOutline_{project}.txt`
+- Reads: `Doc/doc-sources/DocOutline_{project}.txt`
 - Processes INCLUDE directives to insert snippets
 - **Outputs to:** `Doc/docs-generated/ReadMe_{project}.txt` (not to project folders!)
 - Adds version number and build date footer to each file
@@ -110,8 +110,8 @@ All ReadMe changes have been discarded.
 ### Edit and test ReadMe content safely:
 
 ```
-1. Edit the template: Doc/Doc-templates/DocOutline_{project}.txt
-   (or modify Doc/DocLibrary_snippets.txt)
+1. Edit the template: Doc/doc-sources/DocOutline_{project}.txt
+   (or modify Doc/docs-reusable-content.txt)
 
 2. Build: python "Build ReadMe files.py"
    (creates/updates Doc/docs-generated/ReadMe_{project}.txt)
@@ -178,9 +178,9 @@ Scripts are now located in: `dev util scripts/doc/`
 Configuration file: `dev util scripts/build-projects-config.yaml`
 
 Doc folders: `doc/`
-- Doc-templates/ (input templates)
+- doc-sources/ (input templates)
 - docs-generated/ (staging area, created if needed)
-- DocLibrary_snippets.txt (snippet library)
+- docs-reusable-content.txt (snippet library)
 
 ---
 

@@ -57,9 +57,9 @@ def main():
 
         # Process each doc template
         for project in project_list:
-            template_file_path = doc_folder / "Doc-templates" / F"DocOutline_{project}.txt"
+            template_file_path = doc_folder / "doc-sources" / F"DocOutline_{project}.txt"
             doc_file_path = doc_built_folder / f"ReadMe_{project}.txt"
-            lib_file_path = doc_folder / "DocLibrary_snippets.txt"
+            lib_file_path = doc_folder / "docs-reusable-content.txt"
             project_dir_path = REPO_ROOT_PATH / project
             util_info_path = project_dir_path / "_util_info.yaml"
             
