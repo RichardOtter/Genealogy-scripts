@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / '../../RMpy package')))
+sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
 
 import os
 import ctypes
@@ -296,33 +296,42 @@ def auxmedia_feature(config, db_connection, report_file):
 
         #compare database vs filesystem info
         row_update_needed = False
+        differences = []
+
         if file_size != fs_file_size:
             count_size_conflict += 1
-            report_file.write(F"\nsize differs  {media_id};  {file_path},\n"
-                              F"database value: {file_size}\n"
-                              F"filesystem    : {fs_file_size}\n\n")
+            differences.append(F"size differs\n"
+                              F"  database value: {file_size}\n"
+                              F"  filesystem    : {fs_file_size}")
             row_update_needed = True
 
         if hash != fs_hash:
             count_hash_conflict += 1
-            report_file.write(F"\nhash differs  {media_id};  {file_path},\n"
-                              F"database value: {hash}\n"
-                              F"filesystem    : {fs_hash}\n\n")
+            differences.append(F"hash differs\n"
+                              F"  database value: {hash}\n"
+                              F"  filesystem    : {fs_hash}")
             row_update_needed = True
 
         if file_mod_date != fs_file_mod_date:
             count_mod_date_conflict += 1
-            report_file.write(F"\nfile modification date differs  {media_id};  {file_path},\n"
-                              F"database value: {local_time_str(file_mod_date)}\n"
-                              F"filesystem    : {local_time_str(fs_file_mod_date)}\n\n")
+            differences.append(F"file modification date differs\n"
+                              F"  database value: {local_time_str(file_mod_date)}\n"
+                              F"  filesystem    : {local_time_str(fs_file_mod_date)}")
             row_update_needed = True
 
         if file_create_date != fs_file_create_date:
             count_create_date_conflict += 1
-            report_file.write(F"\nfile creation date differs  {media_id};  {file_path},\n"
-                              F"database value: {local_time_str(file_create_date)}\n"
-                              F"filesystem    : {local_time_str(fs_file_create_date)}\n\n")
+            differences.append(F"file creation date differs\n"
+                              F"  database value: {local_time_str(file_create_date)}\n"
+                              F"  filesystem    : {local_time_str(fs_file_create_date)}")
             row_update_needed = True
+
+        # Write all differences for this file in a single grouped block
+        if differences:
+            report_file.write(F"\n{media_id};  {file_path}\n")
+            for diff in differences:
+                report_file.write(F"  {diff}\n")
+            report_file.write("\n")
 
         if update_MODE and row_update_needed:
             update_aux_row(db_connection, fs_values)

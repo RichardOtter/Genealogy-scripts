@@ -5,19 +5,18 @@ RootsMagic utility programs.
 
 
 These utilities are written in the Python programming language, currently the
-most popular computer language in use. To run them, the Python language must
-be installed on the computer. See the instructions labeled
-"APPENDIX  Python install"
-included in each of the utility's ReadMe files.
+most popular computer language in use. To run them, the Python language
+interpreter must be installed on the computer. See the instructions labeled
+"APPENDIX  Python install" included in each of the utility's ReadMe files.
 
 Each folder contains the files needed to run a different utility app.
 Each folder contains-
-* a py text file which contains the actual utility app,
+* a py or pyw text file which contains the actual utility app,
 * a ReadeMe.txt file which contains all you need to know about how to run the utility.
-* a sample configuration file, specific for the app in the dame folder.
-  These could have been all combined into one file, but to prevent confusion
-  for new users they are separate to minimize the contents of each.
 * a copy of the folder named RMpy
+* a sample configuration file, specific for the app in the same folder.
+  These configurations could have been all merged into one file, but to prevent
+  confusion for new users they are separated to minimize the contents of each.
 
 Code common to each of the utilities is contained in the Python 
 package named: RMpy. This is the folder named RMpy in each of the utility
@@ -36,7 +35,7 @@ usually require several attempts to get the desired results due to their more
 complicated setup requirements. So these should always be run on a database copy.
 As mentioned in the individual ReadMe files, always run the utility on a database
 copy *until* you are confident of the results and affect on the database- and even
-then. make sure you have backups.
+then, make sure you have backups.
 
 Version numbers
 The collection of utilities, RM Utilities Suite, has a version number

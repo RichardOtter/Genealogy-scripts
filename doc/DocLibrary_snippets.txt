@@ -198,11 +198,11 @@ Installation using winget.
 
 1 Open a command line terminal. 
 A quick method is to right click the Windows menu icon in the file manager task 
-bar and select the Terminal command.
-Or, using just the keyboard, press the Windows key and then tap X and select 
-the Terminal command from the displayed menu.
+bar and select the Terminal command;  not the "Terminal (Admin)" command.
+Or, using just the keyboard, press and hold the Windows key and then tap X, and select 
+the Terminal command from the displayed menu. 
 
-2 Type the following command in the window and hit Enter:
+2 Type (copy and paste) the following command in the window and hit Enter:
 
     winget install --id Python.PythonInstallManager --source winget
 
@@ -215,22 +215,26 @@ The output for this command should be similar to-
 -------
 The signature for https://www.python.org/ftp/python/index-windows.json was 
 successfully verified.
-Installing Python 3.14.7.
+Installing Python 3.15.2.
 Extracting: ...............................................................✅
 
 Global shortcuts directory is not on PATH. Add it for easy access to global Python aliases.
 Directory to add: C:\Users\rotter\AppData\Local\Python\bin
 -------
+
 Ignore the last 2 lines. You won't need that functionality.
 
 
 Uninstall
 Use the Settings app in the Windows menu.
 Go to Apps=>Installed apps
-and find "Python Install Manager" and "Python 3.n.n"
-and select Uninstall from the three dot menu to the right of the names.
+and find:
+"Python Install Manager"
+and 
+"Python 3.n.n"
+and select Uninstall from the three dot menu to the right of the names for each item.
 
-or use winget
+or use winget from the command terminal:
 winget uninstall --id Python.PythonInstallManager
 winget uninstall --id Python.Python.3.nn
 
