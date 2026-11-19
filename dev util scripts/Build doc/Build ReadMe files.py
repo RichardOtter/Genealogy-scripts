@@ -44,11 +44,11 @@ def main():
         raise Exception("Problem getting the values from the top level yaml file.\n")
 
     try:
-        # Ensure Doc-built folder exists
-        doc_built_folder = doc_folder / "Doc-built"
+        # Ensure docs-generated folder exists
+        doc_built_folder = doc_folder / "docs-generated"
         doc_built_folder.mkdir(parents=True, exist_ok=True)
         
-        # Clear any existing files in the Doc-built folder
+        # Clear any existing files in the docs-generated folder
         for existing_file in doc_built_folder.glob("*"):
             if existing_file.is_file():
                 # Remove read-only attribute before sending to trash

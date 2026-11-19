@@ -9,7 +9,7 @@ Edit DocOutline_{project}.txt
          ↓
   Build ReadMe files.py
          ↓
-  Doc/Doc-built/ReadMe_{project}.txt (staging)
+  Doc/docs-generated/ReadMe_{project}.txt (staging)
          ↓
   Copy-ReadMe-to-Projects.py
          ↓
@@ -25,9 +25,9 @@ Builds ReadMe files from templates in `Doc/Doc-templates/` and snippets in `Doc/
 **What it does:**
 - Reads: `Doc/Doc-templates/DocOutline_{project}.txt`
 - Processes INCLUDE directives to insert snippets
-- **Outputs to:** `Doc/Doc-built/ReadMe_{project}.txt` (not to project folders!)
+- **Outputs to:** `Doc/docs-generated/ReadMe_{project}.txt` (not to project folders!)
 - Adds version number and build date footer to each file
-- Creates `Doc/Doc-built/` folder if it doesn't exist
+- Creates `Doc/docs-generated/` folder if it doesn't exist
 - Reads utility version from each project's `_util_info.yaml`
 
 **Run:** `python "Build ReadMe files.py"`
@@ -48,9 +48,9 @@ Built: 2026-11-19 10:15:14
 Copies staged ReadMe files from `Doc/Doc-built/` to project folders
 
 **What it does:**
-- Reads: `Doc/Doc-built/ReadMe_{project}.txt`
+- Reads: `Doc/docs-generated/ReadMe_{project}.txt`
 - Copies to: `{project}/ReadMe.txt` (overwrites existing)
-- Processes all projects from `_top_level_build_config.yaml`
+- Processes all projects from `build-projects-config.yaml`
 - Console output only (no log files)
 - **Stops on first error**
 
@@ -114,9 +114,9 @@ All ReadMe changes have been discarded.
    (or modify Doc/DocLibrary_snippets.txt)
 
 2. Build: python "Build ReadMe files.py"
-   (creates/updates Doc/Doc-built/ReadMe_{project}.txt)
+   (creates/updates Doc/docs-generated/ReadMe_{project}.txt)
 
-3. Review the file: Doc/Doc-built/ReadMe_{project}.txt
+3. Review the file: Doc/docs-generated/ReadMe_{project}.txt
    (project folders are NOT affected yet!)
 
 4. If happy, copy: python "Copy-ReadMe-to-Projects.py"
@@ -179,7 +179,7 @@ Configuration file: `dev util scripts/build-projects-config.yaml`
 
 Doc folders: `doc/`
 - Doc-templates/ (input templates)
-- Doc-built/ (staging area, created if needed)
+- docs-generated/ (staging area, created if needed)
 - DocLibrary_snippets.txt (snippet library)
 
 ---

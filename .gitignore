@@ -29,7 +29,7 @@ DB/
 # ignore generated files
 MediaFiles_HASH*
 DEV_REPORT*.txt
-Doc-built/
+docs-generated/
 
 # ignore files and folders starting with
 HIDE_*

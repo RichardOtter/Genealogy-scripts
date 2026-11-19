@@ -4,7 +4,7 @@ import shutil
 from pathlib import Path
 import yaml  # type: ignore
 
-# This script copies ReadMe files from Doc/Doc-built staging folder
+# This script copies ReadMe files from Doc/docs-generated staging folder
 # to their respective project folders, overwriting existing files.
 #
 # This allows working on ReadMe content without immediately affecting
@@ -25,7 +25,7 @@ def main():
     
     TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
     doc_folder = REPO_ROOT_PATH / "doc"
-    doc_built_folder = doc_folder / "Doc-built"
+    doc_built_folder = doc_folder / "docs-generated"
 
     try:
         top_level_config_path = DEV_UTIL_DIR / TOP_LEVEL_CONFIG_NAME
@@ -43,7 +43,7 @@ def main():
         return 1
 
     try:
-        # Copy each ReadMe file from Doc-built to project folder
+        # Copy each ReadMe file from docs-generated to project folder
         for project in project_list:
             source_file = doc_built_folder / f"ReadMe_{project}.txt"
             destination_file = REPO_ROOT_PATH / project / "ReadMe.txt"
