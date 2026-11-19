@@ -20,7 +20,7 @@ def main():
     # CONSTANTS
     REPO_ROOT_PATH = Path(
         r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts")
-    TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
+    TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
     VERSION_REPLACE_TEXT = r'UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE'
 
     try:

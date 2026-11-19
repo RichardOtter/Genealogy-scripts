@@ -23,7 +23,7 @@ def main():
     DEV_UTIL_DIR = SCRIPT_DIR.parent
     REPO_ROOT_PATH = DEV_UTIL_DIR.parent
     
-    TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
+    TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
     doc_folder = REPO_ROOT_PATH / "doc"
     doc_built_folder = doc_folder / "Doc-built"
 

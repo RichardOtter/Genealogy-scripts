@@ -1,6 +1,6 @@
 # ReadMe Build Workflow
 
-This directory contains three scripts that work together to manage ReadMe documentation for all projects listed in _top_level_build_config.yaml in a safe, staged workflow.
+This directory contains three scripts that work together to manage ReadMe documentation for all projects listed in build-projects-config.yaml in a safe, staged workflow.
 
 ## Workflow Overview
 
@@ -144,7 +144,7 @@ All ReadMe changes have been discarded.
 
 ## Configuration
 
-All scripts read projects from: `../dev util scripts/_top_level_build_config.yaml`
+All scripts read projects from: `../dev util scripts/build-projects-config.yaml`
 
 ```yaml
 ProjectList:
@@ -175,7 +175,7 @@ Scripts are now located in: `dev util scripts/doc/`
 - Copy-ReadMe-to-Projects.py
 - Discard-ReadMe-Changes.py
 
-Configuration file: `dev util scripts/_top_level_build_config.yaml`
+Configuration file: `dev util scripts/build-projects-config.yaml`
 
 Doc folders: `doc/`
 - Doc-templates/ (input templates)

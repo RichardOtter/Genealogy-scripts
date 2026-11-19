@@ -1,9 +1,11 @@
 import os
+import stat
 import ctypes
 from pathlib import Path
 import yaml    # type: ignore
 from datetime import datetime
 from pathlib import Path
+from send2trash import send2trash
 
 # As a first step, this build script builds from local source
 # it does not get "fresh files" from GitHub
@@ -21,7 +23,7 @@ def main():
     DEV_UTIL_DIR = SCRIPT_DIR.parent
     REPO_ROOT_PATH = DEV_UTIL_DIR.parent
     
-    TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
+    TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
     VERSION_REPLACE_TEXT = r'DOC_VERSION_NUMBER_RM_UTILS_OVERRIDE'
     doc_folder = REPO_ROOT_PATH / "doc"
 
@@ -45,6 +47,13 @@ def main():
         # Ensure Doc-built folder exists
         doc_built_folder = doc_folder / "Doc-built"
         doc_built_folder.mkdir(parents=True, exist_ok=True)
+        
+        # Clear any existing files in the Doc-built folder
+        for existing_file in doc_built_folder.glob("*"):
+            if existing_file.is_file():
+                # Remove read-only attribute before sending to trash
+                os.chmod(existing_file, stat.S_IWRITE)
+                send2trash(str(existing_file))
 
         # Process each doc template
         for project in project_list:
@@ -81,6 +90,9 @@ def main():
                 doc_final.write(f"Utility Version: {utility_version}\n")
                 doc_final.write(f"Built: {time_stamp_now()}\n")
                 doc_final.write("=" * 80 + "\n")
+            
+            # Make the generated file read-only
+            os.chmod(doc_file_path, stat.S_IREAD)
     except (Exception) as e:
         print(e)
     finally:

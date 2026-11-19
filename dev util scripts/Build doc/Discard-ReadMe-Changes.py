@@ -30,7 +30,7 @@ def main():
     DEV_UTIL_DIR = SCRIPT_DIR.parent
     REPO_ROOT_PATH = DEV_UTIL_DIR.parent
     
-    TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
+    TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
 
     try:
         top_level_config_path = DEV_UTIL_DIR / TOP_LEVEL_CONFIG_NAME

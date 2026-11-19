@@ -1,5 +1,5 @@
 =========================================================================DIV80==
-Save External Files/ Media Files Information to RM Database
+Save External Files / Media Files Information to RM Database
 ExternalFilesInfo.py
 INCLUDE: LIB_INTRO
 =========================================================================DIV80==
