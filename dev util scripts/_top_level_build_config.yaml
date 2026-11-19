@@ -13,7 +13,7 @@ ProjectList:
  - Color from group
  - Convert fact
  - Group from SQL
- - List citations for PersonID
+ - List citations for personID
  - Lump sources
  - Modify citation list
  - Run SQL

@@ -14,7 +14,7 @@ def main():
     # Handle double-click (no args)
     if len(sys.argv) == 1:
         print("ERROR: Missing required argument.")
-        print("Usage: python dbtool.py [production|test|local_test|reset]")
+        print("Usage: python DB_util.py [production|test|local_test|reset]")
         print()
         input("Press Enter to exit...")
         sys.exit(1)

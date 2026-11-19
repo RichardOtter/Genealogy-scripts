@@ -8,24 +8,26 @@ from pathlib import Path
 # As a first step, this build script builds from local source
 # it does not get "fresh files" from GitHub
 
-# this file lives in the dir:  repo root/dev util scripts
-# the top level yaml config file is also here.
-
+# this file lives in the dir:  repo root/dev util scripts/doc
+# the top level yaml config file is in: repo root/dev util scripts
+# the doc folder structure is at: repo root/doc
 
 # ===================================================DIV60==
 def main():
 
     # CONSTANTS
-    REPO_ROOT_PATH = Path(
-        r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts")
+    # Navigate up two levels from this script's location to repo root
+    SCRIPT_DIR = Path(__file__).resolve().parent
+    DEV_UTIL_DIR = SCRIPT_DIR.parent
+    REPO_ROOT_PATH = DEV_UTIL_DIR.parent
+    
     TOP_LEVEL_CONFIG_NAME = r"_top_level_build_config.yaml"
-    VERSION_REPLACE_TEXT = r'UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE'
+    VERSION_REPLACE_TEXT = r'DOC_VERSION_NUMBER_RM_UTILS_OVERRIDE'
     doc_folder = REPO_ROOT_PATH / "doc"
 
     try:
         time_stamp = time_stamp_now("file")
-        dev_util_fldr_path= REPO_ROOT_PATH / "dev util scripts"
-        top_level_config_path = dev_util_fldr_path / TOP_LEVEL_CONFIG_NAME
+        top_level_config_path = DEV_UTIL_DIR / TOP_LEVEL_CONFIG_NAME
 
         if (not Path(top_level_config_path).exists()):
             print("Can't find the top level config file.\n")
@@ -40,14 +42,27 @@ def main():
         raise Exception("Problem getting the values from the top level yaml file.\n")
 
     try:
+        # Ensure Doc-built folder exists
+        doc_built_folder = doc_folder / "Doc-built"
+        doc_built_folder.mkdir(parents=True, exist_ok=True)
+
         # Process each doc template
         for project in project_list:
-            project_dir_path = REPO_ROOT_PATH / project
-            template_file_path = doc_folder / F"DocOutline_{project}.txt"
-            # doc_file_path = doc_folder / F"docFinal-{project}.txt"
-            doc_file_path = project_dir_path/ "ReadMe.txt"
+            template_file_path = doc_folder / "Doc-templates" / F"DocOutline_{project}.txt"
+            doc_file_path = doc_built_folder / f"ReadMe_{project}.txt"
             lib_file_path = doc_folder / "DocLibrary_snippets.txt"
-            print (template_file_path)
+            project_dir_path = REPO_ROOT_PATH / project
+            util_info_path = project_dir_path / "_util_info.yaml"
+            
+            # Get utility version from project's _util_info.yaml
+            utility_version = "Unknown"
+            if util_info_path.exists():
+                with open(util_info_path, 'r') as util_info:
+                    util_doc = yaml.safe_load(util_info)
+                    if util_doc and "Version" in util_doc:
+                        utility_version = util_doc["Version"]
+            
+            print(f"Building: {doc_file_path}")
             with open(template_file_path, 'r') as doc_template, \
                 open(doc_file_path, 'w') as doc_final:
                 
@@ -58,6 +73,14 @@ def main():
                             doc_final.write(lib_line)
                     else:
                         doc_final.write(line)
+                
+                # Add version and build date footer
+                doc_final.write("\n\n")
+                doc_final.write("=" * 80 + "\n")
+                doc_final.write(f"Suite Version: {suite_version}\n")
+                doc_final.write(f"Utility Version: {utility_version}\n")
+                doc_final.write(f"Built: {time_stamp_now()}\n")
+                doc_final.write("=" * 80 + "\n")
     except (Exception) as e:
         print(e)
     finally:

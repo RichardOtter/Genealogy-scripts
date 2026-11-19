@@ -28,7 +28,8 @@ DB/
 
 # ignore generated files
 MediaFiles_HASH*
-DEV_REPORT*.txt 
+DEV_REPORT*.txt
+Doc-built/
 
 # ignore files and folders starting with
 HIDE_*
