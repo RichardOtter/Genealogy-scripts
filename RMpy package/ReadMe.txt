@@ -61,7 +61,7 @@ now_RMDate()
 now_RMSortDate()
 
 to_RMDate(DateStr)
-from_RMDate(RMDate, form)
+RMDate_str_TO_en_str(RMDate, form)
 to_RMSortDate(RMDate)
 from_RMSortDate(RMSortDate : int) -> str
 
@@ -89,7 +89,7 @@ OK
 now_RMDate()
 now_RMSortDate()
 to_RMDate(DateStr)      limited to ISO std dates
-from_RMDate(RMDate, form)
+RMDate_str_TO_en_str(RMDate, form)
 to_RMSortDate(RMDate)
 
 not working for all supported types
@@ -116,19 +116,19 @@ PROBLEMS
 # 28                year
 from_RMSortDate->RMDate     wrong              out_RMDate_from_SortDate='D.+19210000..+63830000..'
 from_RMSortDate->std        wrong              out_std_fmt_from_DB_SortDate='19216383'
-from_RMDate->std            OK
+RMDate_str_TO_en_str->std            OK
 to_RMSortDate(RMDate)       OK
 
 # 30          month
 from_RMSortDate->RMDate     wrong               out_RMDate_from_SortDate='D.+63830100..+63830000..'
 from_RMSortDate->std        wrong               out_std_fmt_from_DB_SortDate='January 63836383'
-from_RMDate->std            OK
+RMDate_str_TO_en_str->std            OK
 to_RMSortDate(RMDate)       OK
 
 # 29      day month
 from_RMSortDate->RMDate     wrong               out_RMDate_from_SortDate='D.+63830113..+63830000..'
 from_RMSortDate->std        wrong               out_std_fmt_from_DB_SortDate='13 January 63836383'
-from_RMDate->std            OK
+RMDate_str_TO_en_str->std            OK
 to_RMSortDate(RMDate)       OK
 but these came after printout
 can only concatenate str (not "int") to str

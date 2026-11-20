@@ -181,7 +181,7 @@ HAVING COUNT() > 1;
         OwnerID = select_name_from_list(rows)
     elif (number_of_names == 1):
         OwnerID = rows[0][0]
-        temp_date = RMpy.RMDate.from_RMDate(
+        temp_date = RMpy.RMDate.RMDate_str_TO_en_str(
             rows[0][1], RMpy.RMDate.Format.SHORT)
         print('Found one name with more than one citation.\n' +
               F'{rows[0][0]:<5}:    {temp_date:15} : '
@@ -233,7 +233,7 @@ def select_name_from_list(rows):
 
     for i in range(0, len(rows)):
         # print(i, rows[i-1][1], rows[i-1][2], rows[i-1][3], rows[i-1][4])
-        temp_date = RMpy.RMDate.from_RMDate(
+        temp_date = RMpy.RMDate.RMDate_str_TO_en_str(
             rows[i][1], RMpy.RMDate.Format.SHORT)
         print(F'{i+1:<5}:{temp_date:15} : '
               F'{rows[i][2]} {rows[i][3]} {rows[i][4]} {rows[i][5]}')
@@ -307,7 +307,7 @@ HAVING COUNT() > 1;
             'No events with more than one citation found. Try again.')
     elif number_of_events == 1:
         EventID = rows[0][0]
-        temp_date = RMpy.RMDate.from_RMDate(
+        temp_date = RMpy.RMDate.RMDate_str_TO_en_str(
             rows[0][2], RMpy.RMDate.Format.SHORT)
         print('Found one event with more than one citation.\n' +
               F'{rows[0][1]}:    {temp_date}  {rows[0][3]}\n\n')
@@ -388,7 +388,7 @@ HAVING COUNT() > 1;
         OwnerID = select_fact_from_list(rows)
     elif number_of_events == 1:
         OwnerID = rows[0][0]
-        temp_date = RMpy.RMDate.from_RMDate(
+        temp_date = RMpy.RMDate.RMDate_str_TO_en_str(
                                 rows[0][2], RMpy.RMDate.Format.SHORT)
         print('Found one event with more than one citation.\n' +
               F'{rows[0][0]:<5}:{rows[0][1]}    {temp_date}'
@@ -439,7 +439,7 @@ def select_fact_from_list(rows):
 
     # et.EventID, ftt.Name, et.Date, et.Details
     for i in range(0, len(rows)):
-        temp_date = RMpy.RMDate.from_RMDate(
+        temp_date = RMpy.RMDate.RMDate_str_TO_en_str(
             rows[i][2], RMpy.RMDate.Format.SHORT)
         message = F'{i+1:<5}{rows[i][1]:15}: {temp_date:15}{rows[i][3]}'
         print(message)
