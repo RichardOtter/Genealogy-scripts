@@ -23,7 +23,8 @@ def main():
     VERSION_REPLACE_TEXT = r'UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE'
 
     try:
-        time_stamp = time_stamp_now("file")
+        now = datetime.now()
+        time_stamp = time_stamp_now("file", now)
         dev_util_fldr_path = REPO_ROOT_PATH / "dev util scripts"
         top_level_config_path = (dev_util_fldr_path / TOP_LEVEL_CONFIG_NAME)
 
@@ -117,6 +118,9 @@ def main():
         with open(py_file_to_edit, "w") as sources:
             for line in lines:
                 sources.write(re.sub(VERSION_REPLACE_TEXT, version_long, line))
+        
+        # Normalize modification time for consistency
+        set_file_mtime(py_file_to_edit, now)
 
     make_zipfile(
         release_dir_path / (str(distribution_dir_name) + ".zip"),
@@ -176,15 +180,23 @@ def make_zipfile(output_file_path: Path, source_dir: Path):
 
 
 # ===================================================DIV60==
-def time_stamp_now(type=""):
+def time_stamp_now(type="", dt=None):
 
     # return a TimeStamp string
-    now = datetime.now()
+    if dt is None:
+        dt = datetime.now()
     if type == '':
-        dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+        dt_string = dt.strftime("%Y-%m-%d %H:%M:%S")
     elif type == 'file':
-        dt_string = now.strftime("%Y-%m-%d_%H%M%S")
+        dt_string = dt.strftime("%Y-%m-%d_%H%M%S")
     return dt_string
+
+
+# ===================================================DIV60==
+def set_file_mtime(file_path: Path, dt: datetime):
+    """Set file modification and access times to the given datetime"""
+    timestamp = dt.timestamp()
+    os.utime(file_path, (timestamp, timestamp))
 
 
 # ===================================================DIV60==
