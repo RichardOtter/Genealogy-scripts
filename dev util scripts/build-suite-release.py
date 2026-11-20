@@ -1,5 +1,4 @@
 import os
-import ctypes
 from pathlib import Path
 import yaml    # type: ignore
 from datetime import datetime
@@ -34,6 +33,7 @@ def main():
         with open(top_level_config_path, 'r') as top_lev:
             doc = yaml.safe_load(top_lev)
             suite_version = doc["SuiteVersion"]
+            build_type = doc.get("BuildType", "")
             suite_name = doc["SuiteName"]
             project_root_dir_path = doc["ProjectRootDirPath"]
             project_list = doc["ProjectList"]
@@ -41,7 +41,7 @@ def main():
         print("Problem getting the values from the top level yaml file.\n")
         exit()
 
-    distribution_dir_name = F"{suite_name}_v{suite_version}"
+    distribution_dir_name = F"{suite_name}_v{suite_version}" + (F" {build_type}" if build_type else "")
     release_dir_name = F"Release {distribution_dir_name} {time_stamp}"
     release_dir_path = Path(project_root_dir_path) / release_dir_name
     distribution_dir_path = release_dir_path / distribution_dir_name
@@ -74,7 +74,11 @@ def main():
             pause_with_message("Press Enter to continue, window will close")
             exit()
 
-        version_long = F"{utility_version}   {time_stamp}"
+        # Append build type to utility version if it exists
+        if build_type:
+            version_long = F"{utility_version} {build_type}   {time_stamp}"
+        else:
+            version_long = F"{utility_version}   {time_stamp}"
 
         #  copy the files and folders that will be distributed in the zip
 
@@ -98,10 +102,15 @@ def main():
             if pyw_file_to_edit.exists():
                 py_file_to_edit = pyw_file_to_edit
             else:
-                raise FileNotFoundError(
-                    f"Could not find entry point file for {util_name}: "
-                    f"{py_file_to_edit.name} or {pyw_file_to_edit.name}"
-                )
+                # Check if this is a package (look for __init__.py in a subfolder)
+                package_init = distribution_dir_path / project / util_name / "__init__.py"
+                if package_init.exists():
+                    py_file_to_edit = package_init
+                else:
+                    raise FileNotFoundError(
+                        f"Could not find entry point file for {util_name}: "
+                        f"{py_file_to_edit.name}, {pyw_file_to_edit.name}, or {package_init}"
+                    )
 
         with open(py_file_to_edit, "r") as sources:
             lines = sources.readlines()
@@ -179,20 +188,10 @@ def time_stamp_now(type=""):
 
 
 # ===================================================DIV60==
-def launched_from_explorer():
-    # Buffer for up to 20 PIDs
-    arr = (ctypes.c_uint * 20)()
-    count = ctypes.windll.kernel32.GetConsoleProcessList(arr, 10)
-    return count == 2
-
-
-# ===================================================DIV60==
 def pause_with_message(message=None):
-    # Don't pause when running from a terminal or when input output is redirected
-    if (message != None):
+    if message is not None:
         print(str(message))
-    if launched_from_explorer():
-        input("\n" "Press the <Enter> key to continue...")
+    input("\nPress the <Enter> key to continue...")
     return
 
 
