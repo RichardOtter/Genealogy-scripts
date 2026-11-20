@@ -59,7 +59,9 @@ Next, run the utility by double clicking the pyw file.
 A window appears, enter the PersonID of the person to be reported on.
 Hit Enter or click the Generate button.
 
-The report appears in the window and is also copied to the clipboard. If Auto-close is selected, the window closes after the configured delay.
+The short report appears in the window and is also copied to the clipboard.
+When Auto-close is selected (default), the window closes after the configured delay
+but the data remains on the clipboard ready to paste as needed.
 
 
 =========================================================================DIV80==
@@ -90,4 +92,6 @@ any suggestions ?
 INCLUDE: LIB_FEEDBACK
 =========================================================================DIV80==
 INCLUDE: LIB_DISTRIBUTION
-=========================================================================DIV80==
+
+
+

@@ -62,8 +62,11 @@ remains intact after use. At that point, run this utility of your
 =========================================================================DIV80==
 Compatibility
 
-Tested with a RootsMagic v 11.0.4 database
-using Python for Windows v3.14   64bit
+Tested with a RootsMagic v 12.1.3 database
+using Python for Windows v3.15.2   64bit
+
+RM versions 8 and later will probably work, but have not been recently tested.
+Much earlier version of Python, say after 3.10 will also probably work.
 
 The python script file has not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
@@ -174,7 +177,7 @@ DUP_FILENAMES
     Lists files that have the same filename. This is not usually a problem, but
     being aware of the duplicate names may help your organizing efforts.
 
-HASH_FILE
+HASH_FILE     (deprecated)
     Generates a text file containing a listing of each media file's name,
     location and HASH value, currently set to use MD5.
     https://en.wikipedia.org/wiki/MD5
@@ -244,8 +247,10 @@ the [FILE_PATHS] section are needed.
 Save the config file but leave it open in Notepad.
 
 =========-
-TODO
-CONTINUE TO FILL IN TH CONFIG FILE
+See the Notes section below to help you determine which features to enable.
+It is suggested that for your first run, leave the CHECK_FILES option on and
+the others OFF.
+After you have a successful run, you can try the other options.
 
 =========-
 Double click the "TestExternalFiles.py" file in the working folder
@@ -338,6 +343,7 @@ I suggest that you organize your file and folders so that ignored folders
 all have the same name, even though there may be many of them in different
 locations in the media folder.
 
+
 =========-
 SEARCH_ROOT_FLDR_PATH
 The folder specified in RM's preferences as the Media folder is not 
@@ -413,7 +419,6 @@ REPORT_FILE_DISPLAY_APP
 RMNOCASE_PATH
 SEARCH_ROOT_FLDR_PATH
 HASH_FILE_FLDR_PATH
-
 
 
 =========-
@@ -662,17 +667,17 @@ APPENDIX  Python install
 Install Python using the "winget" command line package manager.
 
 It is also possible to install from the Microsoft Store or from the 
-Python.org web site, but I only recommend the winget method.
+Python.org web site but only the winget method is described here.
 
 Installation using winget.
 
 1 Open a command line terminal. 
 A quick method is to right click the Windows menu icon in the file manager task 
-bar and select the Terminal command.
-Or, using just the keyboard, press the Windows key and then tap X and select 
-the Terminal command from the displayed menu.
+bar and select the Terminal command;  not the "Terminal (Admin)" command.
+Or, using just the keyboard, press and hold the Windows key and then tap X, and select 
+the Terminal command from the displayed menu. 
 
-2 Type the following command in the window and hit Enter:
+2 Type (copy and paste) the following command in the window and hit Enter:
 
     winget install --id Python.PythonInstallManager --source winget
 
@@ -685,22 +690,26 @@ The output for this command should be similar to-
 -------
 The signature for https://www.python.org/ftp/python/index-windows.json was 
 successfully verified.
-Installing Python 3.14.7.
+Installing Python 3.15.2.
 Extracting: ...............................................................✅
 
 Global shortcuts directory is not on PATH. Add it for easy access to global Python aliases.
 Directory to add: C:\Users\rotter\AppData\Local\Python\bin
 -------
+
 Ignore the last 2 lines. You won't need that functionality.
 
 
 Uninstall
 Use the Settings app in the Windows menu.
 Go to Apps=>Installed apps
-and find "Python Install Manager" and "Python 3.n.n"
-and select Uninstall from the three dot menu to the right of the names.
+and find:
+"Python Install Manager"
+and 
+"Python 3.n.n"
+and select Uninstall from the three dot menu to the right of the names for each item.
 
-or use winget
+or use winget from the command terminal:
 winget uninstall --id Python.PythonInstallManager
 winget uninstall --id Python.Python.3.nn
 
@@ -836,4 +845,14 @@ Everyone is free to use this utility. However, instead of
 distributing it yourself, please instead distribute the URL
 of my website where I describe it- https://RichardOtter.github.io
 
-=========================================================================DIV80==
+
+
+
+
+
+
+================================================================================
+Suite Version: 1.1.0
+Utility Version: 1.9.0
+Built: 2026-11-19 21:19:06
+================================================================================

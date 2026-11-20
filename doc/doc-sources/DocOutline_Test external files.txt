@@ -84,7 +84,7 @@ DUP_FILENAMES
     Lists files that have the same filename. This is not usually a problem, but
     being aware of the duplicate names may help your organizing efforts.
 
-HASH_FILE
+HASH_FILE     (deprecated)
     Generates a text file containing a listing of each media file's name,
     location and HASH value, currently set to use MD5.
     https://en.wikipedia.org/wiki/MD5
@@ -111,8 +111,10 @@ INCLUDE: LIB_STEPS_2
 Save the config file but leave it open in Notepad.
 
 =========-
-TODO
-CONTINUE TO FILL IN TH CONFIG FILE
+See the Notes section below to help you determine which features to enable.
+It is suggested that for your first run, leave the CHECK_FILES option on and
+the others OFF.
+After you have a successful run, you can try the other options.
 
 =========-
 Double click the "TestExternalFiles.py" file in the working folder
@@ -205,6 +207,7 @@ I suggest that you organize your file and folders so that ignored folders
 all have the same name, even though there may be many of them in different
 locations in the media folder.
 
+
 =========-
 SEARCH_ROOT_FLDR_PATH
 The folder specified in RM's preferences as the Media folder is not 
@@ -280,7 +283,6 @@ REPORT_FILE_DISPLAY_APP
 RMNOCASE_PATH
 SEARCH_ROOT_FLDR_PATH
 HASH_FILE_FLDR_PATH
-
 
 
 =========-
@@ -405,4 +407,7 @@ TODO
 INCLUDE: LIB_FEEDBACK
 =========================================================================DIV80==
 INCLUDE: LIB_DISTRIBUTION
-=========================================================================DIV80==
+
+
+
+

@@ -3,6 +3,7 @@ import ctypes
 import shutil
 from pathlib import Path
 import yaml  # type: ignore
+import stat
 
 # This script copies ReadMe files from Doc/docs-generated staging folder
 # to their respective project folders, overwriting existing files.
@@ -53,7 +54,21 @@ def main():
                 raise FileNotFoundError(
                     f"Source file not found: {source_file}")
 
-            # Copy file (overwrites destination)
+            # If destination exists and is read-only, make it writable and remove it
+            if destination_file.exists():
+                # Make file writable if it's read-only
+                current_permissions = destination_file.stat().st_mode
+                if not (current_permissions & stat.S_IWUSR):
+                    destination_file.chmod(destination_file.stat().st_mode | stat.S_IWUSR)
+                
+                # Move to trash (send2trash for better UX, falls back to remove)
+                try:
+                    import send2trash
+                    send2trash.send2trash(str(destination_file))
+                except ImportError:
+                    destination_file.unlink()
+
+            # Copy file from docs-generated (preserves read-only attribute)
             shutil.copy2(source_file, destination_file)
             print(f"✓ Copied: {project}")
 

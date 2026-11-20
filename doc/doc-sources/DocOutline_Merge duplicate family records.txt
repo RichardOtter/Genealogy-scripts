@@ -18,8 +18,8 @@ citations, media, children etc to the remaining family record.
 CHild links will not be duplicated in the merge.
 
 If no duplicated family records are found, that result is displayed in the
-report file and no changes were made. Thus, this utility can be run as a
-diagnostic tool to detect problems.
+report file and no changes are made. Thus, this utility can be run as a
+diagnostic tool to detect a duplication problem that may not have been found..
 
 =========================================================================DIV80==
 INCLUDE: LIB_BACKUPS_SMALL_CHANGES

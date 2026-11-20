@@ -33,7 +33,7 @@ family records.
 
 There appears to be a bug in FamilySearch tools when adding people where in
 certain circumstances, duplicate family records are created.
-This is visible in RM when a person is shown to have the same spouse more
+This is visible in RM as a person is shown to have the same spouse more
 than once. 
 
 The utility will delete one of the spousal connections, moving all attached
@@ -41,8 +41,8 @@ citations, media, children etc to the remaining family record.
 CHild links will not be duplicated in the merge.
 
 If no duplicated family records are found, that result is displayed in the
-report file and no changes were made. Thus, this utility can be run as a
-diagnostic tool to detect problems.
+report file and no changes are made. Thus, this utility can be run as a
+diagnostic tool to detect a duplication problem that may not have been found..
 
 =========================================================================DIV80==
 Backups
@@ -56,8 +56,11 @@ are the ones desired.
 =========================================================================DIV80==
 Compatibility
 
-Tested with a RootsMagic v 11.0.4 database
-using Python for Windows v3.14   64bit
+Tested with a RootsMagic v 12.1.3 database
+using Python for Windows v3.15.2   64bit
+
+RM versions 8 and later will probably work, but have not been recently tested.
+Much earlier version of Python, say after 3.10 will also probably work.
 
 The python script file has not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
@@ -316,11 +319,11 @@ Installation using winget.
 
 1 Open a command line terminal. 
 A quick method is to right click the Windows menu icon in the file manager task 
-bar and select the Terminal command.
-Or, using just the keyboard, press the Windows key and then tap X and select 
-the Terminal command from the displayed menu.
+bar and select the Terminal command;  not the "Terminal (Admin)" command.
+Or, using just the keyboard, press and hold the Windows key and then tap X, and select 
+the Terminal command from the displayed menu. 
 
-2 Type the following command in the window and hit Enter:
+2 Type (copy and paste) the following command in the window and hit Enter:
 
     winget install --id Python.PythonInstallManager --source winget
 
@@ -333,22 +336,26 @@ The output for this command should be similar to-
 -------
 The signature for https://www.python.org/ftp/python/index-windows.json was 
 successfully verified.
-Installing Python 3.14.7.
+Installing Python 3.15.2.
 Extracting: ...............................................................✅
 
 Global shortcuts directory is not on PATH. Add it for easy access to global Python aliases.
 Directory to add: C:\Users\rotter\AppData\Local\Python\bin
 -------
+
 Ignore the last 2 lines. You won't need that functionality.
 
 
 Uninstall
 Use the Settings app in the Windows menu.
 Go to Apps=>Installed apps
-and find "Python Install Manager" and "Python 3.n.n"
-and select Uninstall from the three dot menu to the right of the names.
+and find:
+"Python Install Manager"
+and 
+"Python 3.n.n"
+and select Uninstall from the three dot menu to the right of the names for each item.
 
-or use winget
+or use winget from the command terminal:
 winget uninstall --id Python.PythonInstallManager
 winget uninstall --id Python.Python.3.nn
 
@@ -418,3 +425,10 @@ distributing it yourself, please instead distribute the URL
 of my website where I describe it- https://RichardOtter.github.io
 
 =========================================================================DIV80==
+
+
+================================================================================
+Suite Version: 1.1.0
+Utility Version: 0.9.0
+Built: 2026-11-19 21:19:06
+================================================================================
