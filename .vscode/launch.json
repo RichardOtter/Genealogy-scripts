@@ -20,7 +20,7 @@
             "cwd": "${fileDirname}",
             "console": "integratedTerminal",
             "args": "testing/dev.ini",
-            "stopOnEntry": true
+            "stopOnEntry": false
         },
         {
             "name": "PYD: Test external files test env",
