@@ -1,0 +1,176 @@
+Report generated at      = 2026-11-20 17:29:48
+Utility name             = CitationNameUpdater
+Utility version          = vUTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE
+Python version           = v3.15.2
+SQLite library version   = v3.53.4
+Database last changed on = 2026-11-20 15:02:22
+Database processed       = C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts\Citation name updater\DB\TEST-Citation name updater.rmtree
+
+
+
+
+Citation name updater filters
+Mode: preview only
+SOURCE_TEMPLATE exact name '_ChurchBooks -archive/online': 1 templates found.
+SOURCE_TEMPLATE (exact name): 26153 before filter, 231 matched after prior filters; 231 remain after intersection.
+SOURCE_NAME exact name '__ChurchBook -Oberschwarzach': 1 sources found.
+SOURCE_NAME (exact name): 231 before filter, 37 matched after prior filters; 37 remain after intersection.
+CITATION_NAME: not applied; 37 citations remain.
+Selected citations: 37
+
+Citation name changes
+Each citation is reported on three lines:
+Citation number
+Old CitationName
+New CitationName
+101129
+'03686; 02-07; 5; _TAUFE; 34; 39; 1861-1862; Katharina Dürr; 4 January 1862; -; 4 January 1862; 34; 4 | year# 1; RJO; 5 November 2026'
+'03686 -- 02-07 -- 5'
+
+122620
+'03686; 02-05; 5; _TAUFE; 32; 37; 1861; Georg Dürr; 9 August 1861; -; 10 August 1861; 32; 5 | year-entry 49; RJOtter; 12 November 2026'
+'03686 -- 02-05 -- 5'
+
+122621
+'03686; 02-27; 5; _TAUFE; 54; 59; 1864; Fabian Brönner; 29 July 1864; -; 30 July 1864; 54; 3 | year# 44; RJO; 4 November 2026'
+'03686 -- 02-27 -- 5'
+
+122622
+'03685; 04-31; 4; _TAUFE; 220; 134; 1828; Jakob Dürr; 8 July 1828; -; 8 July 1828; 220; 10; RJO; 5 November 2026'
+'03685 -- 04-31 -- 4'
+
+122623
+'03685; 07-19; 4; _TAUFE; 311; 229; 1846; Georg Peter Rädler; 20 September 1846; -; 20 September 1846; 311; 10; RJO; 5 November 2026'
+'03685 -- 07-19 -- 4'
+
+122624
+'03685; 08-05; 4; _TAUFE; 332; 251; 1851-1852; Georg Dürr; 16 November 1851; -; 17 November 1851; 332; 2; RJO; 5 November 2026'
+'03685 -- 08-05 -- 4'
+
+122625
+'03686; 01-21; 5; _TAUFE; 18; 22; 1859; Anna Maria Lutz; 6 April 1859; -; 7 April 1859; 18; 1 | year# 17; RJO; 5 November 2026'
+'03686 -- 01-21 -- 5'
+
+122626
+'03686; 01-30; 5; _TAUFE; 27; 31; 1860; Anna Margareta Schmitt; 26 October 1860; -; 27 October 1860; 27; 5 | year# 58; RJO; 5 November 2026'
+'03686 -- 01-30 -- 5'
+
+122627
+'03686; 02-12; 5; _TAUFE; 39; 44; 1862; Adam Fick; 26 October 1862; -; 27 October 1862; 39; 2 | year# 61; RJO; 5 November 2026'
+'03686 -- 02-12 -- 5'
+
+122678
+'03689; 01-30; 8; _TAUFE; 27; 31; 1891; Theresia Maier; -; ; ; 27; 4 | year-entry 24; RJOtter; 12 November 2026'
+'03689 -- 01-30 -- 8'
+
+122679
+'03689; 01-28; 8; _TAUFE; 25; 29; 1891; Kasper Dürr; 28 January 1891; -; ; 25; 5 | year-entry 7; RJOtter; 12 November 2026'
+'03689 -- 01-28 -- 8'
+
+122680
+'03689; 01-22; 8; _TAUFE; 19; 23; ; Josef Thomas; 27 November 1889; -; 28 November 1889; 19; ; RJOtter; 12 November 2026'
+'03689 -- 01-22 -- 8'
+
+122681
+'03689; 01-13; 8; _TAUFE; 10; 14; 1888; Marie Barbara Dürr; 15 February 1888; -; 1888; 10; 2 | year-entry 5; RJOtter; 12 November 2026'
+'03689 -- 01-13 -- 8'
+
+122682
+'03689; 01-11; 8; _TAUFE; 8; 12; 1887; Kunigunde Barht; 29 September 1887; -; ; 8;  1 | year-entry 30; RJOtter; 12 November 2026'
+'03689 -- 01-11 -- 8'
+
+122683
+'03689; 01-04; 8; _TAUFE; 1; 5; 1886; Lorenz Dürr; 7 April 1886; -; ; 1; 5 | year-entry 19; RJOtter; 12 November 2026'
+'03689 -- 01-04 -- 8'
+
+122684
+'03686; 07-07; 5; _TAUFE; 205; 291; 1885; Leonhard Maier; 29 May 1885; -; 31 May 1885; 205; 12 | year-entry 24; RJOtter; 12 November 2026'
+'03686 -- 07-07 -- 5'
+
+122685
+'03686; 07-05; 5; _TAUFE; 203; 217; 1884-1885; Kunigunda Dorothea Stephanie Dürr; 22 December 1884; -; ; 203; 3 | year-entry 67; RJOtter; 12 November 2026'
+'03686 -- 07-05 -- 5'
+
+122686
+'03686; 06-29; 5; _TAUFE; 192; 205; 1883; Eva Maria Barth; 29 May 1883; -; ; 192; 9 | year-entry 33; RJOtter; 12 November 2026'
+'03686 -- 06-29 -- 5'
+
+122687
+'03686; 06-08; 5; _TAUFE; 171; 184; 1889; Johann Götz; 26 May 1880; -; ; 171;  5 | year-entry 55; RJOtter; 12 November 2026'
+'03686 -- 06-08 -- 5'
+
+122688
+'03686; 05-15; 5; _TAUFE; 143; 155; 1876; Georg Dürr; 30 March 1876; -; ; 143;  7 | year-entry 26; RJOtter; 12 November 2026'
+'03686 -- 05-15 -- 5'
+
+122689
+'03686; 04-07; 5; _TAUFE; 103; 111; ; Franz Rost; 10 November 1870; -; ; 103; 6 | year-entry  56; RJOtter; 12 November 2026'
+'03686 -- 04-07 -- 5'
+
+122690
+'03686; 04-09; 5; _TAUFE; 105; 113; 1871; Johann Dürr; 3 February 1871; -; ; 105;  1 | year-entry  11; RJOtter; 12 November 2026'
+'03686 -- 04-09 -- 5'
+
+122691
+'03686; 04-24; 5; _TAUFE; 118; 128; 1873; Heinrich Glos; 3 January 1873; -; ; 118; 1 | year-entry  1; RJOtter; 12 November 2026'
+'03686 -- 04-24 -- 5'
+
+122692
+'03686; 04-27; 5; _TAUFE; 121; 131; 1873; Johann Andreas Ruppenstein; 15 July 1873; -; ; 121; 8 | year-entry 38; RJOtter; 12 November 2026'
+'03686 -- 04-27 -- 5'
+
+122693
+'03686; 04-35; 5; _TAUFE; 128; 139; 1874; Apollonia Lutz; 20 May 1874; ; ; 128; 7 | year-entry 25; RJOtter; 12 November 2026'
+'03686 -- 04-35 -- 5'
+
+122694
+'03686; 05-13; 5; _TAUFE; 141; 153; 1876; Erhard Rost; 25 January 1876; -; ; 141; NOT FOUND; RJOtter; 12 November 2026'
+'03686 -- 05-13 -- 5'
+
+122695
+'03689; 03-06; 8; _TAUFE; 67; 73; 1898-1899; Karl Brönner; 22 January 1899; ; 24 January 1899; 67; 8 | year-entry 5; RJOtter; 13 November 2026'
+'03689 -- 03-06 -- 8'
+
+122696
+'03689; 03-04; 8; _TAUFE; 65; 71; 1898; Josef Fleischman; 19 March 1898; ; ; 65; 5 | year-entry 15; RJOtter; 13 November 2026'
+'03689 -- 03-04 -- 8'
+
+122697
+'03689; 02-32; 8; _TAUFE; 59; 64; 1897; Johann Josef Barth; 15 March 1897; ; 17 March 1897; 59; 11 | year-entry 13; RJOtter; 13 November 2026'
+'03689 -- 02-32 -- 8'
+
+122698
+'03689; 02-31; 8; _TAUFE; 58; 63; 1896-1897; Johanna Brönner; 26 December 1896; ; 27 December 1896; 58; 8 | year-entry 57; RJOtter; 13 November 2026'
+'03689 -- 02-31 -- 8'
+
+122699
+'03689; 03-06; 8; _TAUFE; 67; 73; 1898-1899; Veronika Fick; 16 February 1899; ; 17 February 1899; 67; 10 | year-entry 7; RJOtter; 13 November 2026'
+'03689 -- 03-06 -- 8'
+
+122700
+'03689; 03-11; 8; _TAUFE; 72; 78; 1900; Andreas Dürr; 20 May 1900; ; 21 May 1900; 72; 2 | year-entry 19; RJOtter; 13 November 2026'
+'03689 -- 03-11 -- 8'
+
+122701
+'03689; 03-15; 9; _TAUFE; 76; 82; 1910; Pankraz Brönner; 17 March 1901; ; 19 March 1901; 76; 6 | year-entry 18; RJOtter; 13 November 2026'
+'03689 -- 03-15 -- 9'
+
+122702
+'03689; 03-16; 8; _TAUFE; 77; 83; 1901; Anna Maria Radler; 20 June 1901; ; 23 June 1901; 77; 6 | year-entry 30; RJOtter; 14 November 2026'
+'03689 -- 03-16 -- 8'
+
+122703
+'03689; 03-17; 8; _TAUFE; 78; 84; 1901; Kunigunda Maria Rost; 23 September 1901; ; 26 September 1901; 78; 11 | year-entry 48; RJOtter; 14 November 2026'
+'03689 -- 03-17 -- 8'
+
+122704
+'03689; 03-23; 8; _TAUFE; 84; 90; 1903; Johanna Rost; 10 February 1903; ; 12 February 1903; 84; 5 | year-entry 9; RJOtter; 15 November 2026'
+'03689 -- 03-23 -- 8'
+
+122705
+'03689; 03-26; 8; _TAUFE; 87; 93; 1903; Theodor Georg Schanz; 21 September 1903; ; 23 September 1903; 87; 2 | year-entry 42; RJOtter; 15 November 2026'
+'03689 -- 03-26 -- 8'
+
+
+Database updated: no.
+CitationName values changed: 0.

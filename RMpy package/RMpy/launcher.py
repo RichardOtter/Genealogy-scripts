@@ -139,7 +139,7 @@ def launcher(utility_info):
         regexp_path = None
         if utility_info["RegExp_required"]:
             try:
-                regexp_path = config['FILE_PATHS']['REGEXP_PATH']
+                regexp_path = Path(config['FILE_PATHS']['REGEXP_PATH'])
             except:
                 report_has_errors = True
                 raise RMc.RM_Py_Exception(
@@ -151,8 +151,8 @@ def launcher(utility_info):
                     f' {rmnocase_path}\n\n')
 
         if utility_info["RegExp_optional"]:
-            regexp_path = config['FILE_PATHS']['REGEXP_PATH']
-            if not rmnocase_path.exists():
+            regexp_path = Path(config['FILE_PATHS']['REGEXP_PATH'])
+            if not regexp_path.exists():
                 report_has_errors = True
                 raise RMc.RM_Py_Exception(
                     f'ERROR: Path for REGEXP extension not found:'
@@ -229,12 +229,15 @@ def launcher(utility_info):
             should_display = (report_has_errors or not utility_info.get(
                 "ReportFile_no_display", False))
             if should_display:
-                # display the report file
-                if report_display_app_arg == None:
-                    subprocess.Popen([report_display_app, report_path])
+                command = [report_display_app]
+                if report_display_app_arg is not None:
+                    command.append(report_display_app_arg)
+                command.append(report_path)
+                if report_display_app.name.casefold() == "code.cmd":
+                    # Let the VS Code CLI send its request before debugpy ends.
+                    subprocess.run(command, check=True)
                 else:
-                    subprocess.Popen(
-                        [report_display_app, report_display_app_arg, report_path])
+                    subprocess.Popen(command)
     return 0
 
 

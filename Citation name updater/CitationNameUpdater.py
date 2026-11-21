@@ -1,0 +1,378 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path.resolve(Path(__file__).resolve().parent / '../RMpy package')))
+
+import RMpy.common as RMc       # noqa #type: ignore
+import RMpy.launcher            # noqa #type: ignore
+
+import configparser
+import re
+import sqlite3
+import xml.etree.ElementTree as ET
+
+# Requirements:
+#   RootsMagic database file
+#   RM-Python-config.ini
+
+# Tested with:
+#   RootsMagic database file v12
+#   Python for Windows v3.15
+
+# Config files fields used
+#    FILE_PATHS  DB_PATH
+#    FILE_PATHS  REPORT_FILE_PATH
+#    FILE_PATHS  REPORT_FILE_DISPLAY_APP
+
+# ===================================================DIV60==
+def main():
+
+    # Configuration
+    utility_info = {}
+    utility_info["utility_name"]      = "CitationNameUpdater" 
+    utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
+    utility_info["config_file_name"]  = "RM-Python-config.ini"
+    utility_info["script_path"]  = Path(__file__).parent
+    utility_info["run_features_function"]  = run_update_citation_name
+    utility_info["allow_db_changes"]  = True
+    utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_optional"] = False
+    utility_info["RegExp_required"]   = False
+    utility_info["RegExp_optional"]   = True
+
+
+    RMpy.launcher.launcher(utility_info)
+
+
+# ===================================================DIV60==
+def run_update_citation_name(config, db_connection, report_file):
+    def get_boolean(section_name, option_name):
+        try:
+            value = config[section_name][option_name].strip().casefold()
+        except (configparser.Error, KeyError) as exc:
+            raise RMc.RM_Py_Exception(
+                f"ERROR: [{section_name}] {option_name} must be on or off.") from exc
+        if value not in ("on", "off"):
+            raise RMc.RM_Py_Exception(
+                f"ERROR: [{section_name}] {option_name} must be on or off.")
+        return value == "on"
+
+    use_regexp = get_boolean("FILTER", "USE_REGEXP")
+    make_changes = get_boolean("CITATION_NAME_UPDATER", "MAKE_CHANGES")
+    template_default = get_boolean(
+        "CITATION_NAME_UPDATER", "TEMPLATE_DEFAULT")
+
+    if template_default:
+        template_from_source = False
+        custom_template = ""
+    else:
+        template_from_source = get_boolean(
+            "CITATION_NAME_UPDATER", "TEMPLATE_FROM_SOURCE_TEMPLATE")
+        try:
+            custom_template = config["CITATION_NAME_UPDATER"]["CUSTOM_TEMPLATE"]
+        except (configparser.Error, KeyError) as exc:
+            raise RMc.RM_Py_Exception(
+                "ERROR: [CITATION_NAME_UPDATER] CUSTOM_TEMPLATE must be specified."
+            ) from exc
+
+    try:
+        source_template_filter = config.get(
+            "FILTER", "SOURCE_TEMPLATE", fallback="").strip()
+        source_name_filter = config.get(
+            "FILTER", "SOURCE_NAME", fallback="").strip()
+        citation_name_filter = config.get(
+            "FILTER", "CITATION_NAME", fallback="").strip()
+    except configparser.Error as exc:
+        raise RMc.RM_Py_Exception(
+            "ERROR: The [FILTER] configuration section is missing.") from exc
+
+    if use_regexp:
+        try:
+            regexp_path = Path(config["FILE_PATHS"]["REGEXP_PATH"])
+        except (configparser.Error, KeyError) as exc:
+            raise RMc.RM_Py_Exception(
+                "ERROR: REGEXP_PATH must be specified when USE_REGEXP is on."
+            ) from exc
+        if not regexp_path.is_file():
+            raise RMc.RM_Py_Exception(
+                f"ERROR: Path for REGEXP extension not found: {regexp_path}")
+        try:
+            db_connection.enable_load_extension(True)
+            db_connection.load_extension(str(regexp_path))
+        except sqlite3.Error as exc:
+            raise RMc.RM_Py_Exception(
+                f"ERROR: Could not load the REGEXP extension: {exc}") from exc
+        finally:
+            db_connection.enable_load_extension(False)
+
+    from_clause = """
+        FROM CitationTable AS ct
+        JOIN SourceTable AS s ON s.SourceID = ct.SourceID
+        LEFT JOIN SourceTemplateTable AS st ON st.TemplateID = s.TemplateID
+    """
+    filter_conditions = []
+    filter_parameters = []
+
+    def count_citations(extra_condition="", extra_parameters=()):
+        conditions = list(filter_conditions)
+        parameters = list(filter_parameters)
+        if extra_condition:
+            conditions.append(extra_condition)
+            parameters.extend(extra_parameters)
+        where_clause = (
+            " WHERE " + " AND ".join(conditions) if conditions else "")
+        cursor = db_connection.execute(
+            "SELECT COUNT(*) " + from_clause + where_clause, parameters)
+        return cursor.fetchone()[0]
+
+    report_file.write(
+        "\nCitation name updater filters\n"
+        f"Mode: {'update database' if make_changes else 'preview only'}\n")
+    remaining = count_citations()
+
+    if source_template_filter:
+        before_filter = remaining
+        if use_regexp:
+            condition = "st.Name REGEXP ?"
+            parameters = (source_template_filter,)
+            matched = count_citations(condition, parameters)
+            description = "regular expression"
+        else:
+            template_ids = db_connection.execute(
+                "SELECT TemplateID FROM SourceTemplateTable "
+                "WHERE Name COLLATE BINARY = ?",
+                (source_template_filter,)).fetchall()
+            report_file.write(
+                f"SOURCE_TEMPLATE exact name {source_template_filter!r}: "
+                f"{len(template_ids)} templates found.\n")
+            if len(template_ids) != 1:
+                reason = "not found" if not template_ids else "not unique"
+                raise RMc.RM_Py_Exception(
+                    f"ERROR: SOURCE_TEMPLATE {source_template_filter!r} "
+                    f"was {reason}.")
+            condition = "st.TemplateID = ?"
+            parameters = (template_ids[0][0],)
+            matched = count_citations(condition, parameters)
+            description = "exact name"
+        filter_conditions.append(condition)
+        filter_parameters.extend(parameters)
+        remaining = count_citations()
+        report_file.write(
+            f"SOURCE_TEMPLATE ({description}): {before_filter} before filter, "
+            f"{matched} matched after prior filters; "
+            f"{remaining} remain after intersection.\n")
+    else:
+        report_file.write(
+            f"SOURCE_TEMPLATE: not applied; {remaining} citations remain.\n")
+
+    if source_name_filter:
+        before_filter = remaining
+        if use_regexp:
+            condition = "s.Name REGEXP ?"
+            parameters = (source_name_filter,)
+            matched = count_citations(condition, parameters)
+            description = "regular expression"
+        else:
+            source_ids = db_connection.execute(
+                "SELECT SourceID FROM SourceTable "
+                "WHERE Name COLLATE BINARY = ?",
+                (source_name_filter,)).fetchall()
+            report_file.write(
+                f"SOURCE_NAME exact name {source_name_filter!r}: "
+                f"{len(source_ids)} sources found.\n")
+            if len(source_ids) != 1:
+                reason = "not found" if not source_ids else "not unique"
+                raise RMc.RM_Py_Exception(
+                    f"ERROR: SOURCE_NAME {source_name_filter!r} was {reason}.")
+            condition = "s.SourceID = ?"
+            parameters = (source_ids[0][0],)
+            matched = count_citations(condition, parameters)
+            description = "exact name"
+        filter_conditions.append(condition)
+        filter_parameters.extend(parameters)
+        remaining = count_citations()
+        report_file.write(
+            f"SOURCE_NAME ({description}): {before_filter} before filter, "
+            f"{matched} matched after prior filters; "
+            f"{remaining} remain after intersection.\n")
+    else:
+        report_file.write(
+            f"SOURCE_NAME: not applied; {remaining} citations remain.\n")
+
+    if citation_name_filter:
+        before_filter = remaining
+        if use_regexp:
+            condition = "ct.CitationName REGEXP ?"
+            parameters = (citation_name_filter,)
+            matched = db_connection.execute(
+                "SELECT COUNT(*) FROM CitationTable AS ct "
+                "WHERE ct.CitationName REGEXP ?", parameters).fetchone()[0]
+            description = "regular expression"
+        else:
+            condition = "ct.CitationName COLLATE BINARY = ?"
+            parameters = (citation_name_filter,)
+            matched = db_connection.execute(
+                "SELECT COUNT(*) FROM CitationTable AS ct "
+                "WHERE ct.CitationName COLLATE BINARY = ?", parameters
+            ).fetchone()[0]
+            description = "exact name"
+        if matched == 0:
+            raise RMc.RM_Py_Exception(
+                f"ERROR: CITATION_NAME {citation_name_filter!r} was not found.")
+        filter_conditions.append(condition)
+        filter_parameters.extend(parameters)
+        remaining = count_citations()
+        report_file.write(
+            f"CITATION_NAME ({description}): {before_filter} before filter, "
+            f"{matched} matched after prior filters; "
+            f"{remaining} remain after intersection.\n")
+    else:
+        report_file.write(
+            f"CITATION_NAME: not applied; {remaining} citations remain.\n")
+
+    report_file.write(f"Selected citations: {remaining}\n")
+
+    source_template_columns = {
+        row[1] for row in db_connection.execute(
+            "PRAGMA table_info(SourceTemplateTable)").fetchall()
+    }
+    has_template_citation_name = "CitationName" in source_template_columns
+    if template_from_source and not has_template_citation_name:
+        raise RMc.RM_Py_Exception(
+            "ERROR: SourceTemplateTable.CitationName is not available in this "
+            "RootsMagic database.")
+    source_template_citation_name_column = (
+        "st.CitationName" if has_template_citation_name else "''")
+
+    selected_where = (
+        " WHERE " + " AND ".join(filter_conditions)
+        if filter_conditions else "")
+    selected_rows = db_connection.execute(
+        """
+        SELECT ct.CitationID, ct.CitationName, ct.Fields, s.TemplateID,
+               """ + source_template_citation_name_column +
+        """, st.FieldDefs, st.Name
+        """ + from_clause + selected_where +
+        " ORDER BY ct.CitationID", filter_parameters).fetchall()
+
+    def parse_xml_fields(xml_data, field_name, record_description):
+        if xml_data in (None, b"", ""):
+            return {}
+        try:
+            root = ET.fromstring(xml_data)
+        except (ET.ParseError, TypeError, ValueError) as exc:
+            raise RMc.RM_Py_Exception(
+                f"ERROR: Invalid {field_name} XML for {record_description}."
+            ) from exc
+        fields = {}
+        for field in root.findall("./Fields/Field"):
+            name = field.findtext("Name")
+            if name is None:
+                name = field.findtext("FieldName")
+            if name:
+                value_element = field.find("Value")
+                if value_element is not None:
+                    fields[name.casefold()] = value_element.text or ""
+        return fields
+
+    def parse_field_definitions(xml_data, record_description):
+        if xml_data in (None, b"", ""):
+            return {}
+        try:
+            root = ET.fromstring(xml_data)
+        except (ET.ParseError, TypeError, ValueError) as exc:
+            raise RMc.RM_Py_Exception(
+                f"ERROR: Invalid FieldDefs XML for {record_description}.") from exc
+        definitions = {}
+        for field in root.findall("./Fields/Field"):
+            name = field.findtext("FieldName")
+            if not name or (field.findtext("CitationField") or "").casefold() not in (
+                    "true", "1"):
+                continue
+            definitions[name.casefold()] = (
+                name, (field.findtext("Type") or "").casefold())
+        return definitions
+
+    template_data = {}
+    for (citation_id, _, _, template_id, _, field_defs_xml,
+         template_name) in selected_rows:
+        if template_id is None:
+            raise RMc.RM_Py_Exception(
+                f"ERROR: Citation {citation_id} has no source template.")
+        if template_id not in template_data:
+            definitions = parse_field_definitions(
+                field_defs_xml, f"source template {template_id}")
+            default_template = "; ".join(
+                f"[{name}]" for name, _ in definitions.values())
+            template_data[template_id] = (
+                template_name, definitions, default_template)
+
+    report_file.write("\nDefault templates for selected citations\n")
+    if not template_data:
+        report_file.write("No source templates selected.\n")
+    for template_id, (template_name, _, default_template) in template_data.items():
+        report_file.write(
+            f"Source template {template_id}: {template_name}\n"
+            f"{default_template}\n\n")
+
+    if not template_default and not template_from_source and len(template_data) > 1:
+        raise RMc.RM_Py_Exception(
+            "ERROR: CUSTOM_TEMPLATE requires all selected citations to "
+            "use the same source template. No changes were made.")
+
+    changes = []
+    for (citation_id, old_name, citation_fields_xml, template_id,
+         source_template_citation_name, _, _) in selected_rows:
+        _, definitions, default_template = template_data[template_id]
+        citation_fields = parse_xml_fields(
+            citation_fields_xml, "Citation Fields", f"citation {citation_id}")
+
+        if template_default:
+            template = default_template
+        elif template_from_source:
+            template = source_template_citation_name or ""
+        else:
+            template = custom_template
+
+        def substitute_field(match):
+            field_name = match.group(1)
+            field_key = field_name.casefold()
+            if field_key in definitions and field_key in citation_fields:
+                return citation_fields[field_key]
+            return match.group(0)
+
+        new_name = re.sub(r"\[([^\[\]]+)\]", substitute_field, template)
+        changes.append((citation_id, old_name or "", new_name))
+
+    report_file.write(
+        "\nCitation name changes\n"
+        "Each citation is reported on three lines:\n"
+        "Citation number\nOld CitationName\nNew CitationName\n")
+    updated = 0
+    for citation_id, old_name, new_name in changes:
+        report_file.write(
+            f"{citation_id}\n"
+            f"{old_name!r}\n"
+            f"{new_name!r}\n\n")
+        if make_changes and old_name != new_name:
+            db_connection.execute(
+                "UPDATE CitationTable SET CitationName = ? WHERE CitationID = ?",
+                (new_name, citation_id))
+            updated += 1
+
+    report_file.write(
+        f"\nDatabase updated: {'yes' if updated else 'no'}.\n"
+        f"CitationName values changed: {updated}.\n")
+    return 0
+
+
+
+
+
+# ===================================================DIV60==
+# Call the "main" function
+if __name__ == '__main__':
+    main()
+
+# ===================================================DIV60==
+
+

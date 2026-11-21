@@ -1,0 +1,98 @@
+App is in file CitationNameUpdater.py
+
+It uses RMpy package routines as the other released apps.
+
+The new code shall go in the function run_update_citation_name
+
+
+all app sepcific options will be set from config file  RM-Python-config.ini
+    That allows app to be run without user input
+
+the app will only make changes in the CitationTable CitationName column and only in selected rows.
+
+It will use information from the SourceTemplateTable and or SourceTable or CitationTable
+to determine which CitationTable.CitationName items will be modified.
+
+The new contents of the CitationTable.CitationName column will be determined by a template
+obtained either from the config file or the SourceTemplateTable.CitationName column
+
+The Template will be a simple subset of the RM SourceCitation sentence language.
+The template will allow literal text and field names enclosed in square brackets.
+
+
+The data field names come from the SourceTemplateTable row that is used by the
+citation to be changed.
+For now, only data fields used in the citation are allowed to be used by the template.
+
+
+The config file values are
+[FILE_PATHS]
+DB_PATH
+REPORT_FILE_PATH
+REPORT_FILE_DISPLAY_APP
+
+These retain their meaning from the other released RMpy utilities
+
+[FILTER]
+USE_REGEXP = on/off
+SOURCE_TEMPLATE
+SOURCE_NAME
+CITATION_NAME
+
+The SOURCE_TEMPLATE, SOURCE_NAME, CITATION_NAME data values simple text or
+regular expressions depending on the value of USE_REGEXP.
+Use RegEx that is supported by sqlean extension for SQLite
+
+If SOURCE_TEMPLATE is non blank and USE_REGEXP = off, then a source template with the specified name is
+found and all sources/citations using that template are selected.
+If more than one source template is found with the same name
+or no source templates are found,
+return error message and stop.   (if using regex, either result is OK)
+If it is blank, do not filter on this value.
+
+If SOURCE_NAME is non blank and USE_REGEXP = off, then all sources with the specified name are
+found and all citations using those sources are selected.
+If more than one source is found with the same name
+or no source are found,
+return error message and stop.   (if using regex, either result is OK)
+If it is blank, do not filter on this value.
+
+If CITATION_NAME is non blank, then citation names with the specified name is /are
+found and all are selected.
+If no citations are found, return error message and stop.
+If it is blank, do not filter on this value.
+
+The non blank filter results are INTERSECTed together.
+
+The report shall give a summary of the effect of each filter
+
+[CITATION_NAME_UPDATER]
+MAKE_CHANGES on/off
+TEMPLATE_DEFAULT on/off
+TEMPLATE_FROM_SOURCE_TEMPLATE on/off
+CUSTOM_TEMPLATE  text
+
+MAKE_CHANGES on/off
+if off, the report file will list all Citation that are selected for change
+and will show the old and new value of the CitationName as if changes were allowed.
+if on, same output but database updated. The report must state whether changes were made.
+if other
+
+
+TEMPLATE_DEFAULT if ON, overrides other settings.
+TEMPLATE_FROM_SOURCE_TEMPLATE and CUSTOM_TEMPLATE values are ignored.
+The default template is constructed for each SourceTemplate which
+will generate the CitationName as was created in RM 11 and earlier.
+It is a full list of all citation date fields separated by a semicolon and space.
+
+
+If TEMPLATE_FROM_SOURCE_TEMPLATE is on, then each citation name will be updated using the
+user defined template within the SourceTemplate used by the citation's source.
+Use it as is, the user can determine if it is correct. If a data field does not exist, 
+print the enclosing square bracket and the template as is, without substitution.
+
+
+CUSTOM_TEMPLATE is simple text, just as could be entered in the SourceTemplateTable.CitationName field.
+
+
+The date field names and values are in the XML in the Fields column of the CitationTable.
