@@ -189,6 +189,19 @@ If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
 
 =========================================================================DIV80==
+LIB_STEPS_3
+==========-
+
+Another parameter is the REGEXP_PATH     = regexp.dll
+
+where to get it
+
+# https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md
+# https://github.com/nalgeon/sqlean/releases
+# sqlean-win-x64.zip
+
+ 
+=========================================================================DIV80==
 LIB_APPENDIX_PYTHON
 APPENDIX  Python install
 

@@ -1,0 +1,166 @@
+=========================================================================DIV80==
+Update Citation Names in selected citations using standard or custom template
+CitationNameUpdater.py
+INCLUDE: LIB_INTRO
+=========================================================================DIV80==
+Purpose
+
+This utility is designed to update a citation's CitationName in a bulk
+operation. First, a set of filters is applied to limit which citations will
+be modified, then rule are followed to determine the new Citation Name.
+
+This utility will work in versions 8 and later of RootsMagic database. It is
+aware of the new option in v12 that allows users to create their own custom 
+CitationName template. 
+
+The utility can operate in a Preview mode in which the database is not altered.
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_BACKUPS_SMALL_CHANGES
+=========================================================================DIV80==
+INCLUDE: LIB_COMPATIBILITY
+=========================================================================DIV80==
+INCLUDE: LIB_OVERVIEW
+=========================================================================DIV80==
+INCLUDE: LIB_STEPS_0_SMALL_CHANGES
+INCLUDE: LIB_STEPS_1
+==========-
+Copy these items from the downloaded zip file to the working folder-
+      CitationNameUpdater.py           (file)
+      RM-Python-config.ini             (file)
+      RMpy                             (folder)
+
+INCLUDE: LIB_STEPS_2
+==========-
+Look at the [CV_PARAMS] section of the config file containing keys for the 
+parameters needed to describe the desired changes:
+
+FACTTYPE_CURRENT
+FACTTYPE_NEW
+ROLE
+
+Now look at the [SOURCE_FILTER] section which contains the keys that specify
+which sources are changed.
+
+DESC
+DATE
+
+Full details of how to specify the parameters are in the Notes section below.
+
+==========-
+Save the config file but leave it open in Notepad.
+
+=========-
+Double click the "CitationNameUpdater.py" file in the working folder
+to start the utility.
+
+=========-
+A terminal window is momentarily displayed while the utility processes
+the commands.
+
+=========-
+The terminal window closes and the report file is displayed in Notepad for
+your inspection.
+
+=========-
+Open the TEST.rmtree database in RM and confirm the desired changes have
+been accomplished.
+
+=========-
+Consider whether to rename TEST.rmtree and use it as your research database.
+
+
+=========================================================================DIV80==
+Notes
+
+===========-
+The utility can operate in a Preview mode in which the database is not altered.
+Running the utility in this mode allows one to work on the filter options to 
+determine the correct set of citation names to update.
+It also displays, in the report, the default citation name template for each 
+SourceTemplate under consideration. This default template lists all citation 
+dta fields and is of great assistance when writing your own template.
+
+Note that the value can have embedded spaces.
+Space characters between the = and the value are ignored.
+
+===========-
+
+
+===========-
+
+===========-
+
+
+===========-
+
+===========-
+Limiting which Facts are changed
+
+There maybe situations in which only a subset of Facts should be changed to a
+new fact type. One can limit the facts by fields that describe them- 
+the Description and the Date-
+
+Some examples-
+
+[SOURCE_FILTER]
+DESC              = %New York%
+DATE              = 1930
+
+if you want to convert only facts whose descriptions start with the
+words "New York", then enter-
+
+[SOURCE_FILTER]
+DESC              = New York%
+DATE              =
+
+notice the trailing percent sign.
+If the fact descriptions should only contain "New York" somewhere in the text,
+enter-
+
+[SOURCE_FILTER]
+DESC              = %New York%
+DATE              =
+
+The percent sign % wildcard matches any sequence of zero or more characters.
+The underscore _ wildcard matches any single character.
+
+To limit the facts converted by their Date, use the DATE value.
+The DATE value is always a four digit year.
+For example-
+
+[SOURCE_FILTER]
+DESC              = 
+DATE              = 1930
+
+The values for DESC and DATE are optional. If all facts of a certain type are to be converted,
+leave these fields blank-
+
+[SOURCE_FILTER]
+DESC              = 
+DATE              = 
+
+===========-
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
+INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
+INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX_PYTHON
+=========================================================================DIV80==
+INCLUDE: LIB_APPENDIX_TROUBLE
+=========================================================================DIV80==
+TODO
+
+*  ?? what would you find useful?
+
+
+=========================================================================DIV80==
+INCLUDE: LIB_FEEDBACK
+=========================================================================DIV80==
+INCLUDE: LIB_DISTRIBUTION
+
+
