@@ -1,6 +1,13 @@
+█_VARIABLES:
+UTILITY_NAME = Test External Files
+SCRIPT_NAME = TestExternalFiles.py
+DATABASE_VERSIONS = 7 and later
+RMNOCASE_REQUIRED = no
+REGEXP_OPTIONAL = no
+█_END_VARIABLES
 =========================================================================DIV80==
 Test usage and status of external/media files
-TestExternalFiles.py
+{SCRIPT_NAME}
 █_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
@@ -29,11 +36,9 @@ mew files are being added.
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_BACKUPS_READONLY
 =========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_SW_SAFETY
+=========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_COMPATIBILITY
-
-Probably still works with RootsMagic v7, although it has not been
-recently tested.
-
 =========================================================================DIV80==
 Performance
 
@@ -41,9 +46,10 @@ A database with 7,000 media files requires about 3 seconds run time for 5
 features turned on without hash file.
 Generating a hash file for 7,000 image files takes roughly a minute.
 
-
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW_A
+█_INCLUDE: REUSE_LIB_OVERVIEW_B_STD
+█_INCLUDE: REUSE_LIB_OVERVIEW_C
 =========================================================================DIV80==
 Capabilities
 
@@ -101,12 +107,6 @@ HASH_FILE     (deprecated)
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
 █_INCLUDE: REUSE_LIB_STEPS_1
-==========-
-Copy these items from the downloaded zip file to the working folder-
-      TestExternalFiles.py             (file)
-      RM-Python-config.ini             (file)
-      RMpy                             (folder)
-
 █_INCLUDE: REUSE_LIB_STEPS_2
 Save the config file but leave it open in Notepad.
 
@@ -117,7 +117,7 @@ the others OFF.
 After you have a successful run, you can try the other options.
 
 =========-
-Double click the "TestExternalFiles.py" file in the working folder
+Double click the "{SCRIPT_NAME}" file in the working folder
 to start the utility.
 
 =========-

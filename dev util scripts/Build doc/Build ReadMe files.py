@@ -1,6 +1,7 @@
 import os
 import stat
 import ctypes
+import json
 from pathlib import Path
 import yaml    # type: ignore
 from datetime import datetime
@@ -48,6 +49,9 @@ def main():
         doc_built_folder = doc_folder / "docs-generated"
         doc_built_folder.mkdir(parents=True, exist_ok=True)
         
+        # Create VS Code settings to mark generated files as read-only
+        create_vscode_readonly_settings(REPO_ROOT_PATH, doc_built_folder)
+        
         # Clear any existing files in the docs-generated folder
         for existing_file in doc_built_folder.glob("*"):
             if existing_file.is_file():
@@ -71,17 +75,36 @@ def main():
                     if util_doc and "Version" in util_doc:
                         utility_version = util_doc["Version"]
             
+            # Parse variables from the template
+            variables = parse_variables(template_file_path)
+            
             print(f"Building: {doc_file_path}")
             with open(template_file_path, 'r') as doc_template, \
                 open(doc_file_path, 'w') as doc_final:
                 
+                in_variables_section = False
                 for line in doc_template:
-                    if line.startswith("█__INCLUDE: "):
-                        label = line[9::]
+                    # Skip the variables section
+                    if line.startswith("█_VARIABLES:"):
+                        in_variables_section = True
+                        continue
+                    if line.startswith("█_END_VARIABLES"):
+                        in_variables_section = False
+                        continue
+                    if in_variables_section:
+                        continue
+                    
+                    if line.startswith("█_INCLUDE: "):
+                        label = line[11::]
                         for lib_line in get_snippet(label, lib_file_path):
-                            doc_final.write(lib_line)
+                            # Apply variable substitution to included snippet
+                            substituted_line = substitute_variables(lib_line, variables)
+                            # Prefix lines from reusable library with ╋
+                            doc_final.write("╋" + substituted_line)
                     else:
-                        doc_final.write(line)
+                        # Apply variable substitution to doc content
+                        substituted_line = substitute_variables(line, variables)
+                        doc_final.write(substituted_line)
                 
                 # Add version and build date footer
                 doc_final.write("\n\n")
@@ -153,6 +176,66 @@ def pause_with_message(message=None):
     if launched_from_explorer():
         input("\n" "Press the <Enter> key to continue...")
     return
+
+
+# ===================================================DIV60==
+def create_vscode_readonly_settings(repo_root, doc_built_folder):
+    """Create VS Code settings to mark generated files as read-only"""
+    vscode_dir = repo_root / ".vscode"
+    settings_file = vscode_dir / "settings.json"
+    
+    vscode_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Read existing settings if file exists
+    if settings_file.exists():
+        with open(settings_file, 'r') as f:
+            settings = json.load(f)
+    else:
+        settings = {}
+    
+    # Add files.readonlyInclude setting for generated docs
+    # Use relative path from repo root to docs-generated folder
+    readonly_pattern = "doc/docs-generated/**"
+    if "files.readonlyInclude" not in settings:
+        settings["files.readonlyInclude"] = {}
+    
+    settings["files.readonlyInclude"][readonly_pattern] = True
+    
+    # Write updated settings
+    with open(settings_file, 'w') as f:
+        json.dump(settings, f, indent=2)
+
+
+# ===================================================DIV60==
+def parse_variables(template_file_path):
+    """Parse the █_VARIABLES: section and return a dictionary of variables"""
+    variables = {}
+    with open(template_file_path, 'r') as f:
+        in_variables_section = False
+        for line in f:
+            if line.startswith("█_VARIABLES:"):
+                in_variables_section = True
+                continue
+            if line.startswith("█_END_VARIABLES"):
+                in_variables_section = False
+                break
+            if in_variables_section:
+                # Parse "KEY = VALUE" format
+                if "=" in line:
+                    parts = line.split("=", 1)
+                    key = parts[0].strip()
+                    value = parts[1].strip()
+                    variables[key] = value
+    return variables
+
+
+# ===================================================DIV60==
+def substitute_variables(text, variables):
+    """Replace all {VARIABLE_NAME} with corresponding values"""
+    result = text
+    for key, value in variables.items():
+        result = result.replace("{" + key + "}", value)
+    return result
 
 
 # ===================================================DIV60==

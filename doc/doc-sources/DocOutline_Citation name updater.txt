@@ -1,36 +1,45 @@
+█_VARIABLES:
+UTILITY_NAME = Citation Name Updater
+SCRIPT_NAME = CitationNameUpdater.py
+DATABASE_VERSIONS = 8 and later
+RMNOCASE_REQUIRED = yes
+REGEXP_OPTIONAL = yes
+█_END_VARIABLES
 =========================================================================DIV80==
 Update Citation Names in selected citations using standard or custom template
-CitationNameUpdater.py
+{SCRIPT_NAME}
 █_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
 This utility is designed to update a citation's CitationName in a bulk
-operation. First, a set of filters is applied to limit which citations will
-be modified, then rule are followed to determine the new Citation Name.
+operation. First, a set of filters is specified and applied to limit which
+citations will be modified, then rules are followed to determine the new
+Citation Name. If the results look satisfactory, the utility is then instructed
+to actually save the changes to the database.
 
 This utility will work in versions 8 and later of RootsMagic database. It is
 aware of the new option in v12 that allows users to create their own custom 
 CitationName template. 
 
-The utility can operate in a Preview mode in which the database is not altered.
-
-
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_BACKUPS_SMALL_CHANGES
+In addition, this utility can only change citation names. Citation names are
+derived from the citation data. If the first result does not give the desired
+result, a second run can fix it. No genealogical data can be modified or lost
+running this utility.
+
+=========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_SW_SAFETY
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW_A
+█_INCLUDE: REUSE_LIB_OVERVIEW_B_STD
+█_INCLUDE: REUSE_LIB_OVERVIEW_C
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
 █_INCLUDE: REUSE_LIB_STEPS_1
-==========-
-Copy these items from the downloaded zip file to the working folder-
-      CitationNameUpdater.py           (file)
-      RM-Python-config.ini             (file)
-      RMpy                             (folder)
-
 █_INCLUDE: REUSE_LIB_STEPS_2
 █_INCLUDE: REUSE_LIB_STEPS_3
 ==========-

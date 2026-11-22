@@ -1,6 +1,13 @@
+█_VARIABLES:
+UTILITY_NAME = Modify Citation List
+SCRIPT_NAME = ModifyCitationList.py
+DATABASE_VERSIONS = 8 and later
+RMNOCASE_REQUIRED = no
+REGEXP_OPTIONAL = no
+█_END_VARIABLES
 =========================================================================DIV80==
 Modifies a citation list
-ModifyCitationList.py
+{SCRIPT_NAME}
 
 (formerly: CitationSortOrder.py)
 █_INCLUDE: REUSE_LIB_INTRO
@@ -21,21 +28,23 @@ Hidden citations may be restored using this utility.
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_BACKUPS_SMALL_CHANGES
 =========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_SW_SAFETY
+=========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_OVERVIEW
-
+█_INCLUDE: REUSE_LIB_OVERVIEW_A
 While the database name and location is specified in the config file, the actual
 instructions for which citations and sources to modify are entered at a series
 of prompts in the black terminal window.
+
+█_INCLUDE: REUSE_LIB_OVERVIEW_B_USER_INPUT
+
+█_INCLUDE: REUSE_LIB_OVERVIEW_C
+=========================================================================DIV80==
+
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
 █_INCLUDE: REUSE_LIB_STEPS_1
-==========-
-Copy these items from the downloaded zip file to the working folder-
-      ModifyCitationList.py            (file)
-      RM-Python-config.ini             (file)
-      RMpy                             (folder)
 
 ==========-
 Make a copy of your database, move the copy into the working folder.
@@ -52,7 +61,7 @@ Open the TEST.rmtree in RootsMagic and find the citation list that is to be
 modified. Having the database open in RM for reference will aid the next steps.
 
 =========-
-Double click the ModifyCitationList.py file in the working folder to start
+Double click the "{SCRIPT_NAME}" file in the working folder to start
 the utility.
 
 =========-

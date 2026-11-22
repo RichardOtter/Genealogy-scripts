@@ -14,15 +14,6 @@ This utility is part of a suite of utilities that has been written to
 perform analysis or data modification not available within the RM application.
 See https://RichardOtter.github.io
 
-This software is written using the Python language (https://Python.org) and
-is distributed as a text ".py" file along with a folder, RMpy, of common Python
-code, called a python package. The user can simply open the file or package
-files in a text editor to read all implementation details and assess safety.
-
-A Python py script file is executed using the Python language interpreter.
-The interpreter is a separate piece of software easily installed on your
-computer. "Installing python" is described in the appendix below for Windows
-computers. MacOS computers already have it installed.
 
 =========================================================================DIV80==
 REUSE_LIB_COMPATIBILITY
@@ -31,7 +22,7 @@ Compatibility
 Tested with a RootsMagic v 12.1.3 database
 using Python for Windows v3.15.2   64bit
 
-RM versions 8 and later will probably work, but have not been recently tested.
+RM {DATABASE_VERSIONS} will probably work, but have not been recently tested.
 Much earlier version of Python, say after 3.10 will also probably work.
 
 The python script file has not been tested on MacOS but could probably be
@@ -74,7 +65,7 @@ remains intact after use. At that point, run this utility of your
 "production" database.
 
 =========================================================================DIV80==
-REUSE_LIB_OVERVIEW
+REUSE_LIB_OVERVIEW_A
 General Overview
 
 This program is what is called a "command line utility". It is in the form of a
@@ -84,12 +75,33 @@ The MainScriptFile relies on code in the RMpy folder.
 These utilities are not installed in the traditional Windows sense, they are
 simply copied to the computer.
 
-The utilities are configured by editing a configuration file. This
+The utilities are told what to do by editing a configuration file. This
 configuration tells the utility which database to use and how to display the output.
-(Some of the utilities use the command terminal to interact with the user.)
+
 The default name of the configuration file (called, hereinafter, the
 "config file") is "RM-Python-config.ini". It should be located in the same
 folder as the MainScriptFile.py file and the RMpy folder.
+=========================================================================DIV80==
+REUSE_LIB_OVERVIEW_B_STD
+
+What happens
+{UTILITY_NAME} is started by the user, a black terminal window is opened, the 
+program processes the configuration data and the database, a report file
+is displayed, the terminal window closes and the program exits.
+
+=========================================================================DIV80==
+REUSE_LIB_OVERVIEW_B_USER_INPUT
+
+{UTILITY_NAME} is started by the user, a black terminal window is opened.
+The terminal window displays prompts to the user to input parameters, the 
+requested database modification is made and the app prompts the user for more
+modifications. When the user is don, the user enters a command to exit the
+program, a summary report file is displayed and the program stops.
+
+=========================================================================DIV80==
+REUSE_LIB_OVERVIEW_C
+
+Getting Started
 
 To install and use the utility for the first time (specifics below):
 
@@ -104,11 +116,9 @@ To install and use the utility for the first time (specifics below):
 *  Edit the config file in the working folder to tell the utility what to
    do and where to do it.
 
-*  Double click the MainScriptFile.py file to run the utility.
+*  Double click the {SCRIPT_NAME} file to run the utility.
 
 *  A window (terminal window) with a black background and white text will appear.
-Some utilities will keep this window open and request data, other utilities will
-only show the window while the command is processing.
 
 *  The terminal window will close and a summary report will be displayed
 in NotePad.
@@ -117,14 +127,14 @@ The above procedure of making a copy of your database and operating on it in
 the working folder is most prudent when a user is just getting familiar with
 a new or updated utility.
 
-Some utilities are read only and do not change the database at all, while others
-affect only small amount of data.
-Once the user has confidence in the operation of a low-impact utility, one
-can start operating directly on the research (production) database, always
-assuming that at least several known-good backups exist.
-
-Other utilities that require more configuration and make larger changes should
-always operate on databases copied into a working folder.
+====== Some utilities are read only and do not change the database at all, while others
+====== affect only small amount of data.
+====== Once the user has confidence in the operation of a low-impact utility, one
+====== can start operating directly on the research (production) database, always
+====== assuming that at least several known-good backups exist.
+====== 
+====== Other utilities that require more configuration and make larger changes should
+====== always operate on databases copied into a working folder.
 
 *****  Details follow below. *****
 
@@ -145,6 +155,27 @@ new directory location. Once you feel comfortable with how the app operates,
 you will want to run the app on your production database in its usual
 folder location.
 
+
+=========================================================================DIV80==
+REUSE_LIB_SW_SAFETY
+Software Safety
+
+This utility is written in the Python programming language (https://Python.org)
+and is distributed as plain-text .py files that can be viewed with Notepad or
+any other text editor.
+
+In addition to the main application file, the RMpy folder is required. This
+folder contains a small number of additional .py text files that provide
+functions shared by all utilities in the suite. In Python terminology, such a
+folder is known as a package.
+
+Because the source code is distributed in readable text form, users can open 
+any of the .py files in a text editor to inspect the complete implementation, 
+verify its behavior, and assess its safety. The source files can also be 
+reviewed by AI to help identify potential security or safety concerns.
+Here is a recent report generated from the code by AI:
+https://github.com/RichardOtter/Genealogy-scripts/blob/main/SECURITY_ANALYSIS.md
+
 =========================================================================DIV80==
 REUSE_LIB_STEPS_1
 ==========-
@@ -157,6 +188,12 @@ folders. It will be referred to as the "working folder".
 You may want to create it within your home folder. Your home folder is
 "C:\Users\me", where "me" is your user name. This is a safe location that will
 not be taken over by OneDrive.
+
+==========-
+Copy these items from the downloaded zip file to the working folder-
+     (file)     {SCRIPT_NAME}               
+     (file)     RM-Python-config.ini             
+    (folder)    RMpy    
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_2
@@ -206,7 +243,7 @@ below, in APPENDIX  How to obtain regexp.dll.
 =========================================================================DIV80==
 REUSE_LIB_STEPS_RMNOCASE_REINDEX
 
-
+Explain reindex in RM tools
 
 =========================================================================DIV80==
 REUSE_LIB_APPENDIX_PYTHON
@@ -299,7 +336,7 @@ The path to the unifuzz64.dll file in the config file is given by the
 RMNOCASE key. Same rules as for the DB_PATH key.
 
 =========================================================================DIV80==
-REUSE_LIB_APPENDIX_REGEXP-DLL
+REUSE_LIB_APPENDIX_REGEXP_DLL
 APPENDIX  How to obtain regexp.dll
 
 

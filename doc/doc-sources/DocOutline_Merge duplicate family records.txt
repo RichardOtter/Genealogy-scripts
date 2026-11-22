@@ -1,6 +1,13 @@
+█_VARIABLES:
+UTILITY_NAME = Merge Duplicate Family Records
+SCRIPT_NAME = MergeDuplicateFamilyRecords.py
+DATABASE_VERSIONS = 8 and later
+RMNOCASE_REQUIRED = no
+REGEXP_OPTIONAL = no
+█_END_VARIABLES
 =========================================================================DIV80==
 Merge duplicate records in the FamilyTable
-MergeDuplicateFamilyRecords.py
+{SCRIPT_NAME}
 █_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
@@ -24,21 +31,19 @@ diagnostic tool to detect a duplication problem that may not have been found..
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_BACKUPS_SMALL_CHANGES
 =========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_SW_SAFETY
+=========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW_A
+█_INCLUDE: REUSE_LIB_OVERVIEW_B_STD
+█_INCLUDE: REUSE_LIB_OVERVIEW_C
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
 █_INCLUDE: REUSE_LIB_STEPS_1
-==========-
-Copy these items from the downloaded zip file to the working folder-
-      MergeDuplicateFamilyRecords.py   (file)
-      RM-Python-config.ini             (file)
-      RMpy                             (folder)
-
 █_INCLUDE: REUSE_LIB_STEPS_2
 =========-
-Double click the "MergeDuplicateFamilyRecords.py" file in the working folder
+Double click the "{SCRIPT_NAME}" file in the working folder
 to start the utility.
 
 =========-

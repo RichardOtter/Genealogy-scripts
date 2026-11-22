@@ -11,7 +11,7 @@ interpreter must be installed on the computer. See the instructions labeled
 
 Each folder contains the files needed to run a different utility app.
 Each folder contains-
-* a py or pyw text file which contains the actual utility app,
+* a py or pyw text file which contains the actual utility app.
 * a ReadeMe.txt file which contains all you need to know about how to run the utility.
 * a copy of the folder named RMpy
 * a sample configuration file, specific for the app in the same folder.

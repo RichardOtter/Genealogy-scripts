@@ -1,23 +1,40 @@
 {
-    "cSpell.words": [
-        "aclt",
-        "auxmedia",
-        "AUXMULTIMEDIATABLE",
-        "Excep",
-        "EXTERNALFILESINFO",
-        "facttype",
-        "FACTTYPE",
-        "fldr",
-        "rmnocase",
-        "unifuzz",
-        "windll"
-    ],
-    "python.analysis.extraPaths": [
-        "./RMpy package"
-    ],
-    "cSpell.enabled": true,
-    "editor.foldingStrategy": "auto",
-    "python.useEnvironmentsExtension": true,
-    "terminal.integrated.accessibleViewPreserveCursorPosition": true,
-    "terminal.integrated.defaultProfile.windows": "Command Prompt"
+  "cSpell.words": [
+    "aclt",
+    "auxmedia",
+    "AUXMULTIMEDIATABLE",
+    "Excep",
+    "EXTERNALFILESINFO",
+    "facttype",
+    "FACTTYPE",
+    "fldr",
+    "rmnocase",
+    "unifuzz",
+    "windll"
+  ],
+  "python.analysis.extraPaths": [
+    "./RMpy package"
+  ],
+  "cSpell.enabled": true,
+  "editor.foldingStrategy": "auto",
+  "python.useEnvironmentsExtension": true,
+  "terminal.integrated.accessibleViewPreserveCursorPosition": true,
+  "terminal.integrated.defaultProfile.windows": "Command Prompt",
+  "files.readonlyInclude": {
+    "doc/docs-generated/**": true,
+    "Change source for citation/ReadMe.txt": true,
+    "Change source template/ReadMe.txt": true,
+    "Color from group/ReadMe.txt": true,
+    "Convert fact/ReadMe.txt": true,
+    "Group from SQL/ReadMe.txt": true,
+    "List citations for personID/ReadMe.txt": true,
+    "Lump sources/ReadMe.txt": true,
+    "Modify citation list/ReadMe.txt": true,
+    "Run SQL/ReadMe.txt": true,
+    "Test external files/ReadMe.txt": true,
+    "External Files Info/ReadMe.txt": true,
+    "Mini report/ReadMe.txt": true,
+    "Merge duplicate family records/ReadMe.txt": true,
+    "Citation name updater/ReadMe.txt": true
+  }
 }

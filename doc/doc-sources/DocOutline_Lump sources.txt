@@ -1,6 +1,13 @@
+█_VARIABLES:
+UTILITY_NAME = Lump Sources
+SCRIPT_NAME = LumpSources.py
+DATABASE_VERSIONS = 8 and later
+RMNOCASE_REQUIRED = yes
+REGEXP_OPTIONAL = no
+█_END_VARIABLES
 =========================================================================DIV80==
 Lump sources that were entered as split sources
-LumpSources.py
+{SCRIPT_NAME}
 █_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
@@ -17,25 +24,24 @@ Currenlt- user must know the source ID  of receiving sources
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_BACKUPS_LARGE_CHANGES
 =========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_SW_SAFETY
+=========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW_A
+█_INCLUDE: REUSE_LIB_OVERVIEW_B_STD
+█_INCLUDE: REUSE_LIB_OVERVIEW_C
 =========================================================================DIV80==
 Running the utility - step by step
 
 The steps listed here run the utility on a copy of your database created in a
 new directory location.
 █_INCLUDE: REUSE_LIB_STEPS_1
-==========-
-Copy these items from the downloaded zip file to the working folder-
-      LumpSources.py                   (file)
-      RM-Python-config.ini             (file)
-      RMpy                             (folder)
 
 ==========-
 Download the SQLite extension file: unifuzz64.dll   -see below
    (This dll provides a RMNOCASE collation used by RM.)
-   Move the unifuzz64.dll file to the working folder.
+   Copy the unifuzz64.dll file to the working folder.
 
 █_INCLUDE: REUSE_LIB_STEPS_2
 
@@ -56,7 +62,7 @@ MAPPING_IDENT_SRC =
      "%-pHTH=%"  >  6815
 
 =========-
-Double click the "LumpSources.py" file in the working folder
+Double click the "{SCRIPT_NAME}" file in the working folder
 to start the utility.
 
 =========-
@@ -100,7 +106,7 @@ Notes
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_UNIFUZZ64DLL
+█_INCLUDE: REUSE_LIB_APPENDIX_RMNOCASE_DLL
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==

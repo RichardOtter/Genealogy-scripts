@@ -1,6 +1,7 @@
 import os
 import ctypes
 import shutil
+import json
 from pathlib import Path
 import yaml  # type: ignore
 import stat
@@ -78,9 +79,43 @@ def main():
         pause_with_message()
         return 1
 
+    # Update VS Code settings to mark project ReadMe files as read-only
+    try:
+        create_vscode_readonly_settings_for_projects(REPO_ROOT_PATH, project_list)
+    except Exception as e:
+        print(f"\nWARNING: Could not update VS Code settings: {e}")
+
     print("\nAll ReadMe files copied successfully to project folders.")
     pause_with_message()
     return 0
+
+
+# ===================================================DIV60==
+def create_vscode_readonly_settings_for_projects(repo_root, project_list):
+    """Create VS Code settings to mark ReadMe files in projects as read-only"""
+    vscode_dir = repo_root / ".vscode"
+    settings_file = vscode_dir / "settings.json"
+    
+    vscode_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Read existing settings if file exists
+    if settings_file.exists():
+        with open(settings_file, 'r') as f:
+            settings = json.load(f)
+    else:
+        settings = {}
+    
+    # Add files.readonlyInclude settings for each project's ReadMe file
+    if "files.readonlyInclude" not in settings:
+        settings["files.readonlyInclude"] = {}
+    
+    for project in project_list:
+        readonly_pattern = f"{project}/ReadMe.txt"
+        settings["files.readonlyInclude"][readonly_pattern] = True
+    
+    # Write updated settings
+    with open(settings_file, 'w') as f:
+        json.dump(settings, f, indent=2)
 
 
 # ===================================================DIV60==
