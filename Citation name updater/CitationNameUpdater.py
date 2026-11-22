@@ -34,7 +34,7 @@ def main():
     utility_info["script_path"]  = Path(__file__).parent
     utility_info["run_features_function"]  = run_update_citation_name
     utility_info["allow_db_changes"]  = True
-    utility_info["RMNOCASE_required"] = False
+    utility_info["RMNOCASE_required"] = True
     utility_info["RMNOCASE_optional"] = False
     utility_info["RegExp_required"]   = False
     utility_info["RegExp_optional"]   = True
@@ -45,6 +45,11 @@ def main():
 
 # ===================================================DIV60==
 def run_update_citation_name(config, db_connection, report_file):
+
+    # deal with RMNOCASE used to collateCitationTable.CitationName
+    # and issue a warning in report to reindex in RM.
+    RMc.reindex_RMNOCASE(db_connection)
+
     def get_boolean(section_name, option_name):
         try:
             value = config[section_name][option_name].strip().casefold()
@@ -55,6 +60,15 @@ def run_update_citation_name(config, db_connection, report_file):
             raise RMc.RM_Py_Exception(
                 f"ERROR: [{section_name}] {option_name} must be on or off.")
         return value == "on"
+
+    def get_unquoted_value(value):
+        """Remove surrounding quotes if present, preserving internal spaces."""
+        value = value.strip()
+        if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
+            return value[1:-1]
+        if len(value) >= 2 and value[0] == "'" and value[-1] == "'":
+            return value[1:-1]
+        return value
 
     use_regexp = get_boolean("FILTER", "USE_REGEXP")
     make_changes = get_boolean("CITATION_NAME_UPDATER", "MAKE_CHANGES")
@@ -75,12 +89,12 @@ def run_update_citation_name(config, db_connection, report_file):
             ) from exc
 
     try:
-        source_template_filter = config.get(
-            "FILTER", "SOURCE_TEMPLATE", fallback="").strip()
-        source_name_filter = config.get(
-            "FILTER", "SOURCE_NAME", fallback="").strip()
-        citation_name_filter = config.get(
-            "FILTER", "CITATION_NAME", fallback="").strip()
+        source_template_filter = get_unquoted_value(
+            config.get("FILTER", "SOURCE_TEMPLATE", fallback=""))
+        source_name_filter = get_unquoted_value(
+            config.get("FILTER", "SOURCE_NAME", fallback=""))
+        citation_name_filter = get_unquoted_value(
+            config.get("FILTER", "CITATION_NAME", fallback=""))
     except configparser.Error as exc:
         raise RMc.RM_Py_Exception(
             "ERROR: The [FILTER] configuration section is missing.") from exc
@@ -125,7 +139,12 @@ def run_update_citation_name(config, db_connection, report_file):
         return cursor.fetchone()[0]
 
     report_file.write(
-        "\nCitation name updater filters\n"
+        "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+        "IMPORTANT:\n"
+        "  Be sure to run the RootsMagic database tool 'Rebuild Indexes'\n"
+        "  when a modified database is first opened in RootsMagic\n"
+        "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+        "\n\n\n+=+Citation name filters\n"
         f"Mode: {'update database' if make_changes else 'preview only'}\n")
     remaining = count_citations()
 
@@ -162,7 +181,7 @@ def run_update_citation_name(config, db_connection, report_file):
             f"{remaining} remain after intersection.\n")
     else:
         report_file.write(
-            f"SOURCE_TEMPLATE: not applied; {remaining} citations remain.\n")
+            f"SOURCE_TEMPLATE: (blank - not applied); {remaining} citations remain.\n")
 
     if source_name_filter:
         before_filter = remaining
@@ -196,7 +215,7 @@ def run_update_citation_name(config, db_connection, report_file):
             f"{remaining} remain after intersection.\n")
     else:
         report_file.write(
-            f"SOURCE_NAME: not applied; {remaining} citations remain.\n")
+            f"SOURCE_NAME: (blank - not applied); {remaining} citations remain.\n")
 
     if citation_name_filter:
         before_filter = remaining
@@ -227,9 +246,25 @@ def run_update_citation_name(config, db_connection, report_file):
             f"{remaining} remain after intersection.\n")
     else:
         report_file.write(
-            f"CITATION_NAME: not applied; {remaining} citations remain.\n")
+            f"CITATION_NAME: (blank - not applied); {remaining} citations remain.\n")
 
-    report_file.write(f"Selected citations: {remaining}\n")
+    # Count distinct source templates and sources
+    where_clause = (
+        " WHERE " + " AND ".join(filter_conditions)
+        if filter_conditions else "")
+    
+    distinct_templates = db_connection.execute(
+        "SELECT COUNT(DISTINCT st.TemplateID) " + from_clause + where_clause,
+        filter_parameters).fetchone()[0]
+    
+    distinct_sources = db_connection.execute(
+        "SELECT COUNT(DISTINCT s.SourceID) " + from_clause + where_clause,
+        filter_parameters).fetchone()[0]
+    
+    report_file.write(
+        f"Source templates: {distinct_templates}\n"
+        f"Sources: {distinct_sources}\n"
+        f"Selected citations: {remaining}\n")
 
     source_template_columns = {
         row[1] for row in db_connection.execute(
@@ -250,9 +285,9 @@ def run_update_citation_name(config, db_connection, report_file):
         """
         SELECT ct.CitationID, ct.CitationName, ct.Fields, s.TemplateID,
                """ + source_template_citation_name_column +
-        """, st.FieldDefs, st.Name
+        """, st.FieldDefs, st.Name, s.Name, s.SourceID
         """ + from_clause + selected_where +
-        " ORDER BY ct.CitationID", filter_parameters).fetchall()
+        " ORDER BY st.Name, s.Name, ct.CitationID", filter_parameters).fetchall()
 
     def parse_xml_fields(xml_data, field_name, record_description):
         if xml_data in (None, b"", ""):
@@ -294,7 +329,7 @@ def run_update_citation_name(config, db_connection, report_file):
 
     template_data = {}
     for (citation_id, _, _, template_id, _, field_defs_xml,
-         template_name) in selected_rows:
+         template_name, _, _) in selected_rows:
         if template_id is None:
             raise RMc.RM_Py_Exception(
                 f"ERROR: Citation {citation_id} has no source template.")
@@ -306,12 +341,12 @@ def run_update_citation_name(config, db_connection, report_file):
             template_data[template_id] = (
                 template_name, definitions, default_template)
 
-    report_file.write("\nDefault templates for selected citations\n")
+    report_file.write("\nDefault templates for SourceTemplate used by selected citations\n")
     if not template_data:
         report_file.write("No source templates selected.\n")
     for template_id, (template_name, _, default_template) in template_data.items():
         report_file.write(
-            f"Source template {template_id}: {template_name}\n"
+            f"\nSource template {template_id}: {template_name}\n"
             f"{default_template}\n\n")
 
     if not template_default and not template_from_source and len(template_data) > 1:
@@ -320,8 +355,10 @@ def run_update_citation_name(config, db_connection, report_file):
             "use the same source template. No changes were made.")
 
     changes = []
+    unresolved_fields = {}  # Track unresolved fields by template/source/field
+    
     for (citation_id, old_name, citation_fields_xml, template_id,
-         source_template_citation_name, _, _) in selected_rows:
+         source_template_citation_name, _, _, source_name, source_id) in selected_rows:
         _, definitions, default_template = template_data[template_id]
         citation_fields = parse_xml_fields(
             citation_fields_xml, "Citation Fields", f"citation {citation_id}")
@@ -338,21 +375,51 @@ def run_update_citation_name(config, db_connection, report_file):
             field_key = field_name.casefold()
             if field_key in definitions and field_key in citation_fields:
                 return citation_fields[field_key]
+            # Track unresolved fields: either not in definitions OR missing from citation
+            if field_key not in definitions or field_key not in citation_fields:
+                template_name = template_data[template_id][0]
+                key = (template_name, source_name, field_name, citation_id)
+                if key not in unresolved_fields:
+                    unresolved_fields[key] = {
+                        'template_name': template_name,
+                        'source_name': source_name,
+                        'field_name': field_name,
+                        'citation_ids': []
+                    }
+                if citation_id not in unresolved_fields[key]['citation_ids']:
+                    unresolved_fields[key]['citation_ids'].append(citation_id)
             return match.group(0)
 
         new_name = re.sub(r"\[([^\[\]]+)\]", substitute_field, template)
-        changes.append((citation_id, old_name or "", new_name))
+        changes.append((citation_id, old_name or "", new_name, template_id, source_name))
 
     report_file.write(
         "\nCitation name changes\n"
-        "Each citation is reported on three lines:\n"
-        "Citation number\nOld CitationName\nNew CitationName\n")
+        "Key:\n"
+        "Citation number\nOld CitationName\nNew CitationName\n\n")
+    
     updated = 0
-    for citation_id, old_name, new_name in changes:
+    current_template = None
+    current_source = None
+    
+    for citation_id, old_name, new_name, template_id, source_name in changes:
+        template_name = template_data[template_id][0]
+        
+        if current_template != template_name:
+            current_template = template_name
+            current_source = None
+            report_file.write(
+                f"\n--- Source Template: {template_name} ---\n\n")
+        
+        if current_source != source_name:
+            current_source = source_name
+            report_file.write(
+                f"--  Source: {source_name}\n\n")
+        
         report_file.write(
-            f"{citation_id}\n"
-            f"{old_name!r}\n"
-            f"{new_name!r}\n\n")
+            f"  {citation_id}\n"
+            f"  {old_name!r}\n"
+            f"  {new_name!r}\n\n")
         if make_changes and old_name != new_name:
             db_connection.execute(
                 "UPDATE CitationTable SET CitationName = ? WHERE CitationID = ?",
@@ -360,8 +427,45 @@ def run_update_citation_name(config, db_connection, report_file):
             updated += 1
 
     report_file.write(
-        f"\nDatabase updated: {'yes' if updated else 'no'}.\n"
-        f"CitationName values changed: {updated}.\n")
+         "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+        f"Database updated: {'yes' if updated else 'no'}.\n\n"
+        f"CitationName values changed: {updated}.\n"
+         "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+        )
+
+    # Unresolved fields summary
+    if unresolved_fields:
+        report_file.write(
+            "\n\n"
+            "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+            "UNRESOLVED DATA FIELDS (Cannot be substituted in citation names)\n\n"
+            )
+        
+        # Group by template and collect unique fields
+        by_template = {}
+        for unresolved in unresolved_fields.values():
+            template_name = unresolved['template_name']
+            if template_name not in by_template:
+                by_template[template_name] = set()
+            by_template[template_name].add(unresolved['field_name'])
+        
+        for template_name in sorted(by_template.keys()):
+            field_names = sorted(by_template[template_name])
+            field_list = ", ".join(f"[{name}]" for name in field_names)
+            report_file.write(
+                f"Source Template: {template_name} - {len(field_names)} unresolved field(s)\n"
+                f"  {field_list}\n\n")
+    else:
+        report_file.write(
+            "\n\n"
+            "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+            "No unresolved data fields found.\n"
+            "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+            )
+    report_file.write(
+        "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+    )
+
     return 0
 
 
