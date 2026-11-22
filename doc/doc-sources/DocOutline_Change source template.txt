@@ -1,7 +1,7 @@
 =========================================================================DIV80==
 Change the source template used by given sources
 ChangeSourceTemplate.py
-INCLUDE: LIB_INTRO
+█_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
@@ -36,21 +36,21 @@ This utility does not move data BETWEEN source fields and citation fields.
 Other utilities can do that. (see: LumpSources another utility in this suite.)
 
 =========================================================================DIV80==
-INCLUDE: LIB_BACKUPS_LARGE_CHANGES
+█_INCLUDE: REUSE_LIB_BACKUPS_LARGE_CHANGES
 =========================================================================DIV80==
-INCLUDE: LIB_COMPATIBILITY
+█_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
-INCLUDE: LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW
 =========================================================================DIV80==
-INCLUDE: LIB_STEPS_0_LARGE_CHANGES
-INCLUDE: LIB_STEPS_1
+█_INCLUDE: REUSE_LIB_STEPS_0_LARGE_CHANGES
+█_INCLUDE: REUSE_LIB_STEPS_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ChangeSourceTemplate.py          (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_STEPS_2
+█_INCLUDE: REUSE_LIB_STEPS_2
 ==========-
 STEP 0		Option    All options = off
 
@@ -704,17 +704,17 @@ Add a new, Key-Value pair with a particular Key and an empty value.-
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_USE_NEW_DB
+█_INCLUDE: REUSE_LIB_USE_NEW_DB
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
-INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
-INCLUDE: LIB_APPENDIX_CONFIG_MULTILINE
-INCLUDE: LIB_APPENDIX_CONFIG_MAPPING
-INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MULTILINE
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MAPPING
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_PYTHON
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_TROUBLE
+█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 ===========-
 Error Message:
 Tried to create duplicate Name in XML.
@@ -825,8 +825,8 @@ A utility to update the Citation Name to either the standard name or a custom
 name operating on a select group of sources.
 
 =========================================================================DIV80==
-INCLUDE: LIB_FEEDBACK
+█_INCLUDE: REUSE_LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_DISTRIBUTION
+█_INCLUDE: REUSE_LIB_DISTRIBUTION
 
 

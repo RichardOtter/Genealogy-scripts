@@ -3,7 +3,7 @@ Modifies a citation list
 ModifyCitationList.py
 
 (formerly: CitationSortOrder.py)
-INCLUDE: LIB_INTRO
+█_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
@@ -19,18 +19,18 @@ Hidden citations may be restored using this utility.
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_BACKUPS_SMALL_CHANGES
+█_INCLUDE: REUSE_LIB_BACKUPS_SMALL_CHANGES
 =========================================================================DIV80==
-INCLUDE: LIB_COMPATIBILITY
+█_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
-INCLUDE: LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW
 
 While the database name and location is specified in the config file, the actual
 instructions for which citations and sources to modify are entered at a series
 of prompts in the black terminal window.
 =========================================================================DIV80==
-INCLUDE: LIB_STEPS_0_SMALL_CHANGES
-INCLUDE: LIB_STEPS_1
+█_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
+█_INCLUDE: REUSE_LIB_STEPS_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ModifyCitationList.py            (file)
@@ -43,7 +43,7 @@ Make a copy of your database, move the copy into the working folder.
 Rename the database copy to "TEST.rmtree" in order to prevent any
 confusion about the purpose of the copy.
 
-INCLUDE: LIB_STEPS_2
+█_INCLUDE: REUSE_LIB_STEPS_2
 
 Save the config file.
 
@@ -148,13 +148,13 @@ DROP TABLE AuxCitationLinkTable;
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
-INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
-INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_PYTHON
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_TROUBLE
+█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
 TODO
 
@@ -163,8 +163,8 @@ TODO
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_FEEDBACK
+█_INCLUDE: REUSE_LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_DISTRIBUTION
+█_INCLUDE: REUSE_LIB_DISTRIBUTION
 
 

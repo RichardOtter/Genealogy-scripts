@@ -1,7 +1,7 @@
 =========================================================================DIV80==
 Merge duplicate records in the FamilyTable
 MergeDuplicateFamilyRecords.py
-INCLUDE: LIB_INTRO
+█_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
@@ -22,21 +22,21 @@ report file and no changes are made. Thus, this utility can be run as a
 diagnostic tool to detect a duplication problem that may not have been found..
 
 =========================================================================DIV80==
-INCLUDE: LIB_BACKUPS_SMALL_CHANGES
+█_INCLUDE: REUSE_LIB_BACKUPS_SMALL_CHANGES
 =========================================================================DIV80==
-INCLUDE: LIB_COMPATIBILITY
+█_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
-INCLUDE: LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW
 =========================================================================DIV80==
-INCLUDE: LIB_STEPS_0_SMALL_CHANGES
-INCLUDE: LIB_STEPS_1
+█_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
+█_INCLUDE: REUSE_LIB_STEPS_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       MergeDuplicateFamilyRecords.py   (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_STEPS_2
+█_INCLUDE: REUSE_LIB_STEPS_2
 =========-
 Double click the "MergeDuplicateFamilyRecords.py" file in the working folder
 to start the utility.
@@ -55,13 +55,13 @@ Consider whether to rename TEST.rmtree and use it as your research database.
 =========================================================================DIV80==
 Notes
 
-INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
-INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
-INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_PYTHON
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_TROUBLE
+█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
 TODO
 
@@ -69,8 +69,8 @@ TODO
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_FEEDBACK
+█_INCLUDE: REUSE_LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_DISTRIBUTION
+█_INCLUDE: REUSE_LIB_DISTRIBUTION
 
 

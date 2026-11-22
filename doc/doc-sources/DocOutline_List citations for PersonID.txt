@@ -1,7 +1,7 @@
 =========================================================================DIV80==
 List all citations for a person given the RIN/PersonID
 ListCitationsForPersonID.py
-INCLUDE: LIB_INTRO
+█_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
@@ -22,21 +22,21 @@ The results are saved to a report file which is automatically displayed.
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_BACKUPS_READONLY
+█_INCLUDE: REUSE_LIB_BACKUPS_READONLY
 =========================================================================DIV80==
-INCLUDE: LIB_COMPATIBILITY
+█_INCLUDE: REUSE_LIB_COMPATIBILITY
 ======================================================================
-INCLUDE: LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW
 =========================================================================DIV80==
-INCLUDE: LIB_STEPS_0_SMALL_CHANGES
-INCLUDE: LIB_STEPS_1
+█_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
+█_INCLUDE: REUSE_LIB_STEPS_1
 ==========-
 *  Copy these items from the downloaded zip file to the working folder-
       ListCitationsForPersonID.py      (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_STEPS_2
+█_INCLUDE: REUSE_LIB_STEPS_2
 Save the config file.
 =========-
 Double click the "ListCitationsForPersonID.py" file in the working folder
@@ -58,13 +58,13 @@ No changes are mde to the database by this utility.
 Notes
 
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
-INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
-INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_PYTHON
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_TROUBLE
+█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
 TODO
 
@@ -73,8 +73,8 @@ TODO
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_FEEDBACK
+█_INCLUDE: REUSE_LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_DISTRIBUTION
+█_INCLUDE: REUSE_LIB_DISTRIBUTION
 
 

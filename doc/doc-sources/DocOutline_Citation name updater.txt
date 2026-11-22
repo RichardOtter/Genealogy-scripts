@@ -1,7 +1,7 @@
 =========================================================================DIV80==
 Update Citation Names in selected citations using standard or custom template
 CitationNameUpdater.py
-INCLUDE: LIB_INTRO
+█_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
@@ -17,36 +17,52 @@ The utility can operate in a Preview mode in which the database is not altered.
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_BACKUPS_SMALL_CHANGES
+█_INCLUDE: REUSE_LIB_BACKUPS_SMALL_CHANGES
 =========================================================================DIV80==
-INCLUDE: LIB_COMPATIBILITY
+█_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
-INCLUDE: LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW
 =========================================================================DIV80==
-INCLUDE: LIB_STEPS_0_SMALL_CHANGES
-INCLUDE: LIB_STEPS_1
+█_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
+█_INCLUDE: REUSE_LIB_STEPS_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       CitationNameUpdater.py           (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_STEPS_2
+█_INCLUDE: REUSE_LIB_STEPS_2
+█_INCLUDE: REUSE_LIB_STEPS_3
 ==========-
 Look at the [CV_PARAMS] section of the config file containing keys for the 
 parameters needed to describe the desired changes:
 
-FACTTYPE_CURRENT
-FACTTYPE_NEW
-ROLE
+[FILTER]
+USE_REGEXP = off
+SOURCE_TEMPLATE = _ChurchBooks -archive/online
+SOURCE_NAME = __ChurchBook -Oberschwarzach
+CITATION_NAME =
 
-Now look at the [SOURCE_FILTER] section which contains the keys that specify
-which sources are changed.
+[CITATION_NAME_UPDATER]
+MAKE_CHANGES = off
+TEMPLATE_DEFAULT = on
+TEMPLATE_FROM_SOURCE_TEMPLATE = 
+# The report lists the default template for each selected source template.
+# CUSTOM_TEMPLATE requires all selected citations to use the same source template.
+CUSTOM_TEMPLATE = 
 
-DESC
-DATE
 
-Full details of how to specify the parameters are in the Notes section below.
+# exclude if contains string1
+# ^(?!.*string1).*$
+
+# exclude if contains string1 or string2
+# ^(?!.*(string1|string2)).*$
+
+# exclude if contains a YYYY > 1900
+# ^(?!.*(190[1-9]|19[1-9][0-9]|[2-9][0-9]{3})).*$
+
+values in config file may be quoted. 
+Only needed if the Template, Source of Citation Name has a leading or trailing space character.
 
 ==========-
 Save the config file but leave it open in Notepad.
@@ -64,6 +80,8 @@ The terminal window closes and the report file is displayed in Notepad for
 your inspection.
 
 =========-
+█_INCLUDE: REUSE_LIB_STEPS_RMNOCASE_REINDEX
+
 Open the TEST.rmtree database in RM and confirm the desired changes have
 been accomplished.
 
@@ -145,13 +163,17 @@ DATE              =
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
-INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
-INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_PYTHON
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_TROUBLE
+REUSE_LIB_APPENDIX_RMNOCASE_DLL
+=========================================================================DIV80==
+REUSE_LIB_APPENDIX_REGEXP-DLL
+=========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
 TODO
 
@@ -159,8 +181,8 @@ TODO
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_FEEDBACK
+█_INCLUDE: REUSE_LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_DISTRIBUTION
+█_INCLUDE: REUSE_LIB_DISTRIBUTION
 
 

@@ -1,7 +1,7 @@
 =========================================================================DIV80==
 Save External Files / Media Files Information to RM Database
 ExternalFilesInfo.py
-INCLUDE: LIB_INTRO
+█_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
 This app retrieves information about all RootsMagic (RM) Media files and stores the
@@ -19,25 +19,25 @@ a good idea. I think it is useful to keep tack of changes to external files,
 helps in the event of a restoration of a backup, and ensures integrity of the 
 link to external data.
 =========================================================================DIV80==
-INCLUDE: LIB_BACKUPS_SMALL_CHANGES
+█_INCLUDE: REUSE_LIB_BACKUPS_SMALL_CHANGES
 =========================================================================DIV80==
-INCLUDE: LIB_COMPATIBILITY
+█_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
 Performance
 A full check of the saved MD5 hash against the hash of the files found on disk
 can take some time. My 7,000 files take about 2 minutes.
 =========================================================================DIV80==
-INCLUDE: LIB_OVERVIEW
+█_INCLUDE: REUSE_LIB_OVERVIEW
 =========================================================================DIV80==
-INCLUDE: LIB_STEPS_0_SMALL_CHANGES
-INCLUDE: LIB_STEPS_1
+█_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
+█_INCLUDE: REUSE_LIB_STEPS_1
 ==========-
 Copy these items from the downloaded zip file to the working folder-
       ExternalFileInfo.py              (file)
       RM-Python-config.ini             (file)
       RMpy                             (folder)
 
-INCLUDE: LIB_STEPS_2
+█_INCLUDE: REUSE_LIB_STEPS_2
 ==========-
 Look at the [OPTIONS] section of the config file containing keys for the 
 parameters needed to describe the desired changes:
@@ -134,14 +134,14 @@ Precautions before using the modified database
 CONSTANT
 only in the 2  big change
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_DB_NEW_LOCATION
-INCLUDE: LIB_APPENDIX_CONFIG_DETAILS
-INCLUDE: LIB_APPENDIX_CONFIG_STD_KEYS
-INCLUDE: LIB_APPENDIX_CONFIG_ENCODE
+█_INCLUDE: REUSE_LIB_APPENDIX_DB_NEW_LOCATION
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_PYTHON
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-INCLUDE: LIB_APPENDIX_TROUBLE
+█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
 TODO
 
@@ -149,8 +149,8 @@ TODO
 
 
 =========================================================================DIV80==
-INCLUDE: LIB_FEEDBACK
+█_INCLUDE: REUSE_LIB_FEEDBACK
 =========================================================================DIV80==
-INCLUDE: LIB_DISTRIBUTION
+█_INCLUDE: REUSE_LIB_DISTRIBUTION
 
 

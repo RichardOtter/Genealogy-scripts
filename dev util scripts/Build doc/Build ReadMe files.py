@@ -76,7 +76,7 @@ def main():
                 open(doc_file_path, 'w') as doc_final:
                 
                 for line in doc_template:
-                    if line.startswith("INCLUDE: "):
+                    if line.startswith("█__INCLUDE: "):
                         label = line[9::]
                         for lib_line in get_snippet(label, lib_file_path):
                             doc_final.write(lib_line)
