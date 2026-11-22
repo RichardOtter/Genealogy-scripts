@@ -429,7 +429,7 @@ def run_update_citation_name(config, db_connection, report_file):
     report_file.write(
          "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
         f"Database updated: {'yes' if updated else 'no'}.\n\n"
-        f"CitationName values changed: {updated}.\n"
+        f"CitationName values changed: {updated}.\n\n"
          "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
         )
 
