@@ -22,6 +22,19 @@ import xml.etree.ElementTree as ET
 #    FILE_PATHS  DB_PATH
 #    FILE_PATHS  REPORT_FILE_PATH
 #    FILE_PATHS  REPORT_FILE_DISPLAY_APP
+#    FILE_PATHS  RMNOCASE_PATH
+#    FILE_PATHS  REGEXP_PATH
+
+#    FILTER   USE_REGEXP
+#    FILTER   SOURCE_TEMPLATE
+#    FILTER   SOURCE_NAME
+#    FILTER   CITATION_NAME
+
+#   CITATION_NAME_UPDATER  MAKE_CHANGES
+#   CITATION_NAME_UPDATER  TEMPLATE_DEFAULT
+#   CITATION_NAME_UPDATER  TEMPLATE_FROM_SOURCE_TEMPLATE
+#   CITATION_NAME_UPDATER  CUSTOM_TEMPLATE
+
 
 # ===================================================DIV60==
 def main():
@@ -138,13 +151,17 @@ def run_update_citation_name(config, db_connection, report_file):
             "SELECT COUNT(*) " + from_clause + where_clause, parameters)
         return cursor.fetchone()[0]
 
+    if make_changes:
+        report_file.write(
+            "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+            "IMPORTANT:\n"
+            "  Be sure to run the RootsMagic database tool 'Rebuild Indexes'\n"
+            "  when a modified database is first opened in RootsMagic\n"
+            "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+            "\n\n")
+
     report_file.write(
-        "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
-        "IMPORTANT:\n"
-        "  Be sure to run the RootsMagic database tool 'Rebuild Indexes'\n"
-        "  when a modified database is first opened in RootsMagic\n"
-        "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
-        "\n\n\n+=+Citation name filters\n"
+        "+=+Citation name filters\n"
         f"Mode: {'update database' if make_changes else 'preview only'}\n")
     remaining = count_citations()
 

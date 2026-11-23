@@ -96,7 +96,7 @@ utility is exited.
 =========-
 The report file is displayed in Notepad for you inspection.
 
-
+=========-
 If the database file couldn't be found, fix the config file, save it and re-run
 the utility until you get it right.
 

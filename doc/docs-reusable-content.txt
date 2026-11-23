@@ -123,19 +123,6 @@ To install and use the utility for the first time (specifics below):
 *  The terminal window will close and a summary report will be displayed
 in NotePad.
 
-====== The above procedure of making a copy of your database and operating on it in
-====== the working folder is most prudent when a user is just getting familiar with
-====== a new or updated utility.
-====== 
-====== Some utilities are read only and do not change the database at all, while others
-====== affect only small amount of data.
-====== Once the user has confidence in the operation of a low-impact utility, one
-====== can start operating directly on the research (production) database, always
-====== assuming that at least several known-good backups exist.
-====== 
-====== Other utilities that require more configuration and make larger changes should
-====== always operate on databases copied into a working folder.
-
 *****  Details follow below. *****
 
 =========================================================================DIV80==
@@ -226,12 +213,13 @@ If you followed the above instructions, no changes to any of the key-values in
 the [FILE_PATHS] section are needed.
 
 =========================================================================DIV80==
-REUSE_LIB_STEPS_3
+REUSE_LIB_STEPS_REGEXP_PATH
 ==========-
 
-Another parameter is the REGEXP_PATH     = regexp.dll
+The next parameter to consider is
+REGEXP_PATH     = regexp.dll
 
-OPTIONAL
+This is an optional setting. Leave it as is for now.
 
 There is another setting (USE_REGEXP) discussed below, that determines whether
 this name needs to be set. Most common uses of this utility will not need to
@@ -241,9 +229,27 @@ If later your needs become more advanced, the download procedure is described
 below, in APPENDIX  How to obtain regexp.dll.
 
 =========================================================================DIV80==
-REUSE_LIB_STEPS_RMNOCASE_REINDEX
+REUSE_LIB_STEPS_REINDEX_RMNOCASE
 
-Explain reindex in RM tools
+VERY IMPORTANT
+After a run of CitationNameUpdater in which changes have been saved to the
+database, it is very important to reindex the database when opening the file
+in RootsMagic.
+This is very easily done.
+Upon first loading the database, either automatically, or manually opening 
+a file within RootsMagic, before doing anything else, click the Tools icon on
+the left hand tab panel, and run the "Rebuild indexes" database tool. 
+It's the second item from the top.
+If you don't, you may get a Malformed disk image error and Roots Magic may stop.
+Don't worry if that happens. Just reopen the file and before doing anything
+else, run the Rebuild indexes tool. This is expected behavior.
+Once the file has been reindexed, you can examine the citation names hat were
+updated to confirm you got what you expected.
+Reindexing does not need to be redone until you run CitationNameUpdater again
+with MAKE_CHANGES = on.
+
+The report file has this same notice right below the header, in case you forget.
+
 
 =========================================================================DIV80==
 REUSE_LIB_APPENDIX_PYTHON
@@ -324,22 +330,6 @@ MD5 hash values are used to confirm the identity and integrity of files.
     MD5 hash                            File size         File name
     06a1f485b0fae62caa80850a8c7fd7c2    256,406 bytes    unifuzz64.dll
 
-A new option-
-I have recently gotten the code for this extension to build on Windows. I renamed
-the extension to "rmnocase_surrogate.dll".
-Use it exactly as the above instructions say to use unifuzz64.dll.
-The new dll is included in the downloaded zip file in the RMNOCASE folder
-along with information about its origin.
-The only advantages over the unifuzz64.dll-
-* I built it from GNU licensed source code and can vouch for its contents. 
-* Anyone else can rebuild it from source.
-* It has a version number in its Windows file manager properties. (v0.4.0.0)
-* I can redistribute it in this utility suite zip file.
-
-They both presumably create the same imperfect surrogate for RM's real RMNOCASE.
-
-    MD5 hash                          File size       File name
-9529c64b7e6c026996195ee825ec7730	    227,328 bytes	  rmnocase_surrogate.dll
 
 MD5 calculation
 In Windows, to generate the MD5 hash of a file named [file name]:
