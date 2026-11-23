@@ -95,7 +95,7 @@ REUSE_LIB_OVERVIEW_B_USER_INPUT
 {UTILITY_NAME} is started by the user, a black terminal window is opened.
 The terminal window displays prompts to the user to input parameters, the 
 requested database modification is made and the app prompts the user for more
-modifications. When the user is don, the user enters a command to exit the
+modifications. When the user is done, the user enters a command to exit the
 program, a summary report file is displayed and the program stops.
 
 =========================================================================DIV80==
@@ -123,10 +123,10 @@ To install and use the utility for the first time (specifics below):
 *  The terminal window will close and a summary report will be displayed
 in NotePad.
 
-The above procedure of making a copy of your database and operating on it in
-the working folder is most prudent when a user is just getting familiar with
-a new or updated utility.
-
+====== The above procedure of making a copy of your database and operating on it in
+====== the working folder is most prudent when a user is just getting familiar with
+====== a new or updated utility.
+====== 
 ====== Some utilities are read only and do not change the database at all, while others
 ====== affect only small amount of data.
 ====== Once the user has confidence in the operation of a low-impact utility, one
@@ -193,7 +193,7 @@ not be taken over by OneDrive.
 Copy these items from the downloaded zip file to the working folder-
      (file)     {SCRIPT_NAME}               
      (file)     RM-Python-config.ini             
-    (folder)    RMpy    
+     (folder)   RMpy    
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_2
@@ -259,8 +259,9 @@ Installation using winget.
 1 Open a command line terminal. 
 A quick method is to right click the Windows menu icon in the file manager task 
 bar and select the Terminal command;  not the "Terminal (Admin)" command.
-Or, using just the keyboard, press and hold the Windows key and then tap X, and select 
-the Terminal command from the displayed menu. 
+
+Or, using just the keyboard, press and hold the Windows key and then tap X, let
+go or the Windows key and tap I for the Terminal command from the displayed menu. 
 
 2 Type (copy and paste) the following command in the window and hit Enter:
 
@@ -285,7 +286,7 @@ Directory to add: C:\Users\rotter\AppData\Local\Python\bin
 Ignore the last 2 lines. You won't need that functionality.
 
 
-Uninstall
+How to Uninstall Python
 Use the Settings app in the Windows menu.
 Go to Apps=>Installed apps
 and find:
@@ -323,6 +324,24 @@ MD5 hash values are used to confirm the identity and integrity of files.
     MD5 hash                            File size         File name
     06a1f485b0fae62caa80850a8c7fd7c2    256,406 bytes    unifuzz64.dll
 
+A new option-
+I have recently gotten the code for this extension to build on Windows. I renamed
+the extension to "rmnocase_surrogate.dll".
+Use it exactly as the above instructions say to use unifuzz64.dll.
+The new dll is included in the downloaded zip file in the RMNOCASE folder
+along with information about its origin.
+The only advantages over the unifuzz64.dll-
+* I built it from GNU licensed source code and can vouch for its contents. 
+* Anyone else can rebuild it from source.
+* It has a version number in its Windows file manager properties. (v0.4.0.0)
+* I can redistribute it in this utility suite zip file.
+
+They both presumably create the same imperfect surrogate for RM's real RMNOCASE.
+
+    MD5 hash                          File size       File name
+9529c64b7e6c026996195ee825ec7730	    227,328 bytes	  rmnocase_surrogate.dll
+
+MD5 calculation
 In Windows, to generate the MD5 hash of a file named [file name]:
 Open a terminal window and enter:
 certutil -hashfile [file name]  MD5
@@ -332,7 +351,7 @@ where [file name] is the fie you wish to compute the MD5 has for.
 So, for example, to display the MD5 of the unifuzz file, enter-
 certutil -hashfile unifuzz64.dll  MD5
 
-The path to the unifuzz64.dll file in the config file is given by the
+The path to the dll file in the config file is given by the
 RMNOCASE key. Same rules as for the DB_PATH key.
 
 =========================================================================DIV80==

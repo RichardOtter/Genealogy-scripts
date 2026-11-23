@@ -1,7 +1,7 @@
 █_VARIABLES:
 UTILITY_NAME = Change Source for Citation
 SCRIPT_NAME = ChangeSrcForCitation.py
-DATABASE_VERSIONS = 8 and later
+DATABASE_VERSIONS = 7 and later
 RMNOCASE_REQUIRED = no
 REGEXP_OPTIONAL = no
 █_END_VARIABLES
@@ -42,11 +42,6 @@ and media.
 █_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_OVERVIEW_A
-
-{UTILITY_NAME} is started, a black terminal window is opened.
-The terminal window asks for user input and the database modification is made.
-After requesting to exit the app, a report file is displayed and the program stops.
-
 █_INCLUDE: REUSE_LIB_OVERVIEW_B_USER_INPUT
 █_INCLUDE: REUSE_LIB_OVERVIEW_C
 =========================================================================DIV80==

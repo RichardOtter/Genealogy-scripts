@@ -1,0 +1,12 @@
+
+UtilityName:  RMNOCASE
+
+# last release NONE
+Version: 0.4.0
+  
+DistributionFileList:
+  - rmnocase_surrogate.dll
+  - info.txt.txt
+ 
+DistributionFolderList:
+
