@@ -45,13 +45,14 @@ def main():
     except:
         raise Exception("Problem getting the values from the top level yaml file.\n")
 
-    if build_type not in ("ALPHA", "BETA", "RELEASE"):
-        print(f"ERROR: BuildType must be ALPHA, BETA, or RELEASE; got {build_type!r}.")
+    if build_type not in ("DEV", "ALPHA", "BETA", "RELEASE"):
+        print(f"ERROR: BuildType must be DEV, ALPHA, BETA, or RELEASE; got {build_type!r}.")
         pause_with_message()
         return 1
 
     is_release = build_type == "RELEASE"
     version_suffix = f" {build_type}" if build_type and not is_release else ""
+    snippet_prefix = "╋" if build_type in ("DEV", "ALPHA") else ""
 
     try:
         # Ensure docs-generated folder exists
@@ -108,7 +109,7 @@ def main():
                         for lib_line in get_snippet(label, lib_file_path):
                             # Apply variable substitution to included snippet
                             substituted_line = substitute_variables(lib_line, variables)
-                            doc_final.write(("" if is_release else "╋") + substituted_line)
+                            doc_final.write(snippet_prefix + substituted_line)
                     else:
                         # Apply variable substitution to doc content
                         substituted_line = substitute_variables(line, variables)

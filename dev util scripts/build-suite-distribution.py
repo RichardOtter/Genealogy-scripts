@@ -43,8 +43,8 @@ def main():
         print("Problem getting the values from the top level yaml file.\n")
         exit()
 
-    if build_type not in ("ALPHA", "BETA", "RELEASE"):
-        print(f"ERROR: BuildType must be ALPHA, BETA, or RELEASE; got {build_type!r}.")
+    if build_type not in ("DEV", "ALPHA", "BETA", "RELEASE"):
+        print(f"ERROR: BuildType must be DEV, ALPHA, BETA, or RELEASE; got {build_type!r}.")
         if sys.stdin.isatty():
             pause_with_message("Press Enter to continue, window will close")
         return 1

@@ -21,8 +21,8 @@ needs a matching source template and project folder. The build also reads the
 utility version from the project's `_util_info.yaml`; if it is missing, the
 generated footer uses `Unknown`.
 
-Both build scripts require `BuildType` to be exactly `ALPHA`, `BETA`, or
-`RELEASE`. A missing, blank, or other value stops the build with an error
+Both build scripts require `BuildType` to be exactly `DEV`, `ALPHA`, `BETA`,
+or `RELEASE`. A missing, blank, or other value stops the build with an error
 before output files are changed.
 
 The scripts require Python and PyYAML. The build and discard scripts also
@@ -44,11 +44,11 @@ Run these commands from the repository root:
 
    The build expands INCLUDE directives, substitutes template variables,
    omits the variables section, and adds suite version, utility version, and
-   build date information. When `BuildType` is `RELEASE`, shared lines have
-   no prefix and versions have no build-type suffix. Otherwise, shared lines
-   are prefixed with `╋`, and the build type is appended to the versions.
-   The suite release builder also omits `RELEASE` from distribution names and
-   utility versions; `ALPHA` and `BETA` are included.
+   build date information. Shared lines are prefixed with `╋` for `DEV` and
+   `ALPHA`, but not for `BETA` or `RELEASE`. The build type is appended to
+   the versions unless it is `RELEASE`. The suite release builder likewise
+   includes `DEV`, `ALPHA`, or `BETA` in distribution names and utility
+   versions, but omits `RELEASE`.
 
    **The build first sends every existing file directly inside
    `doc\docs-generated` to the Recycle Bin**, then generates the configured

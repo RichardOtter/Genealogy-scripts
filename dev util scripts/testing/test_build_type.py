@@ -28,8 +28,9 @@ class BuildTypeTests(unittest.TestCase):
     def test_build_outputs_for_release_and_other_types(self):
         for build_type, suffix, marker in [
             ("RELEASE", "", ""),
+            ("DEV", " DEV", "╋"),
             ("ALPHA", " ALPHA", "╋"),
-            ("BETA", " BETA", "╋"),
+            ("BETA", " BETA", ""),
         ]:
             with self.subTest(build_type=build_type), tempfile.TemporaryDirectory() as temp:
                 root = Path(temp)
@@ -144,7 +145,7 @@ class BuildTypeTests(unittest.TestCase):
                          patch.object(script, "pause_with_message"), \
                          contextlib.redirect_stdout(io.StringIO()) as output:
                         self.assertEqual(script.main(), 1)
-                        self.assertIn("BuildType must be ALPHA, BETA, or RELEASE", output.getvalue())
+                        self.assertIn("BuildType must be DEV, ALPHA, BETA, or RELEASE", output.getvalue())
 
                 self.assertEqual(sentinel.read_text(encoding="utf-8"), "unchanged")
                 self.assertFalse((root / ".vscode").exists())

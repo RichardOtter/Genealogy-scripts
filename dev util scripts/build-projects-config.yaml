@@ -2,9 +2,9 @@
 
 # Last Release 1.0.2   2025-02-01_202626
 SuiteVersion: 1.2.0
-BuildType: ALPHA
+BuildType: DEV
 
-# ALPHA BETA RELEASE
+# DEV ALPHA BETA RELEASE
 
 SuiteName: RM_Utilities_Suite
 
