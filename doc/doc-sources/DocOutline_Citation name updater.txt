@@ -6,32 +6,36 @@ RMNOCASE_REQUIRED = yes
 REGEXP_OPTIONAL = yes
 █_END_VARIABLES
 =========================================================================DIV80==
-Update Citation Names in selected citations using standard or custom template
+Update Citation Names in selected citations using standard or custom templates
 {SCRIPT_NAME}
 █_INCLUDE: REUSE_LIB_INTRO
 =========================================================================DIV80==
 Purpose
 
-This utility is designed to update a citation's CitationName in a bulk
-operation. First, a set of filters is specified and applied to limit which
-citations will be modified, then rules are followed to determine the new
-Citation Name. If the results look satisfactory, the utility is then instructed
-to actually save the changes to the database.
+This utility is designed to update a citation's "citation name" in a bulk
+operation. 
+A set of filters may be specified and applied to limit which
+citations are to be modified, then rules are followed to determine the new
+citation name for each citation.
+If the results look satisfactory, the utility is then instructed to actually
+save the changes to the database in another run of the software.
 
-This utility will work in versions 8 and later of RootsMagic database. It is
-aware of the new option in v12 that allows users to create their own custom 
-CitationName template. 
+This utility will work with versions {DATABASE_VERSIONS} of RootsMagic database.
+It is aware of the new option in RM v12 that allows users to create their own
+custom citation name template in the source template edit window. 
 
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_BACKUPS_SMALL_CHANGES
 Use the preview mode to be clear on what is in scope to be changed.
-This utility only changes citation names. Citation names are
-derived from the citation data. If the first result does not give the desired
-result, a second run can fix it. No genealogical data can be modified or lost
+
+This utility only changes citation names. Citation names are derived from the
+citation data. If the first run of the utility gives a result that is not
+desired, a second run can fix it. No genealogical data can be modified or lost
 running this utility.
 
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_SW_SAFETY
+█_INCLUDE: REUSE_LIB_SW_SAFETY_RMNOCASE_REGEXP
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_COMPATIBILITY
 =========================================================================DIV80==
@@ -42,22 +46,27 @@ running this utility.
 █_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
 █_INCLUDE: REUSE_LIB_STEPS_1
 █_INCLUDE: REUSE_LIB_STEPS_2
+The RMNOCASE_PATH and REGEXP_PATH, also in the [FILE_PATHS] section, point to
+helper files needed by the utility to make SQLite operate as needed.
+
+█_INCLUDE: REUSE_LIB_STEPS_2_A
+More details are in "APPENDIX  Config file: location, contents and editing"
+and in the appendixes describing the 2 helper files-
+APPENDIX  RMNOCASE_Surrogate.dll and unifuzz64.dll
+and
+APPENDIX  How to obtain regexp.dll
+
 █_INCLUDE: REUSE_LIB_STEPS_REGEXP_PATH
 ==========-
-Now examine the [FILTER] section of the config file:
+The first settings specific to {UTILITY_NAME} are those in the [FILTER] section.
 
 [FILTER]
-USE_REGEXP = off
 SOURCE_TEMPLATE = 
 SOURCE_NAME = 
 CITATION_NAME =
+USE_REGEXP = off
 
-These settings determine which CitationNames will be updated.
-
-First, for now, leave USE_REGEXP = off
-The setting is explained in the Notes section below.
-REGEXP (regular expressions) allow the use of very sophisticated wild card characters
-so allow selection and exclusion of items.
+These settings determine which citation names will be updated.
 
 SOURCE_TEMPLATE
 allows specification of a particular SourceTemplate name.
@@ -90,15 +99,23 @@ Since they all use the same source citation, you don't need to give the source
 template name.
 Specifying the Citation Name is an option that you probably will not use.
 
+USE_REGEXP = off
+For now, leave this off.
+The setting is explained in the Notes section below.
+REGEXP (regular expressions) allow the use of very sophisticated wild card characters
+so allow selection and exclusion of items.
 
-Now come the section with parameters that tell the utility what format to use
-to update the citation names.
+
+Next up is the CITATION_NAME_UPDATER section:
 
 [CITATION_NAME_UPDATER]
 MAKE_CHANGES = off
 TEMPLATE_DEFAULT = on
 TEMPLATE_FROM_SOURCE_TEMPLATE = 
 CUSTOM_TEMPLATE = 
+
+This section's parameters tell the utility what template to use to update
+the citation names.
 
 MAKE_CHANGES  on or off
 The first is not really a format issue, but whether any changes should be made.
@@ -130,13 +147,9 @@ This is only considered when TEMPLATE_FROM_SOURCE_TEMPLATE is off.
 Since only a single template can be specified in the config file, this
 should be used only when the filtering includes one source template.
 
-
-
 Values in config file sections [FILTER] and [CITATION_NAME_UPDATER] may be
 in quotes. if needed. Only necessary if the Template, Source of Citation Name 
 has a leading or trailing space character.
-
-
 
 ==========-
 Save the config file but leave it open in Notepad.
@@ -156,13 +169,11 @@ your inspection.
 =========-
 █_INCLUDE: REUSE_LIB_STEPS_REINDEX_RMNOCASE
 
-
-Open the TEST.rmtree database in RM and confirm the desired changes have
+Examine the changed database in RM and confirm the desired changes have
 been accomplished.
 
 =========-
 Consider whether to rename TEST.rmtree and use it as your research database.
-
 
 =========================================================================DIV80==
 Notes
@@ -173,33 +184,28 @@ Running the utility in this mode allows one to work on the filter options to
 determine the correct set of citation names to update.
 It also displays, in the report, the default citation name template for each 
 SourceTemplate under consideration. This default template lists all citation 
-dta fields and is of great assistance when writing your own template.
-
-Note that the value can have embedded spaces.
-Space characters between the = and the value are ignored.
+data fields and is of great assistance when writing your own template.
 
 ===========-
 USE_REGEXP = on
 
+SQLite does not provide regular expression matching by default. To be able
+to use regular expression matching, one must load an extension dll.
+
 This requires that the REGEXP_PATH be set to a SQLite extension library that
 implements RegExp matching.
 
-A popular example is the file regexp.dll from the GitHub repo-
-https://github.com/nalgeon/sqlean/releases/latest
+This utility has been tested with the free sqlean regexp extension.
+A popular example is the file regexp.dll from the GitHub available as 
+open source.
 
-The current version is 0.29.0, but future versions should also work.
-Open the link, scroll to the bottom of the page to the "Assets" section.
-Click on the item named- "sqlean-win-x64.zip"
-Save the file on your computer.
-Open the zip file and copy the regexp.dll file to a folder on your computer
-and then edit the config file so that REGEXP_PATH points to it.
-
+Fo download instructions, see "APPENDIX  How to obtain regexp.dll", below.
 
 RegExp examples
 
 using the SOURCE_NAME as an example-
 string
-This will match any source that has "string" someplace within the source name.
+This will match any source that has "string" anywhere within the source name.
 
 Either of 2 strings match, the strings only need to occur in the name
 (name1|name2)
@@ -235,5 +241,11 @@ TODO
 █_INCLUDE: REUSE_LIB_FEEDBACK
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_DISTRIBUTION
+
+█_INCLUDE: LICENSE_REFERENCE
+█_INCLUDE: LICENSE_REFERENCE_RMNOCASE_SURROGATE_DLL
+█_INCLUDE: LICENSE_REFERENCE_REGEXP_DLL
+
+
 
 

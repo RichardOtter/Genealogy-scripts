@@ -22,11 +22,11 @@ Compatibility
 Tested with a RootsMagic v 12.1.3 database
 using Python for Windows v3.15.2   64bit
 
-RM {DATABASE_VERSIONS} will probably work, but have not been recently tested.
-Much earlier version of Python, say after 3.10 will also probably work.
+RM {DATABASE_VERSIONS} and uch earlier version of Python, say after 3.10 will 
+also probably work but have not been recently tested.
 
-The python script file has not been tested on MacOS but could probably be
-modified to work on a Macintosh with Python version 3.n installed.
+The python script file has also not been tested on MacOS but could probably be
+modified to work on a Macintosh with Python version 3.n installed. 
 
 =========================================================================DIV80==
 REUSE_LIB_BACKUPS_LARGE_CHANGES
@@ -65,12 +65,44 @@ remains intact after use. At that point, run this utility of your
 "production" database.
 
 =========================================================================DIV80==
+REUSE_LIB_SW_SAFETY
+Software Safety
+
+This utility is written in the Python programming language (https://Python.org)
+and is distributed as plain-text '.py' files that can be viewed with Notepad or
+any other text editor.
+
+Because the source code is distributed in human readable text form, users can
+open any of the .py files in a text editor to inspect the complete
+implementation, verify its behavior, and assess its safety.
+
+The source files can also be reviewed by AI to help identify potential security 
+or safety concerns. Here is a recent report generated from the code by AI:
+https://github.com/RichardOtter/Genealogy-scripts/blob/main/SECURITY_ANALYSIS.md
+
+=========================================================================DIV80==
+REUSE_LIB_SW_SAFETY_RMNOCASE
+The SQLite helper file used by this utility is distributed as a binary dll
+file.
+It is used by SQLite to provide additional functionality, it is not 
+run by the Python scripts directly. The appendixes say more.
+
+=========================================================================DIV80==
+REUSE_LIB_SW_SAFETY_RMNOCASE_REGEXP
+The two SQLite helper files used by this utility are distributed as binary dll
+files. They are both open source and can be regenerated from source by an
+experienced user. Their code may also be reviewed and explained by AI.
+
+They are both used by SQLite to provide additional functionality, they are not 
+run by the Python scripts directly. The appendixes say more.
+
+=========================================================================DIV80==
 REUSE_LIB_OVERVIEW_A
 General Overview
 
 This program is what is called a "command line utility". It is in the form of a
-single text file with a "py" file name extension ("MainScriptFile.py") along
-with the package "RMpy" which is a folder included in the distribution zip file. 
+single text file with a "py" file name extension ("{SCRIPT_NAME}") along
+with the package "RMpy" which is a folder included in the distribution zip file.
 The MainScriptFile relies on code in the RMpy folder.
 These utilities are not installed in the traditional Windows sense, they are
 simply copied to the computer.
@@ -79,21 +111,21 @@ The utilities are told what to do by editing a configuration file. This
 configuration tells the utility which database to use and how to display the output.
 
 The default name of the configuration file (called, hereinafter, the
-"config file") is "RM-Python-config.ini". It should be located in the same
-folder as the MainScriptFile.py file and the RMpy folder.
+"config file") is "RM-Python-config.ini". For now, it should be located in the
+same folder as the MainScriptFile.py file and the RMpy folder.
 =========================================================================DIV80==
 REUSE_LIB_OVERVIEW_B_STD
 
-What happens
-{UTILITY_NAME} is started by the user, a black terminal window is opened, the 
+How it works
+{UTILITY_NAME} is started by the user, a terminal window is displayed, the
 program processes the configuration data and the database, a report file
-is displayed, the terminal window closes and the program exits.
+is displayed in Notepad, the terminal window closes and the program exits.
 
 =========================================================================DIV80==
 REUSE_LIB_OVERVIEW_B_USER_INPUT
 
-{UTILITY_NAME} is started by the user, a black terminal window is opened.
-The terminal window displays prompts to the user to input parameters, the 
+{UTILITY_NAME} is started by the user, a terminal window is displayed.
+The terminal window displays prompts to the user to input parameters, the
 requested database modification is made and the app prompts the user for more
 modifications. When the user is done, the user enters a command to exit the
 program, a summary report file is displayed and the program stops.
@@ -101,33 +133,28 @@ program, a summary report file is displayed and the program stops.
 =========================================================================DIV80==
 REUSE_LIB_OVERVIEW_C
 
-Getting Started
+Getting Started     *****  Details follow immediately below. *****
 
-To install and use the utility for the first time (specifics below):
+To install and use the utility for the first time:
 
 *  Install Python for Windows x64.
 
-*  Create a new folder on your computer, the "working folder".
-
-*  Make a copy of your database, move the copy into the working folder.
-
-*  Copy the required files from the downloaded zip file to the working folder.
+*  Create a new folder on your computer, the "working folder" to contain
+   a copy of your database, the program files and the config file.
 
 *  Edit the config file in the working folder to tell the utility what to
-   do and where to do it.
+   do and how to do it.
 
 *  Double click the {SCRIPT_NAME} file to run the utility.
 
-*  A window (terminal window) with a black background and white text will appear.
+*  A terminal window with a black background and white text will appear.
 
 *  The terminal window will close and a summary report will be displayed
-in NotePad.
-
-*****  Details follow below. *****
+   in Notepad.
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_0_LARGE_CHANGES
-Running the utility - step by step
+Running the utility - detailed step by step
 
 The steps listed here run the utility on a copy of your database created in a
 new directory location. Always run this utility on a copy as shown here. It
@@ -135,38 +162,19 @@ is likely that several attempts will be needed to obtain satisfactory results.
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_0_SMALL_CHANGES
-Running the utility - step by step
+Running the utility - detailed step by step
 
 The steps listed here run the utility on a copy of your database created in a
 new directory location. Once you feel comfortable with how the app operates,
-you will want to run the app on your production database in its usual
-folder location.
-
-
-=========================================================================DIV80==
-REUSE_LIB_SW_SAFETY
-Software Safety
-
-This utility is written in the Python programming language (https://Python.org)
-and is distributed as plain-text .py files that can be viewed with Notepad or
-any other text editor.
-
-In addition to the main application file, the RMpy folder is required. This
-folder contains a small number of additional .py text files that provide
-functions shared by all utilities in the suite. In Python terminology, such a
-folder is known as a package.
-
-Because the source code is distributed in readable text form, users can open 
-any of the .py files in a text editor to inspect the complete implementation, 
-verify its behavior, and assess its safety. The source files can also be 
-reviewed by AI to help identify potential security or safety concerns.
-Here is a recent report generated from the code by AI:
-https://github.com/RichardOtter/Genealogy-scripts/blob/main/SECURITY_ANALYSIS.md
+you will want to run the app on your production database at its usual folder
+location and create another folder for all of the utilities and config files
+you regularly use.
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_1
 ==========-
-Install Python for Windows x64  -see "APPENDIX  Python install" below.
+Install Python for Windows x64
+- see the easy steps in "APPENDIX  Python install" below.
 
 ==========-
 Create a folder on your computer that you will not confuse with other
@@ -174,13 +182,14 @@ folders. It will be referred to as the "working folder".
 
 You may want to create it within your home folder. Your home folder is
 "C:\Users\me", where "me" is your user name. This is a safe location that will
-not be taken over by OneDrive.
+not be affected by OneDrive.
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
-     (file)     {SCRIPT_NAME}               
-     (file)     RM-Python-config.ini             
-     (folder)   RMpy    
+     (file)     {SCRIPT_NAME}
+     (file)     RM-Python-config.ini
+     (file)     RMNOCASE_surrogate.dll
+     (folder)   RMpy
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_2
@@ -188,62 +197,72 @@ REUSE_LIB_STEPS_2
 Make a copy of your database, move the copy into the working folder.
 
 Rename the database copy to "TEST.rmtree" in order to prevent any
-confusion about the purpose of the copy.
+confusion about the purpose of the new file.
 
 ==========-
 Edit the sample RM-Python-config.ini file in the working folder.
 (See the section "APPENDIX  Config file: location, contents and editing"
 if you need help)
 
-A summary of the config file structure:
+A summary of the config file (ini file) structure:
 The names in square brackets are section names.
 The items in a section are key-value pairs.
 
 For example, in the sample config file, there is a section named [FILE_PATHS].
-In that section, reside several key-value pairs, one of which is 
+In that section, reside several key-value pairs, one of which is
 DB_PATH = TEST.rmtree
 
 "DB_PATH" is the key, "TEST.rmtree" is the value. key-value pairs are separated
-with an equals sign character.
+with an equals sign character. Spaces between the = and the value are ignored,
+as are trailing spaces.
 
 The utility needs to know where the RM database file is located, the output
 report file name and its location.
 
-If you followed the above instructions, no changes to any of the key-values in
+=========================================================================DIV80==
+REUSE_LIB_STEPS_2_A
+If you followed the above instructions exactly, no changes to the key-values in
 the [FILE_PATHS] section are needed.
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_REGEXP_PATH
 ==========-
-
-The next parameter to consider is
+The next parameter to consider in [FILE_PATHS] is
 REGEXP_PATH     = regexp.dll
 
-This is an optional setting. Leave it as is for now.
+This is an optional setting. For now, leave it as is.
 
 There is another setting (USE_REGEXP) discussed below, that determines whether
-this name needs to be set. Most common uses of this utility will not need to
-use this setting. You can leave it as it is.
+this name needs to be accurately set. Most common uses of this utility will
+not need to use this setting. You can leave it as it is.
 
-If later your needs become more advanced, the download procedure is described
-below, in APPENDIX  How to obtain regexp.dll.
+If later your needs become more advanced, Its use is described below in the
+Notes and the download procedure is described below, in the 
+"APPENDIX  How to obtain regexp.dll".
+
+
+USE_REGEXP = off
+For now, leave this off.
+The setting is explained in the Notes section below.
+REGEXP (regular expressions) allow the use of very sophisticated wild card characters
+so allow selection and exclusion of items.
+
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_REINDEX_RMNOCASE
-
 VERY IMPORTANT
 After a run of CitationNameUpdater in which changes have been saved to the
 database, it is very important to reindex the database when opening the file
 in RootsMagic.
 This is very easily done.
-Upon first loading the database, either automatically, or manually opening 
+Upon first loading the database, either automatically, or manually opening
 a file within RootsMagic, before doing anything else, click the Tools icon on
-the left hand tab panel, and run the "Rebuild indexes" database tool. 
+the left hand tab panel, and run the "Rebuild indexes" database tool.
 It's the second item from the top.
 If you don't, you may get a Malformed disk image error and Roots Magic may stop.
 Don't worry if that happens. Just reopen the file and before doing anything
 else, run the Rebuild indexes tool. This is expected behavior.
-Once the file has been reindexed, you can examine the citation names hat were
+Once the file has been reindexed, you can examine the citation names that were
 updated to confirm you got what you expected.
 Reindexing does not need to be redone until you run CitationNameUpdater again
 with MAKE_CHANGES = on.
@@ -257,17 +276,17 @@ APPENDIX  Python install
 
 Install Python using the "winget" command line package manager.
 
-It is also possible to install from the Microsoft Store or from the 
+It is also possible to install from the Microsoft Store or from the
 Python.org web site but only the winget method is described here.
 
 Installation using winget.
 
-1 Open a command line terminal. 
-A quick method is to right click the Windows menu icon in the file manager task 
+1 Open a command line terminal.
+A quick method is to right click the Windows menu icon in the file manager task
 bar and select the Terminal command;  not the "Terminal (Admin)" command.
 
 Or, using just the keyboard, press and hold the Windows key and then tap X, let
-go or the Windows key and tap I for the Terminal command from the displayed menu. 
+go or the Windows key and tap I for the Terminal command from the displayed menu.
 
 2 Type (copy and paste) the following command in the window and hit Enter:
 
@@ -280,7 +299,7 @@ command and hit Enter:
 
 The output for this command should be similar to-
 -------
-The signature for https://www.python.org/ftp/python/index-windows.json was 
+The signature for https://www.python.org/ftp/python/index-windows.json was
 successfully verified.
 Installing Python 3.15.2.
 Extracting: ...............................................................✅
@@ -297,7 +316,7 @@ Use the Settings app in the Windows menu.
 Go to Apps=>Installed apps
 and find:
 "Python Install Manager"
-and 
+and
 "Python 3.n.n"
 and select Uninstall from the three dot menu to the right of the names for each item.
 
@@ -311,7 +330,10 @@ https://docs.python.org/3.14/using/windows.html
 
 =========================================================================DIV80==
 REUSE_LIB_APPENDIX_RMNOCASE_DLL
-APPENDIX  unifuzz64.dll download
+APPENDIX  RMNOCASE_Surrogate.dll and unifuzz64.dll
+
+The path to the dll file in the config file is given by the
+RMNOCASE key. Same rules as for the DB_PATH key.
 
 The SQLiteToolsforRootsMagic website has been around for many years and is run
 by a trusted RM user. Many posts to public RootsMagic user forums mention use
@@ -330,9 +352,15 @@ MD5 hash values are used to confirm the identity and integrity of files.
     MD5 hash                            File size         File name
     06a1f485b0fae62caa80850a8c7fd7c2    256,406 bytes    unifuzz64.dll
 
+
+NEW
 A new alternative that seems to be a better match to the RoostMagic RMNOCASE
 can be found at-
 https://github.com/RichardOtter/RMNOCASE_surrogate/releases/latest
+
+Early testing indicates that using this when doing database updates by these
+utilities no longer requires reindexing when first opened in RM.
+Running Check integrity confirms this.
 
 
 
@@ -341,36 +369,42 @@ In Windows, to generate the MD5 hash of a file named [file name]:
 Open a terminal window and enter:
 certutil -hashfile [file name]  MD5
 
-where [file name] is the fie you wish to compute the MD5 has for.
+where [file name] is the file you wish to compute the MD5 has for.
 
 So, for example, to display the MD5 of the unifuzz file, enter-
 certutil -hashfile unifuzz64.dll  MD5
 
-The path to the dll file in the config file is given by the
-RMNOCASE key. Same rules as for the DB_PATH key.
 
 
 =========================================================================DIV80==
 REUSE_LIB_APPENDIX_REGEXP_DLL
-APPENDIX  How to obtain regexp.dll
+APPENDIX  Source of the regexp.dll SQLite extension
 
-SQLite does not provide regular expression matching by default. To use it, 
-load an extension such as regexp.dll.
+regexp.dll was released under the-
 
-This utility has been tested with the free sqlean regexp extension.
+MIT License
 
-Open the releases page at: https://github.com/nalgeon/sqlean/releases  
-Download sqlean-win-x64.zip from the Assets section at the bottom of the page.
-Extract regexp.dll to a folder on your computer.
-Set REGEXP_PATH in the configuration file to the path of regexp.dll.
+Copyright (c) 2021+ Anton Zhiyanov
+https://github.com/nalgeon/sqlean
+
+
+It has been downloaded from-
+https://github.com/nalgeon/sqlean/releases/tag/0.29.0
+
+Documentation is at-
+https://github.com/nalgeon/sqlean/blob/main/README.md
+
+
+MD5                               size          name
+74d4fc356e55c5cd721576e68a2f6f6b	482,220 bytes	regexp.dll
 
 
 =========================================================================DIV80==
 REUSE_LIB_APPENDIX_DB_NEW_LOCATION
 APPENDIX  Using a database with external file links from a new directory location
 
-RM finds media files linked to a database by several methods. In my opinion, 
-the most reliable method to find all media files in the Media Folder, as 
+RM finds media files linked to a database by several methods. In my opinion,
+the most reliable method to find all media files in the Media Folder, as
 specified in the RM Preferences. The other methods can certainly be
 useful in some circumstances.
 One of the  other"search methods" is to find a file by recording it location in
@@ -378,7 +412,7 @@ relation to the database file. This is fine unless the database file is moved
 and the files are not.
 This point needs to be made in regards to the instructions for testing the
 utility app described here. When you make a copy of your database and move the
-copy to the "Working folder", as instructed earlier, some of the database's 
+copy to the "Working folder", as instructed earlier, some of the database's
 external files may not be found when running the database in the new location.
 This is only temporary. Move the database back to it's original location and
 the media files will be found again.
@@ -731,6 +765,7 @@ https://RichardOtter.github.io
 My Linked-In profile at-
 https://www.linkedin.com/in/richardotter/
 
+
 =========================================================================DIV80==
 REUSE_LIB_DISTRIBUTION
 Distribution
@@ -738,6 +773,94 @@ Distribution
 Everyone is free to use this utility. However, instead of
 distributing it yourself, please instead distribute the URL
 of my website where I describe it- https://RichardOtter.github.io
+or a link to the GitHub repo:
+https://github.com/RichardOtter/Genealogy-scripts
+
 
 =========================================================================DIV80==
+LICENSE_REFERENCE
 
+===========================================DIV50==
+===========================================DIV50==
+Licenses reference
+
+===========================================DIV50==
+All .py files
+
+MIT License
+
+Copyright (c) 2026 Richard J Otter  <https://github.com/RichardOtter/Genealogy-scripts>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+=========================================================================DIV80==
+LICENSE_REFERENCE_RMNOCASE_SURROGATE_DLL
+===========================================DIV50==
+RMNOCASE_surrogate.dll
+
+MIT License
+
+Copyright (c) 2026 Richard J Otter  <https://github.com/RichardOtter/RMNOCASE_surrogate>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+=========================================================================DIV80==
+LICENSE_REFERENCE_REGEXP_DLL
+===========================================DIV50==
+regexp.dll
+
+MIT License
+
+Copyright (c) 2021+ Anton Zhiyanov <https://github.com/nalgeon/sqlean>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===========================================DIV50==

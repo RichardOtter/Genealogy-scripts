@@ -203,7 +203,9 @@ def set_file_mtime(file_path: Path, dt: datetime):
 def pause_with_message(message=None):
     if message is not None:
         print(str(message))
-    input("\nPress the <Enter> key to continue...")
+        input()
+    else:
+        input("\nPress the <Enter> key to continue...")
     return
 
 

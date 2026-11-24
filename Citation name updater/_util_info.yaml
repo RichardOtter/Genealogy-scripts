@@ -8,6 +8,8 @@ DistributionFileList:
   - CitationNameUpdater.py
   - ReadMe.txt
   - RM-Python-config.ini
+  - ../SQLite extensions/RMNOCASE/RMNOCASE_surrogate.dll
+  - ../SQLite extensions/RegExp/regexp.dll
 
 DistributionFolderList:
   - ..\RMpy package\RMpy
