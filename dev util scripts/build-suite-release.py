@@ -6,6 +6,7 @@ from pathlib import Path
 import zipfile
 import shutil
 import re
+import sys
 
 # As a first step, this build script builds from local source
 # it does not get "fresh files" from GitHub
@@ -34,7 +35,7 @@ def main():
         with open(top_level_config_path, 'r') as top_lev:
             doc = yaml.safe_load(top_lev)
             suite_version = doc["SuiteVersion"]
-            build_type = doc.get("BuildType", "")
+            build_type = doc.get("BuildType")
             suite_name = doc["SuiteName"]
             project_root_dir_path = doc["ProjectRootDirPath"]
             project_list = doc["ProjectList"]
@@ -42,6 +43,14 @@ def main():
         print("Problem getting the values from the top level yaml file.\n")
         exit()
 
+    if build_type not in ("ALPHA", "BETA", "RELEASE"):
+        print(f"ERROR: BuildType must be ALPHA, BETA, or RELEASE; got {build_type!r}.")
+        if sys.stdin.isatty():
+            pause_with_message("Press Enter to continue, window will close")
+        return 1
+
+    if build_type == "RELEASE":
+        build_type = ""
     distribution_dir_name = F"{suite_name}_v{suite_version}" + (F" {build_type}" if build_type else "")
     release_dir_name = F"Release {distribution_dir_name} {time_stamp}"
     release_dir_path = Path(project_root_dir_path) / release_dir_name
@@ -212,6 +221,6 @@ def pause_with_message(message=None):
 # ===================================================DIV60==
 # Call the "main" function
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())
 
 # ===================================================DIV60==

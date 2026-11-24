@@ -4,6 +4,8 @@
 SuiteVersion: 1.2.0
 BuildType: ALPHA
 
+# ALPHA BETA RELEASE
+
 SuiteName: RM_Utilities_Suite
 
 ProjectRootDirPath: C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts

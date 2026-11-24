@@ -38,11 +38,20 @@ def main():
         with open(top_level_config_path, 'r') as top_lev:
             doc = yaml.safe_load(top_lev)
             suite_version = doc["SuiteVersion"]
+            build_type = doc.get("BuildType")
             suite_name = doc["SuiteName"]
             project_root_dir_path = doc["ProjectRootDirPath"]
             project_list = doc["ProjectList"]
     except:
         raise Exception("Problem getting the values from the top level yaml file.\n")
+
+    if build_type not in ("ALPHA", "BETA", "RELEASE"):
+        print(f"ERROR: BuildType must be ALPHA, BETA, or RELEASE; got {build_type!r}.")
+        pause_with_message()
+        return 1
+
+    is_release = build_type == "RELEASE"
+    version_suffix = f" {build_type}" if build_type and not is_release else ""
 
     try:
         # Ensure docs-generated folder exists
@@ -99,9 +108,7 @@ def main():
                         for lib_line in get_snippet(label, lib_file_path):
                             # Apply variable substitution to included snippet
                             substituted_line = substitute_variables(lib_line, variables)
-                            # Prefix lines from reusable library with ╋
-# use for release           doc_final.write(substituted_line)
-                            doc_final.write("╋" + substituted_line)
+                            doc_final.write(("" if is_release else "╋") + substituted_line)
                     else:
                         # Apply variable substitution to doc content
                         substituted_line = substitute_variables(line, variables)
@@ -110,8 +117,8 @@ def main():
                 # Add version and build date footer
                 doc_final.write("\n\n")
                 doc_final.write("=" * 80 + "\n")
-                doc_final.write(f"Suite Version: {suite_version}\n")
-                doc_final.write(f"Utility Version: {utility_version}\n")
+                doc_final.write(f"Suite Version: {suite_version}{version_suffix}\n")
+                doc_final.write(f"Utility Version: {utility_version}{version_suffix}\n")
                 doc_final.write(f"Built: {time_stamp_now()}\n")
                 doc_final.write("=" * 80 + "\n")
             
@@ -242,7 +249,7 @@ def substitute_variables(text, variables):
 # ===================================================DIV60==
 # Call the "main" function
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())
 
 
 # ===================================================DIV60==
