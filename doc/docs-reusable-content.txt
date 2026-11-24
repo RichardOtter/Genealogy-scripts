@@ -286,7 +286,7 @@ Installing Python 3.15.2.
 Extracting: ...............................................................✅
 
 Global shortcuts directory is not on PATH. Add it for easy access to global Python aliases.
-Directory to add: C:\Users\rotter\AppData\Local\Python\bin
+Directory to add: C:\Users\<user_name>\AppData\Local\Python\bin
 -------
 
 Ignore the last 2 lines. You won't need that functionality.
@@ -330,6 +330,11 @@ MD5 hash values are used to confirm the identity and integrity of files.
     MD5 hash                            File size         File name
     06a1f485b0fae62caa80850a8c7fd7c2    256,406 bytes    unifuzz64.dll
 
+A new alternative that seems to be a better match to the RoostMagic RMNOCASE
+can be found at-
+https://github.com/RichardOtter/RMNOCASE_surrogate/releases/latest
+
+
 
 MD5 calculation
 In Windows, to generate the MD5 hash of a file named [file name]:
@@ -344,17 +349,20 @@ certutil -hashfile unifuzz64.dll  MD5
 The path to the dll file in the config file is given by the
 RMNOCASE key. Same rules as for the DB_PATH key.
 
+
 =========================================================================DIV80==
 REUSE_LIB_APPENDIX_REGEXP_DLL
 APPENDIX  How to obtain regexp.dll
 
+SQLite does not provide regular expression matching by default. To use it, 
+load an extension such as regexp.dll.
 
-where to get regexp.dll
-This utility has been tested with the file from this particular source.
-It is available for free and is easily downloaded. 
-# https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md
-# https://github.com/nalgeon/sqlean/releases
-# sqlean-win-x64.zip
+This utility has been tested with the free sqlean regexp extension.
+
+Open the releases page at: https://github.com/nalgeon/sqlean/releases  
+Download sqlean-win-x64.zip from the Assets section at the bottom of the page.
+Extract regexp.dll to a folder on your computer.
+Set REGEXP_PATH in the configuration file to the path of regexp.dll.
 
 
 =========================================================================DIV80==

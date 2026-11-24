@@ -24,7 +24,8 @@ CitationName template.
 
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_BACKUPS_SMALL_CHANGES
-In addition, this utility can only change citation names. Citation names are
+Use the preview mode to be clear on what is in scope to be changed.
+This utility only changes citation names. Citation names are
 derived from the citation data. If the first result does not give the desired
 result, a second run can fix it. No genealogical data can be modified or lost
 running this utility.
@@ -191,7 +192,7 @@ Open the link, scroll to the bottom of the page to the "Assets" section.
 Click on the item named- "sqlean-win-x64.zip"
 Save the file on your computer.
 Open the zip file and copy the regexp.dll file to a folder on your computer
-and then edit the config file so that REXP_PATH points to it.
+and then edit the config file so that REGEXP_PATH points to it.
 
 
 RegExp examples
@@ -212,63 +213,6 @@ exclude if contains string1 or string2
 exclude if contains a YYYY > 1900
 ^(?!.*(190[1-9]|19[1-9][0-9]|[2-9][0-9]{3})).*$
 
-
-===========-
-
-===========-
-
-
-===========-
-
-===========-
-Limiting which Facts are changed
-
-There maybe situations in which only a subset of Facts should be changed to a
-new fact type. One can limit the facts by fields that describe them- 
-the Description and the Date-
-
-Some examples-
-
-[SOURCE_FILTER]
-DESC              = %New York%
-DATE              = 1930
-
-if you want to convert only facts whose descriptions start with the
-words "New York", then enter-
-
-[SOURCE_FILTER]
-DESC              = New York%
-DATE              =
-
-notice the trailing percent sign.
-If the fact descriptions should only contain "New York" somewhere in the text,
-enter-
-
-[SOURCE_FILTER]
-DESC              = %New York%
-DATE              =
-
-The percent sign % wildcard matches any sequence of zero or more characters.
-The underscore _ wildcard matches any single character.
-
-To limit the facts converted by their Date, use the DATE value.
-The DATE value is always a four digit year.
-For example-
-
-[SOURCE_FILTER]
-DESC              = 
-DATE              = 1930
-
-The values for DESC and DATE are optional. If all facts of a certain type are to be converted,
-leave these fields blank-
-
-[SOURCE_FILTER]
-DESC              = 
-DATE              = 
-
-===========-
-
-
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
@@ -276,9 +220,9 @@ DATE              =
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
-REUSE_LIB_APPENDIX_RMNOCASE_DLL
+█_INCLUDE: REUSE_LIB_APPENDIX_RMNOCASE_DLL
 =========================================================================DIV80==
-REUSE_LIB_APPENDIX_REGEXP-DLL
+█_INCLUDE: REUSE_LIB_APPENDIX_REGEXP_DLL
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==

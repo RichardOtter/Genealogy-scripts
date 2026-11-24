@@ -100,6 +100,7 @@ def main():
                             # Apply variable substitution to included snippet
                             substituted_line = substitute_variables(lib_line, variables)
                             # Prefix lines from reusable library with ╋
+# use for release           doc_final.write(substituted_line)
                             doc_final.write("╋" + substituted_line)
                     else:
                         # Apply variable substitution to doc content

@@ -1,193 +1,107 @@
 # ReadMe Build Workflow
 
-This directory contains three scripts that work together to manage ReadMe documentation for all projects listed in build-projects-config.yaml in a safe, staged workflow.
+The documentation scripts build project ReadMe files in a staging folder so
+they can be reviewed before being copied into the project folders.
 
-## Workflow Overview
+## Files and configuration
 
-```
-Edit DocOutline_{project}.txt 
-         ↓
-  Build ReadMe files.py
-         ↓
-  Doc/docs-generated/ReadMe_{project}.txt (staging)
-         ↓
-  Copy-ReadMe-to-Projects.py
-         ↓
-  {project}/ReadMe.txt (actual)
-```
+Paths below are relative to the repository root.
 
-## Scripts
+| Path | Purpose |
+| --- | --- |
+| `doc\doc-sources\DocOutline_{project}.txt` | Source template for each project |
+| `doc\docs-reusable-content.txt` | Shared text inserted by INCLUDE directives |
+| `doc\docs-generated\ReadMe_{project}.txt` | Generated ReadMe for review |
+| `{project}\ReadMe.txt` | Project copy of the ReadMe |
+| `dev util scripts\build-projects-config.yaml` | Project list and suite version |
+| `dev util scripts\Build doc\` | Documentation scripts |
 
-### 1. **Build ReadMe files.py** (Modified)
+The scripts use `ProjectList` in the configuration file. Each listed project
+needs a matching source template and project folder. The build also reads the
+utility version from the project's `_util_info.yaml`; if it is missing, the
+generated footer uses `Unknown`.
 
-Builds ReadMe files from templates in `Doc/doc-sources/` and snippets in `Doc/docs-reusable-content.txt`
+The scripts require Python and PyYAML. The build and discard scripts also
+require `send2trash`; the copy script uses it if installed. The discard
+script requires Git.
 
-**What it does:**
-- Reads: `Doc/doc-sources/DocOutline_{project}.txt`
-- Processes INCLUDE directives to insert snippets
-- **Outputs to:** `Doc/docs-generated/ReadMe_{project}.txt` (not to project folders!)
-- Adds version number and build date footer to each file
-- Creates `Doc/docs-generated/` folder if it doesn't exist
-- Reads utility version from each project's `_util_info.yaml`
+## Build and review
 
-**Run:** `python "Build ReadMe files.py"`
+Run these commands from the repository root:
 
-**Output example:**
-```
-================================================================================
-Suite Version: 1.1.0 ALPHA
-Utility Version: 1.2.2
-Built: 2026-11-19 10:15:14
-================================================================================
-```
+1. Edit the appropriate template in `doc\doc-sources`, or edit shared text in
+   `doc\docs-reusable-content.txt`.
 
----
+2. Build the staged files:
 
-### 2. **Copy-ReadMe-to-Projects.py** (New)
+   ```powershell
+   py "dev util scripts\Build doc\Build ReadMe files.py"
+   ```
 
-Copies staged ReadMe files from `Doc/Doc-built/` to project folders
+   The build expands INCLUDE directives, substitutes template variables,
+   omits the variables section, and adds suite version, utility version, and
+   build date information. Shared lines are prefixed with `╋`.
 
-**What it does:**
-- Reads: `Doc/docs-generated/ReadMe_{project}.txt`
-- Copies to: `{project}/ReadMe.txt` (overwrites existing)
-- Processes all projects from `build-projects-config.yaml`
-- Console output only (no log files)
-- **Stops on first error**
+   **The build first sends every existing file directly inside
+   `doc\docs-generated` to the Recycle Bin**, then generates the configured
+   projects. Do not keep unrelated files there. If an error occurs, the
+   staging folder may contain only part of the output; check the console and
+   rebuild before copying. The build script can print an error without
+   returning a failing process exit code.
 
-**Run:** `python "Copy-ReadMe-to-Projects.py"`
+3. Review the staged `ReadMe_{project}.txt` files in `doc\docs-generated`.
+   Check for unresolved directives, incorrect content, and formatting. Edit
+   the source template or shared content and rebuild if changes are needed.
 
-**Output example:**
-```
-✓ Copied: Change source for citation
-✓ Copied: Change source template
-✓ Copied: Color from group
-...
-All ReadMe files copied successfully to project folders.
-```
+4. Once satisfied, copy all configured staged files to their project folders:
 
----
+   ```powershell
+   py "dev util scripts\Build doc\Copy-ReadMe-to-Projects.py"
+   ```
 
-### 3. **Discard-ReadMe-Changes.py** (New)
+   This replaces each `{project}\ReadMe.txt`, including any local changes.
+   Existing files are sent to the Recycle Bin if `send2trash` is available;
+   otherwise they are deleted. The script stops on the first error, so an
+   incomplete run may have already replaced some project files. Review the
+   console output and Git changes after copying.
 
-Discards changes made to project ReadMe.txt files, restoring them to last committed state
+## Read-only protection
 
-**What it does:**
-- Checks each project's ReadMe.txt for uncommitted changes
-- **If changes exist:** Sends the modified file to Windows Recycle Bin (trash)
-- Then runs `git checkout` to restore the git version
-- Preserves local changes in trash for recovery if needed
-- Processes all projects from `_top_level_build_config.yaml`
-- Console output only
-- **Stops on first error**
+Generated files are intended for review, not direct editing:
 
-**Requirements:**
-- `send2trash` package: `pip install send2trash`
+- The build sets the Windows read-only file attribute on each generated
+  ReadMe and adds `doc/docs-generated/**` to `files.readonlyInclude` in the
+  repository's `.vscode\settings.json`.
+- The copy preserves the file attribute and adds each configured project
+  `ReadMe.txt` to the same VS Code setting. If the settings update fails, the
+  copy script prints a warning; the copies may already exist.
 
-**Run:** `python "Discard-ReadMe-Changes.py"`
+The VS Code setting makes matching files read-only in the editor; the Windows
+file attribute is separate and also affects writes outside VS Code. To make
+lasting changes, edit the source template or shared content and rebuild,
+rather than editing the generated or copied file. Removing the VS Code
+setting alone does not clear the Windows attribute, and running the scripts
+adds their settings and attributes again.
 
-**Output example:**
-```
-✓ Discarded changes: Change source for citation
-✓ Discarded changes: Change source template
-  → Sent to trash: Run SQL/ReadMe.txt
-✓ Discarded changes: Run SQL
-...
-All ReadMe changes have been discarded.
-```
+Both scripts update `.vscode\settings.json`, preserving settings they can
+parse. The file must contain valid JSON for the scripts to read it.
 
-**Workflow:**
-1. Detects if file has local changes
-2. If yes: Sends to Windows Recycle Bin
-3. Restores git version
-4. If no changes: Just restores (no trash action needed)
+## Discard project ReadMe changes
 
-**Note:** This script only works for files already committed to git. If a project's ReadMe.txt isn't in git, the script will stop with an error (as designed).
+To restore the configured project ReadMe files from Git's **index**:
 
----
-
-## Typical Usage Scenario
-
-### Edit and test ReadMe content safely:
-
-```
-1. Edit the template: Doc/doc-sources/DocOutline_{project}.txt
-   (or modify Doc/docs-reusable-content.txt)
-
-2. Build: python "Build ReadMe files.py"
-   (creates/updates Doc/docs-generated/ReadMe_{project}.txt)
-
-3. Review the file: Doc/docs-generated/ReadMe_{project}.txt
-   (project folders are NOT affected yet!)
-
-4. If happy, copy: python "Copy-ReadMe-to-Projects.py"
-   (copies to actual project folders)
-
-5. If unhappy with copy, discard: python "Discard-ReadMe-Changes.py"
-   (reverts project folders to last git commit)
+```powershell
+py "dev util scripts\Build doc\Discard-ReadMe-Changes.py"
 ```
 
----
+**Review `git status` first.** This operates on every configured project's
+ReadMe, including unrelated local edits. When Git reports changes and the
+file exists, the script sends it to the Recycle Bin before running
+`git checkout` for that path. Checkout restores the index version, not
+necessarily the last commit: staged changes remain staged and are restored
+to the working file. The script stops on the first error; earlier files may
+already have been processed. A file absent from the Git index cannot be
+restored this way.
 
-## Why This Workflow?
-
-**Before:** Editing templates immediately affected project ReadMe.txt files  
-**Now:** Staging area lets you test, review, and control when changes go live
-
-**Benefits:**
-- ✅ Safe testing (project folders untouched until you're ready)
-- ✅ Easy rollback (git discard reverts unwanted changes)
-- ✅ Clear separation of concerns (templates vs. deployed files)
-- ✅ Version tracking (each build marks suite version and timestamp)
-- ✅ Utility versions (each ReadMe shows its own utility version)
-
----
-
-## Configuration
-
-All scripts read projects from: `../dev util scripts/build-projects-config.yaml`
-
-```yaml
-ProjectList:
-  - Change source for citation
-  - Change source template
-  - Color from group
-  - Convert fact
-  - Group from SQL
-  - List citations for PersonID
-  - Lump sources
-  - Modify citation list
-  - Run SQL
-  - Test external files
-  - External Files Info
-  - Mini report
-  - Merge duplicate family records
-```
-
-To add or remove projects, edit this YAML file and all three scripts will respect it.
-
----
-
-## File Locations
-
-Scripts are now located in: `dev util scripts/doc/`
-
-- Build ReadMe files.py
-- Copy-ReadMe-to-Projects.py
-- Discard-ReadMe-Changes.py
-
-Configuration file: `dev util scripts/build-projects-config.yaml`
-
-Doc folders: `doc/`
-- doc-sources/ (input templates)
-- docs-generated/ (staging area, created if needed)
-- docs-reusable-content.txt (snippet library)
-
----
-
-## Notes
-
-- **Path handling:** Scripts use relative navigation to find config and doc folders from their location
-- **Error handling:** All scripts stop on first error (as requested). Error messages are clear.
-- **Console-only:** No report files are generated (as requested).
-- **Git requirement:** Discard script requires git to be installed and the repo to be initialized.
-- **Folder renaming:** If you rename folder structure, paths in scripts may need adjustment
+Discarding project copies does not revert templates or shared content and
+does not undo a build in `doc\docs-generated`.

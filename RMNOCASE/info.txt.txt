@@ -17,5 +17,5 @@ For Windows x64
 
 Downloaded from:
 
-https://github.com/RichardOtter/rmnocase-surrogate/releases/tag/ver-0.9
+https://github.com/RichardOtter/rmnocase-surrogate/releases/tag/ver-0.1.0
 

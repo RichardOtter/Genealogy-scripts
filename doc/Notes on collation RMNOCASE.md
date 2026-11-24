@@ -37,9 +37,9 @@ A key point is that unifuzz64.dll and the proprietary code found inside RootsMag
 
 While operating on a database with RootsMagic alone, there is no problem. The authentic RMNOCASE collation is always used.
 
-When working on a RootsMagic database externally, there can be issues if precautions are not take. This is becasue the authentic RMNOCASE collation function is not available outside the RM app and the fake RMNOCASE is used instead.
+When working on a RootsMagic database externally, there can be issues if precautions are not take. This is because the authentic RMNOCASE collation function is not available outside the RM app and the fake RMNOCASE is used instead.
 
-If names contain only the 26 latin characters, it would seem that there should not be a problem because the fake and authentic RMNOCASE should produce the same results. NOT TESTED
+If names contain only the 26 Latin characters, it would seem that there should not be a problem because the fake and authentic RMNOCASE should produce the same results. NOT TESTED
 
 Indexes contain data that can be easily reconstructed by the SQLite command "reindex". However, if a database is opened and it already has an index created with, say the authentic RMNOCASE and one operates on the data using the fake RMNOCASE and an index using RMNOCASE collation is used, bad things may happen, especially if an index is updated.
 
@@ -47,10 +47,10 @@ Indexes contain data that can be easily reconstructed by the SQLite command "rei
 
 When doing read-only queries externally, one can often include in the SQL statement a collation sequence that will override the defalut specified in the table declaration. This may mean that existing indexes won't be used which could impact speed.
 
-For data modifing SQL, the safest procedure is-\
+For data modifying SQL, the safest procedure is-\
 -close the database in RM\
 -open it in an external app and load the “fake” RMNOCASE collation extension\
--do a “reindex RMNOCASE;” SQL command\
+-do a “ReIndex RMNOCASE;” SQL command\
 -do whatever SQL operations are desired, including updates and inserts\
 -close the database\
 -open the database in RM and immediately use the RM tools to rebuild indexes.
@@ -67,6 +67,10 @@ No problems seems after brief testing in RM.
 
 Another idea-\
 Reverse engineer the real RMNOCASE collation and write an extension that implements it exactly.
+
+This has been started, MANY characters now compare the same as in the real RMNOCASE.
+https://github.com/RichardOtter/RMNOCASE_surrogate/
+
 
 Another idea-\
 The "sqlean" project by Anton Zhiyanov at: https://github.com/nalgeon/sqlean
