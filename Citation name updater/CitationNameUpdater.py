@@ -41,7 +41,7 @@ def main():
 
     # Configuration
     utility_info = {}
-    utility_info["utility_name"]      = "CitationNameUpdater" 
+    utility_info["utility_name"]      = "CitationNameUpdater"
     utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
     utility_info["config_file_name"]  = "RM-Python-config.ini"
     utility_info["script_path"]  = Path(__file__).parent
@@ -251,15 +251,15 @@ def run_update_citation_name(config, db_connection, report_file):
     where_clause = (
         " WHERE " + " AND ".join(filter_conditions)
         if filter_conditions else "")
-    
+
     distinct_templates = db_connection.execute(
         "SELECT COUNT(DISTINCT st.TemplateID) " + from_clause + where_clause,
         filter_parameters).fetchone()[0]
-    
+
     distinct_sources = db_connection.execute(
         "SELECT COUNT(DISTINCT s.SourceID) " + from_clause + where_clause,
         filter_parameters).fetchone()[0]
-    
+
     report_file.write(
         f"Source templates: {distinct_templates}\n"
         f"Sources: {distinct_sources}\n"
@@ -328,26 +328,26 @@ def run_update_citation_name(config, db_connection, report_file):
 
     template_data = {}
     citations_missing_template = []
-    
+
     # Build template_data from selected_rows (index 3=s.TemplateID, 5=st.FieldDefs, 6=st.Name)
-    for (citation_id, _, _, template_id, _, field_defs_xml, 
+    for (citation_id, _, _, template_id, _, field_defs_xml,
          template_name, _, _) in selected_rows:
         if template_id is None:
             citations_missing_template.append(citation_id)
             continue
-        
+
         if template_id not in template_data:
             definitions = parse_field_definitions(
                 field_defs_xml, f"source template {template_id}")
             default_template = "; ".join(
                 f"[{name}]" for name, _ in definitions.values())
-            
+
             # Template ID 0 means free-form source
             if template_id == 0:
                 display_name = "FREE-FORM SOURCE (No Template)"
             else:
                 display_name = template_name if template_name else f"Template {template_id}"
-            
+
             template_data[template_id] = (
                 display_name, definitions, default_template)
 
@@ -369,7 +369,7 @@ def run_update_citation_name(config, db_connection, report_file):
 
     changes = []
     unresolved_fields = {}  # Track unresolved fields by template/source/field
-    
+
     for (citation_id, old_name, citation_fields_xml, template_id,
          source_template_citation_name, _, _, source_name, source_id) in selected_rows:
         if template_id is None:
@@ -412,25 +412,25 @@ def run_update_citation_name(config, db_connection, report_file):
         "\n+=+=+=+= Citation name changes listing\n\n"
         "Key:\n"
         "Citation number\nOld CitationName\nNew CitationName\n\n")
-    
+
     updated = 0
     current_template = None
     current_source = None
-    
+
     for citation_id, old_name, new_name, template_id, source_name in changes:
         template_name = template_data[template_id][0]
-        
+
         if current_template != template_name:
             current_template = template_name
             current_source = None
             report_file.write(
                 f"\n--- Source Template Name: {template_name} ---\n\n")
-        
+
         if current_source != source_name:
             current_source = source_name
             report_file.write(
                 f"--  Source Name: {source_name}\n\n")
-        
+
         report_file.write(
             f"  {citation_id}\n"
             f"  {old_name!r}\n"
@@ -450,7 +450,7 @@ def run_update_citation_name(config, db_connection, report_file):
 
     # Problem reports
     problems_found = False
-    
+
     # Report citations without source templates
     if citations_missing_template:
         problems_found = True
@@ -467,15 +467,15 @@ def run_update_citation_name(config, db_connection, report_file):
             "\nThese citations were SKIPPED during processing.\n"
             "In RootsMagic, verify these citations have valid sources and those\n"
             "sources have source templates assigned.\n")
-    
+
     # Report sources without templates in selected citations
     sources_without_template = db_connection.execute(
         "SELECT DISTINCT s.SourceID, s.Name FROM SourceTable AS s "
         "JOIN CitationTable AS ct ON ct.SourceID = s.SourceID "
-        "WHERE s.TemplateID IS NULL " + 
+        "WHERE s.TemplateID IS NULL " +
         ("AND " + " AND ".join(filter_conditions) if filter_conditions else ""),
         filter_parameters).fetchall()
-    
+
     if sources_without_template:
         problems_found = True
         if not citations_missing_template:
@@ -490,7 +490,7 @@ def run_update_citation_name(config, db_connection, report_file):
             report_file.write(f"  Source ID: {src_id}, Name: {src_name}\n")
         report_file.write(
             "\nIn RootsMagic, assign a source template to each of these sources.\n")
-    
+
     if problems_found:
         report_file.write(
             "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n")
@@ -502,7 +502,7 @@ def run_update_citation_name(config, db_connection, report_file):
             "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
             "UNRESOLVED DATA FIELDS (Cannot be substituted in citation names)\n\n"
             )
-        
+
         # Group by template and collect unique fields
         by_template = {}
         for unresolved in unresolved_fields.values():
@@ -510,7 +510,7 @@ def run_update_citation_name(config, db_connection, report_file):
             if template_name not in by_template:
                 by_template[template_name] = set()
             by_template[template_name].add(unresolved['field_name'])
-        
+
         for template_name in sorted(by_template.keys()):
             field_names = sorted(by_template[template_name])
             field_list = ", ".join(f"[{name}]" for name in field_names)
