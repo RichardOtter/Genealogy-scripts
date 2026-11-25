@@ -63,37 +63,17 @@ def run_update_citation_name(config, db_connection, report_file):
     # and issue a warning in report to reindex in RM.
     RMc.reindex_RMNOCASE(db_connection)
 
-    def get_boolean(section_name, option_name):
-        try:
-            value = config[section_name][option_name].strip().casefold()
-        except (configparser.Error, KeyError) as exc:
-            raise RMc.RM_Py_Exception(
-                f"ERROR: [{section_name}] {option_name} must be on or off.") from exc
-        if value not in ("on", "off"):
-            raise RMc.RM_Py_Exception(
-                f"ERROR: [{section_name}] {option_name} must be on or off.")
-        return value == "on"
-
-    def get_unquoted_value(value):
-        """Remove surrounding quotes if present, preserving internal spaces."""
-        value = value.strip()
-        if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
-            return value[1:-1]
-        if len(value) >= 2 and value[0] == "'" and value[-1] == "'":
-            return value[1:-1]
-        return value
-
-    use_regexp = get_boolean("FILTER", "USE_REGEXP")
-    make_changes = get_boolean("CITATION_NAME_UPDATER", "MAKE_CHANGES")
-    template_default = get_boolean(
-        "CITATION_NAME_UPDATER", "TEMPLATE_DEFAULT")
+    use_regexp = RMc.get_bool_option(config, "FILTER", "USE_REGEXP")
+    make_changes = RMc.get_bool_option(config, "CITATION_NAME_UPDATER", "MAKE_CHANGES")
+    template_default = RMc.get_bool_option(
+        config, "CITATION_NAME_UPDATER", "TEMPLATE_DEFAULT")
 
     if template_default:
-        template_from_source = False
+        template_from_source_template = False
         custom_template = ""
     else:
-        template_from_source = get_boolean(
-            "CITATION_NAME_UPDATER", "TEMPLATE_FROM_SOURCE_TEMPLATE")
+        template_from_source_template = RMc.get_bool_option(
+            config, "CITATION_NAME_UPDATER", "TEMPLATE_FROM_SOURCE_TEMPLATE")
         try:
             custom_template = config["CITATION_NAME_UPDATER"]["CUSTOM_TEMPLATE"]
         except (configparser.Error, KeyError) as exc:
@@ -102,11 +82,11 @@ def run_update_citation_name(config, db_connection, report_file):
             ) from exc
 
     try:
-        source_template_filter = get_unquoted_value(
+        source_template_filter = RMc.get_unquoted_value(
             config.get("FILTER", "SOURCE_TEMPLATE", fallback=""))
-        source_name_filter = get_unquoted_value(
+        source_name_filter = RMc.get_unquoted_value(
             config.get("FILTER", "SOURCE_NAME", fallback=""))
-        citation_name_filter = get_unquoted_value(
+        citation_name_filter = RMc.get_unquoted_value(
             config.get("FILTER", "CITATION_NAME", fallback=""))
     except configparser.Error as exc:
         raise RMc.RM_Py_Exception(
@@ -155,13 +135,15 @@ def run_update_citation_name(config, db_connection, report_file):
         report_file.write(
             "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
             "IMPORTANT:\n"
-            "  Be sure to run the RootsMagic database tool 'Rebuild Indexes'\n"
-            "  when a modified database is first opened in RootsMagic\n"
+            "  Be sure to run the RootsMagic database tool:\n"
+            " 'Integrity check' when a modified database is first\n"
+            "  opened in RootsMagic. Select the tool 'Rebuild indexes'\n"
+            "  if the check returns anything but 'ok'.\n"
             "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
             "\n\n")
 
     report_file.write(
-        "+=+Citation name filters\n"
+        "+=+=+=+= Citation name filters\n"
         f"Mode: {'update database' if make_changes else 'preview only'}\n")
     remaining = count_citations()
 
@@ -288,7 +270,7 @@ def run_update_citation_name(config, db_connection, report_file):
             "PRAGMA table_info(SourceTemplateTable)").fetchall()
     }
     has_template_citation_name = "CitationName" in source_template_columns
-    if template_from_source and not has_template_citation_name:
+    if template_from_source_template and not has_template_citation_name:
         raise RMc.RM_Py_Exception(
             "ERROR: SourceTemplateTable.CitationName is not available in this "
             "RootsMagic database.")
@@ -304,7 +286,7 @@ def run_update_citation_name(config, db_connection, report_file):
                """ + source_template_citation_name_column +
         """, st.FieldDefs, st.Name, s.Name, s.SourceID
         """ + from_clause + selected_where +
-        " ORDER BY st.Name, s.Name, ct.CitationID", filter_parameters).fetchall()
+        " ORDER BY s.TemplateID, s.Name, ct.CitationID", filter_parameters).fetchall()
 
     def parse_xml_fields(xml_data, field_name, record_description):
         if xml_data in (None, b"", ""):
@@ -345,28 +327,42 @@ def run_update_citation_name(config, db_connection, report_file):
         return definitions
 
     template_data = {}
-    for (citation_id, _, _, template_id, _, field_defs_xml,
+    citations_missing_template = []
+    
+    # Build template_data from selected_rows (index 3=s.TemplateID, 5=st.FieldDefs, 6=st.Name)
+    for (citation_id, _, _, template_id, _, field_defs_xml, 
          template_name, _, _) in selected_rows:
         if template_id is None:
-            raise RMc.RM_Py_Exception(
-                f"ERROR: Citation {citation_id} has no source template.")
+            citations_missing_template.append(citation_id)
+            continue
+        
         if template_id not in template_data:
             definitions = parse_field_definitions(
                 field_defs_xml, f"source template {template_id}")
             default_template = "; ".join(
                 f"[{name}]" for name, _ in definitions.values())
+            
+            # Template ID 0 means free-form source
+            if template_id == 0:
+                display_name = "FREE-FORM SOURCE (No Template)"
+            else:
+                display_name = template_name if template_name else f"Template {template_id}"
+            
             template_data[template_id] = (
-                template_name, definitions, default_template)
+                display_name, definitions, default_template)
 
-    report_file.write("\nDefault templates for SourceTemplate used by selected citations\n")
+    report_file.write("\n+=+=+=+= Default templates for SourceTemplate used by selected citations\n")
     if not template_data:
         report_file.write("No source templates selected.\n")
-    for template_id, (template_name, _, default_template) in template_data.items():
+    else:
+        report_file.write(f"Found {len(template_data)} source template(s)\n")
+    for template_id in sorted(template_data.keys()):
+        template_name, _, default_template = template_data[template_id]
         report_file.write(
             f"\nSource template {template_id}: {template_name}\n"
             f"{default_template}\n\n")
 
-    if not template_default and not template_from_source and len(template_data) > 1:
+    if not template_default and not template_from_source_template and len(template_data) > 1:
         raise RMc.RM_Py_Exception(
             "ERROR: CUSTOM_TEMPLATE requires all selected citations to "
             "use the same source template. No changes were made.")
@@ -376,13 +372,15 @@ def run_update_citation_name(config, db_connection, report_file):
     
     for (citation_id, old_name, citation_fields_xml, template_id,
          source_template_citation_name, _, _, source_name, source_id) in selected_rows:
+        if template_id is None:
+            continue
         _, definitions, default_template = template_data[template_id]
         citation_fields = parse_xml_fields(
             citation_fields_xml, "Citation Fields", f"citation {citation_id}")
 
         if template_default:
             template = default_template
-        elif template_from_source:
+        elif template_from_source_template:
             template = source_template_citation_name or ""
         else:
             template = custom_template
@@ -411,7 +409,7 @@ def run_update_citation_name(config, db_connection, report_file):
         changes.append((citation_id, old_name or "", new_name, template_id, source_name))
 
     report_file.write(
-        "\nCitation name changes\n"
+        "\n+=+=+=+= Citation name changes listing\n\n"
         "Key:\n"
         "Citation number\nOld CitationName\nNew CitationName\n\n")
     
@@ -426,12 +424,12 @@ def run_update_citation_name(config, db_connection, report_file):
             current_template = template_name
             current_source = None
             report_file.write(
-                f"\n--- Source Template: {template_name} ---\n\n")
+                f"\n--- Source Template Name: {template_name} ---\n\n")
         
         if current_source != source_name:
             current_source = source_name
             report_file.write(
-                f"--  Source: {source_name}\n\n")
+                f"--  Source Name: {source_name}\n\n")
         
         report_file.write(
             f"  {citation_id}\n"
@@ -446,9 +444,56 @@ def run_update_citation_name(config, db_connection, report_file):
     report_file.write(
          "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
         f"Database updated: {'yes' if updated else 'no'}.\n\n"
-        f"CitationName values changed: {updated}.\n\n"
+        f"Citation Name values changed: {updated}.\n\n"
          "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
         )
+
+    # Problem reports
+    problems_found = False
+    
+    # Report citations without source templates
+    if citations_missing_template:
+        problems_found = True
+        report_file.write(
+            "\n\n"
+            "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+            "DATABASE PROBLEMS: Citations without source templates\n\n"
+            )
+        report_file.write(
+            f"{len(citations_missing_template)} citation(s) have no source template:\n")
+        for cit_id in sorted(citations_missing_template):
+            report_file.write(f"  Citation ID: {cit_id}\n")
+        report_file.write(
+            "\nThese citations were SKIPPED during processing.\n"
+            "In RootsMagic, verify these citations have valid sources and those\n"
+            "sources have source templates assigned.\n")
+    
+    # Report sources without templates in selected citations
+    sources_without_template = db_connection.execute(
+        "SELECT DISTINCT s.SourceID, s.Name FROM SourceTable AS s "
+        "JOIN CitationTable AS ct ON ct.SourceID = s.SourceID "
+        "WHERE s.TemplateID IS NULL " + 
+        ("AND " + " AND ".join(filter_conditions) if filter_conditions else ""),
+        filter_parameters).fetchall()
+    
+    if sources_without_template:
+        problems_found = True
+        if not citations_missing_template:
+            report_file.write(
+                "\n\n"
+                "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
+                "DATABASE PROBLEMS\n\n"
+                )
+        report_file.write(
+            f"{len(sources_without_template)} source(s) have no source template:\n")
+        for src_id, src_name in sorted(sources_without_template):
+            report_file.write(f"  Source ID: {src_id}, Name: {src_name}\n")
+        report_file.write(
+            "\nIn RootsMagic, assign a source template to each of these sources.\n")
+    
+    if problems_found:
+        report_file.write(
+            "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n")
 
     # Unresolved fields summary
     if unresolved_fields:
@@ -484,9 +529,6 @@ def run_update_citation_name(config, db_connection, report_file):
     )
 
     return 0
-
-
-
 
 
 # ===================================================DIV60==

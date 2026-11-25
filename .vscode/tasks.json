@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build-Docs",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/dev util scripts/Build doc/Build ReadMe files.py"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "Build-all-Dist",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/dev util scripts/build-suite-distribution.py"
+            ],
+            "group": "build"
+        }
+    ]
+}

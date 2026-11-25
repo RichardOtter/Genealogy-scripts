@@ -83,18 +83,20 @@ https://github.com/RichardOtter/Genealogy-scripts/blob/main/SECURITY_ANALYSIS.md
 =========================================================================DIV80==
 REUSE_LIB_SW_SAFETY_RMNOCASE
 The SQLite helper file used by this utility is distributed as a binary dll
-file.
+file. It is open source and can be regenerated from source by any
+experienced user. Its code may also be reviewed and explained by AI.
+
 It is used by SQLite to provide additional functionality, it is not 
-run by the Python scripts directly. The appendixes say more.
+run by the Python scripts directly.
 
 =========================================================================DIV80==
 REUSE_LIB_SW_SAFETY_RMNOCASE_REGEXP
 The two SQLite helper files used by this utility are distributed as binary dll
-files. They are both open source and can be regenerated from source by an
+files. They are both open source and can be regenerated from source by any
 experienced user. Their code may also be reviewed and explained by AI.
 
 They are both used by SQLite to provide additional functionality, they are not 
-run by the Python scripts directly. The appendixes say more.
+run by the Python scripts directly.
 
 =========================================================================DIV80==
 REUSE_LIB_OVERVIEW_A
@@ -174,7 +176,7 @@ you regularly use.
 REUSE_LIB_STEPS_1
 ==========-
 Install Python for Windows x64
-- see the easy steps in "APPENDIX  Python install" below.
+- follow the three easy steps in "APPENDIX  Python install" below.
 
 ==========-
 Create a folder on your computer that you will not confuse with other
@@ -188,11 +190,9 @@ not be affected by OneDrive.
 Copy these items from the downloaded zip file to the working folder-
      (file)     {SCRIPT_NAME}
      (file)     RM-Python-config.ini
-     (file)     RMNOCASE_surrogate.dll
-     (folder)   RMpy
-
 =========================================================================DIV80==
 REUSE_LIB_STEPS_2
+     (folder)   RMpy
 ==========-
 Make a copy of your database, move the copy into the working folder.
 
@@ -205,10 +205,10 @@ Edit the sample RM-Python-config.ini file in the working folder.
 if you need help)
 
 A summary of the config file (ini file) structure:
-The names in square brackets are section names.
-The items in a section are key-value pairs.
+      The names in square brackets are section names.
+      The items in a section are key-value pairs.
 
-For example, in the sample config file, there is a section named [FILE_PATHS].
+The sample config file contains a section named [FILE_PATHS].
 In that section, reside several key-value pairs, one of which is
 DB_PATH = TEST.rmtree
 
@@ -219,10 +219,19 @@ as are trailing spaces.
 The utility needs to know where the RM database file is located, the output
 report file name and its location.
 
+The next key: REPORT_FILE_PATH tells the utility where to create the report
+file. The setting as it is in the sample says create a file with a name starting
+withe "REPORT_" in the current (working) folder.
+
+The next key: REPORT_FILE_DISPLAY_APP names the app that will be automatically
+called to display the report file.
+
 =========================================================================DIV80==
 REUSE_LIB_STEPS_2_A
 If you followed the above instructions exactly, no changes to the key-values in
 the [FILE_PATHS] section are needed.
+
+More details are in "APPENDIX  Config file: location, contents and editing".
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_REGEXP_PATH
@@ -238,37 +247,29 @@ not need to use this setting. You can leave it as it is.
 
 If later your needs become more advanced, Its use is described below in the
 Notes and the download procedure is described below, in the 
-"APPENDIX  How to obtain regexp.dll".
-
-
-USE_REGEXP = off
-For now, leave this off.
-The setting is explained in the Notes section below.
-REGEXP (regular expressions) allow the use of very sophisticated wild card characters
-so allow selection and exclusion of items.
+"APPENDIX  Source of the regexp.dll SQLite extension".
 
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_REINDEX_RMNOCASE
-VERY IMPORTANT
+IMPORTANT
 After a run of CitationNameUpdater in which changes have been saved to the
-database, it is very important to reindex the database when opening the file
-in RootsMagic.
-This is very easily done.
-Upon first loading the database, either automatically, or manually opening
-a file within RootsMagic, before doing anything else, click the Tools icon on
-the left hand tab panel, and run the "Rebuild indexes" database tool.
-It's the second item from the top.
-If you don't, you may get a Malformed disk image error and Roots Magic may stop.
-Don't worry if that happens. Just reopen the file and before doing anything
-else, run the Rebuild indexes tool. This is expected behavior.
-Once the file has been reindexed, you can examine the citation names that were
-updated to confirm you got what you expected.
-Reindexing does not need to be redone until you run CitationNameUpdater again
-with MAKE_CHANGES = on.
+database, it is important to check the file integrity of the database when
+opening the file in RootsMagic. This is very easily done. Upon first loading the
+database within RootsMagic, before doing anything else, click the Tools icon on
+the left hand tab panel, and run the "Integrity check" database tool. It's the
+third item from the top. If the result is anything besides "Integrity check
+results: ok", then run the "Rebuild indexes" database tool right above it.
+
+If Integrity check shows problems and the indexes are not rebuilt you will at
+some point get a scary "database disk image is malformed" error and RootsMagic
+will stop. Don't panic if that happens. Just close  (or kill) RM, reopen the 
+same file in RM and before doing anything else, run the Rebuild indexes tool.
+This is expected behavior.
+If you get a non-ok integrity check, the author would appreciate a message
+describing the languages used by you person and place names.
 
 The report file has this same notice right below the header, in case you forget.
-
 
 =========================================================================DIV80==
 REUSE_LIB_APPENDIX_PYTHON
@@ -330,15 +331,76 @@ https://docs.python.org/3.14/using/windows.html
 
 =========================================================================DIV80==
 REUSE_LIB_APPENDIX_RMNOCASE_DLL
-APPENDIX  RMNOCASE_Surrogate.dll and unifuzz64.dll
+APPENDIX  RMNOCASE_surrogate.dll and unifuzz64.dll
 
 The path to the dll file in the config file is given by the
 RMNOCASE key. Same rules as for the DB_PATH key.
 
+=======================DIV30==
+There are two recommended sources for the dll that can provide the needed
+RMNOCASE SQLite collation. 
+
+https://github.com/RichardOtter/RMNOCASE_surrogate/releases/latest
+and
+https://sqlitetoolsforrootsmagic.com/wp-content/uploads/2018/05/unifuzz64.dll
+
+The dll from Github.com and included in this distribution is named RMNOCASE_surrogate.dll
+I recently created it with the help of Copilot AI with the goal of matching the functionality of
+RMNOCASE. No one outside of RootsMagic Inc knows exactly how their RMNOCASE works, but anyone can
+test what it does and make a matching function. For Unicode character sorting,
+there are about 150,000 characters along with many complications. The process used to create
+RMNOCASE_surrogate used about 100,000 different characters.  These were not random, but
+selected as most probable in name type data (Egyptian hieroglyphs were not included).
+
+The other dll is named unifuzz64.dll and available at the SQLiteToolsforRootsMagic website. 
+It has been used for many years, but often with an annoying handicap. It just asked Windows
+to compare the characters. That would be fine, but it is not what RMNOCASE does.
+
+The problem with using unifuzz64.dll is that often, when making large numbers of
+database updates to fields that have name type data, the database needs to be
+reindexed when it is first opened in RootsMagic. This is easy, but adds an extra
+step that may be forgotten. (Even if it is forgotten, I have not seen any damage
+occur. What happens is that RM pops up a frightening dialog saying that the
+database is corrupted. The solution is to close RM, reopen the same database
+file, and then immediately run the database tool "Rebuild indexes" In my
+experience, this has always fixed the problem.) 
+This temporary corruption happens because the collation defined in RMNOCASE , used inside RootsMagic and the
+collation in unifuzz64.dll are not the same in ways that are often triggered.
+This probably has to do with the kind of data in your name fields. I have several lanuages in my database
+so maybe that is why unifuzz64 fails to match RMNOCASE so often in my hands.
+
+Using RMNOCASE_surrogate.dll however, has not required reindexing. This is confirmed by running the Integrity
+check tool after opening an updated database.
+
+Again, RMNOCASE_surrogate is not proven to be the same as RMNOCASE, but for my data
+any differences have not triggered the problem.
+
+A conservative approach is to recommend that the RMNOCASE_PATH be set to
+RMNOCASE_surrogate.dll and when the changed file is opened in RootsMagic, the
+user should run the database tool "Integrity check". If there is anything listed
+besides "Integrity check results: ok", then run the Rebuild indexes tool and let
+me know, because I haven't seen that happen yet.
+
+Another advantage to the new RMNOCASE_surogate.dll is that the full source code
+is available on GitHub, licensing terms are clear (MIT), and it is clear what it
+does.
+
+
+
+The RMNOCASE_surrogate.dll
+This file is in this distribution so an external source is not needed, but this is
+where it lives-
+https://github.com/RichardOtter/rmnocase-surrogate/releases/tag/ver-0.1.0
+
+MD5 hash
+2906df88c3771b68507ad68c6f93a35d	236,480 bytes	rmnocase_surrogate.dll
+
+
+The unifuzz64.dll
 The SQLiteToolsforRootsMagic website has been around for many years and is run
-by a trusted RM user. Many posts to public RootsMagic user forums mention use
-of unifuzz64.dll from the SQLiteToolsforRootsMagic website. The author has
-also used it for years and can vouch for its safety.
+by a trusted RM user. Many posts to public RootsMagic user forums mention use of
+unifuzz64.dll from the SQLiteToolsforRootsMagic website. The author has also
+used it for years and can vouch for its safety.
 
 direct download:
 https://sqlitetoolsforrootsmagic.com/wp-content/uploads/2018/05/unifuzz64.dll
@@ -351,18 +413,7 @@ MD5 hash values are used to confirm the identity and integrity of files.
 
     MD5 hash                            File size         File name
     06a1f485b0fae62caa80850a8c7fd7c2    256,406 bytes    unifuzz64.dll
-
-
-NEW
-A new alternative that seems to be a better match to the RoostMagic RMNOCASE
-can be found at-
-https://github.com/RichardOtter/RMNOCASE_surrogate/releases/latest
-
-Early testing indicates that using this when doing database updates by these
-utilities no longer requires reindexing when first opened in RM.
-Running Check integrity confirms this.
-
-
+=======================DIV30==
 
 MD5 calculation
 In Windows, to generate the MD5 hash of a file named [file name]:
@@ -373,7 +424,6 @@ where [file name] is the file you wish to compute the MD5 has for.
 
 So, for example, to display the MD5 of the unifuzz file, enter-
 certutil -hashfile unifuzz64.dll  MD5
-
 
 
 =========================================================================DIV80==

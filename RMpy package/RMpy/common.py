@@ -70,6 +70,17 @@ def get_bool_option(config, section_name, option_name, default=False):
 
 
 # ===================================================DIV60==
+def get_unquoted_value(value):
+    """Remove surrounding quotes if present, preserving internal spaces."""
+    value = value.strip()
+    if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
+        return value[1:-1]
+    if len(value) >= 2 and value[0] == "'" and value[-1] == "'":
+        return value[1:-1]
+    return value
+
+
+# ===================================================DIV60==
 def launched_from_explorer():
     # Check how many processes are attached to the console
     arr = (ctypes.c_uint * 10)()
