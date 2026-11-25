@@ -110,7 +110,8 @@ These utilities are not installed in the traditional Windows sense, they are
 simply copied to the computer.
 
 The utilities are told what to do by editing a configuration file. This
-configuration tells the utility which database to use and how to display the output.
+configuration tells the utility which database to use and how to display the
+output.
 
 The default name of the configuration file (called, hereinafter, the
 "config file") is "RM-Python-config.ini". For now, it should be located in the
@@ -119,8 +120,8 @@ same folder as the MainScriptFile.py file and the RMpy folder.
 REUSE_LIB_OVERVIEW_B_STD
 
 How it works
-{UTILITY_NAME} is started by the user, a terminal window is displayed, the
-program processes the configuration data and the database, a report file
+{UTILITY_NAME} is started by the user, a terminal window is displayed,
+the program processes the configuration data and the database, a report file
 is displayed in Notepad, the terminal window closes and the program exits.
 
 =========================================================================DIV80==
@@ -193,6 +194,7 @@ Copy these items from the downloaded zip file to the working folder-
 =========================================================================DIV80==
 REUSE_LIB_STEPS_2
      (folder)   RMpy
+
 ==========-
 Make a copy of your database, move the copy into the working folder.
 
@@ -213,8 +215,7 @@ In that section, reside several key-value pairs, one of which is
 DB_PATH = TEST.rmtree
 
 "DB_PATH" is the key, "TEST.rmtree" is the value. key-value pairs are separated
-with an equals sign character. Spaces between the = and the value are ignored,
-as are trailing spaces.
+with an equals sign character.
 
 The utility needs to know where the RM database file is located, the output
 report file name and its location.
@@ -252,6 +253,7 @@ Notes and the download procedure is described below, in the
 
 =========================================================================DIV80==
 REUSE_LIB_STEPS_REINDEX_RMNOCASE
+=========-
 IMPORTANT
 After a run of CitationNameUpdater in which changes have been saved to the
 database, it is important to check the file integrity of the database when
@@ -344,17 +346,19 @@ https://github.com/RichardOtter/RMNOCASE_surrogate/releases/latest
 and
 https://sqlitetoolsforrootsmagic.com/wp-content/uploads/2018/05/unifuzz64.dll
 
-The dll from Github.com and included in this distribution is named RMNOCASE_surrogate.dll
-I recently created it with the help of Copilot AI with the goal of matching the functionality of
-RMNOCASE. No one outside of RootsMagic Inc knows exactly how their RMNOCASE works, but anyone can
-test what it does and make a matching function. For Unicode character sorting,
-there are about 150,000 characters along with many complications. The process used to create
-RMNOCASE_surrogate used about 100,000 different characters.  These were not random, but
-selected as most probable in name type data (Egyptian hieroglyphs were not included).
+The dll from Github.com and included in this distribution is named
+RMNOCASE_surrogate.dll I recently created it with the help of Copilot AI with
+the goal of matching the functionality of RMNOCASE. No one outside of RootsMagic
+Inc knows exactly how their RMNOCASE works, but anyone can test what it does and
+make a matching function. For Unicode character sorting, there are about 150,000
+characters. The process used to create RMNOCASE_surrogate used about 100,000
+different characters.  These were not random, but selected as most probable in
+name type data (Egyptian hieroglyphs were not included).
 
-The other dll is named unifuzz64.dll and available at the SQLiteToolsforRootsMagic website. 
-It has been used for many years, but often with an annoying handicap. It just asked Windows
-to compare the characters. That would be fine, but it is not what RMNOCASE does.
+The other dll is named unifuzz64.dll and available at the
+SQLiteToolsforRootsMagic website. It has been used for many years, but often
+with an annoying handicap. It just asked Windows to compare the characters. That
+would be fine, but it is not what RMNOCASE does.
 
 The problem with using unifuzz64.dll is that often, when making large numbers of
 database updates to fields that have name type data, the database needs to be
@@ -363,17 +367,18 @@ step that may be forgotten. (Even if it is forgotten, I have not seen any damage
 occur. What happens is that RM pops up a frightening dialog saying that the
 database is corrupted. The solution is to close RM, reopen the same database
 file, and then immediately run the database tool "Rebuild indexes" In my
-experience, this has always fixed the problem.) 
-This temporary corruption happens because the collation defined in RMNOCASE , used inside RootsMagic and the
-collation in unifuzz64.dll are not the same in ways that are often triggered.
-This probably has to do with the kind of data in your name fields. I have several lanuages in my database
-so maybe that is why unifuzz64 fails to match RMNOCASE so often in my hands.
+experience, this has always fixed the problem.) This temporary corruption
+happens because the collation defined in RMNOCASE , used inside RootsMagic and
+the collation in unifuzz64.dll are not the same in ways that are often
+triggered. This probably has to do with the kind of data in your name fields. I
+have several languages in my database so maybe that is why unifuzz64 fails to
+match RMNOCASE so often in my hands.
 
-Using RMNOCASE_surrogate.dll however, has not required reindexing. This is confirmed by running the Integrity
-check tool after opening an updated database.
+Using RMNOCASE_surrogate.dll however, has not required reindexing. This is
+confirmed by running the Integrity check tool after opening an updated database.
 
-Again, RMNOCASE_surrogate is not proven to be the same as RMNOCASE, but for my data
-any differences have not triggered the problem.
+Again, RMNOCASE_surrogate is not proven to be the same as RMNOCASE, but for my
+data any differences have not triggered the problem.
 
 A conservative approach is to recommend that the RMNOCASE_PATH be set to
 RMNOCASE_surrogate.dll and when the changed file is opened in RootsMagic, the
@@ -396,6 +401,7 @@ MD5 hash
 2906df88c3771b68507ad68c6f93a35d	236,480 bytes	rmnocase_surrogate.dll
 
 
+=======================DIV30==
 The unifuzz64.dll
 The SQLiteToolsforRootsMagic website has been around for many years and is run
 by a trusted RM user. Many posts to public RootsMagic user forums mention use of
@@ -408,13 +414,12 @@ https://sqlitetoolsforrootsmagic.com/wp-content/uploads/2018/05/unifuzz64.dll
 the link above is found in this context-
 https://sqlitetoolsforrootsmagic.com/rmnocase-faking-it-in-sqlite-expert-command-line-shell-et-al/
 
-
 MD5 hash values are used to confirm the identity and integrity of files.
 
     MD5 hash                            File size         File name
     06a1f485b0fae62caa80850a8c7fd7c2    256,406 bytes    unifuzz64.dll
-=======================DIV30==
 
+=======================DIV30==
 MD5 calculation
 In Windows, to generate the MD5 hash of a file named [file name]:
 Open a terminal window and enter:
@@ -430,20 +435,11 @@ certutil -hashfile unifuzz64.dll  MD5
 REUSE_LIB_APPENDIX_REGEXP_DLL
 APPENDIX  Source of the regexp.dll SQLite extension
 
-regexp.dll was released under the-
-
-MIT License
-
-Copyright (c) 2021+ Anton Zhiyanov
-https://github.com/nalgeon/sqlean
-
-
 It has been downloaded from-
 https://github.com/nalgeon/sqlean/releases/tag/0.29.0
 
 Documentation is at-
 https://github.com/nalgeon/sqlean/blob/main/README.md
-
 
 MD5                               size          name
 74d4fc356e55c5cd721576e68a2f6f6b	482,220 bytes	regexp.dll
@@ -487,12 +483,12 @@ Alternatively, the configuration file name and location can be specified
 on the command-line as an argument to the script. This argument overrides
 the default configuration file name and location.
 
-For example, if the script "MainScriptFile.py" is executed from a terminal window
-which has the folder "C:\Users\me\TestFolder" as its 'current directory', it
-will use the configuration file "C:\Users\me\TestFolder\RM-Python-config.ini"
+For example, if the script "MainScriptFile.py" is executed from a terminal
+window which has the folder "C:\Users\me\TestFolder" as its 'current directory',
+it will use the configuration file "C:\Users\me\TestFolder\RM-Python-config.ini"
 if it exists. If the utility is run with an explicit argument, such as:
-MainScriptFile.py "C:\Users\me\Documents\RM-Python-config.ini"
-then the specified ini configuration file will be used instead.
+MainScriptFile.py "C:\Users\me\Documents\RM-Python-config.ini" then the
+specified ini configuration file will be used instead.
 
 Note also that the file name is not restricted to the default.
 For instance, running the utility from a terminal window as:

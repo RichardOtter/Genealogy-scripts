@@ -86,9 +86,8 @@ If you leave it blank, as it is, then there will be no selection based on
 the existing citation name and all citations passed from the second filter,
 no matter what their names, will be updated.
 
-Most 
 Here is an example to make this more concrete,
-Say that You have a source template which you have modified by adding a 
+Say that you have a source template which you have modified by adding a 
 citation name template to the details of the template as can be done in RM12.
 New citations will use the template, but existing ones are not changed and still
 use the default template. (a semicolon separated list of all citation data items
@@ -98,8 +97,7 @@ and you have updated their data fields.
 If you want to change the citation name for all of them, specify the source 
 template name. 
 If you want to change only some of the sources, then specify the source name.
-Since they all use the same source citation, you don't need to give the source
-template name.
+You don't need to give the source template name.
 Specifying the citation name is an option that you probably will not use
 without the RegExp feature.
 
@@ -121,7 +119,7 @@ CUSTOM_TEMPLATE =
 This section's parameters tell the utility how the new citation names will be
 constructed.
 
-MAKE_CHANGES  on or off
+MAKE_CHANGES  on / off
 The first is not really a format control, but a master switch that determines
 whether any changes should be made to the database.
 
@@ -134,7 +132,7 @@ It will also list the default template for all source templates encountered.
 This section of text will be very helpful when writing your own templates as it
 gives the names of all the citation data fields. 
 
-TEMPLATE_DEFAULT  on or off
+TEMPLATE_DEFAULT  on / off
 If on, then the default template defined by the citations name's source template
 is used to update the citations selected by the FILTER section parameters. 
 It overrides the next two parameters, TEMPLATE_FROM_SOURCE_TEMPLATE and 
@@ -142,8 +140,9 @@ CUSTOM_TEMPLATE.
 
 If TEMPLATE_DEFAULT is off, the the other options are considered.
 
-TEMPLATE_FROM_SOURCE_TEMPLATE = on overrides the next option, CUSTOM_TEMPLATE
-so that it is not considered
+TEMPLATE_FROM_SOURCE_TEMPLATE  on / off
+on setting overrides the next option, CUSTOM_TEMPLATE so that it is not
+considered.
 
 TEMPLATE_FROM_SOURCE_TEMPLATE = on means that for each citation, its source
 template is examined. If the source template has a RM v12 custom template
@@ -158,12 +157,8 @@ This is only considered when TEMPLATE_FROM_SOURCE_TEMPLATE is off.
 Since only a single template can be specified in the config file, this
 should be used only when the filtering includes one source template.
 
-If you haven't designed your citation name template(s) or entered them into the
-source template yet, do a run with MAKE_CHANGES = off and TEMPLATE_DEFAULT = on.
-
 Values in config file sections [FILTER] and [CITATION_NAME_UPDATER] may be
-in quotes. if needed. Only necessary if the Template, Source of Citation Name 
-has a leading or trailing space character.
+in quotes. if needed.
 
 ==========-
 Save the config file but leave it open in Notepad.
@@ -185,7 +180,6 @@ Check the report to see what the proposed citation name changes are.
 Rer-run the utility after making config file changes.
 When satisfied, change the config setting MAKE_CHANGES to on and run again.
 
-=========-
 █_INCLUDE: REUSE_LIB_STEPS_REINDEX_RMNOCASE
 =========-
 Examine the changed database in RM and confirm the desired changes have
