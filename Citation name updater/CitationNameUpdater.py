@@ -445,20 +445,28 @@ def run_update_citation_name(config, db_connection, report_file):
             "UNRESOLVED DATA FIELDS (Cannot be substituted in citation names)\n\n"
             )
 
-        # Group by template and collect unique fields
+        # Group by template, then by source, then collect unique fields
         by_template = {}
         for unresolved in unresolved_fields.values():
             template_name = unresolved['template_name']
+            source_name = unresolved['source_name']
+            field_name = unresolved['field_name']
+            
             if template_name not in by_template:
-                by_template[template_name] = set()
-            by_template[template_name].add(unresolved['field_name'])
+                by_template[template_name] = {}
+            if source_name not in by_template[template_name]:
+                by_template[template_name][source_name] = set()
+            by_template[template_name][source_name].add(field_name)
 
         for template_name in sorted(by_template.keys()):
-            field_names = sorted(by_template[template_name])
-            field_list = ", ".join(f"[{name}]" for name in field_names)
-            report_file.write(
-                f"Source Template: {template_name} - {len(field_names)} unresolved field(s)\n"
-                f"  {field_list}\n\n")
+            report_file.write(f"Source Template: {template_name}\n")
+            for source_name in sorted(by_template[template_name].keys()):
+                field_names = sorted(by_template[template_name][source_name])
+                field_list = ", ".join(f"[{name}]" for name in field_names)
+                report_file.write(
+                    f"  Source: {source_name} - {len(field_names)} unresolved field(s)\n"
+                    f"    {field_list}\n")
+            report_file.write("\n")
     else:
         report_file.write(
             "\n\n"
