@@ -21,7 +21,6 @@ __pycache__
 # ignore test database stuff
 DB/
 
-
 # ignore RootsMagic database files
 *.rmgc
 *.rmtree
@@ -37,10 +36,6 @@ HIDE_*
 # ignore Releases storage folder and Release build folder
 Release*/
 
-# ignore folder f hard links to readme files
-Doc/Links/
 
-# ignore files in doc not to be checked in
-DocFull_*
 
 Test Data/TestData-*FULL.sql

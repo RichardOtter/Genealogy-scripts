@@ -1,13 +1,18 @@
+import sys
+from pathlib import Path
+
 from os import chdir
-import RMpy.common as RMc  # type: ignore
 import traceback
 import subprocess
 import configparser
 import sqlite3
 from datetime import datetime
-import sys
-from pathlib import Path
-sys.path.append(r'.')
+
+# Add parent directory to path so RMpy can be imported
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+# Import RMpy after path is set up
+import RMpy.common as RMc  # type: ignore
 
 
 # ===================================================DIV60==
@@ -242,3 +247,11 @@ def launcher(utility_info):
 
 
 # ===================================================DIV60==
+# Guard against direct execution
+if __name__ == '__main__':
+    sys.exit(
+        "ERROR: launcher.py is a module for internal use and should not be run directly.\n"
+        "       It must be imported and called by a utility script using:\n"
+        "           RMpy.launcher.launcher(utility_info)\n"
+        "       See CitationNameUpdater.py or other utility scripts for examples."
+    )

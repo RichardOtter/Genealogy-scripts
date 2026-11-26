@@ -122,3 +122,11 @@ class RM_Py_Exception(Exception):
 
 
 # ===================================================DIV60==
+# Guard against direct execution
+if __name__ == '__main__':
+    sys.exit(
+        "ERROR: common.py is a module for internal use and should not be run directly.\n"
+        "       It must be imported by utility scripts or the launcher module.\n"
+        "       See CitationNameUpdater.py or other utility scripts for examples."
+    )
+
