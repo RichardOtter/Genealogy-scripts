@@ -512,12 +512,35 @@ As above, the "others" are the data fields defined for this particular citation
 and they are specified by the Source Template.
 
 ===========-
-Listing of all possible Source Template changes that can affect a Source template
-already in use by Sources and Citations.
+Listing of all possible Source Template changes:
 
-These alterations:
+Main window:
 *    change source template name
-*    change the order of the source fields
+*    add new data fields
+*    delete data fields
+*    change data field name
+*    change state of the check-box "source detail field"
+*    change field data type
+*    change display name of a field
+*    change brief hint for a field
+*    change long hint for a field
+*    change the order of the data fields
+*    change footnote template
+*    change short footnote template
+*    change bibliography template
+
+from the "Details" button
+*    change Category
+*    change Description
+*    change Keywords
+*    change Source name template
+*    change Citation name template
+
+
+Each change will be considered regarding its affect on new and existing data.
+
+Group 1:
+*    change source template name
 *    change field data type
 *    change display name of a field
 *    change brief hint for a field
@@ -525,42 +548,44 @@ These alterations:
 *    change footnote template
 *    change short footnote template
 *    change bibliography template
+*    change Category
+*    change Description
+*    change Keywords
 
-May be made at anytime with no negative consequence. The changes will be immediately
-seen in all new and existing source and citations. This utility is not needed.
-Converting a field type from say, "name" type to "date" would not make much
+Group 1 changes may be made at anytime without any negative consequence. The 
+changes will be immediately seen in all new and existing source and citations.
+This utility is not needed.
+
+Converting a data field type from say, "name" type to "date" would not make much
 sense if the field's existing data actually has name data in it. But it can be
 done at any time.
 
+Group 2:
+*    change the order of the data fields
+*    change Source name template
+*    change Citation name template
 
-The alteration:
-*    change order of citation fields
+Group 2 changes may be made at any time, new sources and citations will use the
+new source template configuration as expected.
+Whn pre-existing sources and citations are viewed, the new order of
+data fields is used to display them.
+However, existing source and citation names will not be regenerated automatically.
+To regenerate citation names, use the utility "CitationNameUpdater".
 
-May be made at any time, but existing citations whose Citation Names were
-automatically generated will not be updated with what would be the new
-auto generated name using the new order of citation fields.
-If this is objectionable, one could open each citation, delete the existing
-citation name and let it be auto generated using the new template information.
-This utility will not update Citation Names.
-(Possible task for a new utility app?) 
+Group 3:
+*    change state of the check-box "source detail field"
 
-
-The alteration:
-*    change state of the check-box "This is a source detail field"
-
-This change implies movement of data from a source to a citation
+Group 3 change implies movement of data from a source to a citation
 or vice versa. This could be called "Lumping" or "Splitting" source info.
-This utility will not fix problems created by doing this alteration.
-See the LumpSources utility as a possible solution.
+This utility will not fix problems created by making this alteration.
+See the "LumpSources" utility for possible assistance.
 
+Group 4:
+*    add new data fields
+*    delete data fields
+*    change data field name
 
-These alterations:
-*    change field name
-*    add new fields
-*    delete fields
-
-Use this utility to update existing source and citations to the new template
-structure.
+Use this utility to make these changes.
 
 If the utility is not used and these changes are made:
 *    change field name
@@ -568,8 +593,8 @@ Data is be invisible when accessed with the new name. The old data remains, but
 is hidden. (it will still be accessible by the footnote templates, but the old
 field will not show during data entry/edit.)
 *    add new fields
-New fields will not be correctly initialized, sentence language will not see the
-new field as empty when tested by <> in the sentence language.
+New fields will not be correctly initialized, the RM sentence language will not
+see the new field as empty when tested by <> in the sentence language.
 *    delete fields
 Old data not removed, but is only hidden. This is not really a problem, but
 it's not tidy.
@@ -642,18 +667,19 @@ the desired name in a later mapping.
 ===========-
 Source Template Names and Field Names
 
-For better or for worse source names, source template names, template field names
-in RM are not required to be unique and can start with, end with or contain
-space characters.
+For better or for worse source names, source template names, template field
+names in RM are not required to be unique and can start with, end with or
+contain space characters.
 
 If you specify a name in the config file that is not unique, the report file
-will show the problem. Simply rename the item in the database to make the name unique.
-If you have duplicate field names that are of the same type (source vs
+will show the problem. Simply rename the item in the database to make the name
+unique. If you have duplicate field names that are of the same type (source vs
 citation), I don't know what to say. You will find odd behavior. Good luck.
 
-If the template name, field name or SOURCE_NAME_LIKE variable contains a
-space character at the start or the end it will generally be invisible when
-displayed. In any case you can quotation marks e.g. "Name ", or " Name" or "My Name".
+If the template name, field name or SOURCE_NAME_LIKE variable contains a space
+character at the start or the end the blank will generally be invisible when
+displayed. In any case you can quotation marks e.g. "Name ", or " Name" or "My
+Name".
 
 ===========-
 Running the utility with MAKE_CHANGES = off does not make any changes to your
@@ -663,7 +689,7 @@ database. You can run it as many times as you need.
 The utility fixes sources and citations that have missing XML field elements.
 This happens when sources or citations have been created with a older template,
 before a field was added.
-Just be sure to list all fields in the mapping.
+Just be sure to list all destination fields in the mapping.
 
 Symptom-
 Say a template T1, has 2 fields, F1 and F2
@@ -673,33 +699,33 @@ Now the template T1 is changed by editing it to add a field, F3.
 The T1 template also has its footnote sentence adjusted to use the new field F3.
 The edited template T1 is now called T1'.
 
-Now some more sources, S3 and S4 are created using template T1'.
+Now add some more sources, S3 and S4 are created using template T1'.
 The user entered text for field F3 in S3, but left field F3 blank in S4.
 
-Looking at the footnotes displayed in RM that are generated from T1',
-one sees that source S3 and S4 look as expected. The F3 in S3 shows the text that
-was entered for F3, and in S4, the F3 prints as blank.
+Looking at the footnotes displayed in RM that are generated from T1', one sees
+that source S3 and S4 look as expected. The F3 in S3 shows the text that was
+entered for F3, and in S4, the F3 prints as blank.
 
-However the footnotes from S1 and S2 are unexpected.
-Those sources do not have data in field F3. In fact, they don't even have a
-field F3. Any reference to F3 in the footnote sentence, by "[F3]" will,
-in the footnote, print out as "[F3]" not as "" as expected.
+However the footnotes from S1 and S2 are unexpected. Those sources do not have
+data in field F3. In fact, they don't even have a field F3. Any reference to F3
+in the footnote sentence, by "[F3]" will, in the footnote, print out as "[F3]"
+not as "" as expected.
 
 To fix, this utility can add the empty field F3 to the existing source S1 and S2.
 
-This can be accomplished by copying the Template T1' to T1'-copy.
-The T1'-copy can have changes like better names, or no changes at all.
-Just map all of the fields to themselves and run the utility.
-Each source and citation will be checked for missing fields and fixed if necessary.
+This can be accomplished by copying the Template T1' to T1'-copy. The T1'-copy
+can have changes like better names, or no changes at all. Just map all of the
+fields to themselves and run the utility. Each source and citation will be
+checked for missing fields and fixed if necessary.
 
 ===========-
 This may or may not be helpful...
 
 To help understand how the system works- think of each source and citation
 record as having a set of Key-Value pairs. These are the fields.
-The source fields are in the source record and citation fields are in the citation record.
-When you enter a source/citation that uses a template, RM displays the key names
-and the user adds the values.
+The source fields are in the source record and citation fields are in the
+citation record. When you enter a source/citation that uses a template, RM
+displays the key names and the user adds the values.
 When a footnote needs to be created, RM uses the template to construct it from
 the Key-Value pairs.
 This app operates on source and citation records. It can-
@@ -771,7 +797,7 @@ field is in source or citation. Sources and Citations have XML that contain only
 Field Name/Field Value pairs.
 
 ===========-
-details of the XML format has changed format from v7 to v8
+Details of the XML format has changed format from v7 to v8
 
 Old style XML  (possibly only remains in built-in SourceTemplate records ?)
 ...<?xml version="1.0" encoding="UTF-8"?>x0A<root> text </root>c0A
@@ -833,5 +859,6 @@ name operating on a select group of sources.
 █_INCLUDE: REUSE_LIB_FEEDBACK
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_DISTRIBUTION
+
 
 
