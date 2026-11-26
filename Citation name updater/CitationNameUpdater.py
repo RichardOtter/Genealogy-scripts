@@ -7,7 +7,6 @@ import RMpy.launcher            # noqa #type: ignore
 
 import configparser
 import re
-import sqlite3
 import xml.etree.ElementTree as ET
 
 # Requirements:
@@ -25,10 +24,10 @@ import xml.etree.ElementTree as ET
 #    FILE_PATHS  RMNOCASE_PATH
 #    FILE_PATHS  REGEXP_PATH
 
-#    FILTER   USE_REGEXP
 #    FILTER   SOURCE_TEMPLATE
 #    FILTER   SOURCE_NAME
 #    FILTER   CITATION_NAME
+#    FILTER   USE_REGEXP
 
 #   CITATION_NAME_UPDATER  MAKE_CHANGES
 #   CITATION_NAME_UPDATER  TEMPLATE_DEFAULT
@@ -60,7 +59,7 @@ def main():
 def run_update_citation_name(config, db_connection, report_file):
 
     # deal with RMNOCASE used to collateCitationTable.CitationName
-    # and issue a warning in report to reindex in RM.
+    # and issue a warning in report to check DB integrity in RM.
     RMc.reindex_RMNOCASE(db_connection)
 
     use_regexp = RMc.get_bool_option(config, "FILTER", "USE_REGEXP")
@@ -94,22 +93,11 @@ def run_update_citation_name(config, db_connection, report_file):
 
     if use_regexp:
         try:
-            regexp_path = Path(config["FILE_PATHS"]["REGEXP_PATH"])
-        except (configparser.Error, KeyError) as exc:
+            db_connection.execute("SELECT '' WHERE '' REGEXP ''")
+        except Exception as exc:
             raise RMc.RM_Py_Exception(
-                "ERROR: REGEXP_PATH must be specified when USE_REGEXP is on."
-            ) from exc
-        if not regexp_path.is_file():
-            raise RMc.RM_Py_Exception(
-                f"ERROR: Path for REGEXP extension not found: {regexp_path}")
-        try:
-            db_connection.enable_load_extension(True)
-            db_connection.load_extension(str(regexp_path))
-        except sqlite3.Error as exc:
-            raise RMc.RM_Py_Exception(
-                f"ERROR: Could not load the REGEXP extension: {exc}") from exc
-        finally:
-            db_connection.enable_load_extension(False)
+                "ERROR: REGEXP extension was not loaded. "
+                "Verify REGEXP_PATH is configured and points to a valid extension file.") from exc
 
     from_clause = """
         FROM CitationTable AS ct
@@ -449,52 +437,6 @@ def run_update_citation_name(config, db_connection, report_file):
         )
 
     # Problem reports
-    problems_found = False
-
-    # Report citations without source templates
-    if citations_missing_template:
-        problems_found = True
-        report_file.write(
-            "\n\n"
-            "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
-            "DATABASE PROBLEMS: Citations without source templates\n\n"
-            )
-        report_file.write(
-            f"{len(citations_missing_template)} citation(s) have no source template:\n")
-        for cit_id in sorted(citations_missing_template):
-            report_file.write(f"  Citation ID: {cit_id}\n")
-        report_file.write(
-            "\nThese citations were SKIPPED during processing.\n"
-            "In RootsMagic, verify these citations have valid sources and those\n"
-            "sources have source templates assigned.\n")
-
-    # Report sources without templates in selected citations
-    sources_without_template = db_connection.execute(
-        "SELECT DISTINCT s.SourceID, s.Name FROM SourceTable AS s "
-        "JOIN CitationTable AS ct ON ct.SourceID = s.SourceID "
-        "WHERE s.TemplateID IS NULL " +
-        ("AND " + " AND ".join(filter_conditions) if filter_conditions else ""),
-        filter_parameters).fetchall()
-
-    if sources_without_template:
-        problems_found = True
-        if not citations_missing_template:
-            report_file.write(
-                "\n\n"
-                "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n"
-                "DATABASE PROBLEMS\n\n"
-                )
-        report_file.write(
-            f"{len(sources_without_template)} source(s) have no source template:\n")
-        for src_id, src_name in sorted(sources_without_template):
-            report_file.write(f"  Source ID: {src_id}, Name: {src_name}\n")
-        report_file.write(
-            "\nIn RootsMagic, assign a source template to each of these sources.\n")
-
-    if problems_found:
-        report_file.write(
-            "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n")
-
     # Unresolved fields summary
     if unresolved_fields:
         report_file.write(
