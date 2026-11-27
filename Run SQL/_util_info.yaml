@@ -9,6 +9,8 @@ DistributionFileList:
   - ReadMe.txt
   - RM-Python-config.ini
   - TestSqlScript.sql
+  - ../SQLite extensions/RMNOCASE/RMNOCASE_surrogate.dll
+  - ../SQLite extensions/RegExp/regexp.dll
 
 DistributionFolderList:
   - ..\RMpy package\RMpy
