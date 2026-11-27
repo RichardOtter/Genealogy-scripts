@@ -241,6 +241,9 @@ exclude if contains string1 or string2
 exclude if contains a YYYY > 1900
 ^(?!.*(190[1-9]|19[1-9][0-9]|[2-9][0-9]{3})).*$
 
+The regexp language features implemented are described in-
+https://github.com/nalgeon/sqlean/blob/main/README.md
+
 AI is a great resource to help you create regular expressions.
 Just mention that you are using "sqlean regexp".
 

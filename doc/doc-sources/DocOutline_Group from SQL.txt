@@ -83,7 +83,7 @@ as above, as long as the SQL lines are all indented with white space.
 Blank lines are not allowed.
 Use indented SQL comments (--) to add spacing for readability.
 
-# style comments are not allowed in multi line values.
+'#' style comments are not allowed in multi line values.
 
 The GROUP_NAME value in OPTIONS may also have multiple lines, that is
 multiple group names. Each of those group will be updated in the same run
@@ -125,10 +125,6 @@ It is suggested that you write and debug your SQL in a GUI SQLite manager app,
 such as "SQLite Expert Personal", the 64bit version, a free app. Several others
 are also available.
 
-Note that the SQL statement is run in an environment that does not have the
-RMNOCASE collation used by RM for most name type columns. Use "COLLATE NOCASE"
-to avoid errors.
-
 =========-
 Also remember, that groups in RM, are always groups of Persons. So if you want
 to find all RM facts with a certain characteristic, you need to create a group of
@@ -136,7 +132,16 @@ the people that have that fact attached. Once the group is created, you will
 need to search each person's edit window for the fact you are interested in.
 
 =========-
-Due to technical issue regarding RMNOCASE, this utility will not actually create a
+Use of the regular expression library with SQLite is optional.
+
+The regexp language features implemented are described in-
+https://github.com/nalgeon/sqlean/blob/main/README.md
+
+AI is a great resource to help you create regular expressions.
+Just mention that you are using "sqlean regexp".
+
+=========-
+Due to technical issues, this utility will not actually create a
 new group. Instead use RM to create the group name before using this utility.
 The process is easy-
 Open the database in RM,
@@ -190,14 +195,19 @@ in an external SQLite tool, try to run this utility. Will get locked message
 until transaction in SQLite Expert is either committed or RolledBack.
 
 =========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
+=========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
+=========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MULTILINE
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
+█_INCLUDE: REUSE_LIB_APPENDIX_RMNOCASE_DLL
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
+█_INCLUDE: REUSE_LIB_APPENDIX_REGEXP_DLL
+
 =========================================================================DIV80==
 TODO
 

@@ -9,6 +9,7 @@ import yaml    # type: ignore
 # the top level yaml config file is in: repo root/dev util scripts
 # the .lnk files are in: repo root/dev util scripts/local DB folder (same as this script)
 
+
 def main():
 
     # if a file already exists, delete it
@@ -17,7 +18,7 @@ def main():
     # CONSTANTS
     REPO_ROOT_PATH = Path(
         r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts")
-    TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
+    TOP_LEVEL_CONFIG_NAME = r"projects-to-build.yaml"
 
     # Shortcut files to copy to each project's DB folder
     db_shortcut_files = [
@@ -35,9 +36,9 @@ def main():
         script_dir = Path(__file__).resolve().parent  # local DB folder
         dev_util_fldr_path = script_dir.parent  # dev util scripts
         local_db_folder_path = script_dir  # Same folder as this script
-        
+
         top_level_config_path = dev_util_fldr_path / TOP_LEVEL_CONFIG_NAME
-        
+
         if (not Path(top_level_config_path).exists()):
             print("Can't find the top level config file.\n")
             return
@@ -49,9 +50,9 @@ def main():
             project_root_dir_path = doc["ProjectRootDirPath"]
             project_list = doc["ProjectList"]
     except Exception as e:
-        print(f"Problem getting the values from the top level yaml file.\n{e}\n")
+        print(
+            f"Problem getting the values from the top level yaml file.\n{e}\n")
         return
-    
 
     # Process each project
     for project in project_list:
@@ -63,7 +64,7 @@ def main():
         # except FileExistsError:
         #     print(f"Error: The file '{links_folder / F"DocFull_{project}"}' already exists.")
 
-        #create a DB folder in each project folder
+        # create a DB folder in each project folder
         project_DB_path = project_dir_path / "DB"
         try:
             os.mkdir(project_DB_path)

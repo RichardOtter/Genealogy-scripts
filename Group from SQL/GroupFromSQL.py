@@ -19,9 +19,10 @@ from RMpy.common import q_str   # noqa #type: ignore
 #    [FILE_PATHS]  REPORT_FILE_DISPLAY_APP
 #    [FILE_PATHS]  DB_PATH
 #    [FILE_PATHS]  RMNOCASE_PATH
-#    [OPTIONS]     GROUP_NAME
-#  note: GROUP_NAME may be a list of names, one per line.
+#    [FILE_PATHS]  REGEXP_PATH
 
+#  note: GROUP_NAME may be a list of names, one per line.
+#    [OPTIONS]     GROUP_NAME
 #  note:Section name is the same label as [OPTIONS] GROUP_NAME's value
 #    [GROUP_NAME_Value]  SQL_QUERY   the SQL to select group members
 
@@ -32,15 +33,15 @@ def main():
     # Configuration
     utility_info = {}
     utility_info["utility_name"]      = "GroupFromSQL" 
-    utility_info["utility_version"] = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
+    utility_info["utility_version"]   = "UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE"
     utility_info["config_file_name"]  = "RM-Python-config.ini"
     utility_info["script_path"]  = Path(__file__).parent
     utility_info["run_features_function"]  = run_selected_features
     utility_info["allow_db_changes"]  = True
     utility_info["RMNOCASE_required"] = False
-    utility_info["RMNOCASE_optional"] = False
+    utility_info["RMNOCASE_optional"] = True
     utility_info["RegExp_required"]   = False
-    utility_info["RegExp_optional"]   = False
+    utility_info["RegExp_optional"]   = True
 
     RMpy.launcher.launcher(utility_info)
 

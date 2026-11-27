@@ -15,9 +15,9 @@ Purpose
 This is a simple maintenance / repair utility to deal with duplicated 
 family records.
 
-There appears to be a bug in FamilySearch tools when adding people where in
-certain circumstances, duplicate family records are created.
-This is visible in RM as a person is shown to have the same spouse more
+There appears to be a bug in FamilySearch tool, either current or past, when
+adding people where in certain circumstances, duplicate family records are
+created. This is visible in RM as a person is shown to have the same spouse more
 than once. 
 
 The utility will delete one of the spousal connections, moving all attached
@@ -60,14 +60,16 @@ Consider whether to rename TEST.rmtree and use it as your research database.
 =========================================================================DIV80==
 Notes
 
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
+=========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_USE_NEW_DB
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 TODO
 
 *  ?? what would you find useful?

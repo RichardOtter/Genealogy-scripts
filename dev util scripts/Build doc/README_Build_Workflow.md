@@ -13,7 +13,7 @@ Paths below are relative to the repository root.
 | `doc\docs-reusable-content.txt` | Shared text inserted by INCLUDE directives |
 | `doc\docs-generated\ReadMe_{project}.txt` | Generated ReadMe for review |
 | `{project}\ReadMe.txt` | Project copy of the ReadMe |
-| `dev util scripts\build-projects-config.yaml` | Project list and suite version |
+| `dev util scripts\projects-to-build.yaml` | Project list and suite version |
 | `dev util scripts\Build doc\` | Documentation scripts |
 
 The scripts use `ProjectList` in the configuration file. Each listed project

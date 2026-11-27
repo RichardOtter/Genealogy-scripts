@@ -249,7 +249,7 @@ not need to use this setting. You can leave it as it is.
 
 If later your needs become more advanced, Its use is described below in the
 Notes and the download procedure is described below, in the
-"APPENDIX  Source of the regexp.dll SQLite extension".
+"APPENDIX  regexp.dll SQLite extension, source and information".
 
 
 =========================================================================DIV80==

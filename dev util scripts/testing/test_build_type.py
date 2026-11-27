@@ -20,7 +20,8 @@ def load_script(name, path):
     return module
 
 
-readme_build = load_script("readme_build", DEV_UTILS / "Build doc" / "Build ReadMe files.py")
+readme_build = load_script(
+    "readme_build", DEV_UTILS / "Build doc" / "Build ReadMe files.py")
 suite_build = load_script("suite_build", DEV_UTILS / "build-suite-release.py")
 
 
@@ -47,7 +48,7 @@ class BuildTypeTests(unittest.TestCase):
                     "ProjectRootDirPath": str(root),
                     "ProjectList": ["Example"],
                 }
-                (dev / "build-projects-config.yaml").write_text(
+                (dev / "projects-to-build.yaml").write_text(
                     yaml.safe_dump(config), encoding="utf-8"
                 )
                 (project / "_util_info.yaml").write_text(yaml.safe_dump({
@@ -75,8 +76,8 @@ class BuildTypeTests(unittest.TestCase):
                 )
 
                 with patch.object(readme_build, "__file__", str(dev / "Build doc" / "build.py")), \
-                     patch.object(readme_build, "pause_with_message"), \
-                     contextlib.redirect_stdout(io.StringIO()):
+                        patch.object(readme_build, "pause_with_message"), \
+                        contextlib.redirect_stdout(io.StringIO()):
                     readme_build.main()
 
                 output = (root / "doc" / "docs-generated" / "ReadMe_Example.txt").read_text(
@@ -95,8 +96,8 @@ class BuildTypeTests(unittest.TestCase):
 
                 test_path.mkdir = Path.mkdir
                 with patch.object(suite_build, "Path", test_path), \
-                     patch.object(suite_build, "pause_with_message"), \
-                     contextlib.redirect_stdout(io.StringIO()):
+                        patch.object(suite_build, "pause_with_message"), \
+                        contextlib.redirect_stdout(io.StringIO()):
                     suite_build.main()
 
                 release_dir, = root.glob("Release *")
@@ -108,7 +109,8 @@ class BuildTypeTests(unittest.TestCase):
                 self.assertIn(f'VERSION = "2.3.4{suffix}   ', version_line)
                 archive = release_dir / f"Suite_v1.2.0{suffix}.zip"
                 with zipfile.ZipFile(archive) as zipped:
-                    self.assertIn(f"Suite_v1.2.0{suffix}/Example/Example.py", zipped.namelist())
+                    self.assertIn(
+                        f"Suite_v1.2.0{suffix}/Example/Example.py", zipped.namelist())
 
     def test_invalid_build_type_stops_before_changing_files(self):
         for build_type in (None, "", "release", "OTHER", False, ["ALPHA"], "missing"):
@@ -128,7 +130,7 @@ class BuildTypeTests(unittest.TestCase):
                 }
                 if build_type != "missing":
                     config["BuildType"] = build_type
-                (dev / "build-projects-config.yaml").write_text(
+                (dev / "projects-to-build.yaml").write_text(
                     yaml.safe_dump(config), encoding="utf-8"
                 )
 
@@ -140,14 +142,16 @@ class BuildTypeTests(unittest.TestCase):
                 test_path.mkdir = Path.mkdir
                 for script in (readme_build, suite_build):
                     with self.subTest(script=script.__name__), \
-                         patch.object(readme_build, "__file__", str(dev / "Build doc" / "build.py")), \
-                         patch.object(suite_build, "Path", test_path), \
-                         patch.object(script, "pause_with_message"), \
-                         contextlib.redirect_stdout(io.StringIO()) as output:
+                            patch.object(readme_build, "__file__", str(dev / "Build doc" / "build.py")), \
+                            patch.object(suite_build, "Path", test_path), \
+                            patch.object(script, "pause_with_message"), \
+                            contextlib.redirect_stdout(io.StringIO()) as output:
                         self.assertEqual(script.main(), 1)
-                        self.assertIn("BuildType must be DEV, ALPHA, BETA, or RELEASE", output.getvalue())
+                        self.assertIn(
+                            "BuildType must be DEV, ALPHA, BETA, or RELEASE", output.getvalue())
 
-                self.assertEqual(sentinel.read_text(encoding="utf-8"), "unchanged")
+                self.assertEqual(sentinel.read_text(
+                    encoding="utf-8"), "unchanged")
                 self.assertFalse((root / ".vscode").exists())
                 self.assertEqual(list(root.glob("Release *")), [])
 

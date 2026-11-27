@@ -18,7 +18,7 @@ The split sources must each have just one citation. The utility moves that
 citation to another pre-existing "lumped" source.
 
 
-Currenlt- user must know the source ID  of receiving sources
+Currently- user must know the source ID  of receiving sources.
 
 
 =========================================================================DIV80==
@@ -98,13 +98,13 @@ Notes
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_USE_NEW_DB
 =========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
+=========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MULTILINE
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MAPPING
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
-=========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_RMNOCASE_DLL
 =========================================================================DIV80==
@@ -113,6 +113,10 @@ Notes
 TODO
 
 *  ?? what would you find useful?
+
+This utility currently has very limited functionality.
+I have used it to lump several of my sources, but those uses have sometimes
+required custom code.
 
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_FEEDBACK

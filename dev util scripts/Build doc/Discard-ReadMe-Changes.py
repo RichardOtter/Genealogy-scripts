@@ -22,6 +22,8 @@ except ImportError:
     HAS_SEND2TRASH = False
 
 # ===================================================DIV60==
+
+
 def main():
 
     # CONSTANTS
@@ -29,8 +31,8 @@ def main():
     SCRIPT_DIR = Path(__file__).resolve().parent
     DEV_UTIL_DIR = SCRIPT_DIR.parent
     REPO_ROOT_PATH = DEV_UTIL_DIR.parent
-    
-    TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
+
+    TOP_LEVEL_CONFIG_NAME = r"projects-to-build.yaml"
 
     try:
         top_level_config_path = DEV_UTIL_DIR / TOP_LEVEL_CONFIG_NAME
@@ -69,7 +71,7 @@ def main():
                     capture_output=True,
                     text=True
                 )
-                
+
                 # If status output is not empty, file has changes
                 if result_status.stdout.strip():
                     try:

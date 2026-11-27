@@ -239,13 +239,15 @@ only the ones that are in use. The ConvertFact report will tell you which ones.
 
 
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
+█_INCLUDE: REUSE_LIB_USE_NEW_DB
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
+=========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
 TODO
 

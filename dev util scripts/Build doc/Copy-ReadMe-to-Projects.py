@@ -17,6 +17,8 @@ import stat
 # Doc folder is at: repo root/doc
 
 # ===================================================DIV60==
+
+
 def main():
 
     # CONSTANTS
@@ -24,8 +26,8 @@ def main():
     SCRIPT_DIR = Path(__file__).resolve().parent
     DEV_UTIL_DIR = SCRIPT_DIR.parent
     REPO_ROOT_PATH = DEV_UTIL_DIR.parent
-    
-    TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
+
+    TOP_LEVEL_CONFIG_NAME = r"projects-to-build.yaml"
     doc_folder = REPO_ROOT_PATH / "doc"
     doc_built_folder = doc_folder / "docs-generated"
 
@@ -60,8 +62,9 @@ def main():
                 # Make file writable if it's read-only
                 current_permissions = destination_file.stat().st_mode
                 if not (current_permissions & stat.S_IWUSR):
-                    destination_file.chmod(destination_file.stat().st_mode | stat.S_IWUSR)
-                
+                    destination_file.chmod(
+                        destination_file.stat().st_mode | stat.S_IWUSR)
+
                 # Move to trash (send2trash for better UX, falls back to remove)
                 try:
                     import send2trash
@@ -81,7 +84,8 @@ def main():
 
     # Update VS Code settings to mark project ReadMe files as read-only
     try:
-        create_vscode_readonly_settings_for_projects(REPO_ROOT_PATH, project_list)
+        create_vscode_readonly_settings_for_projects(
+            REPO_ROOT_PATH, project_list)
     except Exception as e:
         print(f"\nWARNING: Could not update VS Code settings: {e}")
 
@@ -95,24 +99,24 @@ def create_vscode_readonly_settings_for_projects(repo_root, project_list):
     """Create VS Code settings to mark ReadMe files in projects as read-only"""
     vscode_dir = repo_root / ".vscode"
     settings_file = vscode_dir / "settings.json"
-    
+
     vscode_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Read existing settings if file exists
     if settings_file.exists():
         with open(settings_file, 'r') as f:
             settings = json.load(f)
     else:
         settings = {}
-    
+
     # Add files.readonlyInclude settings for each project's ReadMe file
     if "files.readonlyInclude" not in settings:
         settings["files.readonlyInclude"] = {}
-    
+
     for project in project_list:
         readonly_pattern = f"{project}/ReadMe.txt"
         settings["files.readonlyInclude"][readonly_pattern] = True
-    
+
     # Write updated settings
     with open(settings_file, 'w') as f:
         json.dump(settings, f, indent=2)

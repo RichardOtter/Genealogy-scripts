@@ -20,7 +20,7 @@ def main():
     # CONSTANTS
     REPO_ROOT_PATH = Path(
         r"C:\Users\rotter\dev\Genealogy\repo Genealogy-scripts")
-    TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
+    TOP_LEVEL_CONFIG_NAME = r"projects-to-build.yaml"
     VERSION_REPLACE_TEXT = r'UTILITY_VERSION_NUMBER_RM_UTILS_OVERRIDE'
 
     try:
@@ -44,14 +44,16 @@ def main():
         exit()
 
     if build_type not in ("DEV", "ALPHA", "BETA", "RELEASE"):
-        print(f"ERROR: BuildType must be DEV, ALPHA, BETA, or RELEASE; got {build_type!r}.")
+        print(
+            f"ERROR: BuildType must be DEV, ALPHA, BETA, or RELEASE; got {build_type!r}.")
         if sys.stdin.isatty():
             pause_with_message("Press Enter to continue, window will close")
         return 1
 
     if build_type == "RELEASE":
         build_type = ""
-    distribution_dir_name = F"{suite_name}_v{suite_version}" + (F" {build_type}" if build_type else "")
+    distribution_dir_name = F"{suite_name}_v{suite_version}" + \
+        (F" {build_type}" if build_type else "")
     release_dir_name = F"Release {distribution_dir_name} {time_stamp}"
     release_dir_path = Path(project_root_dir_path) / release_dir_name
     distribution_dir_path = release_dir_path / distribution_dir_name
@@ -127,7 +129,7 @@ def main():
         with open(py_file_to_edit, "w") as sources:
             for line in lines:
                 sources.write(re.sub(VERSION_REPLACE_TEXT, version_long, line))
-        
+
         # Normalize modification time for consistency
         set_file_mtime(py_file_to_edit, now)
 

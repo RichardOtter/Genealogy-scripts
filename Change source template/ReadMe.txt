@@ -15,15 +15,6 @@ This utility is part of a suite of utilities that has been written to
 perform analysis or data modification not available within the RM application.
 See https://RichardOtter.github.io
 
-This software is written using the Python language (https://Python.org) and
-is distributed as a text ".py" file along with a folder, RMpy, of common Python
-code, called a python package. The user can simply open the file or package
-files in a text editor to read all implementation details and assess safety.
-
-A Python py script file is executed using the Python language interpreter.
-The interpreter is a separate piece of software easily installed on your
-computer. "Installing python" is described in the appendix below for Windows
-computers. MacOS computers already have it installed.
 
 =========================================================================DIV80==
 Purpose
@@ -73,80 +64,86 @@ multiple known-good backups.
 Read about additional considerations in the Precautions section below.
 
 =========================================================================DIV80==
+Software Safety
+
+This utility is written in the Python programming language (https://Python.org)
+and is distributed as plain-text '.py' files that can be viewed with Notepad or
+any other text editor.
+
+Because the source code is distributed in human readable text form, users can
+open any of the .py files in a text editor to inspect the complete
+implementation, verify its behavior, and assess its safety.
+
+The source files can also be reviewed by AI to help identify potential security
+or safety concerns. Here is a recent report generated from the code by AI:
+https://github.com/RichardOtter/Genealogy-scripts/blob/main/SECURITY_ANALYSIS.md
+
+=========================================================================DIV80==
 Compatibility
 
 Tested with a RootsMagic v 12.1.3 database
 using Python for Windows v3.15.2   64bit
 
-RM versions 8 and later will probably work, but have not been recently tested.
-Much earlier version of Python, say after 3.10 will also probably work.
+RM 7 and later and much earlier version of Python, say after 3.10 will
+also probably work but have not been recently tested.
 
-The python script file has not been tested on MacOS but could probably be
+The python script file has also not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
 
 =========================================================================DIV80==
 General Overview
 
 This program is what is called a "command line utility". It is in the form of a
-single text file with a "py" file name extension ("MainScriptFile.py") along
-with the package "RMpy" which is a folder included in the distribution zip file. 
-The MainScriptFile relies on code in the RMpy folder.
+single text file with a "py" file name extension ("ChangeSourceTemplate.py")
+along with the package "RMpy" which is a folder included in the 
+distribution zip file.
+The ChangeSourceTemplate.py file relies on code in the RMpy folder.
 These utilities are not installed in the traditional Windows sense, they are
 simply copied to the computer.
 
-The utilities are configured by editing a configuration file. This
-configuration tells the utility which database to use and how to display the output.
-(Some of the utilities use the command terminal to interact with the user.)
-The default name of the configuration file (called, hereinafter, the
-"config file") is "RM-Python-config.ini". It should be located in the same
-folder as the MainScriptFile.py file and the RMpy folder.
+The utilities are told what to do by editing a configuration file. This
+configuration tells the utility which database to use and how to display the
+output.
 
-To install and use the utility for the first time (specifics below):
+The default name of the configuration file (called, hereinafter, the
+"config file") is "RM-Python-config.ini". For now, it should be located in the
+same folder as the MainScriptFile.py file and the RMpy folder.
+
+How it works
+Change Source Template is started by the user, a terminal window is displayed,
+the program processes the configuration data and the database, a report file
+is displayed in Notepad, the terminal window closes and the program exits.
+
+
+Getting Started     *****  Details follow immediately below. *****
+
+To install and use the utility for the first time:
 
 *  Install Python for Windows x64.
 
-*  Create a new folder on your computer, the "working folder".
-
-*  Make a copy of your database, move the copy into the working folder.
-
-*  Copy the required files from the downloaded zip file to the working folder.
+*  Create a new folder on your computer, the "working folder" to contain
+   a copy of your database, the program files and the config file.
 
 *  Edit the config file in the working folder to tell the utility what to
-   do and where to do it.
+   do and how to do it.
 
-*  Double click the MainScriptFile.py file to run the utility.
+*  Double click the ChangeSourceTemplate.py file to run the utility.
 
-*  A window (terminal window) with a black background and white text will appear.
-Some utilities will keep this window open and request data, other utilities will
-only show the window while the command is processing.
+*  A terminal window with a black background and white text will appear.
 
 *  The terminal window will close and a summary report will be displayed
-in NotePad.
-
-The above procedure of making a copy of your database and operating on it in
-the working folder is most prudent when a user is just getting familiar with
-a new or updated utility.
-
-Some utilities are read only and do not change the database at all, while others
-affect only small amount of data.
-Once the user has confidence in the operation of a low-impact utility, one
-can start operating directly on the research (production) database, always
-assuming that at least several known-good backups exist.
-
-Other utilities that require more configuration and make larger changes should
-always operate on databases copied into a working folder.
-
-*****  Details follow below. *****
+   in Notepad.
 
 =========================================================================DIV80==
-Running the utility - step by step
+Running the utility - detailed step by step
 
 The steps listed here run the utility on a copy of your database created in a
 new directory location. Always run this utility on a copy as shown here. It
 is likely that several attempts will be needed to obtain satisfactory results.
 
 ==========-
-Install Python for Windows x64  -see "APPENDIX  Python install" below.
+Install Python for Windows x64
+- follow the three easy steps in "APPENDIX  Python install" below.
 
 ==========-
 Create a folder on your computer that you will not confuse with other
@@ -154,41 +151,45 @@ folders. It will be referred to as the "working folder".
 
 You may want to create it within your home folder. Your home folder is
 "C:\Users\me", where "me" is your user name. This is a safe location that will
-not be taken over by OneDrive.
+not be affected by OneDrive.
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
-      ChangeSourceTemplate.py          (file)
-      RM-Python-config.ini             (file)
-      RMpy                             (folder)
+     (file)     ChangeSourceTemplate.py
+     (file)     RM-Python-config.ini
+     (folder)   RMpy
 
 ==========-
 Make a copy of your database, move the copy into the working folder.
 
 Rename the database copy to "TEST.rmtree" in order to prevent any
-confusion about the purpose of the copy.
+confusion about the purpose of the new file.
 
 ==========-
 Edit the sample RM-Python-config.ini file in the working folder.
 (See the section "APPENDIX  Config file: location, contents and editing"
 if you need help)
 
-A summary of the config file structure:
-The names in square brackets are section names.
-The items in a section are key-value pairs.
+A summary of the config file (ini file) structure:
+      The names in square brackets are section names.
+      The items in a section are key-value pairs.
 
-For example, in the sample config file, there is a section named [FILE_PATHS].
-In that section, reside several key-value pairs, one of which is 
+The sample config file contains a section named [FILE_PATHS].
+In that section, reside several key-value pairs, one of which is
 DB_PATH = TEST.rmtree
 
-"DB_PATH" is the key, "TEST.rmtree" is the value. key-value pairs are separated
+"DB_PATH" is the key, "TEST.rmtree" is the value. Key-value pairs are separated
 with an equals sign character.
 
 The utility needs to know where the RM database file is located, the output
 report file name and its location.
 
-If you followed the above instructions, no changes to any of the key-values in
-the [FILE_PATHS] section are needed.
+The next key: REPORT_FILE_PATH tells the utility where to create the report
+file. The setting as it is in the sample says create a file with a name starting
+withe "REPORT_" in the current (working) folder.
+
+The next key: REPORT_FILE_DISPLAY_APP names the app that will be automatically
+called to display the report file.
 
 ==========-
 STEP 0		Option    All options = off
@@ -230,7 +231,7 @@ utility is exited.
 =========-
 The report file is displayed in Notepad for you inspection.
 
-
+=========-
 If the database file couldn't be found, fix the config file, save it and re-run
 the utility until you get it right.
 
@@ -646,12 +647,35 @@ As above, the "others" are the data fields defined for this particular citation
 and they are specified by the Source Template.
 
 ===========-
-Listing of all possible Source Template changes that can affect a Source template
-already in use by Sources and Citations.
+Listing of all possible Source Template changes:
 
-These alterations:
+Main window:
 *    change source template name
-*    change the order of the source fields
+*    add new data fields
+*    delete data fields
+*    change data field name
+*    change state of the check-box "source detail field"
+*    change field data type
+*    change display name of a field
+*    change brief hint for a field
+*    change long hint for a field
+*    change the order of the data fields
+*    change footnote template
+*    change short footnote template
+*    change bibliography template
+
+from the "Details" button
+*    change Category
+*    change Description
+*    change Keywords
+*    change Source name template
+*    change Citation name template
+
+
+Each change will be considered regarding its affect on new and existing data.
+
+Group 1:
+*    change source template name
 *    change field data type
 *    change display name of a field
 *    change brief hint for a field
@@ -659,42 +683,44 @@ These alterations:
 *    change footnote template
 *    change short footnote template
 *    change bibliography template
+*    change Category
+*    change Description
+*    change Keywords
 
-May be made at anytime with no negative consequence. The changes will be immediately
-seen in all new and existing source and citations. This utility is not needed.
-Converting a field type from say, "name" type to "date" would not make much
+Group 1 changes may be made at anytime without any negative consequence. The 
+changes will be immediately seen in all new and existing source and citations.
+This utility is not needed.
+
+Converting a data field type from say, "name" type to "date" would not make much
 sense if the field's existing data actually has name data in it. But it can be
 done at any time.
 
+Group 2:
+*    change the order of the data fields
+*    change Source name template
+*    change Citation name template
 
-The alteration:
-*    change order of citation fields
+Group 2 changes may be made at any time, new sources and citations will use the
+new source template configuration as expected.
+Whn pre-existing sources and citations are viewed, the new order of
+data fields is used to display them.
+However, existing source and citation names will not be regenerated automatically.
+To regenerate citation names, use the utility "CitationNameUpdater".
 
-May be made at any time, but existing citations whose Citation Names were
-automatically generated will not be updated with what would be the new
-auto generated name using the new order of citation fields.
-If this is objectionable, one could open each citation, delete the existing
-citation name and let it be auto generated using the new template information.
-This utility will not update Citation Names.
-(Possible task for a new utility app?) 
+Group 3:
+*    change state of the check-box "source detail field"
 
-
-The alteration:
-*    change state of the check-box "This is a source detail field"
-
-This change implies movement of data from a source to a citation
+Group 3 change implies movement of data from a source to a citation
 or vice versa. This could be called "Lumping" or "Splitting" source info.
-This utility will not fix problems created by doing this alteration.
-See the LumpSources utility as a possible solution.
+This utility will not fix problems created by making this alteration.
+See the "LumpSources" utility for possible assistance.
 
+Group 4:
+*    add new data fields
+*    delete data fields
+*    change data field name
 
-These alterations:
-*    change field name
-*    add new fields
-*    delete fields
-
-Use this utility to update existing source and citations to the new template
-structure.
+Use this utility to make these changes.
 
 If the utility is not used and these changes are made:
 *    change field name
@@ -702,8 +728,8 @@ Data is be invisible when accessed with the new name. The old data remains, but
 is hidden. (it will still be accessible by the footnote templates, but the old
 field will not show during data entry/edit.)
 *    add new fields
-New fields will not be correctly initialized, sentence language will not see the
-new field as empty when tested by <> in the sentence language.
+New fields will not be correctly initialized, the RM sentence language will not
+see the new field as empty when tested by <> in the sentence language.
 *    delete fields
 Old data not removed, but is only hidden. This is not really a problem, but
 it's not tidy.
@@ -776,18 +802,19 @@ the desired name in a later mapping.
 ===========-
 Source Template Names and Field Names
 
-For better or for worse source names, source template names, template field names
-in RM are not required to be unique and can start with, end with or contain
-space characters.
+For better or for worse source names, source template names, template field
+names in RM are not required to be unique and can start with, end with or
+contain space characters.
 
 If you specify a name in the config file that is not unique, the report file
-will show the problem. Simply rename the item in the database to make the name unique.
-If you have duplicate field names that are of the same type (source vs
+will show the problem. Simply rename the item in the database to make the name
+unique. If you have duplicate field names that are of the same type (source vs
 citation), I don't know what to say. You will find odd behavior. Good luck.
 
-If the template name, field name or SOURCE_NAME_LIKE variable contains a
-space character at the start or the end it will generally be invisible when
-displayed. In any case you can quotation marks e.g. "Name ", or " Name" or "My Name".
+If the template name, field name or SOURCE_NAME_LIKE variable contains a space
+character at the start or the end the blank will generally be invisible when
+displayed. In any case you can quotation marks e.g. "Name ", or " Name" or "My
+Name".
 
 ===========-
 Running the utility with MAKE_CHANGES = off does not make any changes to your
@@ -797,7 +824,7 @@ database. You can run it as many times as you need.
 The utility fixes sources and citations that have missing XML field elements.
 This happens when sources or citations have been created with a older template,
 before a field was added.
-Just be sure to list all fields in the mapping.
+Just be sure to list all destination fields in the mapping.
 
 Symptom-
 Say a template T1, has 2 fields, F1 and F2
@@ -807,33 +834,33 @@ Now the template T1 is changed by editing it to add a field, F3.
 The T1 template also has its footnote sentence adjusted to use the new field F3.
 The edited template T1 is now called T1'.
 
-Now some more sources, S3 and S4 are created using template T1'.
+Now add some more sources, S3 and S4 are created using template T1'.
 The user entered text for field F3 in S3, but left field F3 blank in S4.
 
-Looking at the footnotes displayed in RM that are generated from T1',
-one sees that source S3 and S4 look as expected. The F3 in S3 shows the text that
-was entered for F3, and in S4, the F3 prints as blank.
+Looking at the footnotes displayed in RM that are generated from T1', one sees
+that source S3 and S4 look as expected. The F3 in S3 shows the text that was
+entered for F3, and in S4, the F3 prints as blank.
 
-However the footnotes from S1 and S2 are unexpected.
-Those sources do not have data in field F3. In fact, they don't even have a
-field F3. Any reference to F3 in the footnote sentence, by "[F3]" will,
-in the footnote, print out as "[F3]" not as "" as expected.
+However the footnotes from S1 and S2 are unexpected. Those sources do not have
+data in field F3. In fact, they don't even have a field F3. Any reference to F3
+in the footnote sentence, by "[F3]" will, in the footnote, print out as "[F3]"
+not as "" as expected.
 
 To fix, this utility can add the empty field F3 to the existing source S1 and S2.
 
-This can be accomplished by copying the Template T1' to T1'-copy.
-The T1'-copy can have changes like better names, or no changes at all.
-Just map all of the fields to themselves and run the utility.
-Each source and citation will be checked for missing fields and fixed if necessary.
+This can be accomplished by copying the Template T1' to T1'-copy. The T1'-copy
+can have changes like better names, or no changes at all. Just map all of the
+fields to themselves and run the utility. Each source and citation will be
+checked for missing fields and fixed if necessary.
 
 ===========-
 This may or may not be helpful...
 
 To help understand how the system works- think of each source and citation
 record as having a set of Key-Value pairs. These are the fields.
-The source fields are in the source record and citation fields are in the citation record.
-When you enter a source/citation that uses a template, RM displays the key names
-and the user adds the values.
+The source fields are in the source record and citation fields are in the
+citation record. When you enter a source/citation that uses a template, RM
+displays the key names and the user adds the values.
 When a footnote needs to be created, RM uses the template to construct it from
 the Key-Value pairs.
 This app operates on source and citation records. It can-
@@ -860,31 +887,143 @@ if you missed a problem only to find it later and have to revert to a backup
 from before the database was modified.
 
 =========================================================================DIV80==
+APPENDIX  Python install
+
+Install Python using the "winget" command line package manager.
+
+It is also possible to install from the Microsoft Store or from the
+Python.org web site but only the winget method is described here.
+
+The completed install folder occupies about 140 MB of disk space.
+
+Installation using winget.
+
+1. Open a command line terminal.
+   A quick method is to right click the Windows menu icon in the file manager
+   task bar and select the Terminal command; not the "Terminal (Admin)" command.
+
+2. Type (copy and paste) the following command in the window and hit Enter:
+
+    winget install --id Python.PythonInstallManager --source winget
+
+3. Wait for the display of "Successfully installed" and then type the
+   following command and hit Enter:
+
+    py install 3
+
+The output for this command should be similar to-
+-------
+The signature for https://www.python.org/ftp/python/index-windows.json was
+successfully verified.
+Installing Python 3.15.2.
+Extracting: ...............................................................✅
+
+Global shortcuts directory is not on PATH. Add it for easy access to global Python aliases.
+Directory to add: C:\Users\<user_name>\AppData\Local\Python\bin
+-------
+
+Ignore the last 2 lines. You won't need that functionality.
+
+
+How to Uninstall Python
+
+Use the Settings app in the Windows menu.
+Go to Apps=>Installed apps
+and find:
+"Python Install Manager"
+and
+"Python 3.n.n"
+and select Uninstall from the three dot menu to the right of the names for each item.
+
+or use winget from the command terminal:
+winget uninstall --id Python.PythonInstallManager
+winget uninstall --id Python.Python.3.nn
+
+
+For additional information, see the Python on Windows docs at-
+https://docs.python.org/3.15/using/windows.html
+
+=========================================================================DIV80==
+APPENDIX  Troubleshooting
+
+=========-
+No Report File displayed
+
+If the terminal windows displays the message: RM-Python-config.ini file contains
+a format error, see the section below.
+
+If no report file is generated, look at the terminal window for error messages
+that will help you fix the problem. There may be something wrong with the config
+file line- REPORT_FILE_PATH.
+
+If the report is created, but not displayed, check the config
+file line- REPORT_FILE_DISPLAY_APP
+
+If no report file is generated and the black command console window closes
+before you can read it, try first opening a command line console, cd'ing to
+the folder containing the py file and then running the py file from the
+command line. The window will not close and you will be able to read any
+error messages.
+
+=========-
+Error message:
+RM-Python-config.ini file contains a format error
+
+Examine the file visually and check to see that it follows the rules mentioned
+above. If all else fails, start over with the supplied config file and make
+sure that it works, Then make your edits one by one to identify the problem.
+You may want to look at- https://en.wikipedia.org/wiki/INI_file
+
+===========-
+Error Message:
+Tried to create duplicate Name in XML.
+
+This message will be shown when the first source is processed. It is generated
+before any database change is made.
+
+This problem can usually be avoided by reordering the lines in the mapping.
+
+Example:
+BAD
+CITATION_MAPPING =
+  Field_1     >     Field_2
+  Field_2     >     Field_1
+
+In this case, existing field 1 is attempted to be renamed to field 2. However,
+there is already an existing field 2. That is not allowed and will stop
+processing and generate the error message.
+
+This can be avoided by using a temporary field, say "temp"
+
+GOOD
+CITATION_MAPPING =
+  Field_1     >     temp
+  Field_2     >     Field_1
+  temp        >     Field_2
+  temp        >     NULL
+=========================================================================DIV80==
 APPENDIX  Config file: location, contents and editing
 
-Name and location
+Name and folder location
 The utility requires a configuration file. A file named "RM-Python-config.ini"
 will be recognized as the utility's configuration file when placed in the same
-directory as the MainScriptFile py file for the utility. Each utility is
-distributed with a sample config file to get you started.
-
-"MainScriptFile.py" refers to the py file having the name of the utility you
-are running, for example, TestExternalFiles.py, ChangeSourceTemplate.py etc
+directory as the ChangeSourceTemplate.py file. Each utility is distributed with
+a sample config file to get you started.
 
 Alternatively, the configuration file name and location can be specified
 on the command-line as an argument to the script. This argument overrides
 the default configuration file name and location.
 
-For example, if the script "MainScriptFile.py" is executed from a terminal window
-which has the folder "C:\Users\me\TestFolder" as its 'current directory', it
-will use the configuration file "C:\Users\me\TestFolder\RM-Python-config.ini"
+For example, if the script "ChangeSourceTemplate.py" is executed from a terminal
+window which has the folder "C:\Users\me\TestFolder" as its 'current directory',
+it will use the configuration file "C:\Users\me\TestFolder\RM-Python-config.ini"
 if it exists. If the utility is run with an explicit argument, such as:
-MainScriptFile.py "C:\Users\me\Documents\RM-Python-config.ini"
-then the specified ini configuration file will be used instead.
+ChangeSourceTemplate.py "C:\Users\me\Documents\RM-Python-config.ini" then the
+specified ini configuration file will be used instead.
 
 Note also that the file name is not restricted to the default.
 For instance, running the utility from a terminal window as:
-MainScriptFile.py config_mine.ini
+ChangeSourceTemplate.py config_mine.ini
 will instruct the utility to use config_mine.ini in the current directory
 as its configuration file.
 
@@ -903,8 +1042,12 @@ mouse to drag the configuration file onto the open Notepad window.
 editor program.)
 
 Format and conventions
-The config file uses the standard ini file format. The config file is made up
-of the elements: Sections, Keys, Values and Comments.
+The config file uses the "standard" ini file format. You can ask AI for help
+with a formatting problem. Just mention that you are using 
+"Python configparser" so that it will be accurate.
+
+The config file is made up of the elements: 
+Sections, Keys, Values and Comments.
 
 A name in square brackets is a section name that identifies the start
 of a section. A section continues until a new section starts. The order of
@@ -916,9 +1059,13 @@ should be in a named section.
 
 A name on the left side of a "=" sign is a key.
 Text on the right side of a "=" is the value assigned to the key on the left.
+Spaces immediately to the left of the = character are ignored; as are leading and
+trailing spaces around the value.
+
 Comment lines start with a "#" character and are only included to help
 the human user read and understand the file. They are ignored by the utility
-software. Comments may appear most anywhere in the config file.
+software. Comments may appear almost anywhere in the config file, except within
+a multi-line value.
 
 For an example, here is a section containing 3 key-values used by all of the
 RM utilities:
@@ -968,7 +1115,7 @@ REPORT_FILE_DISPLAY_APP  = C:\Windows\System32\notepad.exe
 
 The application used to display the report at the end of the run.
 If this key is not given (say, the line is commented out), then the report is
-generated but not displayed.
+generated but not automatically displayed.
 
 multi-line value
 
@@ -978,7 +1125,7 @@ The multi line value is still just one value, but the values is split up into
 multiple lines.
 
 Each line of a value after the first, must be indented with at least one
-space character.
+space character more than the key name.
 
 All the lines in a value should have the same indentation. Not required but
 looks much more tidy and is easier to read.
@@ -1051,127 +1198,13 @@ contains a blank or ">" character at the beginning, end, or anywhere within it.
 
 The white space between the names and ">" character is ignored.
 
-Encoding
+Text Encoding
 If there are any non-ASCII characters in the config file then the file must be
 saved in UTF-8 format, with no byte order mark (BOM).
-The included sample config file has an accented ä in the first line comment to
+The included sample config file has an umlauted ä in the first line comment to
 force it to be in the correct format.
-File format is an option in the "Save file" dialog box in NotePad.
-
-=========================================================================DIV80==
-APPENDIX  Python install
-
-Install Python using the "winget" command line package manager.
-
-It is also possible to install from the Microsoft Store or from the 
-Python.org web site but only the winget method is described here.
-
-Installation using winget.
-
-1 Open a command line terminal. 
-A quick method is to right click the Windows menu icon in the file manager task 
-bar and select the Terminal command;  not the "Terminal (Admin)" command.
-Or, using just the keyboard, press and hold the Windows key and then tap X, and select 
-the Terminal command from the displayed menu. 
-
-2 Type (copy and paste) the following command in the window and hit Enter:
-
-    winget install --id Python.PythonInstallManager --source winget
-
-After it finishes and displays "Successfully installed", type the following
-command and hit Enter:
-
-    py install 3
-
-The output for this command should be similar to-
--------
-The signature for https://www.python.org/ftp/python/index-windows.json was 
-successfully verified.
-Installing Python 3.15.2.
-Extracting: ...............................................................✅
-
-Global shortcuts directory is not on PATH. Add it for easy access to global Python aliases.
-Directory to add: C:\Users\rotter\AppData\Local\Python\bin
--------
-
-Ignore the last 2 lines. You won't need that functionality.
-
-
-Uninstall
-Use the Settings app in the Windows menu.
-Go to Apps=>Installed apps
-and find:
-"Python Install Manager"
-and 
-"Python 3.n.n"
-and select Uninstall from the three dot menu to the right of the names for each item.
-
-or use winget from the command terminal:
-winget uninstall --id Python.PythonInstallManager
-winget uninstall --id Python.Python.3.nn
-
-
-For additional information, see the Python on Windows docs at-
-https://docs.python.org/3.14/using/windows.html
-
-=========================================================================DIV80==
-APPENDIX  Troubleshooting
-
-=========-
-No Report File displayed
-
-If the terminal windows displays the message: RM-Python-config.ini file contains
-a format error, see the section below.
-
-If no report file is generated, look at the terminal window for error messages
-that will help you fix the problem. There may be something wrong with the config
-file line- REPORT_FILE_PATH.
-
-If the report is created, but not displayed, check the config
-file line- REPORT_FILE_DISPLAY_APP
-
-If no report file is generated and the black command console window closes
-before you can read it, try first opening a command line console, cd'ing to
-the folder containing the py file and then running the py file from the
-command line. The window will not close and you will be able to read any
-error messages.
-
-=========-
-Error message:
-RM-Python-config.ini file contains a format error
-
-Examine the file visually and check to see that it follows the rules mentioned
-above. If all else fails, start over with the supplied config file and make
-sure that it works, Then make your edits one by one to identify the problem.
-You may want to look at- https://en.wikipedia.org/wiki/INI_file
-
-===========-
-Error Message:
-Tried to create duplicate Name in XML.
-
-This message will be shown when the first source is processed. It is generated
-before any database change is made.
-
-This problem can usually be avoided by reordering the lines in the mapping.
-
-Example:
-BAD
-CITATION_MAPPING =
-  Field_1     >     Field_2
-  Field_2     >     Field_1
-
-In this case, existing field 1 is attempted to be renamed to field 2. However,
-there is already an existing field 2. That is not allowed and will stop
-processing and generate the error message.
-
-This can be avoided by using a temporary field, say "temp"
-
-GOOD
-CITATION_MAPPING =
-  Field_1     >     temp
-  Field_2     >     Field_1
-  temp        >     Field_2
-  temp        >     NULL
+Text encoding can be found in the file format option in the "Save file" dialog
+box in NotePad.
 
 =========================================================================DIV80==
 Developer Notes
@@ -1196,7 +1229,7 @@ field is in source or citation. Sources and Citations have XML that contain only
 Field Name/Field Value pairs.
 
 ===========-
-details of the XML format has changed format from v7 to v8
+Details of the XML format has changed format from v7 to v8
 
 Old style XML  (possibly only remains in built-in SourceTemplate records ?)
 ...<?xml version="1.0" encoding="UTF-8"?>x0A<root> text </root>c0A
@@ -1271,18 +1304,24 @@ https://RichardOtter.github.io
 My Linked-In profile at-
 https://www.linkedin.com/in/richardotter/
 
+
 =========================================================================DIV80==
 Distribution
 
 Everyone is free to use this utility. However, instead of
 distributing it yourself, please instead distribute the URL
 of my website where I describe it- https://RichardOtter.github.io
+or a link to the GitHub repo:
+https://github.com/RichardOtter/Genealogy-scripts
 
-=========================================================================DIV80==
+
+
+
+
 
 
 ================================================================================
-Suite Version: 1.1.0
-Utility Version: 1.2.0
-Built: 2026-11-19 21:19:05
+Suite Version: 1.2.0 BETA
+Utility Version: 1.2.0 BETA
+Built: 2026-11-27 15:20:16
 ================================================================================

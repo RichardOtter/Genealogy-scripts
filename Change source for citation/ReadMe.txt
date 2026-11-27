@@ -15,15 +15,6 @@ This utility is part of a suite of utilities that has been written to
 perform analysis or data modification not available within the RM application.
 See https://RichardOtter.github.io
 
-This software is written using the Python language (https://Python.org) and
-is distributed as a text ".py" file along with a folder, RMpy, of common Python
-code, called a python package. The user can simply open the file or package
-files in a text editor to read all implementation details and assess safety.
-
-A Python py script file is executed using the Python language interpreter.
-The interpreter is a separate piece of software easily installed on your
-computer. "Installing python" is described in the appendix below for Windows
-computers. MacOS computers already have it installed.
 
 =========================================================================DIV80==
 Purpose
@@ -60,81 +51,90 @@ have multiple known-good backups) until you are confident that the changes made
 are the ones desired.
 
 =========================================================================DIV80==
+Software Safety
+
+This utility is written in the Python programming language (https://Python.org)
+and is distributed as plain-text '.py' files that can be viewed with Notepad or
+any other text editor.
+
+Because the source code is distributed in human readable text form, users can
+open any of the .py files in a text editor to inspect the complete
+implementation, verify its behavior, and assess its safety.
+
+The source files can also be reviewed by AI to help identify potential security
+or safety concerns. Here is a recent report generated from the code by AI:
+https://github.com/RichardOtter/Genealogy-scripts/blob/main/SECURITY_ANALYSIS.md
+
+=========================================================================DIV80==
 Compatibility
 
 Tested with a RootsMagic v 12.1.3 database
 using Python for Windows v3.15.2   64bit
 
-RM versions 8 and later will probably work, but have not been recently tested.
-Much earlier version of Python, say after 3.10 will also probably work.
+RM 7 and later and much earlier version of Python, say after 3.10 will
+also probably work but have not been recently tested.
 
-The python script file has not been tested on MacOS but could probably be
+The python script file has also not been tested on MacOS but could probably be
 modified to work on a Macintosh with Python version 3.n installed.
 
 =========================================================================DIV80==
 General Overview
 
 This program is what is called a "command line utility". It is in the form of a
-single text file with a "py" file name extension ("MainScriptFile.py") along
-with the package "RMpy" which is a folder included in the distribution zip file. 
-The MainScriptFile relies on code in the RMpy folder.
+single text file with a "py" file name extension ("ChangeSrcForCitation.py")
+along with the package "RMpy" which is a folder included in the 
+distribution zip file.
+The ChangeSrcForCitation.py file relies on code in the RMpy folder.
 These utilities are not installed in the traditional Windows sense, they are
 simply copied to the computer.
 
-The utilities are configured by editing a configuration file. This
-configuration tells the utility which database to use and how to display the output.
-(Some of the utilities use the command terminal to interact with the user.)
-The default name of the configuration file (called, hereinafter, the
-"config file") is "RM-Python-config.ini". It should be located in the same
-folder as the MainScriptFile.py file and the RMpy folder.
+The utilities are told what to do by editing a configuration file. This
+configuration tells the utility which database to use and how to display the
+output.
 
-To install and use the utility for the first time (specifics below):
+The default name of the configuration file (called, hereinafter, the
+"config file") is "RM-Python-config.ini". For now, it should be located in the
+same folder as the MainScriptFile.py file and the RMpy folder.
+
+Change Source for Citation is started by the user, a terminal window is displayed.
+The terminal window displays prompts to the user to input parameters, the
+requested database modification is made and the app prompts the user for more
+modifications. When the user is done, the user enters a command to exit the
+program, a summary report file is displayed and the program stops.
+
+
+Getting Started     *****  Details follow immediately below. *****
+
+To install and use the utility for the first time:
 
 *  Install Python for Windows x64.
 
-*  Create a new folder on your computer, the "working folder".
-
-*  Make a copy of your database, move the copy into the working folder.
-
-*  Copy the required files from the downloaded zip file to the working folder.
+*  Create a new folder on your computer, the "working folder" to contain
+   a copy of your database, the program files and the config file.
 
 *  Edit the config file in the working folder to tell the utility what to
-   do and where to do it.
+   do and how to do it.
 
-*  Double click the MainScriptFile.py file to run the utility.
+*  Double click the ChangeSrcForCitation.py file to run the utility.
 
-*  A window (terminal window) with a black background and white text will appear.
-Some utilities will keep this window open and request data, other utilities will
-only show the window while the command is processing.
+*  A terminal window with a black background and white text will appear.
 
 *  The terminal window will close and a summary report will be displayed
-in NotePad.
-
-The above procedure of making a copy of your database and operating on it in
-the working folder is most prudent when a user is just getting familiar with
-a new or updated utility.
-
-Some utilities are read only and do not change the database at all, while others
-affect only small amount of data.
-Once the user has confidence in the operation of a low-impact utility, one
-can start operating directly on the research (production) database, always
-assuming that at least several known-good backups exist.
-
-Other utilities that require more configuration and make larger changes should
-always operate on databases copied into a working folder.
-
-*****  Details follow below. *****
+   in Notepad.
 
 =========================================================================DIV80==
-Running the utility - step by step
+=========================================================================DIV80==
+Running the utility - detailed step by step
 
 The steps listed here run the utility on a copy of your database created in a
 new directory location. Once you feel comfortable with how the app operates,
-you will want to run the app on your production database in its usual
-folder location.
+you will want to run the app on your production database at its usual folder
+location and create another folder for all of the utilities and config files
+you regularly use.
 
 ==========-
-Install Python for Windows x64  -see "APPENDIX  Python install" below.
+Install Python for Windows x64
+- follow the three easy steps in "APPENDIX  Python install" below.
 
 ==========-
 Create a folder on your computer that you will not confuse with other
@@ -142,41 +142,45 @@ folders. It will be referred to as the "working folder".
 
 You may want to create it within your home folder. Your home folder is
 "C:\Users\me", where "me" is your user name. This is a safe location that will
-not be taken over by OneDrive.
+not be affected by OneDrive.
 
 ==========-
 Copy these items from the downloaded zip file to the working folder-
-      ChangeSrcForCitation.py          (file)
-      RM-Python-config.ini             (file)
-      RMpy                             (folder)
+     (file)     ChangeSrcForCitation.py
+     (file)     RM-Python-config.ini
+     (folder)   RMpy
 
 ==========-
 Make a copy of your database, move the copy into the working folder.
 
 Rename the database copy to "TEST.rmtree" in order to prevent any
-confusion about the purpose of the copy.
+confusion about the purpose of the new file.
 
 ==========-
 Edit the sample RM-Python-config.ini file in the working folder.
 (See the section "APPENDIX  Config file: location, contents and editing"
 if you need help)
 
-A summary of the config file structure:
-The names in square brackets are section names.
-The items in a section are key-value pairs.
+A summary of the config file (ini file) structure:
+      The names in square brackets are section names.
+      The items in a section are key-value pairs.
 
-For example, in the sample config file, there is a section named [FILE_PATHS].
-In that section, reside several key-value pairs, one of which is 
+The sample config file contains a section named [FILE_PATHS].
+In that section, reside several key-value pairs, one of which is
 DB_PATH = TEST.rmtree
 
-"DB_PATH" is the key, "TEST.rmtree" is the value. key-value pairs are separated
+"DB_PATH" is the key, "TEST.rmtree" is the value. Key-value pairs are separated
 with an equals sign character.
 
 The utility needs to know where the RM database file is located, the output
 report file name and its location.
 
-If you followed the above instructions, no changes to any of the key-values in
-the [FILE_PATHS] section are needed.
+The next key: REPORT_FILE_PATH tells the utility where to create the report
+file. The setting as it is in the sample says create a file with a name starting
+withe "REPORT_" in the current (working) folder.
+
+The next key: REPORT_FILE_DISPLAY_APP names the app that will be automatically
+called to display the report file.
 
 =========-
 Open the TEST.rmtree database file in RootsMagic.
@@ -249,33 +253,134 @@ Checks made by the utility:
        specified must both use the same source template.
    You will be made aware of problems.
 
+=========================================================================DIV80==
+Precautions before using the modified database
+
+Once you are satisfied with the results of the modifications made by this
+software, don't hurry to start using the resulting file for research.
+Continue your usual work for several days using the original database to allow
+further thought. Then run the utility again with your perfected config
+file on a new copy of your now-current database. Inspect the results and then
+use the modified database as your normal research file.
+
+The week delay will give you time to think about what could go wrong. You should
+consider unexpected changes to your data that you did not want.
+
+If you start using the newly modified database immediately, you'll lose work
+if you missed a problem only to find it later and have to revert to a backup
+from before the database was modified.
+
+=========================================================================DIV80==
+APPENDIX  Python install
+
+Install Python using the "winget" command line package manager.
+
+It is also possible to install from the Microsoft Store or from the
+Python.org web site but only the winget method is described here.
+
+The completed install folder occupies about 140 MB of disk space.
+
+Installation using winget.
+
+1. Open a command line terminal.
+   A quick method is to right click the Windows menu icon in the file manager
+   task bar and select the Terminal command; not the "Terminal (Admin)" command.
+
+2. Type (copy and paste) the following command in the window and hit Enter:
+
+    winget install --id Python.PythonInstallManager --source winget
+
+3. Wait for the display of "Successfully installed" and then type the
+   following command and hit Enter:
+
+    py install 3
+
+The output for this command should be similar to-
+-------
+The signature for https://www.python.org/ftp/python/index-windows.json was
+successfully verified.
+Installing Python 3.15.2.
+Extracting: ...............................................................✅
+
+Global shortcuts directory is not on PATH. Add it for easy access to global Python aliases.
+Directory to add: C:\Users\<user_name>\AppData\Local\Python\bin
+-------
+
+Ignore the last 2 lines. You won't need that functionality.
+
+
+How to Uninstall Python
+
+Use the Settings app in the Windows menu.
+Go to Apps=>Installed apps
+and find:
+"Python Install Manager"
+and
+"Python 3.n.n"
+and select Uninstall from the three dot menu to the right of the names for each item.
+
+or use winget from the command terminal:
+winget uninstall --id Python.PythonInstallManager
+winget uninstall --id Python.Python.3.nn
+
+
+For additional information, see the Python on Windows docs at-
+https://docs.python.org/3.15/using/windows.html
+
+=========================================================================DIV80==
+APPENDIX  Troubleshooting
+
+=========-
+No Report File displayed
+
+If the terminal windows displays the message: RM-Python-config.ini file contains
+a format error, see the section below.
+
+If no report file is generated, look at the terminal window for error messages
+that will help you fix the problem. There may be something wrong with the config
+file line- REPORT_FILE_PATH.
+
+If the report is created, but not displayed, check the config
+file line- REPORT_FILE_DISPLAY_APP
+
+If no report file is generated and the black command console window closes
+before you can read it, try first opening a command line console, cd'ing to
+the folder containing the py file and then running the py file from the
+command line. The window will not close and you will be able to read any
+error messages.
+
+=========-
+Error message:
+RM-Python-config.ini file contains a format error
+
+Examine the file visually and check to see that it follows the rules mentioned
+above. If all else fails, start over with the supplied config file and make
+sure that it works, Then make your edits one by one to identify the problem.
+You may want to look at- https://en.wikipedia.org/wiki/INI_file
 
 =========================================================================DIV80==
 APPENDIX  Config file: location, contents and editing
 
-Name and location
+Name and folder location
 The utility requires a configuration file. A file named "RM-Python-config.ini"
 will be recognized as the utility's configuration file when placed in the same
-directory as the MainScriptFile py file for the utility. Each utility is
-distributed with a sample config file to get you started.
-
-"MainScriptFile.py" refers to the py file having the name of the utility you
-are running, for example, TestExternalFiles.py, ChangeSourceTemplate.py etc
+directory as the ChangeSrcForCitation.py file. Each utility is distributed with
+a sample config file to get you started.
 
 Alternatively, the configuration file name and location can be specified
 on the command-line as an argument to the script. This argument overrides
 the default configuration file name and location.
 
-For example, if the script "MainScriptFile.py" is executed from a terminal window
-which has the folder "C:\Users\me\TestFolder" as its 'current directory', it
-will use the configuration file "C:\Users\me\TestFolder\RM-Python-config.ini"
+For example, if the script "ChangeSrcForCitation.py" is executed from a terminal
+window which has the folder "C:\Users\me\TestFolder" as its 'current directory',
+it will use the configuration file "C:\Users\me\TestFolder\RM-Python-config.ini"
 if it exists. If the utility is run with an explicit argument, such as:
-MainScriptFile.py "C:\Users\me\Documents\RM-Python-config.ini"
-then the specified ini configuration file will be used instead.
+ChangeSrcForCitation.py "C:\Users\me\Documents\RM-Python-config.ini" then the
+specified ini configuration file will be used instead.
 
 Note also that the file name is not restricted to the default.
 For instance, running the utility from a terminal window as:
-MainScriptFile.py config_mine.ini
+ChangeSrcForCitation.py config_mine.ini
 will instruct the utility to use config_mine.ini in the current directory
 as its configuration file.
 
@@ -294,8 +399,12 @@ mouse to drag the configuration file onto the open Notepad window.
 editor program.)
 
 Format and conventions
-The config file uses the standard ini file format. The config file is made up
-of the elements: Sections, Keys, Values and Comments.
+The config file uses the "standard" ini file format. You can ask AI for help
+with a formatting problem. Just mention that you are using 
+"Python configparser" so that it will be accurate.
+
+The config file is made up of the elements: 
+Sections, Keys, Values and Comments.
 
 A name in square brackets is a section name that identifies the start
 of a section. A section continues until a new section starts. The order of
@@ -307,9 +416,13 @@ should be in a named section.
 
 A name on the left side of a "=" sign is a key.
 Text on the right side of a "=" is the value assigned to the key on the left.
+Spaces immediately to the left of the = character are ignored; as are leading and
+trailing spaces around the value.
+
 Comment lines start with a "#" character and are only included to help
 the human user read and understand the file. They are ignored by the utility
-software. Comments may appear most anywhere in the config file.
+software. Comments may appear almost anywhere in the config file, except within
+a multi-line value.
 
 For an example, here is a section containing 3 key-values used by all of the
 RM utilities:
@@ -359,101 +472,15 @@ REPORT_FILE_DISPLAY_APP  = C:\Windows\System32\notepad.exe
 
 The application used to display the report at the end of the run.
 If this key is not given (say, the line is commented out), then the report is
-generated but not displayed.
+generated but not automatically displayed.
 
-Encoding
+Text Encoding
 If there are any non-ASCII characters in the config file then the file must be
 saved in UTF-8 format, with no byte order mark (BOM).
-The included sample config file has an accented ä in the first line comment to
+The included sample config file has an umlauted ä in the first line comment to
 force it to be in the correct format.
-File format is an option in the "Save file" dialog box in NotePad.
-
-=========================================================================DIV80==
-APPENDIX  Python install
-
-Install Python using the "winget" command line package manager.
-
-It is also possible to install from the Microsoft Store or from the 
-Python.org web site but only the winget method is described here.
-
-Installation using winget.
-
-1 Open a command line terminal. 
-A quick method is to right click the Windows menu icon in the file manager task 
-bar and select the Terminal command;  not the "Terminal (Admin)" command.
-Or, using just the keyboard, press and hold the Windows key and then tap X, and select 
-the Terminal command from the displayed menu. 
-
-2 Type (copy and paste) the following command in the window and hit Enter:
-
-    winget install --id Python.PythonInstallManager --source winget
-
-After it finishes and displays "Successfully installed", type the following
-command and hit Enter:
-
-    py install 3
-
-The output for this command should be similar to-
--------
-The signature for https://www.python.org/ftp/python/index-windows.json was 
-successfully verified.
-Installing Python 3.15.2.
-Extracting: ...............................................................✅
-
-Global shortcuts directory is not on PATH. Add it for easy access to global Python aliases.
-Directory to add: C:\Users\rotter\AppData\Local\Python\bin
--------
-
-Ignore the last 2 lines. You won't need that functionality.
-
-
-Uninstall
-Use the Settings app in the Windows menu.
-Go to Apps=>Installed apps
-and find:
-"Python Install Manager"
-and 
-"Python 3.n.n"
-and select Uninstall from the three dot menu to the right of the names for each item.
-
-or use winget from the command terminal:
-winget uninstall --id Python.PythonInstallManager
-winget uninstall --id Python.Python.3.nn
-
-
-For additional information, see the Python on Windows docs at-
-https://docs.python.org/3.14/using/windows.html
-
-=========================================================================DIV80==
-APPENDIX  Troubleshooting
-
-=========-
-No Report File displayed
-
-If the terminal windows displays the message: RM-Python-config.ini file contains
-a format error, see the section below.
-
-If no report file is generated, look at the terminal window for error messages
-that will help you fix the problem. There may be something wrong with the config
-file line- REPORT_FILE_PATH.
-
-If the report is created, but not displayed, check the config
-file line- REPORT_FILE_DISPLAY_APP
-
-If no report file is generated and the black command console window closes
-before you can read it, try first opening a command line console, cd'ing to
-the folder containing the py file and then running the py file from the
-command line. The window will not close and you will be able to read any
-error messages.
-
-=========-
-Error message:
-RM-Python-config.ini file contains a format error
-
-Examine the file visually and check to see that it follows the rules mentioned
-above. If all else fails, start over with the supplied config file and make
-sure that it works, Then make your edits one by one to identify the problem.
-You may want to look at- https://en.wikipedia.org/wiki/INI_file
+Text encoding can be found in the file format option in the "Save file" dialog
+box in NotePad.
 
 =========================================================================DIV80==
 TODO
@@ -478,18 +505,23 @@ https://RichardOtter.github.io
 My Linked-In profile at-
 https://www.linkedin.com/in/richardotter/
 
+
 =========================================================================DIV80==
 Distribution
 
 Everyone is free to use this utility. However, instead of
 distributing it yourself, please instead distribute the URL
 of my website where I describe it- https://RichardOtter.github.io
+or a link to the GitHub repo:
+https://github.com/RichardOtter/Genealogy-scripts
 
-=========================================================================DIV80==
+
+
+
 
 
 ================================================================================
-Suite Version: 1.1.0
-Utility Version: 1.1.0
-Built: 2026-11-19 21:19:05
+Suite Version: 1.2.0 BETA
+Utility Version: 1.1.0 BETA
+Built: 2026-11-27 15:20:16
 ================================================================================

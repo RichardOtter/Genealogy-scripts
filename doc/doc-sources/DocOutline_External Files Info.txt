@@ -157,14 +157,14 @@ This will restore the database to the state created by RootsMagic.
 
 
 =========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
+=========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
+=========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_DB_NEW_LOCATION
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
-=========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
-=========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 =========================================================================DIV80==
 TODO
 

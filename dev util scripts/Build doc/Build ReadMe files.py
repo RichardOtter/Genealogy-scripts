@@ -16,6 +16,8 @@ from send2trash import send2trash
 # the doc folder structure is at: repo root/doc
 
 # ===================================================DIV60==
+
+
 def main():
 
     # CONSTANTS
@@ -23,8 +25,8 @@ def main():
     SCRIPT_DIR = Path(__file__).resolve().parent
     DEV_UTIL_DIR = SCRIPT_DIR.parent
     REPO_ROOT_PATH = DEV_UTIL_DIR.parent
-    
-    TOP_LEVEL_CONFIG_NAME = r"build-projects-config.yaml"
+
+    TOP_LEVEL_CONFIG_NAME = r"projects-to-build.yaml"
     VERSION_REPLACE_TEXT = r'DOC_VERSION_NUMBER_RM_UTILS_OVERRIDE'
     doc_folder = REPO_ROOT_PATH / "doc"
 
@@ -43,10 +45,12 @@ def main():
             project_root_dir_path = doc["ProjectRootDirPath"]
             project_list = doc["ProjectList"]
     except:
-        raise Exception("Problem getting the values from the top level yaml file.\n")
+        raise Exception(
+            "Problem getting the values from the top level yaml file.\n")
 
     if build_type not in ("DEV", "ALPHA", "BETA", "RELEASE"):
-        print(f"ERROR: BuildType must be DEV, ALPHA, BETA, or RELEASE; got {build_type!r}.")
+        print(
+            f"ERROR: BuildType must be DEV, ALPHA, BETA, or RELEASE; got {build_type!r}.")
         pause_with_message()
         return 1
 
@@ -58,10 +62,10 @@ def main():
         # Ensure docs-generated folder exists
         doc_built_folder = doc_folder / "docs-generated"
         doc_built_folder.mkdir(parents=True, exist_ok=True)
-        
+
         # Create VS Code settings to mark generated files as read-only
         create_vscode_readonly_settings(REPO_ROOT_PATH, doc_built_folder)
-        
+
         # Clear any existing files in the docs-generated folder
         for existing_file in doc_built_folder.glob("*"):
             if existing_file.is_file():
@@ -71,12 +75,13 @@ def main():
 
         # Process each doc template
         for project in project_list:
-            template_file_path = doc_folder / "doc-sources" / F"DocOutline_{project}.txt"
+            template_file_path = doc_folder / \
+                "doc-sources" / F"DocOutline_{project}.txt"
             doc_file_path = doc_built_folder / f"ReadMe_{project}.txt"
             lib_file_path = doc_folder / "docs-reusable-content.txt"
             project_dir_path = REPO_ROOT_PATH / project
             util_info_path = project_dir_path / "_util_info.yaml"
-            
+
             # Get utility version from project's _util_info.yaml
             utility_version = "Unknown"
             if util_info_path.exists():
@@ -84,14 +89,14 @@ def main():
                     util_doc = yaml.safe_load(util_info)
                     if util_doc and "Version" in util_doc:
                         utility_version = util_doc["Version"]
-            
+
             # Parse variables from the template
             variables = parse_variables(template_file_path)
-            
+
             print(f"Building: {doc_file_path}")
             with open(template_file_path, 'r') as doc_template, \
-                open(doc_file_path, 'w') as doc_final:
-                
+                    open(doc_file_path, 'w') as doc_final:
+
                 in_variables_section = False
                 for line in doc_template:
                     # Skip the variables section
@@ -103,26 +108,30 @@ def main():
                         continue
                     if in_variables_section:
                         continue
-                    
+
                     if line.startswith("█_INCLUDE: "):
                         label = line[11::]
                         for lib_line in get_snippet(label, lib_file_path):
                             # Apply variable substitution to included snippet
-                            substituted_line = substitute_variables(lib_line, variables)
+                            substituted_line = substitute_variables(
+                                lib_line, variables)
                             doc_final.write(snippet_prefix + substituted_line)
                     else:
                         # Apply variable substitution to doc content
-                        substituted_line = substitute_variables(line, variables)
+                        substituted_line = substitute_variables(
+                            line, variables)
                         doc_final.write(substituted_line)
-                
+
                 # Add version and build date footer
                 doc_final.write("\n\n")
                 doc_final.write("=" * 80 + "\n")
-                doc_final.write(f"Suite Version: {suite_version}{version_suffix}\n")
-                doc_final.write(f"Utility Version: {utility_version}{version_suffix}\n")
+                doc_final.write(
+                    f"Suite Version: {suite_version}{version_suffix}\n")
+                doc_final.write(
+                    f"Utility Version: {utility_version}{version_suffix}\n")
                 doc_final.write(f"Built: {time_stamp_now()}\n")
                 doc_final.write("=" * 80 + "\n")
-            
+
             # Make the generated file read-only
             os.chmod(doc_file_path, stat.S_IREAD)
     except (Exception) as e:
@@ -132,6 +141,8 @@ def main():
     return
 
 # ===================================================DIV60==
+
+
 def get_snippet(label, lib_file):
 
     term = "=========================================================================DIV80=="
@@ -179,7 +190,7 @@ def launched_from_explorer():
 
 # ===================================================DIV60==
 def pause_with_message(message=None):
-# Don't pause when running from a terminal or when input output is redirected
+    # Don't pause when running from a terminal or when input output is redirected
     if (message != None):
         print(str(message))
     if launched_from_explorer():
@@ -192,24 +203,24 @@ def create_vscode_readonly_settings(repo_root, doc_built_folder):
     """Create VS Code settings to mark generated files as read-only"""
     vscode_dir = repo_root / ".vscode"
     settings_file = vscode_dir / "settings.json"
-    
+
     vscode_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Read existing settings if file exists
     if settings_file.exists():
         with open(settings_file, 'r') as f:
             settings = json.load(f)
     else:
         settings = {}
-    
+
     # Add files.readonlyInclude setting for generated docs
     # Use relative path from repo root to docs-generated folder
     readonly_pattern = "doc/docs-generated/**"
     if "files.readonlyInclude" not in settings:
         settings["files.readonlyInclude"] = {}
-    
+
     settings["files.readonlyInclude"][readonly_pattern] = True
-    
+
     # Write updated settings
     with open(settings_file, 'w') as f:
         json.dump(settings, f, indent=2)

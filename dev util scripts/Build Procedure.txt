@@ -6,7 +6,7 @@ For now, building from Main branch from local files
 First test any changes to the build util scripts and configuration files.
 Confirm old and current version numbers are correct.
 BuildRelease.py
-build-projects-config.yaml
+projects-to-build.yaml
 _util_info.yaml
 
 Confirm documentation correct, both the top level ReadMe in the doc folder

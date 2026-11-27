@@ -3,7 +3,7 @@ UTILITY_NAME = Color from Group
 SCRIPT_NAME = ColorFromGroup.py
 DATABASE_VERSIONS = 8 and later
 RMNOCASE_REQUIRED = no
-REGEXP_OPTIONAL = no
+REGEXP_OPTIONAL = yes
 █_END_VARIABLES
 =========================================================================DIV80==
 Color code people by group membership
@@ -278,14 +278,14 @@ that may be important to you. Especially if it was created manually.
 Take care when assigning the actions in the config file.
 
 =========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
+=========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
+=========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MULTILINE
 █_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
-=========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
-=========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
 
 
 =========================================================================DIV80==

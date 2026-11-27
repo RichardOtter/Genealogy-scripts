@@ -737,12 +737,6 @@ Add a new, Key-Value pair with a particular Key and an empty value.-
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_USE_NEW_DB
 =========================================================================DIV80==
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MULTILINE
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MAPPING
-█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
-=========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_PYTHON
 =========================================================================DIV80==
 █_INCLUDE: REUSE_LIB_APPENDIX_TROUBLE
@@ -773,7 +767,12 @@ CITATION_MAPPING =
   Field_2     >     Field_1
   temp        >     Field_2
   temp        >     NULL
-
+=========================================================================DIV80==
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_DETAILS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_STD_KEYS
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MULTILINE
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_MAPPING
+█_INCLUDE: REUSE_LIB_APPENDIX_CONFIG_ENCODE
 =========================================================================DIV80==
 Developer Notes
 (not needed to use utility)

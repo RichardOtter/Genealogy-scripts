@@ -7,6 +7,11 @@ New feature release
 uses RMpy package v1.2
     Allows specification of config file on command line
 
+Both RMNOCASE and REXXP use are now optional; before they were not allowed.
+Updated ini file and include the dlls in distrib.
+Update doc.
+
+
 Testing:
 Tested with new environment: procedure and standard test database.
 
