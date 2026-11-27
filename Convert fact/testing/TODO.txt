@@ -1,0 +1,5 @@
+create the needed facts in the test data database.
+several test cases involved
+
+do them in test procedure along with ini file settings
+

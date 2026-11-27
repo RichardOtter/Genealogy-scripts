@@ -11,8 +11,8 @@ from RMpy.common import q_str   # noqa #type: ignore
 #   RM-Python-config.ini
 
 # Tested with:
-#   RootsMagic database file v10
-#   Python for Windows v3.13
+#   RootsMagic database file v12
+#   Python for Windows v3.15
 
 # Config files fields used
 #    FILE_PATHS  REPORT_FILE_PATH

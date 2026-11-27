@@ -114,6 +114,9 @@ def run_selected_features(config, db_connection, report_file):
 
     # Run all of the requested options.
     #if config['OPTIONS'].getboolean('MAIN'):
+    if config['OPTIONS'].getboolean('DROP_AUXMULTIMEDIATABLE'):
+        drop_aux_media_table(config, db_connection, report_file)
+        return
 
     if config['OPTIONS'].getboolean('TESTING_MODE_USE_TEST_MEDIA_FOLDER'):
     # app is in test mode.
@@ -726,6 +729,22 @@ def set_file_dates_from_mjd_float(path, mjd_tuple):
     modified_dt = mjd_float_to_datetime(modified_mjd)
 
     set_ntfs_times(path, created_dt, modified_dt)
+
+
+# ===================================================DIV60==
+def drop_aux_media_table(config, db_connection, report_file):
+    report_file.write("DROP_AUXMULTIMEDIATABLE = on\n\n")
+    if not table_exists(db_connection, "AuxMultimediaTable" ):
+            report_file.write("\nAuxMultimediaTable is not in database.\n\n")
+            return
+    SqlStmt = """
+DROP TABLE IF EXISTS AuxMultimediaTable;
+"""
+    cur = db_connection.cursor()
+    cur.execute(SqlStmt)
+    report_file.write("AuxMultimediaTable dropped\n\n")
+
+    return
 
 
 # ===================================================DIV60==

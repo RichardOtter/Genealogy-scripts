@@ -41,16 +41,17 @@ fact type based on the date of the fact and/or the description of the fact.
 █_INCLUDE: REUSE_LIB_STEPS_0_SMALL_CHANGES
 █_INCLUDE: REUSE_LIB_STEPS_1
 █_INCLUDE: REUSE_LIB_STEPS_2
+
 ==========-
-Look at the [CV_PARAMS] section of the config file containing keys for the 
+The [CV_PARAMS] section of the config file contains keys for the 
 parameters needed to describe the desired changes:
 
 FACTTYPE_CURRENT
 FACTTYPE_NEW
 ROLE
 
-Now look at the [SOURCE_FILTER] section which contains the keys that specify
-which sources are changed.
+The [SOURCE_FILTER] section contains the keys that specify
+which facts are to be changed.
 
 DESC
 DATE
@@ -84,9 +85,9 @@ Consider whether to rename TEST.rmtree and use it as your research database.
 Notes
 
 ===========-
-The config file must be edited to indicate the conversion that should be done.
+The config file must be edited to specify the conversion to be executed.
 
-The task is specified by the key value pairs. or example-
+The task is specified by the key value pairs:
 
 [CV_PARAMS]
 FACTTYPE_CURRENT  = Census (family)
@@ -116,13 +117,14 @@ Fact Type fields used
 
 It is best to check the fields used in both fact types before making the change.
 If the fields used by the current and new fact types differ (date, place,
-description), no data is lost in the conversion.
+description), no data is lost in the conversion. But visibility of the field must
+be manually set.
 
 ===========-
 Fact types in RM come in two categories: Individual and Family.
 
 Facts of the Individual type are linked to a single person while facts of the
-family type are linked to a database family.
+family type are linked to a "family", or couple.
 An RM database family consists either 2 or 1 persons, labeled internally as
 Father and Mother. Either the father or mother may be "unknown"
 (and thus set to 0 in the database). Database families, by design, do not
@@ -161,14 +163,14 @@ FACTTYPE_NEW
 ===========-
 Limiting which Facts are changed
 
-There maybe situations in which only a subset of Facts should be changed to a
+There may be situations in which only a subset of facts should be changed to a
 new fact type. One can limit the facts by fields that describe them- 
 the Description and the Date-
 
 Some examples-
 
 [SOURCE_FILTER]
-DESC              = %New York%
+DESC              = New York
 DATE              = 1930
 
 if you want to convert only facts whose descriptions start with the
@@ -233,7 +235,7 @@ the utility will complain and request that you create such a role for "Census"
 before the conversion can be completed.
 
 You don't have to recreate all of the roles that exist for the FACTTYPE_CURRENT,
-only the ones that are in use. ConvertFact will tell you which ones.
+only the ones that are in use. The ConvertFact report will tell you which ones.
 
 
 =========================================================================DIV80==
